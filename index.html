@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- This page exists for two reasons. It is a front door for anyone who trims
+       a link back to the host, and it is the page Google reads when it decides
+       what favicon and what site name to attach to everything under this host.
+       Google resolves both per host, not per directory, so without a real page
+       here the whole host inherits GitHub's "Site not found" error page. -->
+  <title>Will Cook</title>
+  <meta name="description" content="Public work by Will Cook: Plectis, a source-linked map of a workflow system built with coding agents, and a Lean corpus of machine-checked results on Erdős problems.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://wcook04.github.io/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Will Cook">
+  <meta property="og:title" content="Will Cook">
+  <meta property="og:description" content="Plectis, a source-linked map of a workflow system built with coding agents, and a Lean corpus of machine-checked results on Erdős problems.">
+  <meta property="og:url" content="https://wcook04.github.io/">
+  <meta property="og:image" content="https://wcook04.github.io/assets/icon-512.png">
+  <meta property="og:image:width" content="512">
+  <meta property="og:image:height" content="512">
+  <meta property="og:image:alt" content="The Plectis mark: two strands plaited, crossing three times.">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Will Cook">
+  <meta name="twitter:description" content="Plectis, and a Lean corpus of machine-checked results on Erdős problems.">
+  <meta name="twitter:image" content="https://wcook04.github.io/assets/icon-512.png">
+
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8f0e2">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#171020">
+
+  <!-- The SVG is the source mark; the .ico is the fallback Google's favicon
+       crawler reaches for first, and it must also sit at /favicon.ico so a
+       crawler that never parses this head still finds it. -->
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://wcook04.github.io/#website",
+        "name": "Will Cook",
+        "url": "https://wcook04.github.io/",
+        "publisher": { "@id": "https://wcook04.github.io/#person" }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://wcook04.github.io/#person",
+        "name": "Will Cook",
+        "url": "https://wcook04.github.io/",
+        "sameAs": [
+          "https://github.com/wcook04",
+          "https://www.linkedin.com/in/will-cook-278127234/"
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --page: #f8f0e2;
+      --surface: #fffdf7;
+      --ink: #211318;
+      --ink-soft: #3c2b31;
+      --muted: #5f4b4c;
+      --faint: #786359;
+      --rule: #eaddc9;
+      --rule-strong: #d9c7ae;
+      --accent: #34508e;
+      --accent-strong: #263c74;
+      --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, ui-serif, serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, system-ui, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --page: #171020;
+        --surface: #1e1629;
+        --ink: #f2e6d4;
+        --ink-soft: #ddceba;
+        --muted: #a9998f;
+        --faint: #8b7c74;
+        --rule: #2e2338;
+        --rule-strong: #3d2f49;
+        --accent: #9db3e8;
+        --accent-strong: #c3d0f2;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font-family: var(--font-serif);
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* The ember thread that heads every page on the Plectis sheet. Same law
+       here, so a reader arriving from a search card recognises the register. */
+    .thread {
+      height: 3px;
+      background: linear-gradient(90deg,
+        #55175a 0%, #8f2740 16%, #c05028 34%, #f0a63f 50%,
+        #d0512c 66%, #b0356a 82%, #4a2464 100%);
+    }
+
+    .wrap {
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: 4.5rem 1.5rem 5rem;
+    }
+
+    header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; }
+    .mark { width: 56px; height: 56px; border-radius: 13px; flex: none; display: block; }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin: 0;
+      line-height: 1.2;
+    }
+    .role {
+      margin: 0.25rem 0 0;
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    .intro { color: var(--ink-soft); margin: 0 0 2.75rem; }
+    .intro a { color: inherit; }
+
+    h2 {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin: 0 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    ul { list-style: none; margin: 0 0 2.75rem; padding: 0; }
+    li { padding: 0.9rem 0; border-bottom: 1px solid var(--rule); }
+    li:last-child { border-bottom: 0; }
+
+    .item-title {
+      display: inline-block;
+      font-size: 1.0625rem;
+      color: var(--accent);
+      text-decoration: none;
+      text-underline-offset: 0.16em;
+      text-decoration-thickness: 1px;
+    }
+    .item-title:hover, .item-title:focus-visible {
+      color: var(--accent-strong);
+      text-decoration: underline;
+    }
+    .item-note { margin: 0.2rem 0 0; font-size: 0.94rem; color: var(--muted); }
+
+    footer {
+      margin-top: 3.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--rule-strong);
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      color: var(--faint);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover, footer a:focus-visible { color: var(--ink); text-decoration: underline; }
+    footer span[aria-hidden] { padding: 0 0.5rem; color: var(--rule-strong); }
+
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+    @media (max-width: 30rem) {
+      .wrap { padding-top: 3rem; }
+      header { gap: 0.85rem; }
+      .mark { width: 44px; height: 44px; border-radius: 10px; }
+      h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="thread"></div>
+
+  <div class="wrap">
+    <header>
+      <img class="mark" src="assets/favicon.svg" width="56" height="56" alt="">
+      <div>
+        <h1>Will Cook</h1>
+        <p class="role">Public work</p>
+      </div>
+    </header>
+
+    <p class="intro">
+      I build and inspect a large private workflow system made with coding agents.
+      Work built that way is quick to produce and slow to check by hand, so the
+      published parts are the ones a stranger can run or verify for themselves.
+    </p>
+
+    <h2>Projects</h2>
+    <ul>
+      <li>
+        <a class="item-title" href="https://wcook04.github.io/plectis/">Plectis</a>
+        <p class="item-note">
+          A source-linked public map of the system. Runnable components, each with
+          a stated claim, a local check, and a result file.
+        </p>
+      </li>
+      <li>
+        <a class="item-title" href="https://github.com/wcook04/plectis-lean-erdos249-257">Lean corpus — Erdős problems</a>
+        <!-- No count here on purpose. The repository is the authority on how
+             many problems it covers, and a number typed by hand on a front door
+             is the first thing to go stale. -->
+        <p class="item-note">
+          Machine-checked mathematics in Lean 4, centred on Erdős Problems 249
+          and 257. The proofs compile; the repository is public.
+        </p>
+      </li>
+      <li>
+        <a class="item-title" href="https://wcook04.github.io/plectis/#papers">Papers</a>
+        <p class="item-note">
+          The active PDF corpus — problem notes, the main paper, and a write-up of
+          the publication method itself.
+        </p>
+      </li>
+    </ul>
+
+    <footer>
+      <a href="https://github.com/wcook04">GitHub</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://www.linkedin.com/in/will-cook-278127234/">LinkedIn</a>
+    </footer>
+  </div>
+</body>
+</html>
