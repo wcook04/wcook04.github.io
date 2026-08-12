@@ -112,27 +112,31 @@
       overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
     }
 
-    .fold { position: relative; min-height: calc(100svh - 3px); overflow: hidden; }
+    .fold { position: relative; overflow: hidden; }
 
-    /* One mass, one boundary, one residue field. The plate carries its own
-       calm column on the left, baked into the composition, so the type sits
-       on quiet ground rather than behind a mask. */
+    /* One mass, one boundary, one residue field.
+
+       Poster is the default: the plate is the upper field, cropped to the
+       membrane and the flank, dissolving into the plum; the type follows
+       below on quiet ground. Nothing sits over the bright body. Side-by-side
+       is the exception, not the base, because it is only honest where the
+       column stays clear of the mass (see the min-width rule at the end). */
     .plate {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
+      display: block;
+      width: 100%;
+      height: clamp(15rem, 52svh, 35rem);
       object-fit: cover;
-      /* Anchor the calm column: at narrower-than-16:10 viewports the crop
-         comes off the right rim, never out from under the type. */
-      object-position: 0% 50%;
-      z-index: 0;
+      object-position: 55% 42%;
+      -webkit-mask-image: linear-gradient(180deg, #000 74%, transparent 100%);
+      mask-image: linear-gradient(180deg, #000 74%, transparent 100%);
     }
 
     .col {
       position: relative; z-index: 1;
       display: flex; flex-direction: column;
-      min-height: calc(100svh - 3px);
       max-width: 38rem;
-      padding: clamp(2.4rem, 6svh, 4.2rem) clamp(1.4rem, 4.5vw, 4.5rem);
+      margin-top: -2.2rem;
+      padding: 0 clamp(1.4rem, 4.5vw, 4.5rem) clamp(2.4rem, 6svh, 4.2rem);
     }
 
     h1 {
@@ -239,17 +243,32 @@
        and the glowing flank, dissolving into the page; the type follows below
        on plum ground. No text sits over the bright body. */
     @media (max-width: 760px) {
-      .fold { min-height: auto; }
-      .plate {
-        position: relative; inset: auto; display: block;
-        width: 100%; height: 52svh;
-        object-position: 55% 42%;
-        -webkit-mask-image: linear-gradient(180deg, #000 74%, transparent 100%);
-        mask-image: linear-gradient(180deg, #000 74%, transparent 100%);
-      }
-      .col { max-width: none; min-height: auto; padding-top: 0; margin-top: -2.2rem; }
       h1 { font-size: clamp(2.7rem, 11.5vw, 3.4rem); }
-      .routes { margin-top: 2.1rem; }
+      .col { max-width: none; }
+    }
+
+    /* Side-by-side: the type on the plate's own calm column, the mass held in
+       the right of the frame. Gated at 1280px because that is where a 34rem
+       column still lands inside the quiet part of the plate. Below it the
+       column would cross the body, so the poster layout holds instead: the
+       art is never dimmed to rescue type that should not be there. */
+    @media (min-width: 1280px) {
+      .fold { min-height: calc(100svh - 3px); }
+      .plate {
+        position: absolute; inset: 0;
+        width: 100%; height: 100%;
+        /* Left-anchored: a viewport narrower than the plate crops the right
+           rim, never the column the type stands on. */
+        object-position: 0% 50%;
+        -webkit-mask-image: none; mask-image: none;
+        z-index: 0;
+      }
+      .col {
+        min-height: calc(100svh - 3px);
+        max-width: 34rem;
+        margin-top: 0;
+        padding: clamp(2.4rem, 6svh, 4.2rem) clamp(1.4rem, 4.5vw, 4.5rem);
+      }
     }
   </style>
 </head>
