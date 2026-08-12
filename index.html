@@ -28,8 +28,7 @@
   <meta name="twitter:description" content="Plectis, and a Lean corpus of machine-checked results on Erdős problems.">
   <meta name="twitter:image" content="https://wcook04.github.io/assets/icon-512.png">
 
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6efdf">
-  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#07070b">
+  <meta name="theme-color" content="#171020">
 
   <!-- The SVG is the source mark; the .ico is the fallback Google's favicon
        crawler reaches for first, and it must also sit at /favicon.ico so a
@@ -65,72 +64,31 @@
   </script>
 
   <style>
-    /* One plate, two print states. The dark state is the artwork's ground:
-       a near-black void, bone type, and a chromatic fracture. The light state
-       is not an inversion; it is the same plate pulled on warm paper in ink
-       and spot colour. Every colour below is a press setting, so the SVG art
-       reprints itself through the variables. */
+    /* The root is the wet state of the Plectis world: the same plum ground,
+       the same serif register, the same quiet sans wayfinding, with one
+       material plate behind it that has not finished drying. The plate is a
+       committed artwork (assets/plate-01.jpg), selected from the art lab, not
+       drawn at runtime. The page stays nocturnal in both colour schemes; a
+       plate is not something you invert. */
     :root {
-      --void: #07070b;
-      --bone: #f3e7d3;
-      --bone-soft: #cdbda6;
-      --bone-faint: #8d8172;
-      --hairline: rgba(243, 231, 211, .18);
-      --hairline-strong: rgba(243, 231, 211, .42);
-
-      /* art plate */
-      --a-bone: #f3e7d3;
-      --a-verm: #f04a2f;
-      --a-cobalt: #335cff;
-      --a-cyan: #42e8e0;
-      --a-mag: #d92378;
-      --a-violet: #7a3fa0;
-      --a-acid: #ffd23f;
-      --a-ember: #c05028;
-      --a-deep: #3a1c52;
-
-      /* wayfinding labels, text-safe on the void */
-      --c-run: #ff6a45;
-      --c-check: #7b9bff;
-      --c-read: #b58fd9;
-      --c-watch: #f05a9e;
-
-      --font-disp: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
+      --page: #171020;
+      --bone: #f2e6d4;
+      --bone-soft: #d7c9b6;
+      --faint: #a4968b;
+      --hair: rgba(242, 230, 212, .16);
+      --hair-strong: rgba(242, 230, 212, .42);
+      --accent: #9db3e8;
+      --accent-bright: #c3d0f2;
       --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, ui-serif, serif;
-    }
-
-    @media (prefers-color-scheme: light) {
-      :root {
-        --void: #f6efdf;
-        --bone: #241418;
-        --bone-soft: #4a373d;
-        --bone-faint: #6f5f56;
-        --hairline: rgba(36, 20, 24, .22);
-        --hairline-strong: rgba(36, 20, 24, .5);
-
-        --a-bone: #241418;
-        --a-verm: #c93a20;
-        --a-cobalt: #2447cc;
-        --a-cyan: #0f9d96;
-        --a-mag: #b31e63;
-        --a-violet: #5a2a78;
-        --a-acid: #c79000;
-        --a-ember: #a84420;
-        --a-deep: #d9c8e4;
-
-        --c-run: #b3300f;
-        --c-check: #2447cc;
-        --c-read: #6c2e96;
-        --c-watch: #b31e63;
-      }
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, system-ui, sans-serif;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
 
-    html { background: var(--void); }
+    html { background: var(--page); }
     body {
       margin: 0;
-      background: var(--void);
+      background: var(--page);
       color: var(--bone);
       font-family: var(--font-serif);
       font-size: 1.0625rem;
@@ -139,16 +97,14 @@
       text-rendering: optimizeLegibility;
     }
 
-    /* The ember thread that heads every page on the Plectis sheet. The field
-       below is what happens to it: two strands shed from this bar, dive, and
-       fracture. */
+    /* The ember thread that heads every page on the Plectis sheet. */
     .thread {
       height: 3px;
       background: linear-gradient(90deg,
         #55175a 0%, #8f2740 16%, #c05028 34%, #f0a63f 50%,
         #d0512c 66%, #b0356a 82%, #4a2464 100%);
       position: relative;
-      z-index: 3;
+      z-index: 2;
     }
 
     .sr-only {
@@ -156,638 +112,216 @@
       overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
     }
 
-    /* ---- the fold: one composition, one viewport on desktop ---- */
-    .fold {
-      position: relative;
-      min-height: calc(100svh - 3px);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
+    .fold { position: relative; min-height: calc(100svh - 3px); overflow: hidden; }
 
-    .field {
-      position: absolute; top: 0; right: -70px;
-      width: min(68vw, 980px);
-      aspect-ratio: 900 / 560;
-      height: auto;
-      pointer-events: none;
+    /* One mass, one boundary, one residue field. The plate carries its own
+       calm column on the left, baked into the composition, so the type sits
+       on quiet ground rather than behind a mask. */
+    .plate {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      /* Anchor the calm column: at narrower-than-16:10 viewports the crop
+         comes off the right rim, never out from under the type. */
+      object-position: 0% 50%;
       z-index: 0;
     }
-    .field svg { width: 100%; height: 100%; display: block; }
 
-    .rail {
+    .col {
       position: relative; z-index: 1;
-      width: 100%;
-      max-width: 82rem;
-      margin: 0 auto;
-      padding: 0 clamp(1.25rem, 4vw, 4rem);
+      display: flex; flex-direction: column;
+      min-height: calc(100svh - 3px);
+      max-width: 38rem;
+      padding: clamp(2.4rem, 6svh, 4.2rem) clamp(1.4rem, 4.5vw, 4.5rem);
     }
 
-    /* ---- the name is the event ---- */
-    .masthead { padding-top: clamp(2.2rem, 6.5svh, 4.5rem); }
     h1 {
       margin: 0;
-      font-family: var(--font-disp);
-      font-weight: 800;
-      font-size: clamp(4.2rem, 10.5vw, 10rem);
-      line-height: .88;
-      letter-spacing: -0.015em;
-      text-transform: uppercase;
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: clamp(3.1rem, 5.8vw, 5.4rem);
+      line-height: 1.04;
+      letter-spacing: -0.012em;
     }
-    h1 .l { display: block; position: relative; width: fit-content; }
-    /* Misregistration: two offset print passes behind the bone pass. The
-       echoes are generated from data attributes and hidden from assistive
-       technology by construction. */
-    h1 .l::before, h1 .l::after {
-      content: attr(data-l);
-      position: absolute; inset: 0;
-      z-index: -1;
-      pointer-events: none;
-    }
-    h1 .l::before { color: var(--a-cyan); opacity: .55; transform: translate(.032em, -.026em); }
-    h1 .l::after  { color: var(--a-mag);  opacity: .5; transform: translate(-.032em, .026em); }
-    @media (prefers-color-scheme: dark) {
-      h1 .l::before, h1 .l::after { mix-blend-mode: screen; }
-    }
-    @media (prefers-color-scheme: light) {
-      h1 .l::before, h1 .l::after { mix-blend-mode: multiply; opacity: .38; }
-    }
-
-    .plate {
-      margin: 1.3rem 0 0;
+    .role {
+      margin: 1.05rem 0 0;
       display: flex; align-items: center; gap: .8rem;
-      font-family: var(--font-disp);
-      font-size: .78rem; font-weight: 600;
-      letter-spacing: .34em; text-transform: uppercase;
-      color: var(--bone-soft);
+      font-family: var(--font-sans);
+      font-size: .76rem; font-weight: 600;
+      letter-spacing: .3em; text-transform: uppercase;
+      color: var(--faint);
     }
-    .plate::before { content: ""; width: 2.6rem; height: 1px; background: var(--hairline-strong); }
+    .role::before { content: ""; width: 2.4rem; height: 1px; background: var(--hair-strong); }
 
     .intro {
-      margin: 1.9rem 0 0;
-      max-width: 34rem;
+      margin: 1.7rem 0 0;
+      max-width: 30rem;
       color: var(--bone-soft);
-      font-size: 1.13rem;
+      font-size: 1.09rem;
     }
     .intro b { font-weight: 600; color: var(--bone); }
 
-    /* ---- the index: unboxed, ruled by the line ---- */
+    /* The route index, in the register of the Plectis right-hand rail:
+       a kind, a name, and destination-named exits. No cards, no icons. */
     .routes {
+      list-style: none; padding: 0;
+      margin: clamp(2.4rem, 6svh, 3.8rem) 0 0;
       margin-top: auto;
-      padding-top: clamp(2.2rem, 5svh, 3.6rem);
-      padding-bottom: 1.1rem;
+      border-top: 1px solid var(--hair-strong);
     }
-    .routes-list {
-      list-style: none; margin: 0; padding: 0;
-      border-left: 1px solid var(--hairline-strong);
-    }
-    .row {
-      position: relative;
+    .routes li {
       display: grid;
-      grid-template-columns: 3.4rem 7.2rem minmax(15rem, 1fr) auto;
-      align-items: baseline;
-      gap: 0 1rem;
-      padding: 1.02rem 0 1.02rem 2.5rem;
-      border-top: 1px solid var(--hairline);
+      grid-template-columns: 5rem minmax(0, 1fr);
+      grid-template-rows: auto auto;
+      column-gap: .9rem;
+      padding: .92rem 0 .98rem;
+      border-bottom: 1px solid var(--hair);
     }
-    .row:first-child { border-top-color: var(--hairline-strong); }
-    /* hover or focus pulls a short segment of the rule into the row's colour;
-       no motion, no layout shift */
-    .row::after {
-      content: ""; position: absolute; top: -1px; left: 0;
-      width: 4.2rem; height: 1px; background: var(--row-c);
-      opacity: 0; transition: opacity .2s linear;
-    }
-    .row:hover::after, .row:focus-within::after { opacity: 1; }
-    @media (prefers-reduced-motion: reduce) { .row::after { transition: none; } }
+    .routes li:last-child { border-bottom: 0; }
 
-    .row-run   { --row-c: var(--c-run); }
-    .row-check { --row-c: var(--c-check); }
-    .row-read  { --row-c: var(--c-read); }
-    .row-watch { --row-c: var(--c-watch); }
-
-    /* the station: each route's mark sits on the spine, a void backing square
-       lets the line pass through it */
-    .station {
-      position: absolute; left: -16px; top: 50%;
-      width: 32px; height: 32px; margin-top: -16px;
-      background: var(--void);
-    }
-    .station svg { width: 100%; height: 100%; display: block; }
-
-    .num {
-      font-family: var(--font-disp);
-      font-size: .8rem; font-weight: 600;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: .1em;
-      color: var(--bone-faint);
-    }
-    .row:hover .num, .row:focus-within .num { color: var(--row-c); }
-    .mode {
-      font-family: var(--font-disp);
-      font-size: .82rem; font-weight: 700;
+    .kind {
+      grid-row: 1 / span 2;
+      margin: 0; padding-top: .42rem;
+      font-family: var(--font-sans);
+      font-size: .72rem; font-weight: 600;
       letter-spacing: .22em; text-transform: uppercase;
-      color: var(--row-c);
+      color: var(--faint);
     }
-    .what { min-width: 0; }
-    .name {
-      font-family: var(--font-disp);
-      font-size: 1.32rem; font-weight: 700;
-      letter-spacing: .01em; text-transform: uppercase;
-      color: var(--bone); text-decoration: underline;
-      text-decoration-color: color-mix(in srgb, var(--bone) 30%, transparent);
-      text-decoration-thickness: 1px; text-underline-offset: .22em;
+    .name { margin: 0; font-size: 1.3rem; font-weight: 600; line-height: 1.3; }
+    .name a {
+      color: var(--bone);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: .2em;
+      text-decoration-color: color-mix(in srgb, var(--bone) 28%, transparent);
     }
-    .name:hover, .name:focus-visible { text-decoration-color: var(--row-c); }
-    .clause {
-      margin-left: .85rem;
-      font-family: var(--font-serif);
-      font-size: .95rem;
-      color: var(--bone-faint);
+    .name a:hover, .name a:focus-visible {
+      text-decoration-color: var(--accent);
     }
     .exits {
-      font-family: var(--font-disp);
-      font-size: .78rem; font-weight: 600;
-      letter-spacing: .12em; text-transform: uppercase;
-      color: var(--bone-faint);
-      white-space: nowrap;
+      margin: .22rem 0 0;
+      font-family: var(--font-sans);
+      font-size: .8rem;
+      color: var(--faint);
     }
     .exits a {
       color: var(--bone-soft);
       text-decoration: underline;
       text-decoration-thickness: 1px;
       text-underline-offset: .24em;
-      text-decoration-color: color-mix(in srgb, var(--bone) 38%, transparent);
+      text-decoration-color: color-mix(in srgb, var(--bone) 34%, transparent);
     }
-    .exits a:hover, .exits a:focus-visible { color: var(--row-c); text-decoration-color: var(--row-c); }
-    .exits .sep { padding: 0 .45rem; color: var(--hairline-strong); text-decoration: none; }
+    .exits a:hover, .exits a:focus-visible {
+      color: var(--accent-bright);
+      text-decoration-color: var(--accent-bright);
+    }
+    .exits .sep { padding: 0 .38rem; color: var(--hair-strong); }
 
-    a:focus-visible { outline: 2px solid var(--row-c, var(--a-cyan)); outline-offset: 3px; }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 1px; }
 
     .colophon {
-      display: flex; justify-content: flex-end; gap: 1.4rem;
-      padding: .9rem 0 1.4rem;
-      font-family: var(--font-disp);
+      margin: 1.7rem 0 0;
+      display: flex; gap: 1.4rem;
+      font-family: var(--font-sans);
       font-size: .72rem; font-weight: 600;
       letter-spacing: .18em; text-transform: uppercase;
     }
     .colophon a {
-      color: var(--bone-faint); text-decoration: underline;
-      text-decoration-thickness: 1px; text-underline-offset: .24em;
-      text-decoration-color: color-mix(in srgb, var(--bone) 30%, transparent);
+      color: var(--faint);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: .24em;
+      text-decoration-color: color-mix(in srgb, var(--bone) 26%, transparent);
     }
     .colophon a:hover, .colophon a:focus-visible { color: var(--bone); }
 
-    /* ---- poster state ---- */
+    /* Poster state: the plate becomes the upper field, cropped to the membrane
+       and the glowing flank, dissolving into the page; the type follows below
+       on plum ground. No text sits over the bright body. */
     @media (max-width: 760px) {
-      .fold { min-height: 100svh; }
-      .field { right: -34vw; width: 125vw; opacity: .9; }
-      .masthead { padding-top: clamp(9rem, 30svh, 13rem); }
-      h1 { font-size: clamp(3.6rem, 16.5vw, 5.4rem); }
-      .intro { font-size: 1.05rem; }
-      .row {
-        grid-template-columns: 3rem 1fr;
-        grid-template-areas: "num mode" "what what" "exits exits";
-        padding-left: 2.1rem; row-gap: .3rem;
+      .fold { min-height: auto; }
+      .plate {
+        position: relative; inset: auto; display: block;
+        width: 100%; height: 52svh;
+        object-position: 55% 42%;
+        -webkit-mask-image: linear-gradient(180deg, #000 74%, transparent 100%);
+        mask-image: linear-gradient(180deg, #000 74%, transparent 100%);
       }
-      .num { grid-area: num; }
-      .mode { grid-area: mode; }
-      .what { grid-area: what; }
-      .exits { grid-area: exits; white-space: normal; }
-      .clause { display: block; margin-left: 0; margin-top: .1rem; }
-      .station { width: 26px; height: 26px; left: -13px; margin-top: -13px; top: 1.4rem; }
+      .col { max-width: none; min-height: auto; padding-top: 0; margin-top: -2.2rem; }
+      h1 { font-size: clamp(2.7rem, 11.5vw, 3.4rem); }
+      .routes { margin-top: 2.1rem; }
     }
   </style>
 </head>
 <body>
   <div class="thread"></div>
 
-  <div class="fold">
-    <!-- The Evidence Field. Composed, then perturbed: authored strands fall
-         from the thread, cross three times, and fracture into hard-edged
-         shards, rays and flow-conditioned spray. One survivor line becomes
-         the rule that the route index hangs from. Committed as generated;
-         regenerate with a new seed rather than editing circles by hand. -->
-    <div class="field" aria-hidden="true">
-      <svg viewBox="0 0 900 560" preserveAspectRatio="xMidYMid meet" focusable="false">
-<defs><filter id="erode" x="-20%" y="-20%" width="140%" height="140%">
-<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11" result="n"/>
-<feDisplacementMap in="SourceGraphic" in2="n" scale="9"/>
-</filter></defs>
-<g class="strands" fill="none"><path d="M 253 -11 L 260 -7 L 267 -3 L 273 2 L 279 6 L 286 11 L 292 16 L 298 20 L 304 25 L 310 30 L 316 35 L 322 40 L 329 44 L 335 49 L 341 54 L 347 58 L 353 63 L 360 67 L 366 71 L 372 75 L 379 79 L 386 83 L 392 86 L 399 90 L 406 93 L 413 96 L 420 99 L 427 102 L 434 104 L 441 107 L 448 110 L 454 112 L 461 115 L 468 118 L 475 120 L 482 123 L 489 126 L 496 129 L 502 132 L 509 135 L 515 138 L 522 141 L 528 145 L 534 148 L 540 152 L 546 156 L 552 160 L 558 164 L 564 168 L 570 172 L 576 176 L 582 179 L 588 183 L 594 187 L 600 191 L 606 195 L 612 198 L 619 202 L 625 205 L 631 208 L 637 211" stroke="var(--a-cobalt)" stroke-width="4"/><path d="M 247 -1 L 253 4 L 260 8 L 267 11 L 274 15 L 281 19 L 288 22 L 295 25 L 302 29 L 309 32 L 316 35 L 324 38 L 331 41 L 338 44 L 345 47 L 352 50 L 359 54 L 365 57 L 372 61 L 379 64 L 385 68 L 392 72 L 398 76 L 405 80 L 411 84 L 417 88 L 423 92 L 429 97 L 435 101 L 441 105 L 448 110 L 454 114 L 460 119 L 466 123 L 472 127 L 478 131 L 484 135 L 490 139 L 496 143 L 503 146 L 509 150 L 516 153 L 522 156 L 529 159 L 536 161 L 542 164 L 549 167 L 556 169 L 563 171 L 570 173 L 576 176 L 583 178 L 590 180 L 597 182 L 604 184 L 610 186 L 617 189 L 623 191 L 630 194 L 636 196 L 643 199" stroke="var(--a-verm)" stroke-width="4"/></g>
-<g class="patches" filter="url(#erode)">
-<polygon points="661,160 671,199 639,223 602,212 565,212 562,174 563,146 566,109 601,96 627,123 651,134" fill="var(--a-deep)" opacity="0.96"/>
-<polygon points="751,245 734,269 710,279 676,279 675,245 677,212 710,199 733,222" fill="var(--a-ember)" opacity="0.95"/>
-<polygon points="566,260 555,280 535,296 518,277 505,260 513,238 535,227 552,243" fill="var(--a-deep)" opacity="0.9"/>
-<polygon points="710,110 699,131 678,143 664,124 654,110 658,90 678,82 693,95" fill="var(--a-mag)" opacity="0.88"/>
-</g>
-<g class="shards">
-<polygon points="675,165 666,157 755,38 756,39" fill="var(--a-verm)" opacity="0.84"/>
-<polygon points="713,150 701,138 905,-24 905,-24" fill="var(--a-verm)" opacity="0.98"/>
-<polygon points="646,167 639,167 642,-77 643,-77" fill="var(--a-ember)" opacity="0.97"/>
-<polygon points="637,270 652,268 653,440 652,440" fill="var(--a-verm)" opacity="0.94"/>
-<polygon points="699,125 689,116 796,-48 797,-48" fill="var(--a-verm)" opacity="0.85"/>
-<polygon points="671,193 668,186 829,113 829,114" fill="var(--a-verm)" opacity="1.00"/>
-<polygon points="729,195 726,179 972,135 972,136" fill="var(--a-mag)" opacity="0.99"/>
-<polygon points="604,235 617,242 504,369 503,369" fill="var(--a-violet)" opacity="0.99"/>
-<polygon points="622,245 629,247 559,420 558,420" fill="var(--a-ember)" opacity="0.96"/>
-<polygon points="594,225 602,234 487,307 486,306" fill="var(--a-mag)" opacity="0.99"/>
-<polygon points="725,245 730,234 960,318 960,319" fill="var(--a-ember)" opacity="0.89"/>
-<polygon points="730,160 723,157 949,36 949,36" fill="var(--a-ember)" opacity="0.82"/>
-<polygon points="569,258 574,262 479,334 479,333" fill="var(--a-mag)" opacity="0.95"/>
-<polygon points="722,169 713,155 1011,3 1011,4" fill="var(--a-verm)" opacity="0.97"/>
-<polygon points="599,122 590,132 533,11 533,11" fill="var(--a-verm)" opacity="0.85"/>
-<polygon points="734,184 729,172 916,116 917,117" fill="var(--a-acid)" opacity="0.98"/>
-<polygon points="535,216 533,233 435,241 435,240" fill="var(--a-mag)" opacity="0.92"/>
-<polygon points="588,207 593,213 428,227 428,226" fill="var(--a-cyan)" opacity="0.96"/>
-<polygon points="661,168 655,160 782,-89 783,-89" fill="var(--a-cyan)" opacity="1.00"/>
-<polygon points="690,134 682,128 746,34 746,34" fill="var(--a-mag)" opacity="0.94"/>
-<polygon points="682,189 678,183 856,107 856,108" fill="var(--a-acid)" opacity="0.97"/>
-<polygon points="563,222 564,225 435,248 435,248" fill="var(--a-cyan)" opacity="0.99"/>
-<polygon points="649,174 637,170 684,-147 684,-147" fill="var(--a-violet)" opacity="0.93"/>
-<polygon points="722,140 713,130 988,-104 988,-104" fill="var(--a-acid)" opacity="0.99"/>
-<polygon points="568,196 568,198 408,176 408,176" fill="var(--a-mag)" opacity="0.84"/>
-<polygon points="678,199 677,188 983,91 983,91" fill="var(--a-acid)" opacity="0.85"/>
-<polygon points="671,207 672,200 900,173 900,173" fill="var(--a-verm)" opacity="1.00"/>
-<polygon points="688,185 685,173 1017,8 1017,8" fill="var(--a-verm)" opacity="0.84"/>
-<polygon points="689,166 686,157 843,25 844,26" fill="var(--a-verm)" opacity="0.90"/>
-<polygon points="670,103 656,99 738,-193 739,-193" fill="var(--a-ember)" opacity="0.86"/>
-<polygon points="733,157 727,144 944,15 944,15" fill="var(--a-bone)" opacity="0.93"/>
-<polygon points="696,165 689,162 870,32 871,32" fill="var(--a-ember)" opacity="0.97"/>
-<polygon points="567,253 575,258 414,372 414,372" fill="var(--a-bone)" opacity="0.85"/>
-<polygon points="569,237 566,244 510,270 509,269" fill="var(--a-mag)" opacity="0.90"/>
-<polygon points="704,198 705,183 923,149 924,150" fill="var(--a-verm)" opacity="0.83"/>
-<polygon points="560,259 570,267 444,365 443,365" fill="var(--a-verm)" opacity="0.89"/>
-<polygon points="674,202 669,189 886,139 886,139" fill="var(--a-violet)" opacity="0.95"/>
-<polygon points="539,245 544,252 420,308 420,308" fill="var(--a-violet)" opacity="0.93"/>
-<polygon points="539,244 544,257 354,333 354,332" fill="var(--a-verm)" opacity="0.82"/>
-<polygon points="675,208 673,194 1025,138 1025,139" fill="var(--a-verm)" opacity="0.99"/>
-</g>
-<g class="rays">
-<line x1="655" y1="194" x2="801" y2="88" stroke="var(--a-violet)" stroke-width="2.0" opacity="0.78"/>
-<line x1="673" y1="195" x2="835" y2="146" stroke="var(--a-ember)" stroke-width="2.0" opacity="0.84"/>
-<line x1="598" y1="268" x2="460" y2="475" stroke="var(--a-verm)" stroke-width="2.0" stroke-dasharray="12 7" opacity="0.83"/>
-<line x1="592" y1="203" x2="488" y2="200" stroke="var(--a-verm)" stroke-width="1.2" opacity="0.84"/>
-<line x1="698" y1="176" x2="1068" y2="-7" stroke="var(--a-violet)" stroke-width="1.2" stroke-dasharray="3 9" opacity="0.89"/>
-<line x1="678" y1="137" x2="817" y2="-112" stroke="var(--a-cobalt)" stroke-width="1.5" opacity="0.93"/>
-<line x1="602" y1="245" x2="416" y2="445" stroke="var(--a-verm)" stroke-width="2.0" opacity="0.68"/>
-<line x1="598" y1="251" x2="401" y2="467" stroke="var(--a-violet)" stroke-width="1.2" opacity="0.92"/>
-<line x1="642" y1="154" x2="646" y2="9" stroke="var(--a-mag)" stroke-width="1.5" stroke-dasharray="3 9" opacity="0.86"/>
-<line x1="661" y1="146" x2="752" y2="-114" stroke="var(--a-violet)" stroke-width="1.2" stroke-dasharray="3 9" opacity="0.67"/>
-<line x1="671" y1="147" x2="767" y2="-36" stroke="var(--a-cobalt)" stroke-width="1.5" opacity="0.88"/>
-<line x1="606" y1="227" x2="357" y2="390" stroke="var(--a-bone)" stroke-width="2.0" stroke-dasharray="12 7" opacity="0.90"/>
-<line x1="679" y1="228" x2="906" y2="360" stroke="var(--a-verm)" stroke-width="1.5" stroke-dasharray="3 9" opacity="0.86"/>
-<line x1="593" y1="223" x2="370" y2="308" stroke="var(--a-mag)" stroke-width="2.0" opacity="0.80"/>
-<line x1="603" y1="241" x2="522" y2="319" stroke="var(--a-verm)" stroke-width="1.2" stroke-dasharray="3 9" opacity="0.95"/>
-<line x1="661" y1="184" x2="956" y2="-107" stroke="var(--a-bone)" stroke-width="1.2" stroke-dasharray="12 7" opacity="0.75"/>
-<line x1="585" y1="254" x2="373" y2="440" stroke="var(--a-verm)" stroke-width="1.2" stroke-dasharray="12 7" opacity="0.75"/>
-<line x1="665" y1="189" x2="928" y2="18" stroke="var(--a-verm)" stroke-width="1.2" opacity="0.90"/>
-<line x1="669" y1="194" x2="1075" y2="38" stroke="var(--a-ember)" stroke-width="1.5" opacity="0.87"/>
-<line x1="686" y1="153" x2="889" y2="-77" stroke="var(--a-verm)" stroke-width="1.2" opacity="0.83"/>
-<line x1="678" y1="183" x2="1095" y2="-52" stroke="var(--a-mag)" stroke-width="1.2" stroke-dasharray="3 9" opacity="0.91"/>
-<line x1="712" y1="201" x2="1170" y2="172" stroke="var(--a-ember)" stroke-width="2.0" opacity="0.73"/>
-<line x1="657" y1="189" x2="950" y2="-96" stroke="var(--a-cobalt)" stroke-width="1.2" stroke-dasharray="3 9" opacity="0.68"/>
-<line x1="669" y1="176" x2="910" y2="-60" stroke="var(--a-mag)" stroke-width="1.2" stroke-dasharray="12 7" opacity="0.73"/>
-</g>
-<g class="spray">
-<circle cx="574" cy="165" r="1.4" fill="var(--a-verm)" opacity="0.57"/>
-<circle cx="333" cy="422" r="1.0" fill="var(--a-bone)" opacity="0.62"/>
-<circle cx="646" cy="154" r="1.5" fill="var(--a-bone)" opacity="0.65"/>
-<circle cx="761" cy="99" r="1.9" fill="var(--a-bone)" opacity="0.61"/>
-<circle cx="682" cy="295" r="0.8" fill="var(--a-verm)" opacity="0.90"/>
-<circle cx="716" cy="255" r="1.4" fill="var(--a-bone)" opacity="0.88"/>
-<circle cx="901" cy="-20" r="1.1" fill="var(--a-bone)" opacity="0.80"/>
-<circle cx="1111" cy="3" r="1.4" fill="var(--a-bone)" opacity="0.75"/>
-<circle cx="733" cy="45" r="0.8" fill="var(--a-verm)" opacity="0.81"/>
-<circle cx="579" cy="226" r="0.8" fill="var(--a-ember)" opacity="0.82"/>
-<circle cx="789" cy="0" r="0.9" fill="var(--a-bone)" opacity="0.76"/>
-<circle cx="810" cy="89" r="1.5" fill="var(--a-bone)" opacity="0.60"/>
-<circle cx="765" cy="95" r="1.3" fill="var(--a-bone)" opacity="0.97"/>
-<circle cx="741" cy="147" r="1.4" fill="var(--a-bone)" opacity="0.51"/>
-<circle cx="799" cy="23" r="0.8" fill="var(--a-violet)" opacity="0.89"/>
-<circle cx="796" cy="116" r="1.3" fill="var(--a-cobalt)" opacity="0.91"/>
-<circle cx="837" cy="162" r="1.0" fill="var(--a-bone)" opacity="0.69"/>
-<circle cx="842" cy="-169" r="0.6" fill="var(--a-bone)" opacity="0.55"/>
-<circle cx="697" cy="177" r="0.9" fill="var(--a-bone)" opacity="0.66"/>
-<circle cx="713" cy="359" r="2.7" fill="var(--a-mag)" opacity="0.81"/>
-<circle cx="811" cy="67" r="1.6" fill="var(--a-bone)" opacity="0.87"/>
-<circle cx="644" cy="144" r="1.1" fill="var(--a-verm)" opacity="0.73"/>
-<circle cx="592" cy="78" r="0.8" fill="var(--a-bone)" opacity="0.61"/>
-<circle cx="811" cy="152" r="0.8" fill="var(--a-cobalt)" opacity="0.59"/>
-<circle cx="548" cy="231" r="1.5" fill="var(--a-bone)" opacity="0.89"/>
-<circle cx="779" cy="48" r="1.1" fill="var(--a-bone)" opacity="0.76"/>
-<circle cx="721" cy="123" r="0.8" fill="var(--a-acid)" opacity="0.85"/>
-<circle cx="697" cy="129" r="1.0" fill="var(--a-ember)" opacity="0.60"/>
-<circle cx="899" cy="120" r="0.7" fill="var(--a-bone)" opacity="0.63"/>
-<circle cx="755" cy="113" r="0.9" fill="var(--a-verm)" opacity="0.70"/>
-<circle cx="801" cy="277" r="1.4" fill="var(--a-bone)" opacity="0.82"/>
-<circle cx="921" cy="-40" r="1.4" fill="var(--a-bone)" opacity="0.53"/>
-<circle cx="800" cy="75" r="1.1" fill="var(--a-verm)" opacity="0.89"/>
-<circle cx="817" cy="95" r="1.0" fill="var(--a-bone)" opacity="0.62"/>
-<circle cx="860" cy="62" r="1.0" fill="var(--a-verm)" opacity="0.74"/>
-<circle cx="768" cy="128" r="0.9" fill="var(--a-bone)" opacity="0.72"/>
-<circle cx="919" cy="96" r="1.1" fill="var(--a-bone)" opacity="0.94"/>
-<circle cx="1025" cy="-141" r="1.3" fill="var(--a-acid)" opacity="0.74"/>
-<circle cx="713" cy="157" r="0.7" fill="var(--a-bone)" opacity="0.87"/>
-<circle cx="702" cy="173" r="0.9" fill="var(--a-bone)" opacity="0.88"/>
-<circle cx="550" cy="47" r="0.9" fill="var(--a-bone)" opacity="0.93"/>
-<circle cx="718" cy="156" r="1.6" fill="var(--a-bone)" opacity="0.72"/>
-<circle cx="721" cy="127" r="1.6" fill="var(--a-cobalt)" opacity="0.80"/>
-<circle cx="418" cy="326" r="1.4" fill="var(--a-bone)" opacity="0.86"/>
-<circle cx="591" cy="286" r="0.8" fill="var(--a-bone)" opacity="0.54"/>
-<circle cx="930" cy="17" r="1.5" fill="var(--a-bone)" opacity="0.68"/>
-<circle cx="782" cy="122" r="1.5" fill="var(--a-mag)" opacity="0.76"/>
-<circle cx="717" cy="60" r="1.4" fill="var(--a-bone)" opacity="0.52"/>
-<circle cx="476" cy="212" r="1.0" fill="var(--a-violet)" opacity="0.71"/>
-<circle cx="716" cy="89" r="1.0" fill="var(--a-violet)" opacity="0.60"/>
-<circle cx="597" cy="130" r="1.4" fill="var(--a-cobalt)" opacity="0.91"/>
-<circle cx="546" cy="265" r="0.7" fill="var(--a-ember)" opacity="0.73"/>
-<circle cx="542" cy="159" r="1.0" fill="var(--a-verm)" opacity="0.64"/>
-<circle cx="681" cy="138" r="0.9" fill="var(--a-cobalt)" opacity="0.66"/>
-<circle cx="901" cy="-149" r="0.7" fill="var(--a-bone)" opacity="0.74"/>
-<circle cx="835" cy="-175" r="0.7" fill="var(--a-bone)" opacity="0.91"/>
-<circle cx="564" cy="144" r="0.9" fill="var(--a-bone)" opacity="0.90"/>
-<circle cx="866" cy="81" r="0.7" fill="var(--a-mag)" opacity="0.90"/>
-<circle cx="695" cy="174" r="0.8" fill="var(--a-bone)" opacity="0.99"/>
-<circle cx="843" cy="57" r="0.8" fill="var(--a-bone)" opacity="0.78"/>
-<circle cx="883" cy="11" r="1.2" fill="var(--a-verm)" opacity="0.51"/>
-<circle cx="773" cy="-55" r="2.3" fill="var(--a-cyan)" opacity="0.81"/>
-<circle cx="764" cy="177" r="0.9" fill="var(--a-bone)" opacity="0.91"/>
-<circle cx="610" cy="266" r="0.8" fill="var(--a-bone)" opacity="0.84"/>
-<circle cx="578" cy="259" r="0.6" fill="var(--a-verm)" opacity="0.77"/>
-<circle cx="911" cy="150" r="1.3" fill="var(--a-bone)" opacity="0.75"/>
-<circle cx="902" cy="91" r="0.8" fill="var(--a-verm)" opacity="0.64"/>
-<circle cx="557" cy="249" r="1.2" fill="var(--a-bone)" opacity="0.82"/>
-<circle cx="767" cy="115" r="0.6" fill="var(--a-bone)" opacity="0.63"/>
-<circle cx="706" cy="328" r="2.2" fill="var(--a-verm)" opacity="0.97"/>
-<circle cx="879" cy="69" r="1.4" fill="var(--a-violet)" opacity="0.51"/>
-<circle cx="1041" cy="125" r="0.9" fill="var(--a-ember)" opacity="0.91"/>
-<circle cx="741" cy="42" r="0.9" fill="var(--a-bone)" opacity="0.98"/>
-<circle cx="765" cy="165" r="1.2" fill="var(--a-bone)" opacity="0.78"/>
-<circle cx="519" cy="309" r="1.6" fill="var(--a-bone)" opacity="0.92"/>
-<circle cx="467" cy="336" r="1.2" fill="var(--a-mag)" opacity="0.96"/>
-<circle cx="858" cy="16" r="0.8" fill="var(--a-bone)" opacity="0.51"/>
-<circle cx="660" cy="-226" r="1.5" fill="var(--a-bone)" opacity="0.66"/>
-<circle cx="893" cy="162" r="1.4" fill="var(--a-cyan)" opacity="0.65"/>
-<circle cx="708" cy="111" r="0.7" fill="var(--a-bone)" opacity="0.79"/>
-<circle cx="870" cy="-101" r="1.3" fill="var(--a-bone)" opacity="0.64"/>
-<circle cx="339" cy="266" r="0.6" fill="var(--a-bone)" opacity="0.69"/>
-<circle cx="738" cy="145" r="0.7" fill="var(--a-bone)" opacity="0.65"/>
-<circle cx="759" cy="81" r="1.2" fill="var(--a-bone)" opacity="0.57"/>
-<circle cx="948" cy="21" r="1.5" fill="var(--a-verm)" opacity="0.73"/>
-<circle cx="783" cy="144" r="1.4" fill="var(--a-bone)" opacity="0.65"/>
-<circle cx="595" cy="266" r="0.9" fill="var(--a-verm)" opacity="0.85"/>
-<circle cx="447" cy="212" r="1.0" fill="var(--a-bone)" opacity="0.65"/>
-<circle cx="876" cy="67" r="2.3" fill="var(--a-bone)" opacity="0.57"/>
-<circle cx="627" cy="327" r="1.1" fill="var(--a-bone)" opacity="0.62"/>
-<circle cx="677" cy="120" r="1.6" fill="var(--a-bone)" opacity="0.82"/>
-<circle cx="729" cy="170" r="1.4" fill="var(--a-bone)" opacity="0.54"/>
-<circle cx="363" cy="428" r="0.8" fill="var(--a-bone)" opacity="0.91"/>
-<circle cx="558" cy="324" r="1.2" fill="var(--a-bone)" opacity="0.99"/>
-<circle cx="602" cy="38" r="1.1" fill="var(--a-cyan)" opacity="0.67"/>
-<circle cx="542" cy="240" r="2.1" fill="var(--a-bone)" opacity="0.64"/>
-<circle cx="559" cy="187" r="1.1" fill="var(--a-bone)" opacity="0.82"/>
-<circle cx="843" cy="41" r="1.6" fill="var(--a-ember)" opacity="0.78"/>
-<circle cx="733" cy="20" r="1.4" fill="var(--a-acid)" opacity="0.83"/>
-<circle cx="574" cy="261" r="1.0" fill="var(--a-bone)" opacity="0.86"/>
-<circle cx="789" cy="-167" r="1.0" fill="var(--a-bone)" opacity="0.55"/>
-<circle cx="651" cy="265" r="0.9" fill="var(--a-bone)" opacity="0.93"/>
-<circle cx="859" cy="-64" r="0.7" fill="var(--a-verm)" opacity="0.74"/>
-<circle cx="825" cy="164" r="1.0" fill="var(--a-mag)" opacity="0.89"/>
-<circle cx="764" cy="168" r="0.8" fill="var(--a-mag)" opacity="0.64"/>
-<circle cx="559" cy="275" r="1.2" fill="var(--a-ember)" opacity="0.77"/>
-<circle cx="568" cy="87" r="1.5" fill="var(--a-bone)" opacity="0.98"/>
-<circle cx="878" cy="177" r="0.6" fill="var(--a-bone)" opacity="0.59"/>
-<circle cx="833" cy="51" r="1.2" fill="var(--a-bone)" opacity="0.79"/>
-<circle cx="593" cy="81" r="0.7" fill="var(--a-ember)" opacity="0.86"/>
-<circle cx="842" cy="22" r="1.5" fill="var(--a-verm)" opacity="0.81"/>
-<circle cx="856" cy="180" r="2.1" fill="var(--a-ember)" opacity="0.52"/>
-<circle cx="473" cy="317" r="1.0" fill="var(--a-verm)" opacity="0.64"/>
-<circle cx="718" cy="115" r="1.5" fill="var(--a-cyan)" opacity="0.86"/>
-<circle cx="716" cy="63" r="0.6" fill="var(--a-violet)" opacity="0.77"/>
-<circle cx="1033" cy="-210" r="1.1" fill="var(--a-bone)" opacity="0.66"/>
-<circle cx="876" cy="7" r="0.7" fill="var(--a-bone)" opacity="0.66"/>
-<circle cx="607" cy="82" r="0.8" fill="var(--a-bone)" opacity="0.83"/>
-<circle cx="689" cy="147" r="0.8" fill="var(--a-verm)" opacity="0.74"/>
-<circle cx="763" cy="69" r="1.5" fill="var(--a-bone)" opacity="0.56"/>
-<circle cx="408" cy="-39" r="1.4" fill="var(--a-bone)" opacity="0.93"/>
-<circle cx="760" cy="119" r="0.6" fill="var(--a-bone)" opacity="0.61"/>
-<circle cx="787" cy="-56" r="1.6" fill="var(--a-bone)" opacity="0.76"/>
-<circle cx="832" cy="60" r="1.3" fill="var(--a-bone)" opacity="0.60"/>
-<circle cx="900" cy="-250" r="1.3" fill="var(--a-bone)" opacity="0.93"/>
-<circle cx="496" cy="309" r="1.2" fill="var(--a-cyan)" opacity="0.52"/>
-<circle cx="581" cy="226" r="1.1" fill="var(--a-mag)" opacity="0.71"/>
-<circle cx="697" cy="-260" r="1.4" fill="var(--a-bone)" opacity="0.71"/>
-<circle cx="1009" cy="157" r="1.0" fill="var(--a-cobalt)" opacity="0.61"/>
-<circle cx="732" cy="128" r="1.0" fill="var(--a-bone)" opacity="0.53"/>
-<circle cx="692" cy="93" r="1.1" fill="var(--a-violet)" opacity="0.72"/>
-<circle cx="248" cy="87" r="0.7" fill="var(--a-bone)" opacity="0.64"/>
-<circle cx="722" cy="142" r="0.6" fill="var(--a-bone)" opacity="0.80"/>
-<circle cx="571" cy="256" r="0.6" fill="var(--a-bone)" opacity="0.98"/>
-<circle cx="574" cy="247" r="0.7" fill="var(--a-acid)" opacity="0.75"/>
-<circle cx="549" cy="274" r="0.7" fill="var(--a-verm)" opacity="0.80"/>
-<circle cx="555" cy="258" r="1.0" fill="var(--a-bone)" opacity="0.79"/>
-<circle cx="757" cy="84" r="0.8" fill="var(--a-verm)" opacity="0.99"/>
-<circle cx="507" cy="275" r="1.2" fill="var(--a-bone)" opacity="0.51"/>
-<circle cx="864" cy="-166" r="1.1" fill="var(--a-bone)" opacity="0.51"/>
-<circle cx="315" cy="71" r="2.6" fill="var(--a-bone)" opacity="0.96"/>
-<circle cx="810" cy="223" r="1.4" fill="var(--a-bone)" opacity="0.58"/>
-<circle cx="845" cy="-42" r="1.2" fill="var(--a-bone)" opacity="0.78"/>
-<circle cx="557" cy="289" r="0.7" fill="var(--a-violet)" opacity="0.74"/>
-<circle cx="966" cy="-118" r="1.3" fill="var(--a-cobalt)" opacity="0.94"/>
-<circle cx="451" cy="282" r="0.8" fill="var(--a-verm)" opacity="0.99"/>
-<circle cx="570" cy="212" r="0.8" fill="var(--a-bone)" opacity="0.86"/>
-<circle cx="576" cy="115" r="1.6" fill="var(--a-bone)" opacity="0.87"/>
-<circle cx="670" cy="122" r="0.7" fill="var(--a-mag)" opacity="0.83"/>
-<circle cx="532" cy="281" r="1.5" fill="var(--a-verm)" opacity="0.94"/>
-<circle cx="772" cy="170" r="1.0" fill="var(--a-bone)" opacity="0.92"/>
-<circle cx="457" cy="391" r="1.5" fill="var(--a-bone)" opacity="0.97"/>
-<circle cx="737" cy="134" r="0.9" fill="var(--a-verm)" opacity="0.91"/>
-<circle cx="498" cy="365" r="1.1" fill="var(--a-bone)" opacity="0.51"/>
-<circle cx="609" cy="467" r="1.0" fill="var(--a-bone)" opacity="0.70"/>
-<circle cx="1157" cy="-67" r="0.8" fill="var(--a-violet)" opacity="0.50"/>
-<circle cx="871" cy="-16" r="0.8" fill="var(--a-bone)" opacity="0.95"/>
-<circle cx="732" cy="163" r="1.0" fill="var(--a-violet)" opacity="0.67"/>
-<circle cx="917" cy="102" r="1.2" fill="var(--a-bone)" opacity="0.74"/>
-<circle cx="716" cy="119" r="1.0" fill="var(--a-mag)" opacity="0.93"/>
-<circle cx="840" cy="90" r="1.6" fill="var(--a-bone)" opacity="0.90"/>
-<circle cx="787" cy="-532" r="1.4" fill="var(--a-bone)" opacity="0.71"/>
-<circle cx="255" cy="349" r="1.2" fill="var(--a-mag)" opacity="0.98"/>
-<circle cx="681" cy="178" r="0.8" fill="var(--a-bone)" opacity="0.77"/>
-<circle cx="714" cy="169" r="0.7" fill="var(--a-bone)" opacity="0.89"/>
-<circle cx="731" cy="70" r="0.8" fill="var(--a-acid)" opacity="0.54"/>
-<circle cx="476" cy="235" r="0.8" fill="var(--a-bone)" opacity="0.59"/>
-<circle cx="685" cy="168" r="0.7" fill="var(--a-bone)" opacity="0.79"/>
-<circle cx="926" cy="-38" r="0.9" fill="var(--a-bone)" opacity="0.86"/>
-<circle cx="485" cy="338" r="1.5" fill="var(--a-bone)" opacity="0.52"/>
-<circle cx="1055" cy="75" r="0.6" fill="var(--a-bone)" opacity="0.85"/>
-<circle cx="537" cy="188" r="0.8" fill="var(--a-bone)" opacity="0.51"/>
-<circle cx="613" cy="241" r="0.6" fill="var(--a-verm)" opacity="0.83"/>
-<circle cx="741" cy="184" r="1.3" fill="var(--a-bone)" opacity="0.78"/>
-<circle cx="798" cy="-19" r="0.6" fill="var(--a-ember)" opacity="0.75"/>
-<circle cx="675" cy="126" r="0.9" fill="var(--a-bone)" opacity="0.81"/>
-<circle cx="745" cy="128" r="0.9" fill="var(--a-bone)" opacity="0.55"/>
-<circle cx="827" cy="214" r="1.2" fill="var(--a-verm)" opacity="0.98"/>
-<circle cx="708" cy="32" r="1.4" fill="var(--a-verm)" opacity="0.78"/>
-<circle cx="569" cy="87" r="1.5" fill="var(--a-bone)" opacity="0.69"/>
-<circle cx="703" cy="135" r="1.5" fill="var(--a-bone)" opacity="0.55"/>
-<circle cx="447" cy="110" r="1.1" fill="var(--a-bone)" opacity="0.86"/>
-<circle cx="723" cy="130" r="1.0" fill="var(--a-bone)" opacity="0.69"/>
-<circle cx="770" cy="57" r="1.5" fill="var(--a-bone)" opacity="0.69"/>
-<circle cx="354" cy="413" r="0.9" fill="var(--a-bone)" opacity="0.72"/>
-<circle cx="510" cy="43" r="1.3" fill="var(--a-violet)" opacity="0.58"/>
-<circle cx="549" cy="238" r="0.7" fill="var(--a-mag)" opacity="0.84"/>
-<circle cx="703" cy="121" r="1.0" fill="var(--a-bone)" opacity="0.58"/>
-<circle cx="698" cy="99" r="0.7" fill="var(--a-bone)" opacity="0.78"/>
-<circle cx="962" cy="-95" r="1.2" fill="var(--a-bone)" opacity="0.63"/>
-<circle cx="547" cy="274" r="0.9" fill="var(--a-bone)" opacity="0.84"/>
-<circle cx="773" cy="164" r="1.4" fill="var(--a-bone)" opacity="0.90"/>
-<circle cx="775" cy="98" r="2.2" fill="var(--a-bone)" opacity="0.52"/>
-<circle cx="731" cy="55" r="1.1" fill="var(--a-bone)" opacity="0.76"/>
-<circle cx="927" cy="115" r="1.2" fill="var(--a-cyan)" opacity="0.98"/>
-<circle cx="721" cy="199" r="1.5" fill="var(--a-bone)" opacity="0.66"/>
-<circle cx="901" cy="68" r="0.8" fill="var(--a-verm)" opacity="0.63"/>
-<circle cx="822" cy="211" r="1.1" fill="var(--a-bone)" opacity="0.85"/>
-<circle cx="579" cy="256" r="1.6" fill="var(--a-cobalt)" opacity="0.89"/>
-<circle cx="689" cy="177" r="1.4" fill="var(--a-ember)" opacity="0.87"/>
-<circle cx="998" cy="1" r="1.3" fill="var(--a-bone)" opacity="0.62"/>
-<circle cx="866" cy="-273" r="0.8" fill="var(--a-bone)" opacity="0.67"/>
-<circle cx="680" cy="153" r="1.3" fill="var(--a-bone)" opacity="0.98"/>
-<circle cx="737" cy="189" r="1.2" fill="var(--a-bone)" opacity="0.96"/>
-<circle cx="560" cy="266" r="1.5" fill="var(--a-bone)" opacity="0.63"/>
-<circle cx="694" cy="41" r="1.6" fill="var(--a-bone)" opacity="0.75"/>
-<circle cx="705" cy="-2" r="1.0" fill="var(--a-bone)" opacity="0.57"/>
-<circle cx="545" cy="277" r="1.0" fill="var(--a-verm)" opacity="0.85"/>
-<circle cx="595" cy="280" r="0.6" fill="var(--a-bone)" opacity="0.80"/>
-<circle cx="407" cy="559" r="1.4" fill="var(--a-bone)" opacity="0.52"/>
-<circle cx="776" cy="74" r="1.2" fill="var(--a-bone)" opacity="0.98"/>
-<circle cx="694" cy="68" r="1.5" fill="var(--a-mag)" opacity="0.71"/>
-<circle cx="430" cy="322" r="0.6" fill="var(--a-bone)" opacity="0.52"/>
-<circle cx="807" cy="-55" r="1.5" fill="var(--a-bone)" opacity="0.69"/>
-<circle cx="874" cy="57" r="0.9" fill="var(--a-bone)" opacity="0.55"/>
-<circle cx="785" cy="15" r="1.6" fill="var(--a-bone)" opacity="0.53"/>
-<circle cx="641" cy="347" r="1.6" fill="var(--a-bone)" opacity="0.86"/>
-<circle cx="715" cy="65" r="1.5" fill="var(--a-bone)" opacity="0.81"/>
-<circle cx="889" cy="26" r="0.9" fill="var(--a-bone)" opacity="0.93"/>
-<circle cx="714" cy="37" r="1.4" fill="var(--a-bone)" opacity="0.63"/>
-<circle cx="575" cy="239" r="0.7" fill="var(--a-bone)" opacity="0.60"/>
-<circle cx="546" cy="101" r="0.9" fill="var(--a-bone)" opacity="0.98"/>
-<circle cx="723" cy="350" r="1.3" fill="var(--a-violet)" opacity="0.76"/>
-<circle cx="677" cy="362" r="1.3" fill="var(--a-bone)" opacity="0.55"/>
-<circle cx="1045" cy="-55" r="1.4" fill="var(--a-acid)" opacity="0.75"/>
-<circle cx="516" cy="249" r="0.8" fill="var(--a-bone)" opacity="0.82"/>
-<circle cx="738" cy="109" r="2.6" fill="var(--a-verm)" opacity="0.85"/>
-<circle cx="551" cy="-34" r="1.5" fill="var(--a-verm)" opacity="0.80"/>
-<circle cx="561" cy="82" r="1.4" fill="var(--a-bone)" opacity="0.91"/>
-<circle cx="772" cy="58" r="1.0" fill="var(--a-bone)" opacity="0.73"/>
-<circle cx="606" cy="244" r="1.2" fill="var(--a-bone)" opacity="0.59"/>
-<circle cx="718" cy="13" r="1.6" fill="var(--a-bone)" opacity="0.67"/>
-<circle cx="1035" cy="-122" r="1.2" fill="var(--a-bone)" opacity="0.62"/>
-<circle cx="700" cy="129" r="1.0" fill="var(--a-bone)" opacity="0.75"/>
-<circle cx="675" cy="143" r="1.0" fill="var(--a-cyan)" opacity="0.52"/>
-<circle cx="878" cy="-40" r="0.9" fill="var(--a-bone)" opacity="0.73"/>
-<circle cx="527" cy="321" r="1.0" fill="var(--a-bone)" opacity="0.92"/>
-<circle cx="854" cy="1" r="1.5" fill="var(--a-bone)" opacity="0.56"/>
-<circle cx="671" cy="356" r="1.3" fill="var(--a-bone)" opacity="0.78"/>
-<circle cx="726" cy="103" r="1.3" fill="var(--a-violet)" opacity="0.70"/>
-</g>
-<g class="whips" fill="none" stroke-linecap="butt">
-<path d="M 640 205 q 70 -45 165 -100 t 120 -20" stroke="var(--a-verm)" stroke-width="3.2"/>
-<path d="M 640 205 q 75 5 180 20 t 135 -38" stroke="var(--a-cobalt)" stroke-width="3.2"/>
-<path d="M 640 205 q 30 -75 60 -170 t -20 -98" stroke="var(--a-mag)" stroke-width="3.2"/>
-</g>
-<path class="survivor" d="M 640 205 L 470 400 L 383 502" fill="none" stroke="var(--a-bone)" stroke-width="2.2" opacity=".8"/>
-<g class="reg">
-<g stroke="var(--a-cyan)" stroke-width="1.5" fill="none">
-  <circle cx="640" cy="205" r="10"/><line x1="623" y1="205" x2="657" y2="205"/><line x1="640" y1="188" x2="640" y2="222"/>
-</g>
-<g stroke="var(--a-mag)" stroke-width="1.5" fill="none" opacity=".65" transform="translate(4,-3)">
-  <circle cx="640" cy="205" r="10"/><line x1="623" y1="205" x2="657" y2="205"/><line x1="640" y1="188" x2="640" y2="222"/>
-</g></g>
-      </svg>
-    </div>
+  <main class="fold">
+    <!-- assets/plate-01.jpg: Wet Proof, plate 01. One warm mass cropped by the
+         right edge, one petrol membrane wrapping its flank, residue whose
+         density decays away from the body, on the Plectis plum ground. Made in
+         the art lab (assets/plate-01.lab.py: pigment channels with different
+         mobilities advected through a curl field inside a resist silhouette;
+         deposits at the boundary; contamination where channels overlap), then
+         selected: seed 5 at 2560x1600. Regenerate from the lab rather than
+         editing pixels. -->
+    <img class="plate" src="assets/plate-01.jpg" alt="" width="2560" height="1600"
+         fetchpriority="high" decoding="async" aria-hidden="true">
 
-    <div class="rail masthead">
-      <h1>
-        <span class="l" data-l="WILL">Will</span>
-        <span class="l" data-l="COOK">Cook</span>
-      </h1>
-      <p class="plate">Public work</p>
+    <div class="col">
+      <header>
+        <h1>Will Cook</h1>
+        <p class="role">Public work</p>
+      </header>
+
       <p class="intro">
         I build and inspect a large private workflow system made with coding
         agents. The public parts are the ones a stranger can
         <b>run</b>, <b>check</b>, <b>read</b> or <b>watch</b>.
       </p>
-    </div>
 
-    <nav class="rail routes" aria-label="Public routes">
-      <h2 class="sr-only">Public routes</h2>
-      <ul class="routes-list">
-        <li class="row row-run">
-          <span class="station" aria-hidden="true">
-            <svg viewBox="0 0 32 32"><g fill="var(--c-run)"><rect x="3" y="15" width="12" height="2"/><rect x="7" y="10.5" width="7" height="2"/><rect x="7" y="19.5" width="7" height="2"/><circle cx="22" cy="16" r="2.4"/><circle cx="27.5" cy="12.5" r="1.2"/><circle cx="27.5" cy="19.5" r="1.2"/></g></svg>
-          </span>
-          <span class="num">01</span>
-          <span class="mode">Run</span>
-          <span class="what">
-            <a class="name" href="https://wcook04.github.io/plectis/">Plectis</a><span class="clause">Runnable components; each states a claim, runs a check, writes a receipt.</span>
-          </span>
-          <span class="exits">
-            <a href="https://wcook04.github.io/plectis/">Site</a><span class="sep" aria-hidden="true">/</span><a href="https://wcook04.github.io/plectis/docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="https://github.com/wcook04/plectis">GitHub<span aria-hidden="true">&#8599;</span></a>
-          </span>
-        </li>
-
-        <li class="row row-check">
-          <span class="station" aria-hidden="true">
-            <svg viewBox="0 0 32 32"><g stroke="var(--c-check)" stroke-width="1.6" fill="none"><circle cx="16" cy="16" r="7"/><line x1="16" y1="4" x2="16" y2="28"/><line x1="4" y1="16" x2="28" y2="16"/></g></svg>
-          </span>
-          <span class="num">02</span>
-          <span class="mode">Check</span>
-          <!-- The Lean repository is the mathematical authority. Keep this row
-               count-free so a publication refresh cannot leave the host front
-               door claiming a scope the linked release no longer states. -->
-          <span class="what">
-            <a class="name" href="https://github.com/wcook04/plectis-lean-erdos249-257">Lean corpus</a><span class="clause">Machine-checked mathematics in Lean 4 on open Erd&#337;s problems.</span>
-          </span>
-          <span class="exits">
-            <a href="https://github.com/wcook04/plectis-lean-erdos249-257">GitHub<span aria-hidden="true">&#8599;</span></a><span class="sep" aria-hidden="true">/</span><a href="https://wcook04.github.io/plectis/#papers">What is checked</a>
-          </span>
-        </li>
-
-        <li class="row row-read">
-          <span class="station" aria-hidden="true">
-            <svg viewBox="0 0 32 32"><g fill="var(--c-read)"><rect x="5" y="9" width="17" height="3.2"/><rect x="5" y="14.4" width="22" height="4.6"/><polygon points="5,21.2 24,21.2 26,22.6 23.5,24.4 5,24.4"/></g></svg>
-          </span>
-          <span class="num">03</span>
-          <span class="mode">Read</span>
-          <span class="what">
-            <a class="name" href="https://wcook04.github.io/plectis/docs/papers.html">Papers</a><span class="clause">One paper per covered problem, and the publication method itself.</span>
-          </span>
-          <span class="exits">
-            <a href="https://wcook04.github.io/plectis/docs/papers.html">Catalogue</a><span class="sep" aria-hidden="true">/</span><a href="https://wcook04.github.io/plectis/#papers">On the site</a>
-          </span>
-        </li>
-
-        <li class="row row-watch">
-          <span class="station" aria-hidden="true">
-            <svg viewBox="0 0 32 32"><g fill="none" stroke="var(--c-watch)" stroke-width="1.6"><rect x="4" y="10" width="13" height="12" opacity=".35"/><rect x="8" y="10" width="13" height="12" opacity=".6"/><rect x="12" y="10" width="13" height="12"/></g><line x1="4" y1="26.5" x2="25" y2="26.5" stroke="var(--c-watch)" stroke-width="1.6" stroke-dasharray="5 3"/></svg>
-          </span>
-          <span class="num">04</span>
-          <span class="mode">Watch</span>
-          <span class="what">
-            <a class="name" href="https://wcook04.github.io/plectis/#demo-videos">Videos</a><span class="clause">The private frontend on screen; demonstrations, not checks.</span>
-          </span>
-          <span class="exits">
-            <a href="https://wcook04.github.io/plectis/#demo-videos">On the site</a><span class="sep" aria-hidden="true">/</span><a href="https://youtu.be/R_--vExxWyk">1&nbsp;min<span aria-hidden="true">&#8599;</span></a><span class="sep" aria-hidden="true">/</span><a href="https://youtu.be/VoWByIOIuBE">5&nbsp;min<span aria-hidden="true">&#8599;</span></a><span class="sep" aria-hidden="true">/</span><a href="https://youtu.be/jA_xC8gmdSs">29&nbsp;min<span aria-hidden="true">&#8599;</span></a>
-          </span>
-        </li>
-      </ul>
+      <nav aria-label="Public routes">
+        <h2 class="sr-only">Public routes</h2>
+        <ul class="routes">
+          <li>
+            <p class="kind">Run</p>
+            <p class="name"><a href="https://wcook04.github.io/plectis/">Plectis</a></p>
+            <p class="exits">
+              <a href="https://wcook04.github.io/plectis/">Site</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://wcook04.github.io/plectis/docs/">Docs</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://github.com/wcook04/plectis">GitHub<span aria-hidden="true">&#8599;</span></a>
+            </p>
+          </li>
+          <li>
+            <p class="kind">Check</p>
+            <!-- The Lean repository is the mathematical authority. Keep this row
+                 count-free so a publication refresh cannot leave the host front
+                 door claiming a scope the linked release no longer states. -->
+            <p class="name"><a href="https://github.com/wcook04/plectis-lean-erdos249-257">Lean corpus</a></p>
+            <p class="exits">
+              <a href="https://github.com/wcook04/plectis-lean-erdos249-257">GitHub<span aria-hidden="true">&#8599;</span></a><span class="sep" aria-hidden="true">&middot;</span><a href="https://wcook04.github.io/plectis/#papers">What is checked</a>
+            </p>
+          </li>
+          <li>
+            <p class="kind">Read</p>
+            <p class="name"><a href="https://wcook04.github.io/plectis/docs/papers.html">Papers</a></p>
+            <p class="exits">
+              <a href="https://wcook04.github.io/plectis/docs/papers.html">Catalogue</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://wcook04.github.io/plectis/#papers">On the site</a>
+            </p>
+          </li>
+          <li>
+            <p class="kind">Watch</p>
+            <p class="name"><a href="https://wcook04.github.io/plectis/#demo-videos">Videos</a></p>
+            <p class="exits">
+              <a href="https://wcook04.github.io/plectis/#demo-videos">On the site</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://youtu.be/R_--vExxWyk">1&nbsp;min<span aria-hidden="true">&#8599;</span></a><span class="sep" aria-hidden="true">&middot;</span><a href="https://youtu.be/VoWByIOIuBE">5&nbsp;min<span aria-hidden="true">&#8599;</span></a><span class="sep" aria-hidden="true">&middot;</span><a href="https://youtu.be/jA_xC8gmdSs">29&nbsp;min<span aria-hidden="true">&#8599;</span></a>
+            </p>
+          </li>
+        </ul>
+      </nav>
 
       <footer class="colophon">
         <a href="https://github.com/wcook04">GitHub<span aria-hidden="true">&#8599;</span></a>
         <a href="https://www.linkedin.com/in/will-cook-278127234/">LinkedIn<span aria-hidden="true">&#8599;</span></a>
       </footer>
-    </nav>
-  </div>
+    </div>
+  </main>
 </body>
 </html>
