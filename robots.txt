@@ -3,4 +3,5 @@
 User-agent: *
 Allow: /
 
+Sitemap: https://wcook04.github.io/sitemap.xml
 Sitemap: https://wcook04.github.io/plectis/sitemap.xml
