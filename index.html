@@ -341,6 +341,95 @@
       .name a, .exits a, .colophon a { transition: none; }
     }
 
+    /* Both trailing sections take the index's own top rule, so the column reads
+       as four stacked bands of one device rather than a list with two
+       appendices bolted under it. The eyebrow is the .role line's type at the
+       .kind line's size: already on the page twice, so it introduces nothing. */
+    .handoff, .note {
+      margin: clamp(2.2rem, 5svh, 3.2rem) 0 0;
+      padding-top: clamp(1.5rem, 3.5svh, 2rem);
+      border-top: 1px solid var(--hair-strong);
+    }
+    .eyebrow {
+      margin: 0;
+      font-family: var(--font-sans);
+      font-size: .72rem; font-weight: 600;
+      letter-spacing: .22em; text-transform: uppercase;
+      color: var(--faint);
+    }
+    .handoff__lede {
+      margin: .75rem 0 0; max-width: 30rem;
+      color: var(--bone-soft); font-size: 1rem; line-height: 1.55;
+    }
+
+    /* The one filled control on the page. Everything else here is a link on
+       plum, so inverting the ground is the whole emphasis — no accent, no
+       shadow, no scale. Bone on plum measures 11.4:1 read one way and is the
+       same pair read the other. */
+    .handoff__act {
+      margin: 1.15rem 0 0;
+      display: flex; flex-wrap: wrap; align-items: baseline;
+      gap: .55rem .95rem;
+    }
+    .btn {
+      flex: none;
+      display: inline-block;
+      /* .68rem takes the box to 45px. At .62 it measured 43, which is under the
+         44px minimum for a touch target and the only control on the page. */
+      padding: .68rem 1.15rem;
+      background: var(--bone); color: var(--page);
+      font-family: var(--font-sans);
+      font-size: .84rem; font-weight: 600; letter-spacing: .01em;
+      text-decoration: none;
+      border: 1px solid var(--bone);
+      border-radius: 2px;
+      transition: background-color 140ms ease-out, border-color 140ms ease-out;
+    }
+    /* Hover empties the button rather than tinting it, which keeps the accent
+       meaning what it means everywhere else on the page and avoids inventing a
+       second bright ground. */
+    .btn:hover, .btn:focus-visible {
+      background: transparent; color: var(--bone); border-color: var(--bone);
+    }
+    /* Capped at the column's own measure rather than something narrower: beside
+       the button flex shrinks it to whatever is left, and once it wraps under
+       the button it should use the full line like every other paragraph here.
+       A 22rem cap left it ragged and short against a 30rem column. */
+    .handoff__alt {
+      max-width: 30rem;
+      font-family: var(--font-sans);
+      font-size: .82rem; line-height: 1.5; color: var(--faint);
+    }
+    .handoff__alt a {
+      color: var(--to-page); text-decoration: underline;
+      text-decoration-thickness: 1px; text-underline-offset: .22em;
+      text-decoration-color: color-mix(in srgb, var(--to-page) 34%, transparent);
+      transition: color 140ms ease-out, text-decoration-color 140ms ease-out;
+    }
+    .handoff__alt a:hover, .handoff__alt a:focus-visible {
+      color: var(--to-page-lit); text-decoration-color: var(--to-page-lit);
+    }
+    /* Same grey and size as a row's .desc, because it does the same job: it is
+       the sentence saying what this route does not get you. */
+    .handoff__limit {
+      margin: .9rem 0 0; max-width: 30rem;
+      font-size: .95rem; line-height: 1.5; color: var(--faint);
+    }
+
+    /* Prose, so it takes the intro's colour and the serif, not the grey the
+       rows use for their metadata. This is the one part of the page a reader
+       has to take on trust, and setting it in the faintest ink on the page
+       would quietly say it matters least. */
+    .note p {
+      margin: .75rem 0 0; max-width: 30rem;
+      font-size: .98rem; line-height: 1.6; color: var(--bone-soft);
+    }
+    .note p:first-of-type { margin-top: .8rem; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .btn, .handoff__alt a { transition: none; }
+    }
+
     .colophon {
       margin: 1.7rem 0 0;
       display: flex; gap: 1.4rem;
@@ -372,13 +461,22 @@
        art is never dimmed to rescue type that should not be there. */
     @media (min-width: 1280px) {
       .fold { min-height: calc(100svh - var(--thread-h)); }
+      /* The plate holds one screen and no more. Taking the whole fold was the
+         same thing while the column still fitted inside a viewport; once the
+         column ran to about twice that, `height: 100%` stretched the plate to
+         1900px and `cover` paid for the extra height by cropping width — from
+         the right, which is exactly where the mass is, so the opening screen
+         went nearly empty. Pinning it to the viewport keeps the composition the
+         file was selected for, and the reading simply continues below it on
+         plum, dissolving through the same mask the poster state uses. */
       .plate {
-        position: absolute; inset: 0;
-        width: 100%; height: 100%;
+        position: absolute; inset: 0 0 auto 0;
+        width: 100%; height: calc(100svh - var(--thread-h));
         /* Left-anchored: a viewport narrower than the plate crops the right
            rim, never the column the type stands on. */
         object-position: 0% 50%;
-        -webkit-mask-image: none; mask-image: none;
+        -webkit-mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
+        mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
         z-index: 0;
       }
       .col {
@@ -434,9 +532,18 @@
         <p class="role">Public work</p>
       </header>
 
+      <!-- Three sentences, and each one is load-bearing. The first says what the
+           thing is. The second says who made it, because a reader who does not
+           know that reads the rest as a team's output and prices it wrongly in
+           both directions. The third is the original line and still the point
+           of the page: the four rows below are the four things a stranger can
+           do without asking me for anything. Nothing here is a count, for the
+           same reason the rows carry none. -->
       <p class="intro">
         I build and inspect a large private workflow system made with coding
-        agents. The public parts are the ones a stranger can
+        agents. I am 22, an economics undergraduate at Bristol, and I have
+        worked on it alone and at my own expense for about a year. The public
+        parts are the ones a stranger can
         <b>run</b>, <b>check</b>, <b>read</b> or <b>watch</b>.
       </p>
 
@@ -500,6 +607,68 @@
           </li>
         </ul>
       </nav>
+
+      <!-- The fifth route, held back from the index above because it is not a
+           kind of thing to look at — it is a way of reading the other four. It
+           gets the only filled control on the page, and that is the honest
+           weighting: the reason most of this work has gone unread is that
+           reading it properly costs hours, and this is the one route that does
+           not. The file is on this host, so `download` is same-origin and does
+           what it says.
+
+           No byte counts, for the reason the rows above carry no counts: a
+           publication refresh must not leave the front door quoting a size the
+           linked release no longer has. "Large" and "smaller" survive a
+           rebuild; "12 MB" does not. -->
+      <section class="handoff" aria-labelledby="handoff-h">
+        <h2 class="eyebrow" id="handoff-h">Or hand it to an AI</h2>
+        <p class="handoff__lede">
+          Reading all of it properly takes hours that nobody has spare, which is
+          most of why it has gone unread. So the whole public record is
+          published as one file you can give to an assistant: every page, every
+          component, every claim, and every stated limit, with instructions to
+          cite exact pages and stop where the records stop.
+        </p>
+        <p class="handoff__act">
+          <a class="btn" href="https://wcook04.github.io/plectis/plectis-ai-review-packet.json"
+             download="plectis-ai-review-packet.json">Download the packet</a>
+          <span class="handoff__alt">then drag it into ChatGPT, Claude, Gemini or Grok. There is a
+            <a href="https://wcook04.github.io/plectis/plectis-ai-reader-digest.json"
+               download="plectis-ai-reader-digest.json">smaller digest</a>
+            if your assistant refuses a file that size.</span>
+        </p>
+        <p class="handoff__limit">
+          It reads and quotes the public files. It cannot run any of the checks.
+          If it tells you it ran one, it is wrong.
+        </p>
+      </section>
+
+      <!-- Why the page says any of this. It sits last because it is the only
+           part a reader has to take on trust, and it should not be the first
+           thing they meet. Every sentence is either a fact about me or a
+           request; none of it claims anything about the work that the work does
+           not claim about itself. The line about nobody having read it is
+           accurate and stays accurate: the recorded replies show field
+           mismatches and declines, not review. It would be easy, and false, to
+           write that no expert has found a mistake. -->
+      <section class="note" aria-labelledby="note-h">
+        <h2 class="eyebrow" id="note-h">Why it is here</h2>
+        <p>
+          AI was not the main tool I built this with. It was the only one. The
+          bet underneath it is that a system built for coding agents to work in
+          is worth more as the models get better, and Lean checks the
+          mathematics so that part never rests on my word. The problems it works
+          on are open, and it closes none of them.
+        </p>
+        <p>
+          I have only just started showing this to anyone, and so far almost
+          nobody with the expertise to judge it has read it. That is the thing I
+          would most like to change. If you work somewhere that could evaluate
+          work like this, an AI lab or anywhere else, I would like you to look.
+          The same goes if you fund it. I would rather be told it is wrong than
+          not be read.
+        </p>
+      </section>
 
       <!-- Accounts, not routes, which is why they sit apart from the index and
            stay in the quiet uppercase rather than taking a destination colour.
