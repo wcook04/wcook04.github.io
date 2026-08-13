@@ -624,69 +624,36 @@
       .col { max-width: none; }
     }
 
-    /* Side-by-side: the type on the plate's own calm column, the mass held in
-       the right of the frame. Gated at 1280px because that is where a 34rem
-       column still lands inside the quiet part of the plate. Below it the
-       column would cross the body, so the poster layout holds instead: the
-       art is never dimmed to rescue type that should not be there. */
-    @media (min-width: 1280px) {
-      .fold { min-height: calc(100svh - var(--thread-h)); }
-      /* The plate holds one screen, absolutely positioned, and dissolves into
-         plum below it.
+    /* Wide screens keep the poster, they do not switch to a side-by-side.
 
-         Three other arrangements were tried and each is worse. Stretched over
-         the whole fold, `cover` pays for the extra height by cropping width
-         off the right, which is where the mass is, so the opening screen comes
-         up nearly empty. `position: fixed` does not paint at all on first load
-         in this engine — the image lays out and reports healthy geometry, full
-         opacity and a decoded source, and is simply not drawn until something
-         forces a repaint, which means it cannot be caught by measurement and
-         looks fine the instant you go to inspect it. A fixed background
-         attachment paints correctly but repaints the whole viewport on every
-         scroll frame with a 2560px source, and hung the renderer outright in
-         testing.
+       There used to be a two-column state here: the type in a 34rem column
+       pinned left, the plate's mass held in the right of the frame. It looked
+       right for exactly one screen. Past the fold the column carried on down
+       the left edge with eleven hundred pixels of bare page beside it, and no
+       amount of work on the plate could fix that, because the emptiness was
+       never the plate's — it was a narrow column pinned to one side of a wide
+       viewport, which leaves a dead flank by construction. Three attempts to
+       fill it with artwork failed on their own terms: stretched over the fold
+       `cover` crops the mass off the right; `position: fixed` does not paint
+       on first load in this engine at all; a fixed background attachment
+       repaints the viewport every scroll frame and hung the renderer.
 
-         So the plate stays absolute and the reading continues below it on
-         plum. That leaves the wide right field empty past the first screen,
-         which is a real cost and is recorded rather than hidden: it is the
-         open question on this page, not an oversight. */
-      .plate {
-        position: absolute; inset: 0 0 auto 0;
-        width: 100%; height: calc(100svh - var(--thread-h));
-        /* Left-anchored: a viewport narrower than the plate crops the right
-           rim, never the column the type stands on. */
-        object-position: 0% 50%;
-        -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
-        mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
-        z-index: 0;
-      }
-      /* The ground the column stands on: a short pour of the page's own plum
-         from the left edge, gone before it reaches the mass. Absolute and
-         matched to the plate's own box, so it dissolves with it. It is why the
-         type reads as seated rather than laid on top, and it means the crop
-         can move at other widths without the column being rechecked. */
-      .fold::after {
-        content: "";
-        position: absolute; inset: 0 auto 0 0;
-        height: calc(100svh - var(--thread-h));
-        width: min(46rem, 60%);
-        background: linear-gradient(90deg,
-          var(--page) 0%,
-          color-mix(in srgb, var(--page) 78%, transparent) 32%,
-          transparent 100%);
-        -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
-        mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
-        pointer-events: none;
-        z-index: 0;
-      }
+       So the column is centred instead and the margins are symmetric. Empty
+       space either side of a measure reads as a page; the same space on one
+       side reads as a mistake. The plate goes full width across the top, which
+       is also the first time the whole picture has been visible at this size —
+       the two-column state was always showing a crop of it. */
+    @media (min-width: 761px) {
+      .plate { height: clamp(22rem, 62svh, 40rem); }
       .col {
-        min-height: calc(100svh - var(--thread-h));
-        max-width: 34rem;
-        margin-top: 0;
-        padding: clamp(2.4rem, 6svh, 4.2rem) clamp(1.4rem, 4.5vw, 4.5rem);
+        max-width: 42rem;
+        margin-inline: auto;
+        padding-inline: clamp(2rem, 5vw, 3.5rem);
       }
-
-
+      /* The measure stays a measure: the column may grow to 42rem for the rows
+         and the reading, but running prose is held to something a person can
+         actually track across. */
+      .intro, .handoff__lede, .handoff__limit, .note p { max-width: 34rem; }
     }
   </style>
 </head>
