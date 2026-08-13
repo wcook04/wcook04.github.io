@@ -478,6 +478,44 @@
       text-decoration-color: var(--accent-bright);
     }
 
+    /* ── Citations ──────────────────────────────────────────────────────────
+       The prose is a routing layer too. A sentence that asserts something a
+       stranger can check carries a link to the place it is checked, on the
+       same rule the rest of the site runs on: a claim names its evidence.
+
+       Two marks, one grammar, and they must not be confused:
+
+         dotted rule  this word has a definition   (a.term, above)
+         solid rule   this statement has evidence  (a.cite, here)
+
+       No phrase ever takes both. Colour is not invented for this: a citation
+       takes the destination pair the exits already use, so one that leaves the
+       host is gold and picks up the outbound glyph from the shared
+       a[data-to] rule, exactly like every other outbound link on the page.
+
+       The discipline that makes this worth doing is what stays UNLINKED. "It
+       is still an assumption", "nobody independent has checked the mathematics
+       yet", "nobody outside has seen the whole system" have no public evidence
+       and therefore get no link. On a page where checkable claims are visibly
+       linked, a bare sentence is a statement about its own evidence. That only
+       holds while the rule is kept exactly. */
+    a.cite  { --to: var(--to-page); --to-lit: var(--to-page-lit); }
+    a.cite[data-to="repo"]  { --to: var(--to-repo);  --to-lit: var(--to-repo-lit); }
+    a.cite[data-to="video"] { --to: var(--to-video); --to-lit: var(--to-video-lit); }
+    a.cite {
+      color: var(--to);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: .17em;
+      text-decoration-color: color-mix(in srgb, var(--to) 36%, transparent);
+      transition: color 140ms ease-out, text-decoration-color 140ms ease-out;
+    }
+    a.cite:hover, a.cite:focus-visible {
+      color: var(--to-lit);
+      text-decoration-color: var(--to-lit);
+    }
+    @media (prefers-reduced-motion: reduce) { a.cite { transition: none; } }
+
     /* The card. Same two tiers, same class names, same measurements as the
        Plectis sheet's .term-tip, with the tokens repointed at this page's plum
        instead of that sheet's surface. Dismissible with Esc, hoverable, and
@@ -687,8 +725,9 @@
       <p class="intro">
         I build a private system for coding
         <a class="term" data-term="agent" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-agent">agents</a>
-        to work in, and the tools to inspect what they did. The public parts
-        are the ones a stranger can
+        to work in, and
+        <a class="cite" data-to="video" href="https://wcook04.github.io/plectis/#demo-videos">the tools to inspect what they did</a>.
+        The public parts are the ones a stranger can
         <b>run</b>, <b>check</b>, <b>read</b> or <b>watch</b>.
       </p>
 
@@ -776,7 +815,8 @@
           the pages yourself. It contains every public page and record, each
           <a class="term" data-term="component" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-component">component</a>
           claim
-          with the limit on that claim, and instructions to cite exact pages.
+          <a class="cite" href="https://wcook04.github.io/plectis/docs/components.html">with the limit on that claim</a>,
+          and instructions to cite exact pages.
         </p>
         <!-- The filename is the honest label, so it is the label: a reader who
              presses this gets a .json in their downloads and should not have to
@@ -809,19 +849,22 @@
         <h2 class="eyebrow" id="note-h">Why it is here</h2>
         <p>
           I am 22, an economics undergraduate at Bristol. I built this alone
-          over about a year and paid for it myself, and AI was the only tool I
-          used.
+          over about a year and paid for it myself, and
+          <a class="cite" href="https://wcook04.github.io/plectis/docs/contact.html#who-built-this">AI was the only tool I used</a>.
         </p>
         <p>
-          I designed the system for coding agents to work in, on the assumption
-          that it gets more useful as the models improve. I have not shown
-          that; it is still an assumption. Most of the mathematics is written
-          in
+          I
+          <a class="cite" href="https://wcook04.github.io/plectis/docs/coding-agents.html">designed the system for coding agents to work in</a>,
+          on the assumption that it gets more useful as the models improve. I
+          have not shown that; it is still an assumption. Most of the
+          mathematics is written in
           <a class="term" data-term="lean" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-lean">Lean</a>,
-          which checks every step, so you do not have to take my word for those
-          claims. The Erd&#337;s problems the work covers are
+          which checks every step, so you do not have to take my word for
+          <a class="cite" data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/main/docs/RESULTS.md">those claims</a>.
+          The Erd&#337;s problems the work covers are
           <a class="term" data-term="open-problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">open</a>,
-          and none of it solves one.
+          and
+          <a class="cite" data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/main/SCOPE.md">none of it solves one</a>.
         </p>
         <!-- The fact, not the diary. This said the replies so far had been
              out-of-field or no-time, which is true and was the wrong thing to
@@ -845,9 +888,10 @@
         <p>
           Nobody independent has checked the mathematics yet, and nobody
           outside has seen the whole system. If you can evaluate work like
-          this, the most useful thing is bounded: take one public claim, follow
-          it to its source and its evidence, and tell me where the wording goes
-          further than the record does. If you are in a position to look at all
+          this, the most useful thing is bounded:
+          <a class="cite" href="https://wcook04.github.io/plectis/docs/evidence.html">take one public claim, follow it to its source and its evidence</a>,
+          and tell me where the wording goes further than the record does. If
+          you are in a position to look at all
           of it, I would like to show you. I am also looking for work or
           funding; a fellowship or something like it would let me do this
           properly instead of alongside a degree.
