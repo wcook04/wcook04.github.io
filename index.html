@@ -569,22 +569,30 @@
        art is never dimmed to rescue type that should not be there. */
     @media (min-width: 1280px) {
       .fold { min-height: calc(100svh - var(--thread-h)); }
-      /* The plate holds one screen and no more. Taking the whole fold was the
-         same thing while the column still fitted inside a viewport; once the
-         column ran to about twice that, `height: 100%` stretched the plate to
-         1900px and `cover` paid for the extra height by cropping width — from
-         the right, which is exactly where the mass is, so the opening screen
-         went nearly empty. Pinning it to the viewport keeps the composition the
-         file was selected for, and the reading simply continues below it on
-         plum, dissolving through the same mask the poster state uses. */
+      /* Fixed, so the plate is the page's ground rather than its header.
+
+         This has now failed in both directions. Stretched over the whole fold,
+         `cover` paid for the extra height by cropping width off the right,
+         which is where the mass is, and the opening screen came up nearly
+         empty. Pinned to one viewport instead, the composition was right but
+         everything below the first screen was a 34rem column with about
+         fourteen hundred pixels of bare plum beside it, which reads as a
+         layout that ran out rather than one that stopped.
+
+         Fixing it answers both. The plate holds the frame it was composed for
+         at every scroll position, the type moves across it, and the wide right
+         field is never empty because the artwork is what fills it. Nothing is
+         layered over the mass: the column is left-anchored and so is the
+         plate, so the type keeps to the quiet flank exactly as before. The
+         mask goes with the scroll — a fixed plate has no bottom edge to
+         dissolve. */
       .plate {
-        position: absolute; inset: 0 0 auto 0;
-        width: 100%; height: calc(100svh - var(--thread-h));
+        position: fixed; inset: 0;
+        width: 100%; height: 100%;
         /* Left-anchored: a viewport narrower than the plate crops the right
            rim, never the column the type stands on. */
         object-position: 0% 50%;
-        -webkit-mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
-        mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
+        -webkit-mask-image: none; mask-image: none;
         z-index: 0;
       }
       .col {
@@ -592,6 +600,32 @@
         max-width: 34rem;
         margin-top: 0;
         padding: clamp(2.4rem, 6svh, 4.2rem) clamp(1.4rem, 4.5vw, 4.5rem);
+      }
+
+      /* A fixed plate is correct and, held perfectly still under moving type,
+         slightly dead: the eye reads it as a backdrop rather than as the thing
+         the page is made of. So the crop drifts twelve per cent down its own
+         height across the length of the scroll. It is driven by scroll
+         position rather than by a clock, so it only moves while the reader
+         does, and it cannot loop or catch the eye on its own. Nothing enters,
+         nothing slides, nothing fades in; the picture is simply seen from
+         slightly further down by the time you reach the end.
+
+         Progressive enhancement in both directions. Browsers without
+         scroll-driven animation keep the still plate above, which is the whole
+         design minus one refinement, and a reader who has asked for less
+         motion gets exactly that. */
+      @supports (animation-timeline: scroll()) {
+        @media (prefers-reduced-motion: no-preference) {
+          .plate {
+            animation: plate-drift linear both;
+            animation-timeline: scroll(root block);
+          }
+          @keyframes plate-drift {
+            from { object-position: 0% 44%; }
+            to   { object-position: 0% 58%; }
+          }
+        }
       }
     }
   </style>
