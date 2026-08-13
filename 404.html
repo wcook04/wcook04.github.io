@@ -10,27 +10,41 @@
   <meta name="theme-color" content="#171020">
   <style>
     /* Nocturnal in both schemes, matching the front page: a visitor who lands
-       here in light mode and clicks through should not cross a colour break. */
+       here in light mode and clicks through should not cross a colour break.
+       color-scheme carries that to the user agent's own furniture too. */
     :root {
+      color-scheme: dark;
       --page: #171020; --ink: #f2e6d4; --muted: #a9998f;
       --accent: #9db3e8; --accent-strong: #c3d0f2;
     }
+    /* border-box or the padding is added to the viewport height rather than
+       taken out of it, and a page with one screen of content on it acquires a
+       64px scroll it has no reason to have. */
     body {
-      margin: 0; min-height: 100vh; background: var(--page); color: var(--ink);
+      box-sizing: border-box;
+      margin: 0; min-height: 100vh; min-height: 100svh;
+      background: var(--page); color: var(--ink);
       font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, ui-serif, serif;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       text-align: center; padding: 2rem; line-height: 1.6;
     }
+    /* Same ember as the front page and the Plectis sheet: two pixels, and the
+       ramp taken from that sheet rather than restated. */
     .thread {
-      position: fixed; top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, #55175a 0%, #8f2740 16%, #c05028 34%,
-        #f0a63f 50%, #d0512c 66%, #b0356a 82%, #4a2464 100%);
+      position: fixed; top: 0; left: 0; right: 0; height: 2px; opacity: .85;
+      background: linear-gradient(90deg, #1c1440 0%, #55175a 11%, #a83030 24%,
+        #e89b3c 33%, #c05028 47%, #802046 63%, #c9679f 71%, #472468 84%,
+        #131a38 100%);
     }
     img { width: 48px; height: 48px; border-radius: 11px; margin-bottom: 1.5rem; }
     h1 { font-size: 1.35rem; font-weight: 600; margin: 0 0 0.5rem; }
     p { color: var(--muted); margin: 0 0 1.5rem; max-width: 26rem; }
     a { color: var(--accent); text-underline-offset: 0.16em; }
     a:hover, a:focus-visible { color: var(--accent-strong); }
+    /* The colour shift alone is not a focus indicator — it is a colour change
+       of about 1.4:1 against the resting state, invisible to a good many
+       readers. The ring is the same one the front page uses. */
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 1px; }
   </style>
 </head>
 <body>

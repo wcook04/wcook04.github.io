@@ -43,6 +43,14 @@ Plectis repository, where `tools/brand/plectis_favicon.py` renders the rasters
 and the pinned day/night siblings from it. If the mark changes there, recopy it
 here; do not edit it in place.
 
+None of the icons in `site.webmanifest` is declared `maskable`, and none should
+be. A maskable icon is cropped to a circle inscribed in the middle 80% of the
+canvas, and the braid runs the full height of every raster we have — declaring
+it maskable cuts the top and bottom strands off on Android. A real maskable
+variant would need its own padded render from the Plectis tool, not a flag
+here. Until that exists, the plain `any` purpose is the honest one: the
+launcher then supplies its own container rather than cutting into the mark.
+
 ## Licence
 
 The mark and page content are © Will Cook.

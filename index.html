@@ -71,6 +71,11 @@
        drawn at runtime. The page stays nocturnal in both colour schemes; a
        plate is not something you invert. */
     :root {
+      /* Nocturnal in both schemes, so say so: this makes the user agent paint
+         its own furniture — scrollbars, overscroll, the canvas behind the
+         page — dark to match, instead of framing a dark page in light chrome. */
+      color-scheme: dark;
+
       --page: #171020;
       --bone: #f2e6d4;
       --bone-soft: #d7c9b6;
@@ -79,6 +84,7 @@
       --hair-strong: rgba(242, 230, 212, .42);
       --accent: #9db3e8;
       --accent-bright: #c3d0f2;
+      --thread-h: 2px;
       --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, ui-serif, serif;
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, system-ui, sans-serif;
     }
@@ -97,12 +103,21 @@
       text-rendering: optimizeLegibility;
     }
 
-    /* The ember thread that heads every page on the Plectis sheet. */
+    /* The ember thread that heads every page on the Plectis sheet. It is one
+       device, so its weight and its ramp are both taken from that sheet's
+       --thread rather than restated here: two pixels, warm mass left of
+       centre, a single magenta flare right of it, navy cooling at both ends.
+       The asymmetry is the point — it must not read as an ordered spectrum,
+       which the seven-stop version this replaces did, with its amber peak
+       sitting exactly at the midpoint. The alpha is that sheet's dark-scheme
+       value, since this page is nocturnal in every scheme. The height is a
+       token because the side-by-side state below subtracts it twice. */
     .thread {
-      height: 3px;
+      height: var(--thread-h);
       background: linear-gradient(90deg,
-        #55175a 0%, #8f2740 16%, #c05028 34%, #f0a63f 50%,
-        #d0512c 66%, #b0356a 82%, #4a2464 100%);
+        #1c1440 0%, #55175a 11%, #a83030 24%, #e89b3c 33%, #c05028 47%,
+        #802046 63%, #c9679f 71%, #472468 84%, #131a38 100%);
+      opacity: .85;
       position: relative;
       z-index: 2;
     }
@@ -139,11 +154,16 @@
       padding: 0 clamp(1.4rem, 4.5vw, 4.5rem) clamp(2.4rem, 6svh, 4.2rem);
     }
 
+    /* The floor matches the ceiling of the narrow rule below, because the two
+       have to agree across the breakpoint they share. At 3.1rem they did not,
+       and the name shrank as the window got wider: 54.4px at 760px, 49.6px at
+       761px, and flat until 855px. At 3.4rem the scale is continuous and never
+       runs backwards — fluid to 760, held to 938, fluid again. */
     h1 {
       margin: 0;
       font-family: var(--font-serif);
       font-weight: 600;
-      font-size: clamp(3.1rem, 5.8vw, 5.4rem);
+      font-size: clamp(3.4rem, 5.8vw, 5.4rem);
       line-height: 1.04;
       letter-spacing: -0.012em;
     }
@@ -170,12 +190,23 @@
     .routes {
       list-style: none; padding: 0;
       margin: clamp(2.4rem, 6svh, 3.8rem) 0 0;
-      margin-top: auto;
       border-top: 1px solid var(--hair-strong);
     }
+    /* The index sits at the foot of the column wherever the column is taller
+       than what fills it — the side-by-side state below. The auto margin has
+       to sit on the flex item, which is the nav, not on the list inside it:
+       on the list it is a block margin in normal flow, so it resolved to zero
+       and took the list's own top margin down with it. The visible symptom was
+       the intro's last line resting on the index rule, at every width. */
+    .col > nav { margin-top: auto; }
     .routes li {
       display: grid;
-      grid-template-columns: 5rem minmax(0, 1fr);
+      /* The kind column holds one short uppercase word — "Watch" is the widest
+         at 55px. Five rem reserved 80px of it at 375px, where the name column
+         has only 236px and the four video exits need 247. Letting it shrink to
+         four rem below ~570px returns those pixels to the exits and keeps that
+         row on one line, without ever crowding the label. */
+      grid-template-columns: clamp(4rem, 14vw, 5rem) minmax(0, 1fr);
       grid-template-rows: auto auto;
       column-gap: .9rem;
       padding: .92rem 0 .98rem;
@@ -223,6 +254,17 @@
 
     a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 1px; }
 
+    /* Colour only, and short. Nothing on this page moves, so this is not the
+       kind of animation prefers-reduced-motion is written against; the guard
+       is there anyway because a reader who asks for stillness should get it.
+       It matches the transition the Plectis sheet puts on the same links. */
+    .name a, .exits a, .colophon a {
+      transition: color 140ms ease-out, text-decoration-color 140ms ease-out;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .name a, .exits a, .colophon a { transition: none; }
+    }
+
     .colophon {
       margin: 1.7rem 0 0;
       display: flex; gap: 1.4rem;
@@ -253,7 +295,7 @@
        column would cross the body, so the poster layout holds instead: the
        art is never dimmed to rescue type that should not be there. */
     @media (min-width: 1280px) {
-      .fold { min-height: calc(100svh - 3px); }
+      .fold { min-height: calc(100svh - var(--thread-h)); }
       .plate {
         position: absolute; inset: 0;
         width: 100%; height: 100%;
@@ -264,7 +306,7 @@
         z-index: 0;
       }
       .col {
-        min-height: calc(100svh - 3px);
+        min-height: calc(100svh - var(--thread-h));
         max-width: 34rem;
         margin-top: 0;
         padding: clamp(2.4rem, 6svh, 4.2rem) clamp(1.4rem, 4.5vw, 4.5rem);
@@ -303,6 +345,16 @@
         <h2 class="sr-only">Public routes</h2>
         <ul class="routes">
           <li>
+            <!-- Half of a pair. The Plectis site names this page in its
+                 colophon using this row's own grammar — a kind, "Front door",
+                 then the destination as it names itself, "Will Cook — public
+                 work", which is the h1 and the role line above. Nothing on
+                 this side needs to point back: the parent lists the child, the
+                 child credits the parent, and a "back" link here would only
+                 duplicate the row it sits in. What does need keeping is the
+                 wording. Rename this row, or reword the h1 or the role line,
+                 and the sentence over there stops matching anything a reader
+                 can see when they arrive. -->
             <p class="kind">Run</p>
             <p class="name"><a href="https://wcook04.github.io/plectis/">Plectis</a></p>
             <p class="exits">
