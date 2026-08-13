@@ -84,6 +84,30 @@
       --hair-strong: rgba(242, 230, 212, .42);
       --accent: #9db3e8;
       --accent-bright: #c3d0f2;
+
+      /* Destination kinds. A route on this page can land you in one of three
+         places, and the page should say which before you click: a page on this
+         host, a repository you clone, a video you watch. Neither value is
+         invented here. The gold is the Plectis sheet's own --link-ext at its
+         dark value (#e6b264), the colour that sheet already uses for every
+         link that leaves it; the rose is the magenta flare from the thread
+         along the top of this page (#c9679f), lifted until it clears AA on the
+         plum. So the ribbon at the top is the key to the list below it.
+
+         Colour is not asked to carry this alone. Everything that leaves the
+         host also takes an outbound glyph, and the words do the rest: the kind
+         column says WATCH, the name says Videos, the exit says GitHub. A
+         reader who sees no hue loses nothing but the shortcut.
+
+         Measured on --page: bone-soft 11.4:1, gold 9.7:1, rose 6.6:1, and
+         every lit state above its resting one. */
+      --to-page: var(--bone-soft);
+      --to-page-lit: var(--accent-bright);
+      --to-repo: #e6b264;
+      --to-repo-lit: #f2cc8a;
+      --to-video: #d47fac;
+      --to-video-lit: #dd8fba;
+
       --thread-h: 2px;
       --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, ui-serif, serif;
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, system-ui, sans-serif;
@@ -141,7 +165,13 @@
       width: 100%;
       height: clamp(15rem, 52svh, 35rem);
       object-fit: cover;
-      object-position: 55% 42%;
+      /* The mass occupies 50%–84% of the plate's width. In the poster state a
+         phone sees only the middle 56% of the picture, so a crop centred at
+         52% — which is what 55% resolves to once cover has scaled the file —
+         put the body just off the right edge and opened the page with four
+         hundred pixels of near-black. Centring the window at 62% instead lands
+         the membrane and the lit flank inside it at every phone width. */
+      object-position: 76% 42%;
       -webkit-mask-image: linear-gradient(180deg, #000 74%, transparent 100%);
       mask-image: linear-gradient(180deg, #000 74%, transparent 100%);
     }
@@ -215,7 +245,7 @@
          four rem below ~570px returns those pixels to the exits and keeps that
          row on one line, without ever crowding the label. */
       grid-template-columns: clamp(4rem, 14vw, 5rem) minmax(0, 1fr);
-      grid-template-rows: auto auto;
+      grid-template-rows: auto auto auto;
       column-gap: .9rem;
       padding: .92rem 0 .98rem;
       border-bottom: 1px solid var(--hair);
@@ -223,7 +253,7 @@
     .routes li:last-child { border-bottom: 0; }
 
     .kind {
-      grid-row: 1 / span 2;
+      grid-row: 1 / span 3;
       margin: 0; padding-top: .42rem;
       font-family: var(--font-sans);
       font-size: .72rem; font-weight: 600;
@@ -231,33 +261,71 @@
       color: var(--faint);
     }
     .name { margin: 0; font-size: 1.3rem; font-weight: 600; line-height: 1.3; }
-    .name a {
-      color: var(--bone);
-      text-decoration: underline;
-      text-decoration-thickness: 1px;
-      text-underline-offset: .2em;
-      text-decoration-color: color-mix(in srgb, var(--bone) 28%, transparent);
+
+    /* One line saying what the row actually gets you. It is the same grammar
+       the Plectis hero's right-hand rail uses — a role, a name, a sentence —
+       so the two pages read as one object seen at two scales rather than two
+       sites that happen to share a host. Deliberately free of counts: a
+       publication refresh must never leave the host front door claiming a
+       scope the linked release no longer states. */
+    .desc {
+      margin: .3rem 0 0;
+      max-width: 30rem;
+      font-size: .95rem;
+      line-height: 1.5;
+      color: var(--faint);
     }
-    .name a:hover, .name a:focus-visible {
-      text-decoration-color: var(--accent);
-    }
+
     .exits {
-      margin: .22rem 0 0;
+      margin: .34rem 0 0;
       font-family: var(--font-sans);
       font-size: .8rem;
       color: var(--faint);
     }
-    .exits a {
-      color: var(--bone-soft);
+
+    /* Every destination link, name or exit, takes its colour from one pair of
+       custom properties. The kind sets the pair; nothing else touches colour.
+       That is what stops a kind being half-applied — you cannot give a link
+       the gold and forget the glyph, because both hang off the same
+       attribute. */
+    .name a  { --to: var(--bone);    --to-lit: var(--accent); }
+    .exits a { --to: var(--to-page); --to-lit: var(--to-page-lit); }
+    /* Qualified by the two defaults above on purpose. A bare [data-to] selector
+       is one specificity point short of `.name a`, so the kind silently lost
+       and every link stayed bone — the rule was in the file and did nothing. */
+    .name a[data-to="repo"],  .exits a[data-to="repo"]  { --to: var(--to-repo);  --to-lit: var(--to-repo-lit); }
+    .name a[data-to="video"], .exits a[data-to="video"] { --to: var(--to-video); --to-lit: var(--to-video-lit); }
+
+    .name a, .exits a {
+      color: var(--to);
       text-decoration: underline;
       text-decoration-thickness: 1px;
-      text-underline-offset: .24em;
-      text-decoration-color: color-mix(in srgb, var(--bone) 34%, transparent);
+      text-decoration-color: color-mix(in srgb, var(--to) 30%, transparent);
     }
+    .name a { text-underline-offset: .2em; }
+    .exits a { text-underline-offset: .24em; }
+    .name a:hover, .name a:focus-visible,
     .exits a:hover, .exits a:focus-visible {
-      color: var(--accent-bright);
-      text-decoration-color: var(--accent-bright);
+      color: var(--to-lit);
+      text-decoration-color: var(--to-lit);
     }
+
+    /* The outbound mark answers one question only — does this leave the host?
+       It is generated rather than typed into the markup so it cannot drift out
+       of step with the colour. Kept off the underline, and out of the
+       accessibility tree, since the link text already names the destination. */
+    a[data-to="repo"]::after,
+    a[data-to="video"]::after,
+    a[data-to="profile"]::after {
+      content: "\2197";
+      display: inline-block;
+      margin-left: .16em;
+      font-size: .82em;
+      line-height: 1;
+      vertical-align: baseline;
+      text-decoration: none;
+    }
+
     .exits .sep { padding: 0 .38rem; color: var(--hair-strong); }
 
     a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 1px; }
@@ -388,40 +456,60 @@
                  can see when they arrive. -->
             <p class="kind">Run</p>
             <p class="name"><a href="https://wcook04.github.io/plectis/">Plectis</a></p>
+            <p class="desc">Components you clone and run locally. Each states a claim and writes a result file.</p>
             <p class="exits">
-              <a href="https://wcook04.github.io/plectis/">Site</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://wcook04.github.io/plectis/docs/">Docs</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://github.com/wcook04/plectis">GitHub<span aria-hidden="true">&#8599;</span></a>
+              <!-- The exits are written to read inside their row, which leaves
+                   them ambiguous in the flat list a screen reader offers: three
+                   rows would otherwise contribute a bare "GitHub", and two a
+                   bare "On the site". Where the visible word does not name its
+                   own destination, aria-label supplies the row it belongs to.
+                   The visible text stays first in the label, so speech and
+                   sight agree (WCAG 2.5.3). -->
+              <a href="https://wcook04.github.io/plectis/">Site</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://wcook04.github.io/plectis/docs/">Docs</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="GitHub: the Plectis repository" href="https://github.com/wcook04/plectis">GitHub</a>
             </p>
           </li>
           <li>
             <p class="kind">Check</p>
             <!-- The Lean repository is the mathematical authority. Keep this row
                  count-free so a publication refresh cannot leave the host front
-                 door claiming a scope the linked release no longer states. -->
-            <p class="name"><a href="https://github.com/wcook04/plectis-lean-erdos249-257">Lean corpus</a></p>
+                 door claiming a scope the linked release no longer states. That
+                 applies to the sentence as much as to the exits: the problems
+                 are open, and the row says what the corpus checks, never what
+                 it has settled. -->
+            <p class="name"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257">Lean corpus</a></p>
+            <p class="desc">Machine-checked mathematics on open Erd&#337;s problems. Lean compiles a proof or it does not.</p>
             <p class="exits">
-              <a href="https://github.com/wcook04/plectis-lean-erdos249-257">GitHub<span aria-hidden="true">&#8599;</span></a><span class="sep" aria-hidden="true">&middot;</span><a href="https://wcook04.github.io/plectis/#papers">What is checked</a>
+              <a data-to="repo" aria-label="GitHub: the Lean corpus repository" href="https://github.com/wcook04/plectis-lean-erdos249-257">GitHub</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://wcook04.github.io/plectis/#papers">What is checked</a>
             </p>
           </li>
           <li>
             <p class="kind">Read</p>
             <p class="name"><a href="https://wcook04.github.io/plectis/docs/papers.html">Papers</a></p>
+            <p class="desc">Standalone PDFs, written for someone reading cold.</p>
             <p class="exits">
-              <a href="https://wcook04.github.io/plectis/docs/papers.html">Catalogue</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://wcook04.github.io/plectis/#papers">On the site</a>
+              <a href="https://wcook04.github.io/plectis/docs/papers.html">Catalogue</a><span class="sep" aria-hidden="true">&middot;</span><a aria-label="On the site: the papers" href="https://wcook04.github.io/plectis/#papers">On the site</a>
             </p>
           </li>
           <li>
             <p class="kind">Watch</p>
             <p class="name"><a href="https://wcook04.github.io/plectis/#demo-videos">Videos</a></p>
+            <p class="desc">Recorded demonstrations of the private system. No check is run in them.</p>
             <p class="exits">
-              <a href="https://wcook04.github.io/plectis/#demo-videos">On the site</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://youtu.be/R_--vExxWyk">1&nbsp;min<span aria-hidden="true">&#8599;</span></a><span class="sep" aria-hidden="true">&middot;</span><a href="https://youtu.be/VoWByIOIuBE">5&nbsp;min<span aria-hidden="true">&#8599;</span></a><span class="sep" aria-hidden="true">&middot;</span><a href="https://youtu.be/jA_xC8gmdSs">29&nbsp;min<span aria-hidden="true">&#8599;</span></a>
+              <a aria-label="On the site: the videos" href="https://wcook04.github.io/plectis/#demo-videos">On the site</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="video" aria-label="1 minute demonstration on YouTube" href="https://youtu.be/R_--vExxWyk">1&nbsp;min</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="video" aria-label="5 minute demonstration on YouTube" href="https://youtu.be/VoWByIOIuBE">5&nbsp;min</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="video" aria-label="29 minute demonstration on YouTube" href="https://youtu.be/jA_xC8gmdSs">29&nbsp;min</a>
             </p>
           </li>
         </ul>
       </nav>
 
+      <!-- Accounts, not routes, which is why they sit apart from the index and
+           stay in the quiet uppercase rather than taking a destination colour.
+           Contact is a route and points at the section of the Plectis site that
+           already carries every way of reaching me, so the address itself is
+           published in exactly one place. -->
       <footer class="colophon">
-        <a href="https://github.com/wcook04">GitHub<span aria-hidden="true">&#8599;</span></a>
-        <a href="https://www.linkedin.com/in/will-cook-278127234/">LinkedIn<span aria-hidden="true">&#8599;</span></a>
+        <a data-to="profile" href="https://github.com/wcook04">GitHub</a>
+        <a data-to="profile" href="https://www.linkedin.com/in/will-cook-278127234/">LinkedIn</a>
+        <a href="https://wcook04.github.io/plectis/#contact">Contact</a>
       </footer>
     </div>
   </main>
