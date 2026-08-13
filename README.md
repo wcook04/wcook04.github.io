@@ -1,6 +1,22 @@
 # wcook04.github.io
 
-The page served at the root of `https://wcook04.github.io/`.
+The page served at the root of <https://wcook04.github.io/>.
+
+It is the top of a two-level public presence. This page is the index; everything
+it lists lives one directory down or in its own repository.
+
+| | |
+|---|---|
+| **Front door** | <https://wcook04.github.io/> — this repository |
+| **Plectis, the site** | <https://wcook04.github.io/plectis/> · [docs](https://wcook04.github.io/plectis/docs/) · [papers](https://wcook04.github.io/plectis/docs/papers.html) |
+| **Plectis, the repository** | <https://github.com/wcook04/plectis> |
+| **Lean corpus** | <https://github.com/wcook04/plectis-lean-erdos249-257> |
+| **Videos** | [1 min](https://youtu.be/R_--vExxWyk) · [5 min](https://youtu.be/VoWByIOIuBE) · [29 min](https://youtu.be/jA_xC8gmdSs) |
+
+The Plectis site is a separate GitHub Pages deployment — the `gh-pages` branch
+of `wcook04/plectis` — that happens to be served under a path on this host.
+Nothing here builds it, and nothing in it builds this. The only thing binding
+them is the pair of links described under [The pair](#the-pair) below.
 
 It exists for two reasons.
 
@@ -36,6 +52,50 @@ anything, and the sitemap it declared had never been discovered by that route.
 | `site.webmanifest` | Root-scoped manifest. |
 | `favicon.ico`, `assets/` | The Plectis mark and its rasters. |
 | `assets/plate-01*` | The plate behind the page, and its size ladder. |
+
+## Destination kinds
+
+The route index colours each link by what it lands you on, so a reader knows
+before clicking whether a word takes them to a page, a repository, or a video.
+
+| Kind | Attribute | Colour | Mark |
+|---|---|---|---|
+| a page on this host | *(none)* | bone, lifting to the blue accent | — |
+| a repository | `data-to="repo"` | `--to-repo` `#e6b264` | `↗` |
+| a video | `data-to="video"` | `--to-video` `#d47fac` | `↗` |
+| an account | `data-to="profile"` | inherits the colophon's `--faint` | `↗` |
+
+Neither colour is invented here. The gold is the value the Plectis stylesheet
+already uses for every link that leaves it (`--link-ext`, dark scheme); the rose
+is the magenta flare from the thread across the top of this page, lifted until
+it clears AA on the plum. That makes the thread the key to the list beneath it.
+
+Two rules are load-bearing, and both are easy to break by accident:
+
+- **Set only `data-to`.** The colour and the mark both hang off that one
+  attribute, so a kind cannot be half-applied. Do not hand-type a `↗`; the
+  stylesheet generates it. The colophon used to carry typed ones and they drifted
+  out of step with everything else.
+- **Colour is never the only signal.** The kind column, the route name and the
+  exit text each say the same thing in words — `Watch` / `Videos` / `29 min`,
+  `Check` / `Lean corpus` / `GitHub`. A reader who sees no hue loses a shortcut,
+  not a fact. Where the visible word does not name its own destination, an
+  `aria-label` supplies the row it belongs to.
+
+## The pair
+
+This page and the Plectis site each name the other, and neither has a build step
+that could check it.
+
+- Down: the `Run` row of the route index points at `/plectis/`.
+- Up: the Plectis header carries `Will Cook / Plectis` beside its wordmark, and
+  its colophon carries a `Front door` row reading *Will Cook — public work*.
+
+Those two labels are quotations of this page: `Will Cook` is its `<h1>`, and
+*public work* is the role line under it. Rename either, and a sentence on the
+other site stops matching anything a reader can see when they arrive. If you
+change them, change the Plectis header, its colophon, and `PARENT_SITE_LABEL` in
+that site's builder in the same pass.
 
 ## The plate
 
