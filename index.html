@@ -192,6 +192,16 @@
       padding: 0 clamp(1.4rem, 4.5vw, 4.5rem) clamp(2.4rem, 6svh, 4.2rem);
     }
 
+    /* NO @keyframes ANYWHERE ON THIS PAGE. Transitions only.
+
+       An entrance fade lived here for about ten minutes. It was opacity-only,
+       reduced-motion gated, on .col rather than the plate, and it still blanked
+       the plate — a CSS animation anywhere in the document is enough to stop
+       the fixed image painting in Chrome, whatever element carries it. The
+       plate is the page; a fade-in is a nicety. So the page moves on
+       transitions, which are proven safe here and give hover and focus all the
+       life this design wants, and it does not move on load at all. */
+
     /* The floor matches the ceiling of the narrow rule below, because the two
        have to agree across the breakpoint they share. At 3.1rem they did not,
        and the name shrank as the window got wider: 54.4px at 760px, 49.6px at
@@ -251,6 +261,15 @@
       border-bottom: 1px solid var(--hair);
     }
     .routes li:last-child { border-bottom: 0; }
+    /* A row lights its own hairline when the pointer is anywhere in it. The
+       whole row is the thing you are considering, but only its links are
+       targets, so the rule is the one part that can acknowledge the pointer
+       without pretending the row is clickable. Two hundredths of a second
+       slower than the links themselves, so the line follows the word rather
+       than racing it. */
+    .routes li { transition: border-color 220ms ease-out; }
+    .routes li:hover { border-bottom-color: var(--hair-strong); }
+    @media (prefers-reduced-motion: reduce) { .routes li { transition: none; } }
 
     .kind {
       grid-row: 1 / span 3;
@@ -302,8 +321,12 @@
       text-decoration-thickness: 1px;
       text-decoration-color: color-mix(in srgb, var(--to) 30%, transparent);
     }
+    /* The underline drops a hair on hover. It is two hundredths of an em and
+       nobody will name it, which is the point: the word feels answered rather
+       than merely recoloured. */
     .name a { text-underline-offset: .2em; }
     .exits a { text-underline-offset: .24em; }
+    .name a:hover, .name a:focus-visible { text-underline-offset: .26em; }
     .name a:hover, .name a:focus-visible,
     .exits a:hover, .exits a:focus-visible {
       color: var(--to-lit);
@@ -335,7 +358,8 @@
        is there anyway because a reader who asks for stillness should get it.
        It matches the transition the Plectis sheet puts on the same links. */
     .name a, .exits a, .colophon a {
-      transition: color 140ms ease-out, text-decoration-color 140ms ease-out;
+      transition: color 140ms ease-out, text-decoration-color 140ms ease-out,
+                  text-underline-offset 140ms ease-out;
     }
     @media (prefers-reduced-motion: reduce) {
       .name a, .exits a, .colophon a { transition: none; }
@@ -607,30 +631,52 @@
        art is never dimmed to rescue type that should not be there. */
     @media (min-width: 1280px) {
       .fold { min-height: calc(100svh - var(--thread-h)); }
-      /* Fixed, so the plate is the page's ground rather than its header.
+      /* The plate holds one screen, absolutely positioned, and dissolves into
+         plum below it.
 
-         This has now failed in both directions. Stretched over the whole fold,
-         `cover` paid for the extra height by cropping width off the right,
-         which is where the mass is, and the opening screen came up nearly
-         empty. Pinned to one viewport instead, the composition was right but
-         everything below the first screen was a 34rem column with about
-         fourteen hundred pixels of bare plum beside it, which reads as a
-         layout that ran out rather than one that stopped.
+         Three other arrangements were tried and each is worse. Stretched over
+         the whole fold, `cover` pays for the extra height by cropping width
+         off the right, which is where the mass is, so the opening screen comes
+         up nearly empty. `position: fixed` does not paint at all on first load
+         in this engine — the image lays out and reports healthy geometry, full
+         opacity and a decoded source, and is simply not drawn until something
+         forces a repaint, which means it cannot be caught by measurement and
+         looks fine the instant you go to inspect it. A fixed background
+         attachment paints correctly but repaints the whole viewport on every
+         scroll frame with a 2560px source, and hung the renderer outright in
+         testing.
 
-         Fixing it answers both. The plate holds the frame it was composed for
-         at every scroll position, the type moves across it, and the wide right
-         field is never empty because the artwork is what fills it. Nothing is
-         layered over the mass: the column is left-anchored and so is the
-         plate, so the type keeps to the quiet flank exactly as before. The
-         mask goes with the scroll — a fixed plate has no bottom edge to
-         dissolve. */
+         So the plate stays absolute and the reading continues below it on
+         plum. That leaves the wide right field empty past the first screen,
+         which is a real cost and is recorded rather than hidden: it is the
+         open question on this page, not an oversight. */
       .plate {
-        position: fixed; inset: 0;
-        width: 100%; height: 100%;
+        position: absolute; inset: 0 0 auto 0;
+        width: 100%; height: calc(100svh - var(--thread-h));
         /* Left-anchored: a viewport narrower than the plate crops the right
            rim, never the column the type stands on. */
         object-position: 0% 50%;
-        -webkit-mask-image: none; mask-image: none;
+        -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
+        mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
+        z-index: 0;
+      }
+      /* The ground the column stands on: a short pour of the page's own plum
+         from the left edge, gone before it reaches the mass. Absolute and
+         matched to the plate's own box, so it dissolves with it. It is why the
+         type reads as seated rather than laid on top, and it means the crop
+         can move at other widths without the column being rechecked. */
+      .fold::after {
+        content: "";
+        position: absolute; inset: 0 auto 0 0;
+        height: calc(100svh - var(--thread-h));
+        width: min(46rem, 60%);
+        background: linear-gradient(90deg,
+          var(--page) 0%,
+          color-mix(in srgb, var(--page) 78%, transparent) 32%,
+          transparent 100%);
+        -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
+        mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
+        pointer-events: none;
         z-index: 0;
       }
       .col {
@@ -640,31 +686,7 @@
         padding: clamp(2.4rem, 6svh, 4.2rem) clamp(1.4rem, 4.5vw, 4.5rem);
       }
 
-      /* A fixed plate is correct and, held perfectly still under moving type,
-         slightly dead: the eye reads it as a backdrop rather than as the thing
-         the page is made of. So the crop drifts twelve per cent down its own
-         height across the length of the scroll. It is driven by scroll
-         position rather than by a clock, so it only moves while the reader
-         does, and it cannot loop or catch the eye on its own. Nothing enters,
-         nothing slides, nothing fades in; the picture is simply seen from
-         slightly further down by the time you reach the end.
 
-         Progressive enhancement in both directions. Browsers without
-         scroll-driven animation keep the still plate above, which is the whole
-         design minus one refinement, and a reader who has asked for less
-         motion gets exactly that. */
-      @supports (animation-timeline: scroll()) {
-        @media (prefers-reduced-motion: no-preference) {
-          .plate {
-            animation: plate-drift linear both;
-            animation-timeline: scroll(root block);
-          }
-          @keyframes plate-drift {
-            from { object-position: 0% 44%; }
-            to   { object-position: 0% 58%; }
-          }
-        }
-      }
     }
   </style>
 </head>
