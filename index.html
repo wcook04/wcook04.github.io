@@ -109,6 +109,29 @@
       --to-video-lit: #dd8fba;
 
       --thread-h: 2px;
+      /* The ember ramp, stated once. Both layers of the thread paint it, and
+         they must paint the same one: the progress device works by lighting
+         part of a fixed ramp, never by redrawing a shorter one. */
+      --thread-ramp: linear-gradient(90deg,
+        #1c1440 0%, #55175a 11%, #a83030 24%, #e89b3c 33%, #c05028 47%,
+        #802046 63%, #c9679f 71%, #472468 84%, #131a38 100%);
+
+      /* Three speeds, because there are three sizes of event on this page and
+         collapsing them onto one duration would make the smallest feel slow
+         and the largest feel abrupt.
+
+           interaction  a word answering the pointer or the keyboard
+           response     a rule or a label acknowledging where you are
+           scene        the plate reframing, which is a camera and not a control
+
+         The first is the value already on every link here, kept. */
+      --t-interaction: 140ms;
+      --t-response: 260ms;
+      --t-scene: 950ms;
+      /* Decelerating, no overshoot. A picture this size settling is the one
+         thing on the page that must not look sprung. */
+      --ease-scene: cubic-bezier(.22, 1, .36, 1);
+
       --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, ui-serif, serif;
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, system-ui, sans-serif;
     }
@@ -135,16 +158,52 @@
        which the seven-stop version this replaces did, with its amber peak
        sitting exactly at the midpoint. The alpha is that sheet's dark-scheme
        value, since this page is nocturnal in every scheme. The height is a
-       token because the side-by-side state below subtracts it twice. */
+       token because the side-by-side state below subtracts it twice.
+
+       It is also the page's clock. The thread holds at the top instead of
+       scrolling away after two pixels, and the part of it you have already
+       passed is lit. Two things about how that is done are load-bearing.
+
+       The ramp is never redrawn shorter. `.thread__lit` carries the SAME
+       gradient across the SAME width and is revealed by a clip, so a colour
+       sits at the same x at every scroll position. Scaling a gradient to the
+       read length would squeeze all nine stops into the lit part and turn the
+       device into a compressed rainbow that slides as you scroll — which is
+       precisely the ordered-spectrum reading the asymmetry above exists to
+       prevent. Light the ramp; do not resize it.
+
+       And the lit layer starts fully clipped, so with scripting off the thread
+       is exactly what it was before any of this: one ramp at .85, no second
+       layer visible. The progress device is an enhancement, not the thread. */
     .thread {
       height: var(--thread-h);
-      background: linear-gradient(90deg,
-        #1c1440 0%, #55175a 11%, #a83030 24%, #e89b3c 33%, #c05028 47%,
-        #802046 63%, #c9679f 71%, #472468 84%, #131a38 100%);
+      background: var(--thread-ramp);
       opacity: .85;
-      position: relative;
-      z-index: 2;
+      /* Sticky rather than fixed, for the same reason the plate is: a sticky
+         box is in normal flow and paints like any other element. It also stays
+         2px tall in flow, so nothing below it moves when it pins. */
+      position: sticky; top: 0;
+      z-index: 3;
     }
+    .thread__lit {
+      position: absolute; inset: 0;
+      background: var(--thread-ramp);
+      /* Brighter, not different. Same ramp, same geometry, more of it. */
+      filter: brightness(1.55) saturate(1.08);
+      clip-path: inset(0 100% 0 0);
+    }
+    /* The runtime sets --progress and this attribute together; neither means
+       anything without the other. */
+    :root[data-progress] .thread__lit {
+      clip-path: inset(0 calc(100% - var(--progress, 0) * 100%) 0 0);
+    }
+    /* A reader who asks for stillness gets the thread they had before. */
+    @media (prefers-reduced-motion: reduce) {
+      :root[data-progress] .thread__lit { clip-path: inset(0 100% 0 0); }
+    }
+
+    /* Anything the fragment links land on clears the pinned thread. */
+    [id] { scroll-margin-top: calc(var(--thread-h) + .25rem); }
 
     .sr-only {
       position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -188,8 +247,10 @@
        not add a box of its own. Block rather than the default inline, because
        an inline wrapper puts the plate on a line box and the baseline gap
        under it would show up as a few stray pixels in the column's -2.2rem
-       overlap. Above 1280px the plate is absolute and positions against .fold
-       regardless, since a picture is never itself positioned. */
+       overlap. Above 1280px the picture is the sticky box itself and carries
+       the clip the plate is reframed inside, so it is very much positioned
+       there — an earlier version of this note said it was absolute and never
+       positioned, which described neither state. */
     .fold picture { display: block; }
 
     .col {
@@ -200,15 +261,34 @@
       padding: 0 clamp(1.4rem, 4.5vw, 4.5rem) clamp(2.4rem, 6svh, 4.2rem);
     }
 
-    /* NO @keyframes ANYWHERE ON THIS PAGE. Transitions only.
+    /* Transitions only. There are no @keyframes on this page — but the reason
+       is no longer the one that used to be written here, and the difference
+       matters to whoever reads this next.
 
-       An entrance fade lived here for about ten minutes. It was opacity-only,
-       reduced-motion gated, on .col rather than the plate, and it still blanked
-       the plate — a CSS animation anywhere in the document is enough to stop
-       the fixed image painting in Chrome, whatever element carries it. The
-       plate is the page; a fade-in is a nicety. So the page moves on
-       transitions, which are proven safe here and give hover and focus all the
-       life this design wants, and it does not move on load at all. */
+       The original note said a CSS animation anywhere in the document was
+       enough to stop the plate painting in Chrome. That was written when the
+       plate was `position: fixed`, and fixed was independently broken: it laid
+       out correctly, reported a decoded source, and was simply never drawn.
+       The entrance fade did not cause that. It coincided with it. When the
+       plate moved to sticky (see the min-width rule at the foot of this
+       sheet), the underlying fault went with it, and the ban was left standing
+       on evidence that no longer described anything.
+
+       Retested, 2026-08-13, against the current sticky implementation: one
+       infinite keyframe animation on .thread, nine cold loads with no warm
+       cache, at 1600x1000 and 1280x800, at the top and at depth, each measured
+       from the pixels of a first render before any hover, resize or style
+       write. The plate painted every time. The detector was checked against a
+       deliberately hidden plate first, so the pass means something: it reads
+       the bright mass as exactly #171020 with zero variance when the plate is
+       missing, and the keyframe runs did not do that once.
+
+       So keyframes are safe here. The page still carries none, because nothing
+       it does needs one — the scene changes and the reading progress below are
+       both driven from state the runtime already has, and a transition
+       expresses them exactly. Held by measurement now, not by superstition.
+       If a later pass wants an animation, it may have one; re-run that cold
+       test rather than trusting this paragraph. */
 
     /* The floor matches the ceiling of the narrow rule below, because the two
        have to agree across the breakpoint they share. At 3.1rem they did not,
@@ -274,9 +354,15 @@
        targets, so the rule is the one part that can acknowledge the pointer
        without pretending the row is clickable. Two hundredths of a second
        slower than the links themselves, so the line follows the word rather
-       than racing it. */
-    .routes li { transition: border-color 220ms ease-out; }
-    .routes li:hover { border-bottom-color: var(--hair-strong); }
+       than racing it.
+
+       :focus-within is the same sentence said to the keyboard. Without it the
+       row acknowledged a pointer and ignored a tab key, which is the one
+       reader who most needs telling where they are — measured before adding
+       it: tabbing onto "Plectis" left the row's border at its resting
+       rgba(242,230,212,.16), exactly as if nothing were focused. */
+    .routes li { transition: border-color var(--t-response) ease-out; }
+    .routes li:hover, .routes li:focus-within { border-bottom-color: var(--hair-strong); }
     @media (prefers-reduced-motion: reduce) { .routes li { transition: none; } }
 
     .kind {
@@ -286,7 +372,13 @@
       font-size: .72rem; font-weight: 600;
       letter-spacing: .22em; text-transform: uppercase;
       color: var(--faint);
+      transition: color var(--t-response) ease-out;
     }
+    /* The kind lifts with the hairline rather than separately, so the row has
+       one response and not two. It stays grey-on-plum either way; this is the
+       row saying "considered", not the row claiming to be a target. */
+    .routes li:hover .kind, .routes li:focus-within .kind { color: var(--bone-soft); }
+    @media (prefers-reduced-motion: reduce) { .kind { transition: none; } }
     .name { margin: 0; font-size: 1.3rem; font-weight: 600; line-height: 1.3; }
 
     /* One line saying what the row actually gets you. It is the same grammar
@@ -355,6 +447,19 @@
       line-height: 1;
       vertical-align: baseline;
       text-decoration: none;
+      transition: transform var(--t-interaction) ease-out;
+    }
+    /* One pixel along its own diagonal, which is the direction it is already
+       pointing. Transform rather than margin or position, so the glyph cannot
+       move the word it hangs off. Focus gets it too: the mark answers a tab
+       key the same way it answers a pointer. */
+    a[data-to]:hover::after,
+    a[data-to]:focus-visible::after { transform: translate(1px, -1px); }
+    @media (prefers-reduced-motion: reduce) {
+      a[data-to="repo"]::after, a[data-to="video"]::after, a[data-to="profile"]::after {
+        transition: none;
+      }
+      a[data-to]:hover::after, a[data-to]:focus-visible::after { transform: none; }
     }
 
     .exits .sep { padding: 0 .38rem; color: var(--hair-strong); }
@@ -381,13 +486,42 @@
       margin: clamp(2.2rem, 5svh, 3.2rem) 0 0;
       padding-top: clamp(1.5rem, 3.5svh, 2rem);
       border-top: 1px solid var(--hair-strong);
+      /* The accent below positions against the section's own rule. Without
+         this it would resolve against .col and stripe the whole column. */
+      position: relative;
     }
+    /* The band you are in says so on its own rule, and nowhere else. A short
+       segment draws along the top border — the same 2.4rem the role line uses
+       under the name, so the mark introduces no new measurement — and the
+       eyebrow comes up from grey. The prose does not move, fade or blur. A
+       reader mid-sentence must not be told anything by the sentence shifting. */
+    .handoff::before, .note::before {
+      content: "";
+      position: absolute; left: 0; top: -1px;
+      width: 2.4rem; height: 1px;
+      background: var(--bone-soft);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform var(--t-response) var(--ease-scene);
+    }
+    :root[data-scene="handoff"] .handoff::before,
+    :root[data-scene="note"] .note::before { transform: scaleX(1); }
+
     .eyebrow {
       margin: 0;
       font-family: var(--font-sans);
       font-size: .72rem; font-weight: 600;
       letter-spacing: .22em; text-transform: uppercase;
       color: var(--faint);
+      transition: color var(--t-response) ease-out;
+    }
+    :root[data-scene="handoff"] .handoff .eyebrow,
+    :root[data-scene="note"] .note .eyebrow { color: var(--bone-soft); }
+
+    /* Stillness means the marks are still there, just already arrived. */
+    @media (prefers-reduced-motion: reduce) {
+      .handoff::before, .note::before { transition: none; transform: scaleX(1); }
+      .eyebrow { transition: none; }
     }
     .handoff__lede {
       margin: .75rem 0 0; max-width: 30rem;
@@ -415,7 +549,11 @@
       text-decoration: none;
       border: 1px solid var(--bone);
       border-radius: 2px;
-      transition: background-color 140ms ease-out, border-color 140ms ease-out;
+      /* Colour was missing from this list, so the ground faded out from under
+         a label that changed in one frame. Three properties, one duration. */
+      transition: background-color var(--t-interaction) ease-out,
+                  border-color var(--t-interaction) ease-out,
+                  color var(--t-interaction) ease-out;
     }
     /* Hover empties the button rather than tinting it, which keeps the accent
        meaning what it means everywhere else on the page and avoids inventing a
@@ -436,6 +574,24 @@
       font-size: .92em; font-weight: 500;
       opacity: .55;
       margin-left: .12em;
+      /* Offset rather than transformed. A transform would need
+         display: inline-block, and giving this span its own block box moves the
+         button's baseline — the label shifts to make room for a decoration.
+         Relative offset moves the painted glyphs and nothing else. */
+      position: relative; top: 0; left: 0;
+      transition: opacity var(--t-interaction) ease-out,
+                  top var(--t-interaction) ease-out,
+                  left var(--t-interaction) ease-out;
+    }
+    /* The filename comes up out of the background as the control is taken.
+       It stays quieter than the verb: this is the thing you get, not the thing
+       you do. */
+    .btn:hover .btn__ext, .btn:focus-visible .btn__ext {
+      opacity: .8; top: -1px; left: 1px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .btn__ext { transition: none; }
+      .btn:hover .btn__ext, .btn:focus-visible .btn__ext { top: 0; left: 0; }
     }
 
     .handoff__alt {
@@ -660,10 +816,24 @@
       .fold > picture, .fold::after, .fold > .col { grid-area: 1 / 1; }
 
       .fold > picture {
-        position: sticky; top: 0;
+        /* Offset by the thread, which now holds at the top rather than
+           scrolling away. top + height = thread-h + (100svh - thread-h) is
+           100svh exactly, so the plate meets the foot of the viewport instead
+           of stopping two pixels short of it. Measured before this: at any
+           scroll past 2px the plate's bottom read 998 in a 1000px viewport,
+           and those two pixels of bare plum sat under the picture all the way
+           down the page. */
+        position: sticky; top: var(--thread-h);
         height: calc(100svh - var(--thread-h));
         align-self: start;
         z-index: 0;
+        /* The frame the plate is reframed inside. overflow on an ANCESTOR of a
+           sticky box is the bug documented above — it makes that ancestor the
+           scroll container and the sticky box rides away. This is overflow on
+           the sticky box ITSELF, which clips its own children and leaves its
+           own stickiness alone. Verified at 1600, 1440, 1280: the plate's top
+           still reads 2 at rest and 2 while scrolled. */
+        overflow: hidden;
       }
       .plate {
         width: 100%; height: 100%;
@@ -671,6 +841,45 @@
            rim, never the column the type stands on. */
         object-position: 0% 50%;
         -webkit-mask-image: none; mask-image: none;
+
+        /* THE CAMERA.
+
+           The column moves and the plate does not, which after the first
+           screen leaves a reader scrolling text across wallpaper: by the time
+           the page is talking about who wrote it, the picture is still saying
+           exactly what it said over the route index. Measured before changing
+           it — the composited ground behind the prose was the same pixel,
+           (46,32,40), at every scroll depth on the page.
+
+           So the plate is a slow push-in, tied to how far down you are. Not
+           three states it steps between: a step of a percent or two is not a
+           move, it is a twitch, and stepping at all makes the picture lurch at
+           a boundary the reader cannot see. It runs continuously off the same
+           reading position the thread uses, so the picture is only ever moving
+           while the reader is, and it stops the moment they stop.
+
+           The transform is written by the runtime below, one inline write on
+           this element per frame. What is here is the resting frame: the state
+           with no scripting and the state a reader who asks for stillness
+           gets, which is why it is a plain declaration and not a keyframe.
+
+           It is a camera, not a control. Transform only, so none of it touches
+           layout; no filter, no blur, no object-position, nothing that would
+           repaint a full-bleed picture on a scroll frame. The origin is the
+           blue membrane rather than the middle of the box, so the hinge the
+           composition is built on stays where it is while the mass grows past
+           the frame.
+
+           The envelope is bounded by one thing: cover crops this file to the
+           box with about a pixel to spare, so every bit of drift has to be
+           paid for by scale first. The check for that is done on PIXELS, not
+           on arithmetic — a script samples the four edges of the plate at a
+           spread of viewports and scroll positions and fails if the page's own
+           plum is ever found there. Two attempts to prove it by algebra
+           disagreed with each other; the pixels do not care which was right.
+           Change these numbers and re-run that check. */
+        transform-origin: 49% 52%;
+        transform: scale(1.02);
       }
 
       /* The ground the column stands on: a short pour of the page's own plum
@@ -678,7 +887,7 @@
          the plate, so the type keeps its footing the whole way down. */
       .fold::after {
         content: "";
-        position: sticky; top: 0;
+        position: sticky; top: var(--thread-h);
         align-self: start;
         height: calc(100svh - var(--thread-h));
         width: min(46rem, 60%);
@@ -702,7 +911,10 @@
   </style>
 </head>
 <body>
-  <div class="thread"></div>
+  <!-- Two layers of one ramp. The second is the read part, clipped to nothing
+       until the runtime says otherwise. Decorative throughout: it carries no
+       information the page does not also say in words. -->
+  <div class="thread" aria-hidden="true"><span class="thread__lit"></span></div>
 
   <main class="fold">
     <!-- assets/plate-01.jpg: Wet Proof, plate 01. One warm mass cropped by the
@@ -764,7 +976,10 @@
         <b>run</b>, <b>check</b>, <b>read</b> or <b>watch</b>.
       </p>
 
-      <nav aria-label="Public routes">
+      <!-- The three scene owners. data-scene-key is read by the runtime at the
+           foot of the page and by nothing else; the sections are what they were
+           without it. -->
+      <nav aria-label="Public routes" data-scene-key="opening">
         <h2 class="sr-only">Public routes</h2>
         <ul class="routes">
           <li>
@@ -837,7 +1052,7 @@
            publication refresh must not leave the front door quoting a size the
            linked release no longer has. "Large" and "smaller" survive a
            rebuild; "12 MB" does not. -->
-      <section class="handoff" aria-labelledby="handoff-h">
+      <section class="handoff" aria-labelledby="handoff-h" data-scene-key="handoff">
         <h2 class="eyebrow" id="handoff-h">Read it with an AI</h2>
         <p class="handoff__lede">
           The whole
@@ -878,7 +1093,7 @@
            accurate and stays accurate: the recorded replies show field
            mismatches and declines, not review. It would be easy, and false, to
            write that no expert has found a mistake. -->
-      <section class="note" aria-labelledby="note-h">
+      <section class="note" aria-labelledby="note-h" data-scene-key="note">
         <h2 class="eyebrow" id="note-h">Why it is here</h2>
         <p>
           I am 22, an economics undergraduate at Bristol. I built this alone
@@ -943,6 +1158,152 @@
       </footer>
     </div>
   </main>
+
+  <!-- Where you are in the page, told twice: once to the plate, which reframes
+       between the three reading bands, and once to the thread, which lights the
+       part you have passed.
+
+       Everything here is an enhancement over a page that is already finished.
+       With scripting off, no attribute is ever set, the plate holds its opening
+       frame, the thread is one ramp at .85, and the sections keep their rules —
+       which is exactly the page as it was before any of this existed. Nothing
+       is hidden waiting to be revealed, so nothing can fail to be revealed.
+
+       It reads a reduced-motion preference first and then does nothing at all,
+       rather than installing listeners it would only ignore. -->
+  <script>
+  (function () {
+    "use strict";
+    var root = document.documentElement;
+    var still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)");
+    if (still && still.matches) return;
+
+    // ── Which band is being read ────────────────────────────────────────────
+    // The root margin collapses the viewport to a single line at 55% of its
+    // height, so a section is "current" once its top has risen past that line.
+    // A line rather than a band, because a band lets two sections qualify at
+    // once and then the choice between them has to be invented. Below centre
+    // rather than at it, because the last section is short and the page ends
+    // just after it: on a 1000px viewport, a line at 50% would leave the
+    // closing note current for the final 140px of scroll, and at 55% it gets
+    // 245px — the difference between a state and a flicker.
+    var scenes = [].slice.call(document.querySelectorAll("[data-scene-key]"));
+    if (scenes.length) {
+      var current = null;
+      var apply = function (el) {
+        var key = el && el.getAttribute("data-scene-key");
+        if (!key || key === current) return;
+        current = key;
+        root.setAttribute("data-scene", key);
+      };
+
+      // Resolve once, synchronously. A reader arriving at #note-h should be in
+      // the note scene on the first frame, not transition into it after one.
+      var line = window.innerHeight * 0.55;
+      var start = scenes[0];
+      for (var i = 0; i < scenes.length; i++) {
+        if (scenes[i].getBoundingClientRect().top <= line) start = scenes[i];
+      }
+      apply(start);
+
+      if ("IntersectionObserver" in window) {
+        var io = new IntersectionObserver(function (entries) {
+          // Between two sections there is a margin where nothing crosses the
+          // line. The scene is never cleared there — it simply stays where it
+          // was, which is what stops the boundary from flickering. When a
+          // batch does contain more than one crossing, the later section in
+          // document order wins, so the state can never run backwards inside a
+          // single callback.
+          var best = -1;
+          for (var i = 0; i < entries.length; i++) {
+            if (!entries[i].isIntersecting) continue;
+            var at = scenes.indexOf(entries[i].target);
+            if (at > best) best = at;
+          }
+          if (best >= 0) apply(scenes[best]);
+        }, { rootMargin: "-55% 0px -45% 0px", threshold: 0 });
+        for (var j = 0; j < scenes.length; j++) io.observe(scenes[j]);
+      }
+    }
+
+    // ── How far down the page you are ───────────────────────────────────────
+    // One passive listener, coalesced onto a frame, writing one number. The
+    // clip that number drives is the only thing that reads it.
+    //
+    // A native scroll timeline would take this off the main thread, and the
+    // keyframe it needs is now known to be safe here. It is still not worth
+    // it: Firefox has not shipped animation-timeline unflagged as of August
+    // 2026, so the listener below has to exist regardless, and adding a second
+    // mechanism to skip it on two engines buys a page with no other main-thread
+    // work one property write per frame. One path, measured, everywhere.
+    //
+    // The number goes on .thread and not on :root, which is the difference
+    // between a cheap write and an expensive one. A custom property set on the
+    // root invalidates everything that could inherit it, which here is the
+    // whole document. Same scroll, 61 frames, both ways: the recalculation
+    // COUNT is identical either way at about 130, because a value still
+    // changes once a frame — what changes is how much each one costs, 83ms on
+    // the root against 15ms on .thread, where the only elements that inherit
+    // it are .thread and the one span inside it. The clip reads it by
+    // inheritance in both cases; nothing about the CSS changes.
+    var thread = document.querySelector(".thread");
+    if (!thread) return;
+
+    // The plate takes the same number. It is driven from here rather than from
+    // CSS state because a camera that steps between three fixed frames is not
+    // a camera: at this page's length the steps are a few hundred pixels of
+    // scroll apart, so either they are small enough to read as a flicker or
+    // big enough to read as a lurch. Off a continuous reading position it is
+    // neither — it tracks, and it is still whenever the reader is.
+    //
+    // Only above the breakpoint. Below it the plate is a fixed block at the
+    // head of the page and there is nothing to move it against.
+    var plate = document.querySelector("img.plate");
+    var wide = window.matchMedia("(min-width: 1280px)");
+    // Ends of the push-in. The rest is linear between them, which is what
+    // makes it feel driven rather than triggered.
+    //
+    // Almost all of it is scale, and almost none of it sideways. Scaling about
+    // the membrane leaves the membrane where it is and grows the mass past the
+    // right edge, so the composition the file was chosen for survives the move
+    // — the calm flank the column stands on stays calm. An earlier version
+    // dragged 6% left as well, which walked the bright body a hundred and
+    // eighty pixels toward the type and ate exactly that flank. What is left
+    // sideways is a hair; the rise is what gives the zoom a direction.
+    var FROM = {scale: 1.02, x: 0, y: 0};
+    var TO   = {scale: 1.26, x: -1.5, y: -5};
+
+    var span = 1, queued = false;
+    var measure = function () {
+      span = Math.max(1, root.scrollHeight - window.innerHeight);
+    };
+    var write = function () {
+      queued = false;
+      var p = window.scrollY / span;
+      p = p < 0 ? 0 : p > 1 ? 1 : p;
+      thread.style.setProperty("--progress", p.toFixed(4));
+      if (!plate) return;
+      if (!wide.matches) { plate.style.transform = ""; return; }
+      plate.style.transform =
+        "translate3d(" + (FROM.x + (TO.x - FROM.x) * p).toFixed(3) + "%," +
+        (FROM.y + (TO.y - FROM.y) * p).toFixed(3) + "%,0) scale(" +
+        (FROM.scale + (TO.scale - FROM.scale) * p).toFixed(4) + ")";
+    };
+    var onScroll = function () {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(write);
+    };
+    measure();
+    root.setAttribute("data-progress", "");
+    write();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", function () { measure(); write(); }, { passive: true });
+    // Crossing the breakpoint hands the plate back to the stylesheet's resting
+    // frame, so the poster state never inherits a camera position.
+    if (wide.addEventListener) wide.addEventListener("change", write);
+  })();
+  </script>
 
   <!-- Term previews. The same two-tier control the Plectis sheet runs, ported
        rather than reinvented: hover or focus gives a one-sentence preview,
