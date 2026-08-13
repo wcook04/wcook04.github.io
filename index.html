@@ -851,35 +851,47 @@
            it — the composited ground behind the prose was the same pixel,
            (46,32,40), at every scroll depth on the page.
 
-           So the plate is a slow push-in, tied to how far down you are. Not
-           three states it steps between: a step of a percent or two is not a
-           move, it is a twitch, and stepping at all makes the picture lurch at
-           a boundary the reader cannot see. It runs continuously off the same
-           reading position the thread uses, so the picture is only ever moving
-           while the reader is, and it stops the moment they stop.
+           So the plate is over-scaled ONCE, and then pans as you scroll. The
+           scale is a constant. That is the whole design and the part that is
+           easy to get wrong: an earlier version ran the scale itself from the
+           scroll position, growing the picture from 1.02 to 1.26 on the way
+           down, and a zoom that changes continuously under a reader is a dolly
+           — the frame is rescaling around them the entire time they are trying
+           to read, and it is genuinely unpleasant. Scale is set once and never
+           touched again. Only the vertical offset moves.
+
+           The pan is symmetric about the resting frame: the picture sits 7%
+           low at the top of the page and 7% high at the foot, so what the plate
+           does over the whole page is travel about a seventh of its own height,
+           in the same direction as the text and far slower. Neutral in the
+           middle, which is why the resting declaration below carries no offset
+           at all. Nothing moves horizontally: the membrane, the flank and the
+           mass keep the exact left-to-right relationship the file was chosen
+           for, at every scroll position.
 
            The transform is written by the runtime below, one inline write on
            this element per frame. What is here is the resting frame: the state
            with no scripting and the state a reader who asks for stillness
            gets, which is why it is a plain declaration and not a keyframe.
 
-           It is a camera, not a control. Transform only, so none of it touches
-           layout; no filter, no blur, no object-position, nothing that would
-           repaint a full-bleed picture on a scroll frame. The origin is the
-           blue membrane rather than the middle of the box, so the hinge the
-           composition is built on stays where it is while the mass grows past
-           the frame.
+           Transform only, so none of it touches layout; no filter, no blur, no
+           object-position, nothing that would repaint a full-bleed picture on a
+           scroll frame.
 
-           The envelope is bounded by one thing: cover crops this file to the
-           box with about a pixel to spare, so every bit of drift has to be
-           paid for by scale first. The check for that is done on PIXELS, not
-           on arithmetic — a script samples the four edges of the plate at a
-           spread of viewports and scroll positions and fails if the page's own
-           plum is ever found there. Two attempts to prove it by algebra
-           disagreed with each other; the pixels do not care which was right.
-           Change these numbers and re-run that check. */
+           1.18 is chosen by what the pan costs, not by taste. Cover crops this
+           file to the box with about a pixel to spare, so every percent of
+           travel has to be bought with scale first: at a 52% vertical origin,
+           1.18 buys 9.4% of margin above and 8.6% below, against a 7% swing
+           either way. It also happens to be free — 1.18 of a 1600px box is
+           1888px drawn from the 1920 rung, so the plate is very slightly
+           downscaled rather than stretched. The check that no bare ground ever
+           shows is done on PIXELS, not arithmetic: a script repaints the ground
+           magenta, strips the column, and reads the four edges of the picture
+           across a spread of viewports and the whole pan. Two attempts to
+           prove it by algebra disagreed with each other; the pixels do not care
+           which was right. Change these numbers and re-run that check. */
         transform-origin: 49% 52%;
-        transform: scale(1.02);
+        transform: scale(1.18);
       }
 
       /* The ground the column stands on: a short pour of the page's own plum
@@ -957,7 +969,32 @@
         <p class="role">Public work</p>
       </header>
 
-      <!-- Two sentences: what the thing does, then what you can do with it.
+      <!-- Two of the four verbs carry a preview and two do not, and that is the
+           informative arrangement rather than an unfinished one.
+
+           Run and check are house terms: each names a specific promise this
+           site makes and can fail to keep. Runnable is stricter than public —
+           the fixtures have to be committed, the dependencies declared, the
+           command written down — and check means a real command that tests one
+           stated claim and leaves a record. A stranger who does not know that
+           reads both words as ordinary English and misses what is being
+           offered. Read and watch ARE ordinary English: you read a PDF, you
+           watch a video, and neither word promises anything the row beneath it
+           does not already say in full.
+
+           Checked before wiring, against the live glossary rather than assumed:
+           #glossary-runnable and #glossary-check resolve, #glossary-watch does
+           not exist at all, and the entry behind #glossary-read is about
+           programs parsing files — "distinguish byte access, parsing, and
+           semantic understanding" — which is the wrong sense for a person
+           reading a paper. Marking those two would have been decoration
+           pointing at a definition that did not fit, and in one case a link to
+           an anchor that is not there. If watch is ever wanted here it needs an
+           entry authored in codex/standards/std_system_term.json first, then
+           the Plectis site rebuilt, in that order: the word has to be a working
+           link before it is a tooltip.
+
+           Two sentences: what the thing does, then what you can do with it.
            This used to open with "a large private workflow system made with
            coding agents", which says how it was made and how big it is before
            it says what it is for, and then spent a sentence on my age and
@@ -973,7 +1010,9 @@
         to work in, and
         <a class="cite" data-to="video" href="https://wcook04.github.io/plectis/#demo-videos">the tools to inspect what they did</a>.
         The public parts are the ones a stranger can
-        <b>run</b>, <b>check</b>, <b>read</b> or <b>watch</b>.
+        <b><a class="term" data-term="runnable" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-runnable">run</a></b>,
+        <b><a class="term" data-term="check" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-check">check</a></b>,
+        <b>read</b> or <b>watch</b>.
       </p>
 
       <!-- The three scene owners. data-scene-key is read by the runtime at the
@@ -1260,18 +1299,17 @@
     // head of the page and there is nothing to move it against.
     var plate = document.querySelector("img.plate");
     var wide = window.matchMedia("(min-width: 1280px)");
-    // Ends of the push-in. The rest is linear between them, which is what
-    // makes it feel driven rather than triggered.
+    // The base zoom is a constant and is NOT animated. Only PAN travels with
+    // the scroll: +7% of the plate's height at the top of the page, -7% at the
+    // foot, linear between, which is the same direction the text moves and
+    // about a fifteenth of its speed. Nothing moves horizontally.
     //
-    // Almost all of it is scale, and almost none of it sideways. Scaling about
-    // the membrane leaves the membrane where it is and grows the mass past the
-    // right edge, so the composition the file was chosen for survives the move
-    // — the calm flank the column stands on stays calm. An earlier version
-    // dragged 6% left as well, which walked the bright body a hundred and
-    // eighty pixels toward the type and ate exactly that flank. What is left
-    // sideways is a hair; the rise is what gives the zoom a direction.
-    var FROM = {scale: 1.02, x: 0, y: 0};
-    var TO   = {scale: 1.26, x: -1.5, y: -5};
+    // Keep scale out of this. Driving it from the scroll position rescales the
+    // frame around the reader for the entire length of the page, which is a
+    // dolly zoom and is nauseating to read against, however small the numbers
+    // look written down.
+    var BASE_SCALE = 1.18;
+    var PAN = 7;
 
     var span = 1, queued = false;
     var measure = function () {
@@ -1285,9 +1323,8 @@
       if (!plate) return;
       if (!wide.matches) { plate.style.transform = ""; return; }
       plate.style.transform =
-        "translate3d(" + (FROM.x + (TO.x - FROM.x) * p).toFixed(3) + "%," +
-        (FROM.y + (TO.y - FROM.y) * p).toFixed(3) + "%,0) scale(" +
-        (FROM.scale + (TO.scale - FROM.scale) * p).toFixed(4) + ")";
+        "translate3d(0," + (PAN - 2 * PAN * p).toFixed(3) + "%,0) scale(" +
+        BASE_SCALE + ")";
     };
     var onScroll = function () {
       if (queued) return;
@@ -1328,6 +1365,20 @@
   (function () {
     "use strict";
     var TERMS = {
+          "runnable": {
+                "preferred_label": "runnable",
+                "reader_preview": "Runnable means a component ships everything needed to execute it locally: the code, its inputs, and a command, so a reader can produce the result rather than read about it.",
+                "reader_card": "It is the difference between a repository you can inspect and one you can exercise. Runnable requires that the fixtures are committed, the dependencies are declared, and the command is written down, which is a stricter condition than the code being public. A cold clone is how the claim gets tested.",
+                "reader_rule": "Check whether something is runnable before treating its result as reproducible. Published is not the same as runnable.",
+                "reader_deep": "The constraint shapes what can be published at all: a component whose real inputs are private is only runnable against synthetic fixtures, and its scope limit has to say so rather than implying the wider case."
+          },
+          "check": {
+                "preferred_label": "check",
+                "reader_preview": "A check is a command you can run that tests one stated claim and writes down what it found.",
+                "reader_card": "Checks are the unit of evidence here. Each is a real command rather than a description of one, runs on your machine rather than a server, reads committed inputs, and leaves a result record behind. That is the whole mechanism: the claim says what should be true, the check finds out, and the record is what remains afterwards.",
+                "reader_rule": "Run the check. Reading about a check establishes nothing that running it would.",
+                "reader_deep": "A check is only as informative as its ability to fail, which is why the negative cases matter more than the passing ones. A check that cannot fail is a formality with the appearance of rigour."
+          },
           "agent": {
                 "preferred_label": "agent",
                 "reader_preview": "An agent is a software-controlled worker that can interpret instructions, inspect context, use permitted tools, and produce or change artifacts.",
