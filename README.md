@@ -35,6 +35,72 @@ anything, and the sitemap it declared had never been discovered by that route.
 | `robots.txt` | The host-root robots.txt. Declares the Plectis sitemap. |
 | `site.webmanifest` | Root-scoped manifest. |
 | `favicon.ico`, `assets/` | The Plectis mark and its rasters. |
+| `assets/plate-01*` | The plate behind the page, and its size ladder. |
+
+## The plate
+
+`assets/plate-01.jpg` is the artwork behind the page: Wet Proof, plate 01, seed
+5 at 2560x1600, made by `assets/plate-01.lab.py` and then selected. It is the
+one thing here that is neither type nor mark, and it was also, for a while, the
+entire weight of the page — 247 KB against 18 KB of everything else. On a
+throttled phone the download alone accounted for 1.9s of a 2.6s paint, which
+put the front door outside the threshold the two pages it links to sit inside.
+
+So the plate is now served as a size ladder. Every file in it is a plain
+downscale of `plate-01.jpg` — same seed, same crop, same 16:10. **None of them
+is a fresh render.** If the plate itself ever changes, re-run the lab to make a
+new `plate-01.jpg` and then rebuild the ladder from it; do not re-run the lab
+per size, because a different render is a different picture.
+
+```sh
+# JPEG rungs. sips ships with macOS and writes progressive JPEG by default,
+# which is what the lab wrote; formatOptions 75 is also its default, stated
+# here so the files do not move if that default ever does.
+for W in 960 1280; do
+  sips -Z $W -s format jpeg -s formatOptions 75 \
+       --out assets/plate-01-$W.jpg assets/plate-01.jpg
+done
+
+# AVIF rungs, via a lossless PNG so the resize is not encoded twice.
+# avifenc comes from libavif (brew install libavif).
+for W in 960 1280 1920 2560; do
+  sips -s format png -Z $W --out /tmp/plate-$W.png assets/plate-01.jpg
+  avifenc -q 66 -s 2 -y 444 -j all /tmp/plate-$W.png assets/plate-01-$W.avif
+done
+```
+
+| Rung | AVIF | JPEG |
+|---|---|---|
+| 960w | 29,252 B | 79,662 B |
+| 1280w | 44,641 B | 129,922 B |
+| 1920w | 72,397 B | — |
+| 2560w | 123,399 B | 246,660 B (`plate-01.jpg`) |
+
+Three of those choices are worth a sentence, since they are the ones a later
+pass would otherwise have to rediscover. `-q 66` is where AVIF comes level with
+the JPEG rung on SSIM against the same reference, at about a third of its size;
+the dark plum ground is where loss would show first on this plate, so that is
+the region to look at if the quality is ever lowered. `-y 444` keeps full chroma
+resolution, because the one hard edge in the picture is a thin saturated blue
+membrane against orange, and 4:2:0 blurs exactly that. The JPEG ladder stops at
+1280 because a 1920 rung would encode larger than the 2560 original below it.
+
+AVIF is offered and WebP is not. WebP came out slightly smaller here but
+measurably worse at the same size, and the browsers that read WebP but not AVIF
+are a narrow band that the JPEG already serves correctly. Two formats is the
+most this page should carry.
+
+The markup is `<picture>` with an AVIF `<source>` and the JPEG on the `<img>`,
+`sizes="100vw"` on both, and `fetchpriority="high"` and explicit `width`/
+`height` kept on the `<img>`. `sizes` is `100vw` because the plate is
+full-width below 1280px and full-bleed above it, so its box is the viewport in
+either layout. Note that `object-fit: cover` then magnifies whichever file was
+chosen by about 1.8x in the poster state, so a 3x phone is really served nearer
+2x — deliberate, and checked against the original at 1:1 rather than assumed.
+
+Measured on a cold load at 375x812 DPR3, 4x CPU, Slow 4G: 261 KB and a 2608 ms
+paint before, 60 KB and 1512 ms after. At 1440x900 DPR2: 253 KB and 2604 ms
+before, 131 KB and 2104 ms after. Layout shift stayed at zero throughout.
 
 ## The mark
 

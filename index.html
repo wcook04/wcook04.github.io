@@ -146,6 +146,14 @@
       mask-image: linear-gradient(180deg, #000 74%, transparent 100%);
     }
 
+    /* The <picture> exists only to offer the AVIF ahead of the JPEG; it must
+       not add a box of its own. Block rather than the default inline, because
+       an inline wrapper puts the plate on a line box and the baseline gap
+       under it would show up as a few stray pixels in the column's -2.2rem
+       overlap. Above 1280px the plate is absolute and positions against .fold
+       regardless, since a picture is never itself positioned. */
+    .fold picture { display: block; }
+
     .col {
       position: relative; z-index: 1;
       display: flex; flex-direction: column;
@@ -325,9 +333,32 @@
          mobilities advected through a curl field inside a resist silhouette;
          deposits at the boundary; contamination where channels overlap), then
          selected: seed 5 at 2560x1600. Regenerate from the lab rather than
-         editing pixels. -->
-    <img class="plate" src="assets/plate-01.jpg" alt="" width="2560" height="1600"
-         fetchpriority="high" decoding="async" aria-hidden="true">
+         editing pixels.
+
+         The plate was also the whole payload: 247 KB against 18 KB of page,
+         1.9s of a 2.6s paint on a throttled phone. The files below are plain
+         downscales of it, same crop and same 16:10, so a phone fetches a
+         phone-sized plate and a retina desktop still gets the full one.
+         README.md has the commands. AVIF leads because smooth pigment is the
+         case it encodes best — 123 KB at 2560 against the JPEG's 247, with no
+         difference visible at 1:1 — and the JPEG srcset carries anything that
+         cannot read it, never serving more than the file it replaces. sizes is
+         100vw in both layouts, the plate being full-width below 1280px and
+         full-bleed above it; cover then magnifies the chosen file by about
+         1.8x in the poster state, which lands a 3x phone nearer 2x. -->
+    <picture>
+      <source type="image/avif" sizes="100vw"
+              srcset="assets/plate-01-960.avif 960w,
+                      assets/plate-01-1280.avif 1280w,
+                      assets/plate-01-1920.avif 1920w,
+                      assets/plate-01-2560.avif 2560w">
+      <img class="plate" src="assets/plate-01.jpg" alt="" width="2560" height="1600"
+           sizes="100vw"
+           srcset="assets/plate-01-960.jpg 960w,
+                   assets/plate-01-1280.jpg 1280w,
+                   assets/plate-01.jpg 2560w"
+           fetchpriority="high" decoding="async" aria-hidden="true">
+    </picture>
 
     <div class="col">
       <header>
