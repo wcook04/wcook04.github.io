@@ -151,7 +151,15 @@
       overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
     }
 
-    .fold { position: relative; overflow: hidden; }
+    /* The clip belongs to the poster state, where the plate is a full-width
+       block that would otherwise push a scrollbar. It must NOT apply to the
+       side-by-side state: an ancestor with `overflow: hidden` becomes the
+       scroll container a sticky descendant sticks to, and that container never
+       scrolls, so the plate silently rides away with the page instead of
+       holding. Measured before scoping it: at scrollY 700 the plate's top read
+       -698, which is the scroll, exactly. */
+    .fold { position: relative; }
+    @media (max-width: 1279.98px) { .fold { overflow: hidden; } }
 
     /* One mass, one boundary, one residue field.
 
@@ -624,36 +632,72 @@
       .col { max-width: none; }
     }
 
-    /* Wide screens keep the poster, they do not switch to a side-by-side.
+    /* Side-by-side, and the plate holds its frame while the type goes past it.
 
-       There used to be a two-column state here: the type in a 34rem column
-       pinned left, the plate's mass held in the right of the frame. It looked
-       right for exactly one screen. Past the fold the column carried on down
-       the left edge with eleven hundred pixels of bare page beside it, and no
-       amount of work on the plate could fix that, because the emptiness was
-       never the plate's — it was a narrow column pinned to one side of a wide
-       viewport, which leaves a dead flank by construction. Three attempts to
-       fill it with artwork failed on their own terms: stretched over the fold
-       `cover` crops the mass off the right; `position: fixed` does not paint
-       on first load in this engine at all; a fixed background attachment
-       repaints the viewport every scroll frame and hung the renderer.
+       The type sits in a 34rem column on the plate's calm left flank, the mass
+       stays in the right of the frame, and the picture stays put for the whole
+       length of the page instead of scrolling away after one screen and
+       leaving a bare flank behind it.
 
-       So the column is centred instead and the margins are symmetric. Empty
-       space either side of a measure reads as a page; the same space on one
-       side reads as a mistake. The plate goes full width across the top, which
-       is also the first time the whole picture has been visible at this size —
-       the two-column state was always showing a crop of it. */
-    @media (min-width: 761px) {
-      .plate { height: clamp(22rem, 62svh, 40rem); }
-      .col {
-        max-width: 42rem;
-        margin-inline: auto;
-        padding-inline: clamp(2rem, 5vw, 3.5rem);
+       It is STICKY, and that detail is the whole thing. `position: fixed` is
+       the obvious way to hold a picture still and it does not paint at all on
+       first load in this engine: the image lays out, reports correct position,
+       size, opacity and a decoded source, and is simply never drawn until some
+       repaint — a hover, a resize, one stray style write — reveals it. It
+       cannot be caught by measurement, and going to inspect it is itself
+       enough to fix it, so it ships broken and looks fine to whoever checks.
+       `background-attachment: fixed` paints but repaints the whole viewport on
+       every scroll frame against a 2560px source and hung the renderer. Sticky
+       has neither problem, because a sticky box is in normal flow: it is laid
+       out and painted like any other element and merely offset as you scroll.
+
+       Both children share one grid cell so the plate is full bleed behind the
+       column rather than boxed beside it, which is what keeps the composition
+       the file was selected for. The scrim is the ::after, a grid item in the
+       same cell, sticky on the same terms. */
+    @media (min-width: 1280px) {
+      .fold { display: grid; grid-template-columns: minmax(0, 1fr); }
+      .fold > picture, .fold::after, .fold > .col { grid-area: 1 / 1; }
+
+      .fold > picture {
+        position: sticky; top: 0;
+        height: calc(100svh - var(--thread-h));
+        align-self: start;
+        z-index: 0;
       }
-      /* The measure stays a measure: the column may grow to 42rem for the rows
-         and the reading, but running prose is held to something a person can
-         actually track across. */
-      .intro, .handoff__lede, .handoff__limit, .note p { max-width: 34rem; }
+      .plate {
+        width: 100%; height: 100%;
+        /* Left-anchored: a viewport narrower than the plate crops the right
+           rim, never the column the type stands on. */
+        object-position: 0% 50%;
+        -webkit-mask-image: none; mask-image: none;
+      }
+
+      /* The ground the column stands on: a short pour of the page's own plum
+         from the left edge, gone before it reaches the mass. It travels with
+         the plate, so the type keeps its footing the whole way down. */
+      .fold::after {
+        content: "";
+        position: sticky; top: 0;
+        align-self: start;
+        height: calc(100svh - var(--thread-h));
+        width: min(46rem, 60%);
+        justify-self: start;
+        background: linear-gradient(90deg,
+          var(--page) 0%,
+          color-mix(in srgb, var(--page) 78%, transparent) 32%,
+          transparent 100%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .col {
+        position: relative; z-index: 1;
+        min-height: calc(100svh - var(--thread-h));
+        max-width: 34rem;
+        margin-top: 0;
+        padding: clamp(2.4rem, 6svh, 4.2rem) clamp(1.4rem, 4.5vw, 4.5rem);
+      }
     }
   </style>
 </head>
