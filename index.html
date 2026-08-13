@@ -640,22 +640,21 @@
         <p class="role">Public work</p>
       </header>
 
-      <!-- Three sentences, and each one is load-bearing. The first says what the
-           thing is. The second says who made it, because a reader who does not
-           know that reads the rest as a team's output and prices it wrongly in
-           both directions. The third is the original line and still the point
-           of the page: the four rows below are the four things a stranger can
-           do without asking me for anything. Nothing here is a count, for the
-           same reason the rows carry none. -->
+      <!-- Two sentences: what the thing does, then what you can do with it.
+           This used to open with "a large private workflow system made with
+           coding agents", which says how it was made and how big it is before
+           it says what it is for, and then spent a sentence on my age and
+           funding before the rows. A reader who does not yet know what the
+           system does cannot use that sentence, so it now names the actor and
+           the function first and the biography waits until the note at the
+           foot. "Large" is gone: the rows can show scale, and a page should
+           not assert a property its own destinations demonstrate. No counts
+           here, for the same reason the rows carry none. -->
       <p class="intro">
-        I build and inspect a large
-        <a class="term" data-term="private" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-private">private</a>
-        workflow system made with coding
-        <a class="term" data-term="agent" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-agent">agents</a>.
-        I am 22, an economics undergraduate at Bristol. I have worked
-        on it alone for about a year and paid for it myself. The
-        <a class="term" data-term="public" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-public">public</a>
-        parts are the ones a stranger can
+        I build a private system for coding
+        <a class="term" data-term="agent" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-agent">agents</a>
+        to work in, and the tools to inspect what they did. The public parts
+        are the ones a stranger can
         <b>run</b>, <b>check</b>, <b>read</b> or <b>watch</b>.
       </p>
 
@@ -675,7 +674,7 @@
                  can see when they arrive. -->
             <p class="kind">Run</p>
             <p class="name"><a href="https://wcook04.github.io/plectis/">Plectis</a></p>
-            <p class="desc"><a class="term" data-term="component" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-component">Components</a> you clone and run locally. Each states a <a class="term" data-term="claim" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-claim">claim</a> and writes a <a class="term" data-term="receipt" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-receipt">result file</a>.</p>
+            <p class="desc"><a class="term" data-term="component" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-component">Components</a> you clone and run locally. Each states a claim and writes a <a class="term" data-term="receipt" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-receipt">result file</a>.</p>
             <p class="exits">
               <!-- The exits are written to read inside their row, which leaves
                    them ambiguous in the flat list a screen reader offers: three
@@ -704,7 +703,7 @@
           <li>
             <p class="kind">Read</p>
             <p class="name"><a href="https://wcook04.github.io/plectis/docs/papers.html">Papers</a></p>
-            <p class="desc">Standalone <a class="term" data-term="paper" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-paper">PDFs</a>, written for someone reading cold.</p>
+            <p class="desc">Standalone PDFs, written for someone reading cold.</p>
             <p class="exits">
               <a href="https://wcook04.github.io/plectis/docs/papers.html">Catalogue</a><span class="sep" aria-hidden="true">&middot;</span><a aria-label="On the site: the papers" href="https://wcook04.github.io/plectis/#papers">On the site</a>
             </p>
@@ -712,7 +711,7 @@
           <li>
             <p class="kind">Watch</p>
             <p class="name"><a href="https://wcook04.github.io/plectis/#demo-videos">Videos</a></p>
-            <p class="desc">Recorded demonstrations of the private system. No <a class="term" data-term="check" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-check">check</a> is run in them.</p>
+            <p class="desc">Recorded demonstrations of the private system. No check is run in them.</p>
             <p class="exits">
               <a aria-label="On the site: the videos" href="https://wcook04.github.io/plectis/#demo-videos">On the site</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="video" aria-label="1 minute demonstration on YouTube" href="https://youtu.be/R_--vExxWyk">1&nbsp;min</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="video" aria-label="5 minute demonstration on YouTube" href="https://youtu.be/VoWByIOIuBE">5&nbsp;min</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="video" aria-label="29 minute demonstration on YouTube" href="https://youtu.be/jA_xC8gmdSs">29&nbsp;min</a>
             </p>
@@ -736,13 +735,13 @@
         <h2 class="eyebrow" id="handoff-h">Read it with an AI</h2>
         <p class="handoff__lede">
           The whole
-          <a class="term" data-term="public" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-public">public</a>
+          public
           record is also published as one
-          <a class="term" data-term="packet" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-packet">packet</a>:
+          packet:
           a single JSON file you can give to an assistant instead of browsing
           the pages yourself. It contains every public page and record, each
           <a class="term" data-term="component" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-component">component</a>
-          <a class="term" data-term="claim" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-claim">claim</a>
+          claim
           with the limit on that claim, and instructions to cite exact pages.
         </p>
         <!-- The filename is the honest label, so it is the label: a reader who
@@ -775,26 +774,34 @@
       <section class="note" aria-labelledby="note-h">
         <h2 class="eyebrow" id="note-h">Why it is here</h2>
         <p>
-          AI was the only tool I used. I designed the system for coding agents
-          to work in, on the assumption that it gets more useful as the models
-          improve. I have not shown that; it is still an assumption. Most of
-          the mathematics is written in
+          I am 22, an economics undergraduate at Bristol. I built this alone
+          over about a year and paid for it myself, and AI was the only tool I
+          used.
+        </p>
+        <p>
+          I designed the system for coding agents to work in, on the assumption
+          that it gets more useful as the models improve. I have not shown
+          that; it is still an assumption. Most of the mathematics is written
+          in
           <a class="term" data-term="lean" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-lean">Lean</a>,
           which checks every step, so you do not have to take my word for those
-          claims.
-          The Erd&#337;s problems the work covers are
+          claims. The Erd&#337;s problems the work covers are
           <a class="term" data-term="open-problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">open</a>,
           and none of it solves one.
         </p>
+        <!-- The fact, not the diary. This said the replies so far had been
+             out-of-field or no-time, which is true and was the wrong thing to
+             put in front of someone who has not looked yet: it reports other
+             people declining to engage before the reader has formed a view,
+             and the only thing it adds over the sentence below is discouraging
+             company. What an evaluator needs is what has and has not been
+             established, which is the first clause on its own. -->
         <p>
-          I started emailing people about this recently. The replies so far have
-          said it is outside their field, or that they had no time to look.
-          Nobody has checked the mathematics properly yet.
-        </p>
-        <p>
-          I would like someone at an AI lab to look at the breadth of it. I am
-          also looking for work, or funding to carry on. If you can evaluate
-          work like this, or know who can, please get in touch.
+          Nobody independent has checked the mathematics yet. If you can
+          evaluate work like this, the most useful thing is bounded: take one
+          public claim, follow it to its source and its evidence, and tell me
+          where the wording goes further than the record does. I am also
+          looking for work, or funding to carry on.
         </p>
       </section>
 
@@ -841,20 +848,6 @@
                 "reader_rule": "Judge an agent by the evidence and permissions attached to its actions, not by how fluent its explanation sounds.",
                 "reader_deep": "Different agents may have different contexts, tools, runtimes, and mutation rights even when they use the same underlying model."
           },
-          "private": {
-                "preferred_label": "private",
-                "reader_preview": "Private means intentionally unavailable to the general public and accessible only under stated permissions or within a restricted environment.",
-                "reader_card": "Private describes an access boundary, not secrecy, wrongdoing, or superior authority. Public projections may summarize allowed facts without exposing the private source material behind them.",
-                "reader_rule": "Do not infer the contents of private material from the existence of a public projection.",
-                "reader_deep": "A private boundary can protect personal data, unfinished work, credentials, operational state, or simply material outside the release scope, and those reasons carry different handling rules."
-          },
-          "public": {
-                "preferred_label": "public",
-                "reader_preview": "Public means intentionally available for anyone to inspect without private repository, account, or operator access.",
-                "reader_card": "Public describes access, not endorsement, completeness, peer review, or permission to infer private material. The public site and repositories expose a deliberately bounded source slice whose omissions and claim limits remain part of what is being published.",
-                "reader_rule": "Read public as an access classification and check separate fields for review status, evidence strength, license, and completeness.",
-                "reader_deep": "A public projection may be generated from private work only when its exported content passes the public boundary; the existence of a public artifact never implies that the private whole is equivalent or available."
-          },
           "component": {
                 "preferred_label": "component",
                 "reader_preview": "A component is one bounded unit of working machinery with a defined job, explicit inputs and outputs, and a claim limit, called a component in public copy and an organ in source identifiers.",
@@ -862,26 +855,12 @@
                 "reader_rule": "Take a component as one bounded unit doing one job, and read its evidence line and scope limit to see what it is responsible for and where that responsibility ends.",
                 "reader_deep": "Component is a naming boundary, not a separate object: it lets the object model be read on the public pages without inheriting the internal working vocabulary, and the source registry, atlas, object map, and evidence profiles decide what each component is allowed to claim."
           },
-          "claim": {
-                "preferred_label": "claim",
-                "reader_preview": "A claim is a stated assertion about what something does or establishes, written down separately from the evidence for it so the two can be compared.",
-                "reader_card": "Every component here states its claim in one place and ships its check in another. Keeping them apart is what makes the pair checkable: a claim that drifts wider than its evidence becomes visible as a mismatch rather than blending into the surrounding description. The wording of a claim is treated as an artefact in its own right, and edits to it are checked.",
-                "reader_rule": "Read the claim and the check together. A claim with no check behind it is a description.",
-                "reader_deep": "The failure this guards against is gradual. Nobody rewrites a claim into a lie; wording widens a little at a time until it covers ground the evidence never did, which is why the relationship is registered rather than remembered."
-          },
           "receipt": {
                 "preferred_label": "receipt",
                 "reader_preview": "A receipt is the durable output that proves an action happened: the file or record a step writes, kept so the claim can be checked later rather than taken on trust.",
                 "reader_card": "Actions here are expected to leave something behind. A commit reports a hash, a deploy reports the bytes it verified live, a check writes its result record. The pattern is deliberate, because the failure it guards against is the confident report of work that did not occur. A receipt turns that from a matter of trust into something you can look up.",
                 "reader_rule": "When a step is reported as done, ask what it wrote. No receipt, no completion.",
                 "reader_deep": "The discipline extends to failure. A refused action produces a receipt too, naming what stopped it, which is what stops a blocked step from being quietly reported as finished."
-          },
-          "check": {
-                "preferred_label": "check",
-                "reader_preview": "A check is a command you can run that tests one stated claim and writes down what it found.",
-                "reader_card": "Checks are the unit of evidence here. Each is a real command rather than a description of one, runs on your machine rather than a server, reads committed inputs, and leaves a result record behind. That is the whole mechanism: the claim says what should be true, the check finds out, and the record is what remains afterwards.",
-                "reader_rule": "Run the check. Reading about a check establishes nothing that running it would.",
-                "reader_deep": "A check is only as informative as its ability to fail, which is why the negative cases matter more than the passing ones. A check that cannot fail is a formality with the appearance of rigour."
           },
           "machine-checked": {
                 "preferred_label": "machine-checked",
@@ -910,20 +889,6 @@
                 "reader_card": "A problem can remain open despite extensive computations, conditional reductions, solved special cases, and formalized supporting theory. Those results narrow or reorganize the question but do not settle its universal statement.",
                 "reader_rule": "When a problem is marked open, distinguish the original question from the partial and conditional results reported around it.",
                 "reader_deep": "Open status is time-sensitive and source-sensitive, so a responsible statement names the problem, date or source of the status, and any claimed resolution that would need independent review."
-          },
-          "paper": {
-                "preferred_label": "paper",
-                "reader_preview": "A paper is a rendered PDF write-up that gives a human-readable account of a project, question, method, result, and evidence boundary, linked to its supporting source where available.",
-                "reader_card": "The Plectis paper shelf contains reader-facing rendered PDFs: short problem notes, longer working records, mathematical expositions, and systems write-ups. Calling one a paper identifies that presentation form, not peer review, journal publication, novelty, or proof authority. A paper module is different: it is an internal ai_workflow document that maps a subsystem, its owners, and its routes. For mathematical claims, the paper explains the argument while the Lean declarations and claim registry own what was checked and what remains open.",
-                "reader_rule": "Use a paper to understand the argument and its significance, then follow its claim and source references for verification.",
-                "reader_deep": "A paper integrates source records into a coherent human exposition and is versioned with the source used to render it. Its value is explanation and synthesis. Its limits come from the cited evidence: formal claims remain subordinate to Lean and the claim registry, measurements remain subordinate to their records, and the label paper alone grants no academic status."
-          },
-          "packet": {
-                "preferred_label": "packet",
-                "reader_preview": "A packet is a single bundled file prepared for an AI assistant to read, carrying the site's content and structure in one download rather than as pages to browse.",
-                "reader_card": "An assistant reading a website page by page gets an incomplete and arbitrary slice of it. A packet removes that problem by shipping the whole public surface at once, in a form built for machine reading. Different sizes exist for the same reason: some tools refuse large files.",
-                "reader_rule": "A packet tells an assistant what the site says. It does not let the assistant run anything.",
-                "reader_deep": "The distinction between reading and running survives the packet. A packet improves the quality of a summary, and a summary is still not evidence."
           }
     };
 
