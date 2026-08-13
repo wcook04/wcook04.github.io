@@ -478,26 +478,65 @@
       text-decoration-color: var(--accent-bright);
     }
 
-    /* Dismissible with Esc, hoverable, and persistent until the pointer leaves
-       both the word and the card (WCAG 1.4.13). Width is explicit rather than
-       only capped: a fixed-position box with max-width alone shrinks to its
-       longest word and becomes a tall sliver. */
+    /* The card. Same two tiers, same class names, same measurements as the
+       Plectis sheet's .term-tip, with the tokens repointed at this page's plum
+       instead of that sheet's surface. Dismissible with Esc, hoverable, and
+       persistent until the pointer leaves both the word and the card
+       (WCAG 1.4.13). Width is explicit rather than only capped: a
+       fixed-position box with max-width alone shrinks to its longest word and
+       becomes a tall sliver. */
     .term-tip {
       position: fixed; z-index: 50;
-      width: 21rem; max-width: calc(100vw - 1.5rem);
-      margin: 0; padding: .58rem .75rem;
+      width: 22rem; max-width: calc(100vw - 1rem);
+      margin: 0; padding: 0.5rem 0.7rem;
       background: #241a2f;
       color: var(--bone);
       border: 1px solid var(--hair-strong);
-      border-radius: 6px;
+      border-radius: 8px;
       box-shadow: 0 8px 28px rgba(0, 0, 0, .45);
       font-family: var(--font-sans);
-      font-size: .8rem; line-height: 1.45;
+      font-size: 0.86rem; line-height: 1.42;
+      transition: opacity 140ms ease-out;
     }
     .term-tip[hidden] { display: none; }
-    .term-tip__label { font-weight: 600; color: var(--bone); }
-    .term-tip__text { margin: .15rem 0 0; color: var(--bone-soft); }
-    .term-tip__cue { margin: .35rem 0 0; font-size: .7rem; color: var(--faint); }
+    .term-tip.is-leaving { opacity: 0; }
+    .term-tip[data-placement="above"] { transform-origin: left bottom; }
+    .term-tip[data-placement="below"] { transform-origin: left top; }
+    .term-tip__label { font-weight: 600; }
+    .term-tip__text { margin-top: 0.1rem; color: var(--bone-soft); }
+    .term-tip__cue { margin-top: 0.3rem; color: var(--faint); font-size: 0.76rem; }
+    .term-tip__escape {
+      margin-top: 0.2rem;
+      color: color-mix(in srgb, var(--faint) 72%, transparent);
+      font-size: 0.68rem; letter-spacing: 0.01em; text-align: right;
+    }
+    /* Tier 1: the same card grows to hold the longer reader card, the rule, an
+       optional in-depth paragraph, and the link through to the full glossary
+       entry. It stays a calm popover and never becomes a modal. */
+    .term-tip.is-expanded {
+      width: 25rem; max-width: calc(100vw - 1rem);
+      max-height: 70vh; overflow-y: auto; padding: 0.65rem 0.85rem;
+    }
+    .term-tip__rule { margin-top: 0.45rem; color: var(--bone-soft); font-size: 0.82rem; }
+    .term-tip__deep {
+      margin-top: 0.45rem; padding-top: 0.45rem;
+      border-top: 1px solid var(--hair); color: var(--bone-soft);
+    }
+    .term-tip__full {
+      display: inline-block; margin-top: 0.55rem;
+      color: var(--accent); font-weight: 600; font-size: 0.82rem; text-decoration: none;
+    }
+    .term-tip__full:hover { color: var(--accent-bright); text-decoration: underline; }
+    .term-tip__actions { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; }
+    .term-tip__back {
+      appearance: none; margin-top: 0.55rem; padding: 0; border: 0; background: none;
+      color: var(--faint); font: inherit; font-size: 0.82rem; cursor: pointer;
+      text-decoration: underline; text-underline-offset: 0.16em;
+    }
+    .term-tip__back:hover { color: var(--bone); }
+    .term-tip__rule[hidden], .term-tip__deep[hidden],
+    .term-tip__full[hidden], .term-tip__back[hidden] { display: none; }
+    @media (prefers-reduced-motion: reduce) { .term-tip { transition: none; } }
 
     .colophon {
       margin: 1.7rem 0 0;
@@ -722,8 +761,8 @@
             also JSON, if your assistant refuses a file that size.</span>
         </p>
         <p class="handoff__limit">
-          It reads and quotes the public files. It cannot run any of the checks.
-          If it tells you it ran one, it is wrong.
+          The assistant reads and quotes the public files. It cannot run any of
+          the checks. If it tells you it ran one, it is wrong.
         </p>
       </section>
 
@@ -738,10 +777,10 @@
       <section class="note" aria-labelledby="note-h">
         <h2 class="eyebrow" id="note-h">Why it is here</h2>
         <p>
-          AI was not the main tool I built this with. It was the only one. I
-          built it for coding agents to work in, on the assumption that it gets
-          more useful as the models improve. That is an assumption, not a
-          result. The mathematics is different: most of it is written in
+          AI was the only tool I built this with. I built it for coding agents
+          to work in, on the assumption that it gets more useful as the models
+          improve. That is still an assumption. Most of the mathematics is
+          written in
           <a class="term" data-term="lean" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-lean">Lean</a>,
           which checks every step, so those claims can be checked without
           trusting me.
@@ -750,14 +789,9 @@
           and none of it solves one.
         </p>
         <p>
-          I started emailing people about this recently. Most of the
-          mathematicians I reached said it was outside their field, or that they
-          had no time. Two replied on a specific claim: one ruled out an
-          approach I had suggested, and one said a result looked plausible while
-          saying they had not checked the
-          <a class="term" data-term="proof" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-proof">proof</a>.
-          So the work has had no proper mathematical review, in either
-          direction.
+          I started emailing people about this recently. So far the replies have
+          said it sits outside their field, or that they had no time to look.
+          Nobody has checked the mathematics properly yet.
         </p>
         <p>
           I would like someone at an AI lab to look at the breadth of it. I am
@@ -779,135 +813,375 @@
     </div>
   </main>
 
-  <!-- Term previews. Thirteen definitions, copied verbatim from the glossary
-       the links point at, and deliberately copied rather than fetched: the
-       Plectis term index is 366 KB for 435 terms, this page is 18 KB, and
-       pulling that file across would make the front door depend on an asset
-       path in another repository that is rebuilt on its own schedule. The
-       trade is that a reworded glossary entry goes stale here silently. That
-       is survivable because the anchor always resolves to the authoritative
-       entry, and because these are definitions of ordinary words that have
-       not moved in the life of the site. If one does change, recopy its
-       `reader_preview` from sites/microcosm/assets/term-previews.js.
+  <!-- Term previews. The same two-tier control the Plectis sheet runs, ported
+       rather than reinvented: hover or focus gives a one-sentence preview,
+       clicking the word expands the SAME card in place to the longer entry
+       plus its rule and, where there is one, an in-depth line; clicking the
+       word a second time follows the link to the full glossary entry. The
+       class names, the tier logic, the 110ms hover grace, the 90ms leaving
+       fade and the reading-block-aware placement are all taken from
+       sites/microcosm/assets/docs.js so the two pages behave identically. What
+       differs is only what has to: docs.js reads a 366 KB index of 435 terms
+       and delegates over hundreds of anchors, and this page carries the
+       thirteen entries it actually uses.
 
-       No definitions are written here that are not in that file. Inventing a
-       gloss on the front door is how two surfaces start disagreeing about
-       what a word means. -->
+       The definitions are copied verbatim from that index rather than fetched
+       from it, because pulling it across would make this page depend on an
+       asset path in another repository that is rebuilt on its own schedule.
+       The trade is that a reworded entry goes stale here silently; the anchor
+       always resolves to the authoritative entry, and nothing is defined here
+       that is not defined there. If one changes, recopy its reader_* fields
+       from sites/microcosm/assets/term-previews.js. -->
   <script>
   (function () {
+    "use strict";
     var TERMS = {
-      "agent": ["agent", "An agent is a software-controlled worker that can interpret instructions, inspect context, use permitted tools, and produce or change artifacts."],
-      "private": ["private", "Private means intentionally unavailable to the general public and accessible only under stated permissions or within a restricted environment."],
-      "public": ["public", "Public means intentionally available for anyone to inspect without private repository, account, or operator access."],
-      "component": ["component", "A component is one bounded unit of working machinery with a defined job, explicit inputs and outputs, and a claim limit, called a component in public copy and an organ in source identifiers."],
-      "claim": ["claim", "A claim is a stated assertion about what something does or establishes, written down separately from the evidence for it so the two can be compared."],
-      "receipt": ["receipt", "A receipt is the durable output that proves an action happened: the file or record a step writes, kept so the claim can be checked later rather than taken on trust."],
-      "check": ["check", "A check is a command you can run that tests one stated claim and writes down what it found."],
-      "machine-checked": ["machine-checked", "Machine-checked means a result has been verified by software rather than accepted on a reader's judgement."],
-      "lean": ["Lean", "Lean is a proof assistant: software that checks a mathematical proof step by step and refuses it if any step does not follow."],
-      "proof": ["proof", "A proof is a logically valid argument showing that a mathematical statement follows from stated definitions, assumptions, and previously established results."],
-      "open-problem": ["open problem", "An open problem is a precisely stated question for which no proof or counterexample accepted by the relevant mathematical community is currently known."],
-      "paper": ["paper", "A paper is a rendered PDF write-up that gives a human-readable account of a project, question, method, result, and evidence boundary, linked to its supporting source where available."],
-      "packet": ["packet", "A packet is a single bundled file prepared for an AI assistant to read, carrying the site's content and structure in one download rather than as pages to browse."]
+          "agent": {
+                "preferred_label": "agent",
+                "reader_preview": "An agent is a software-controlled worker that can interpret instructions, inspect context, use permitted tools, and produce or change artifacts.",
+                "reader_card": "On this site, an agent is not a person and not an autonomous authority. It acts through a bounded tool and permission surface, and its outputs still require source checks and validation.",
+                "reader_rule": "Judge an agent by the evidence and permissions attached to its actions, not by how fluent its explanation sounds.",
+                "reader_deep": "Different agents may have different contexts, tools, runtimes, and mutation rights even when they use the same underlying model."
+          },
+          "private": {
+                "preferred_label": "private",
+                "reader_preview": "Private means intentionally unavailable to the general public and accessible only under stated permissions or within a restricted environment.",
+                "reader_card": "Private describes an access boundary, not secrecy, wrongdoing, or superior authority. Public projections may summarize allowed facts without exposing the private source material behind them.",
+                "reader_rule": "Do not infer the contents of private material from the existence of a public projection.",
+                "reader_deep": "A private boundary can protect personal data, unfinished work, credentials, operational state, or simply material outside the release scope, and those reasons carry different handling rules."
+          },
+          "public": {
+                "preferred_label": "public",
+                "reader_preview": "Public means intentionally available for anyone to inspect without private repository, account, or operator access.",
+                "reader_card": "Public describes access, not endorsement, completeness, peer review, or permission to infer private material. The public site and repositories expose a deliberately bounded source slice whose omissions and claim limits remain part of what is being published.",
+                "reader_rule": "Read public as an access classification and check separate fields for review status, evidence strength, license, and completeness.",
+                "reader_deep": "A public projection may be generated from private work only when its exported content passes the public boundary; the existence of a public artifact never implies that the private whole is equivalent or available."
+          },
+          "component": {
+                "preferred_label": "component",
+                "reader_preview": "A component is one bounded unit of working machinery with a defined job, explicit inputs and outputs, and a claim limit, called a component in public copy and an organ in source identifiers.",
+                "reader_card": "The system is built as a set of these units rather than one large program, and each one is presented on its own card. A component card names the unit, says what it does, gives the evidence line that backs it, links to its source route, and marks where its scope stops. Each component can be opened and inspected on its own.",
+                "reader_rule": "Take a component as one bounded unit doing one job, and read its evidence line and scope limit to see what it is responsible for and where that responsibility ends.",
+                "reader_deep": "Component is a naming boundary, not a separate object: it lets the object model be read on the public pages without inheriting the internal working vocabulary, and the source registry, atlas, object map, and evidence profiles decide what each component is allowed to claim."
+          },
+          "claim": {
+                "preferred_label": "claim",
+                "reader_preview": "A claim is a stated assertion about what something does or establishes, written down separately from the evidence for it so the two can be compared.",
+                "reader_card": "Every component here states its claim in one place and ships its check in another. Keeping them apart is what makes the pair checkable: a claim that drifts wider than its evidence becomes visible as a mismatch rather than blending into the surrounding description. The wording of a claim is treated as an artefact in its own right, and edits to it are checked.",
+                "reader_rule": "Read the claim and the check together. A claim with no check behind it is a description.",
+                "reader_deep": "The failure this guards against is gradual. Nobody rewrites a claim into a lie; wording widens a little at a time until it covers ground the evidence never did, which is why the relationship is registered rather than remembered."
+          },
+          "receipt": {
+                "preferred_label": "receipt",
+                "reader_preview": "A receipt is the durable output that proves an action happened: the file or record a step writes, kept so the claim can be checked later rather than taken on trust.",
+                "reader_card": "Actions here are expected to leave something behind. A commit reports a hash, a deploy reports the bytes it verified live, a check writes its result record. The pattern is deliberate, because the failure it guards against is the confident report of work that did not occur. A receipt turns that from a matter of trust into something you can look up.",
+                "reader_rule": "When a step is reported as done, ask what it wrote. No receipt, no completion.",
+                "reader_deep": "The discipline extends to failure. A refused action produces a receipt too, naming what stopped it, which is what stops a blocked step from being quietly reported as finished."
+          },
+          "check": {
+                "preferred_label": "check",
+                "reader_preview": "A check is a command you can run that tests one stated claim and writes down what it found.",
+                "reader_card": "Checks are the unit of evidence here. Each is a real command rather than a description of one, runs on your machine rather than a server, reads committed inputs, and leaves a result record behind. That is the whole mechanism: the claim says what should be true, the check finds out, and the record is what remains afterwards.",
+                "reader_rule": "Run the check. Reading about a check establishes nothing that running it would.",
+                "reader_deep": "A check is only as informative as its ability to fail, which is why the negative cases matter more than the passing ones. A check that cannot fail is a formality with the appearance of rigour."
+          },
+          "machine-checked": {
+                "preferred_label": "machine-checked",
+                "reader_preview": "Machine-checked means a result has been verified by software rather than accepted on a reader's judgement.",
+                "reader_card": "It is the strongest evidence class on this site, and also the narrowest. A machine-checked theorem is settled for exactly the statement checked, which is often a smaller claim than the surrounding description suggests. Reading the statement rather than the headline is the whole discipline.",
+                "reader_rule": "Machine-checked applies to the formal statement. Check what that statement actually says.",
+                "reader_deep": "The label is worth distrusting when it appears near prose rather than near a source reference, because that is where the range quietly widens."
+          },
+          "lean": {
+                "preferred_label": "Lean",
+                "reader_preview": "Lean is a proof assistant: software that checks a mathematical proof step by step and refuses it if any step does not follow.",
+                "reader_card": "A proof written in Lean is checked by machine rather than by a reader's judgement. That removes a specific class of error, the plausible step that turns out not to hold, and it is why a Lean-checked result carries more weight than a written argument of the same length. It does not remove every error: Lean confirms the proof establishes the statement written in the source, and whether that statement is the interesting one is a human question.",
+                "reader_rule": "For a Lean result, read the formal statement rather than the summary. Lean checked the statement, not the description of it.",
+                "reader_deep": "Machine checking moves the risk rather than deleting it. What remains is whether the formal statement means what the prose says it means, which is exactly the proof boundary."
+          },
+          "proof": {
+                "preferred_label": "proof",
+                "reader_preview": "A proof is a logically valid argument showing that a mathematical statement follows from stated definitions, assumptions, and previously established results.",
+                "reader_card": "A human proof communicates the reasoning to qualified readers; a formal proof encodes enough detail for a proof checker. Both establish only their exact conclusion under their exact assumptions.",
+                "reader_rule": "Read the theorem statement and dependencies before treating a proof as settling a broader claim.",
+                "reader_deep": "Proof validity is different from exposition quality, novelty, significance, or whether the theorem solves the motivating open problem."
+          },
+          "open-problem": {
+                "preferred_label": "open problem",
+                "reader_preview": "An open problem is a precisely stated question for which no proof or counterexample accepted by the relevant mathematical community is currently known.",
+                "reader_card": "A problem can remain open despite extensive computations, conditional reductions, solved special cases, and formalized supporting theory. Those results narrow or reorganize the question but do not settle its universal statement.",
+                "reader_rule": "When a problem is marked open, distinguish the original question from the partial and conditional results reported around it.",
+                "reader_deep": "Open status is time-sensitive and source-sensitive, so a responsible statement names the problem, date or source of the status, and any claimed resolution that would need independent review."
+          },
+          "paper": {
+                "preferred_label": "paper",
+                "reader_preview": "A paper is a rendered PDF write-up that gives a human-readable account of a project, question, method, result, and evidence boundary, linked to its supporting source where available.",
+                "reader_card": "The Plectis paper shelf contains reader-facing rendered PDFs: short problem notes, longer working records, mathematical expositions, and systems write-ups. Calling one a paper identifies that presentation form, not peer review, journal publication, novelty, or proof authority. A paper module is different: it is an internal ai_workflow document that maps a subsystem, its owners, and its routes. For mathematical claims, the paper explains the argument while the Lean declarations and claim registry own what was checked and what remains open.",
+                "reader_rule": "Use a paper to understand the argument and its significance, then follow its claim and source references for verification.",
+                "reader_deep": "A paper integrates source records into a coherent human exposition and is versioned with the source used to render it. Its value is explanation and synthesis. Its limits come from the cited evidence: formal claims remain subordinate to Lean and the claim registry, measurements remain subordinate to their records, and the label paper alone grants no academic status."
+          },
+          "packet": {
+                "preferred_label": "packet",
+                "reader_preview": "A packet is a single bundled file prepared for an AI assistant to read, carrying the site's content and structure in one download rather than as pages to browse.",
+                "reader_card": "An assistant reading a website page by page gets an incomplete and arbitrary slice of it. A packet removes that problem by shipping the whole public surface at once, in a form built for machine reading. Different sizes exist for the same reason: some tools refuse large files.",
+                "reader_rule": "A packet tells an assistant what the site says. It does not let the assistant run anything.",
+                "reader_deep": "The distinction between reading and running survives the packet. A packet improves the quality of a summary, and a summary is still not evidence."
+          }
     };
 
-    var marks = [].slice.call(document.querySelectorAll("a.term"));
-    if (!marks.length) return;
+    if (!document.querySelector("a.term")) return;
 
-    // Grade the page: the first mention of each term keeps the dotted rule,
-    // later ones drop it. Done here rather than in the markup so the no-JS
-    // rendering keeps every rule, which is the safe way round.
+    function el(tag, cls, text) {
+      var n = document.createElement(tag);
+      if (cls) n.className = cls;
+      if (text) n.textContent = text;
+      return n;
+    }
+    function termAnchorFrom(target) {
+      if (!target || !target.closest) return null;
+      var a = target.closest("a.term");
+      return a && TERMS[a.getAttribute("data-term")] ? a : null;
+    }
+
+    // Grade the page: the first mention of a term keeps the dotted rule, later
+    // ones drop it and keep the behaviour. Done at runtime rather than in the
+    // markup so that with scripting off every mention keeps its rule, which is
+    // the safe direction to fail in.
     var seen = {};
-    marks.forEach(function (el) {
-      var k = el.getAttribute("data-term");
-      if (seen[k]) el.classList.add("is-again");
+    Array.prototype.forEach.call(document.querySelectorAll("a.term"), function (a) {
+      var k = a.getAttribute("data-term");
+      if (seen[k]) a.classList.add("is-again");
       seen[k] = true;
     });
 
-    var tip = document.createElement("div");
-    tip.className = "term-tip";
+    // Placement is reading-block aware: given a choice, the card goes to
+    // whichever side covers less of the paragraph the word sits in.
+    function placeFloater(node, anchor) {
+      node.hidden = false;
+      var rect = anchor.getBoundingClientRect();
+      var readingBlock = anchor.closest("p, li, h1, h2");
+      var readingRect = readingBlock ? readingBlock.getBoundingClientRect() : null;
+      var width = node.offsetWidth || 352;
+      var height = node.offsetHeight || 120;
+      var edge = 8, gap = 12;
+      var left = Math.min(Math.max(8, rect.left), Math.max(8, window.innerWidth - width - 8));
+      var aboveTop = rect.top - height - gap;
+      var belowTop = rect.bottom + gap;
+      var aboveFits = aboveTop >= edge;
+      var belowFits = belowTop + height <= window.innerHeight - edge;
+      var tiePrefersAbove = rect.top > window.innerHeight * 0.42;
+      var placeAbove;
+      if (aboveFits && belowFits && readingRect) {
+        var aboveOverlap = Math.max(0, Math.min(aboveTop + height, readingRect.bottom) -
+          Math.max(aboveTop, readingRect.top));
+        var belowOverlap = Math.max(0, Math.min(belowTop + height, readingRect.bottom) -
+          Math.max(belowTop, readingRect.top));
+        placeAbove = aboveOverlap === belowOverlap ? tiePrefersAbove : aboveOverlap < belowOverlap;
+      } else if (aboveFits && belowFits) { placeAbove = tiePrefersAbove; }
+      else if (aboveFits) { placeAbove = true; }
+      else if (belowFits) { placeAbove = false; }
+      else { placeAbove = rect.top > window.innerHeight / 2; }
+      var top = placeAbove
+        ? Math.max(edge, aboveTop)
+        : Math.min(window.innerHeight - height - edge, belowTop);
+      node.setAttribute("data-placement", placeAbove ? "above" : "below");
+      node.style.left = left + "px";
+      node.style.top = top + "px";
+    }
+
+    var tip = el("div", "term-tip");
+    tip.id = "mc-term-tip";
     tip.setAttribute("role", "tooltip");
-    tip.id = "term-tip";
     tip.hidden = true;
-    tip.innerHTML = '<p class="term-tip__label"></p><p class="term-tip__text"></p>' +
-                    '<p class="term-tip__cue">Click through for the full entry. Esc to close.</p>';
+    var tipLabel = el("div", "term-tip__label");
+    var tipText = el("div", "term-tip__text");
+    var tipRule = el("div", "term-tip__rule"); tipRule.hidden = true;
+    var tipDeep = el("div", "term-tip__deep"); tipDeep.hidden = true;
+    var tipFull = el("a", "term-tip__full", "See this in the glossary \u2192"); tipFull.hidden = true;
+    var tipBack = el("button", "term-tip__back", "Back to page");
+    tipBack.type = "button"; tipBack.hidden = true;
+    var tipCue = el("div", "term-tip__cue");
+    tip.appendChild(tipLabel);
+    tip.appendChild(tipText);
+    tip.appendChild(tipRule);
+    tip.appendChild(tipDeep);
+    var tipActions = el("div", "term-tip__actions");
+    tipActions.appendChild(tipBack);
+    tipActions.appendChild(tipFull);
+    tip.appendChild(tipActions);
+    tip.appendChild(tipCue);
+    tip.appendChild(el("div", "term-tip__escape", "Esc to close"));
     document.body.appendChild(tip);
-    var elLabel = tip.querySelector(".term-tip__label");
-    var elText = tip.querySelector(".term-tip__text");
 
-    var current = null;
-    var overTip = false;
-    var closeTimer = null;
+    var tipFor = null;   // the anchor the card currently describes
+    var tier = 0;        // 0 = hover preview, 1 = expanded in place
+    var tipHideTimer = 0;
+    var tipFadeTimer = 0;
+    var suppressFocusPreview = false;
+    var suppressPointerPreview = false;
+    var previewIntent = null;
+    var pointerX = null, pointerY = null;
 
-    function place(anchor) {
-      var r = anchor.getBoundingClientRect();
-      // Measure first, then decide: the card is only sized once it is laid out,
-      // so it goes visible off-screen before its height is read.
-      tip.style.left = "-9999px";
-      tip.style.top = "0";
-      tip.hidden = false;
-      var t = tip.getBoundingClientRect();
-      var pad = 8;
-      var left = Math.min(Math.max(pad, r.left), window.innerWidth - t.width - pad);
-      var below = r.bottom + pad;
-      var top = (below + t.height > window.innerHeight - pad && r.top - pad - t.height > pad)
-        ? r.top - pad - t.height
-        : below;
-      // Preference above, guarantee after: a word high on the screen has no
-      // room over it, and one low down has none under it. Whichever side the
-      // rule picks, the card is then pulled back inside the viewport, because a
-      // definition placed off-screen is the same as no definition.
-      top = Math.min(Math.max(pad, top), Math.max(pad, window.innerHeight - t.height - pad));
-      tip.style.left = left + "px";
-      tip.style.top = top + "px";
+    function renderTier(data, anchor) {
+      tipLabel.textContent = data.preferred_label || "";
+      if (tier === 1) {
+        tip.classList.add("is-expanded");
+        tipText.textContent = data.reader_card || data.reader_preview || "";
+        if (data.reader_rule && data.reader_rule !== data.reader_card) {
+          tipRule.textContent = data.reader_rule; tipRule.hidden = false;
+        } else { tipRule.textContent = ""; tipRule.hidden = true; }
+        if (data.reader_deep && data.reader_deep !== data.reader_card &&
+            data.reader_deep !== data.reader_rule) {
+          tipDeep.textContent = data.reader_deep; tipDeep.hidden = false;
+        } else { tipDeep.textContent = ""; tipDeep.hidden = true; }
+        tipFull.href = anchor.getAttribute("href");
+        tipFull.hidden = false;
+        tipBack.hidden = false;
+        tipCue.textContent = "Click the term again, or use the link, to open the complete glossary entry";
+      } else {
+        tip.classList.remove("is-expanded");
+        tipText.textContent = data.reader_preview || data.reader_card || "";
+        tipRule.textContent = ""; tipRule.hidden = true;
+        tipDeep.textContent = ""; tipDeep.hidden = true;
+        tipFull.hidden = true;
+        tipBack.hidden = true;
+        tipCue.textContent = "Click to expand here and stay on this page";
+      }
+    }
+    function showTip(anchor, intent) {
+      var data = TERMS[anchor.getAttribute("data-term")];
+      if (!data) return;
+      if (tipHideTimer) { clearTimeout(tipHideTimer); tipHideTimer = 0; }
+      if (tipFadeTimer) { clearTimeout(tipFadeTimer); tipFadeTimer = 0; }
+      tip.classList.remove("is-leaving");
+      if (tipFor !== anchor) tier = 0; // a different term always starts collapsed
+      tipFor = anchor;
+      previewIntent = intent || null;
+      anchor.setAttribute("aria-describedby", tip.id);
+      renderTier(data, anchor);
+      placeFloater(tip, anchor);
+    }
+    function expandTip(anchor) {
+      var data = TERMS[anchor.getAttribute("data-term")];
+      if (!data) return false;
+      if (tipHideTimer) { clearTimeout(tipHideTimer); tipHideTimer = 0; }
+      if (tipFadeTimer) { clearTimeout(tipFadeTimer); tipFadeTimer = 0; }
+      tip.classList.remove("is-leaving");
+      tier = 1;
+      tipFor = anchor;
+      previewIntent = "click";
+      anchor.setAttribute("aria-describedby", tip.id);
+      renderTier(data, anchor);
+      placeFloater(tip, anchor); // reposition: the card grew
+      return true;
+    }
+    function hideTip(immediate) {
+      tier = 0;
+      previewIntent = null;
+      if (tipFor) { tipFor.removeAttribute("aria-describedby"); tipFor = null; }
+      if (tip.hidden) return;
+      if (immediate) {
+        if (tipFadeTimer) { clearTimeout(tipFadeTimer); tipFadeTimer = 0; }
+        tip.hidden = true;
+        tip.classList.remove("is-leaving");
+        return;
+      }
+      // Leave as a quick fade rather than a blink, so moving between terms
+      // reads as one continuous surface.
+      tip.classList.add("is-leaving");
+      if (tipFadeTimer) clearTimeout(tipFadeTimer);
+      tipFadeTimer = setTimeout(function () {
+        tipFadeTimer = 0;
+        tip.hidden = true;
+        tip.classList.remove("is-leaving");
+      }, 90);
+    }
+    function scheduleHideTip() {
+      if (tipHideTimer) clearTimeout(tipHideTimer);
+      tipHideTimer = setTimeout(hideTip, 110); // grace so the pointer can land on the card
     }
 
-    function open(anchor) {
-      var entry = TERMS[anchor.getAttribute("data-term")];
-      if (!entry) return;
-      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
-      current = anchor;
-      elLabel.textContent = entry[0];
-      elText.textContent = entry[1];
-      anchor.setAttribute("aria-describedby", "term-tip");
-      place(anchor);
-    }
-
-    function close() {
-      if (!current) return;
-      current.removeAttribute("aria-describedby");
-      current = null;
-      tip.hidden = true;
-    }
-
-    // Hoverable: leaving the word does not close the card immediately, so the
-    // pointer can travel into it to read or to reach the link.
-    function scheduleClose() {
-      if (closeTimer) clearTimeout(closeTimer);
-      closeTimer = setTimeout(function () {
-        if (!overTip) close();
-      }, 220);
-    }
-
-    marks.forEach(function (el) {
-      el.addEventListener("pointerenter", function () { open(el); });
-      el.addEventListener("pointerleave", scheduleClose);
-      el.addEventListener("focus", function () { open(el); });
-      el.addEventListener("blur", close);
+    tip.addEventListener("mouseenter", function () {
+      if (tipHideTimer) { clearTimeout(tipHideTimer); tipHideTimer = 0; }
+      if (tipFadeTimer) { clearTimeout(tipFadeTimer); tipFadeTimer = 0; }
+      tip.classList.remove("is-leaving");
+    });
+    tip.addEventListener("mouseleave", scheduleHideTip);
+    tipBack.addEventListener("click", function () {
+      var anchor = tipFor;
+      suppressFocusPreview = true;
+      suppressPointerPreview = true;
+      document.addEventListener("mousemove", function () {
+        suppressPointerPreview = false;
+      }, { once: true, capture: true });
+      hideTip(true);
+      requestAnimationFrame(function () {
+        if (anchor && typeof anchor.focus === "function") {
+          try { anchor.focus({ preventScroll: true }); } catch (e) { anchor.focus(); }
+        }
+        requestAnimationFrame(function () {
+          hideTip(true);
+          suppressFocusPreview = false;
+        });
+      });
     });
 
-    tip.addEventListener("pointerenter", function () {
-      overTip = true;
-      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    document.addEventListener("keydown", function (ev) {
+      if ((ev.key === "Escape" || ev.key === "Esc") && !tip.hidden) hideTip();
     });
-    tip.addEventListener("pointerleave", function () { overTip = false; scheduleClose(); });
+    // An unmodified first activation expands in place. Activating the SAME term
+    // again follows its glossary link, so the word is a preview -> drilldown
+    // control without losing native link semantics. Modified clicks keep their
+    // native new-tab behaviour from either tier.
+    document.addEventListener("click", function (ev) {
+      if (tip.contains(ev.target)) return;
+      var onTerm = termAnchorFrom(ev.target);
+      if (onTerm) {
+        if (ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+        if (tipFor === onTerm && tier === 1 && !tip.hidden) {
+          hideTip(true);
+          return; // second activation: allow the anchor's native navigation
+        }
+        ev.preventDefault();
+        expandTip(onTerm);
+        return;
+      }
+      if (!tip.hidden) hideTip();
+    });
+    window.addEventListener("resize", function () {
+      if (!tip.hidden && tipFor) placeFloater(tip, tipFor);
+    });
+    window.addEventListener("scroll", function () {
+      if (tip.hidden || tier !== 0 || previewIntent !== "pointer" || !tipFor) return;
+      var hit = pointerX !== null && document.elementFromPoint
+        ? document.elementFromPoint(pointerX, pointerY) : null;
+      if (!hit || (!tipFor.contains(hit) && !tip.contains(hit))) hideTip(true);
+    }, { passive: true });
 
-    // Dismissible without moving the pointer, per WCAG 1.4.13.
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && current) { close(); }
-    });
-    window.addEventListener("scroll", function () { if (current) place(current); }, { passive: true });
-    window.addEventListener("resize", close);
+    // Delegated, as on the sheet: four document listeners rather than four on
+    // every anchor.
+    document.addEventListener("mouseover", function (ev) {
+      if (typeof ev.clientX === "number") { pointerX = ev.clientX; pointerY = ev.clientY; }
+      if (suppressPointerPreview) return;
+      var anchor = termAnchorFrom(ev.target);
+      if (!anchor) return;
+      if (ev.relatedTarget && anchor.contains(ev.relatedTarget)) return;
+      showTip(anchor, "pointer");
+    }, true);
+    document.addEventListener("mouseout", function (ev) {
+      var anchor = termAnchorFrom(ev.target);
+      if (!anchor) return;
+      if (ev.relatedTarget && anchor.contains(ev.relatedTarget)) return;
+      scheduleHideTip();
+    }, true);
+    document.addEventListener("focusin", function (ev) {
+      if (suppressFocusPreview) return;
+      var anchor = termAnchorFrom(ev.target);
+      if (anchor) showTip(anchor, "focus");
+    }, true);
+    document.addEventListener("focusout", function (ev) {
+      if (termAnchorFrom(ev.target)) scheduleHideTip();
+    }, true);
   })();
   </script>
 </body>
