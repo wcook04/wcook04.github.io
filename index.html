@@ -855,6 +855,10 @@
       display: block; position: relative;
       aspect-ratio: 16 / 10;
       background: #150f1d;
+      /* The map inside sizes its type against the frame rather than the root,
+         because the frame is fluid and the map is dense. Plain rem first, so a
+         host without container units still gets a readable size. */
+      container-type: inline-size;
     }
     .shot__img {
       position: absolute; inset: 0;
@@ -872,6 +876,101 @@
     .shot[data-to="video"] .shot__img { object-fit: contain; background: #0d0a12; }
     @media (prefers-reduced-motion: reduce) {
       .shot, .shot__img { transition: none; }
+    }
+
+    /* ── The packet map ──────────────────────────────────────────────────────
+       Three of the destinations on this page are JSON files, and a screenshot
+       of a JSON file is a picture of a scrollbar. So when the window is asked
+       to show one it draws the shape of the file instead: the bands of the
+       packet in the order it reads, then the two thinner cuts taken from the
+       same build.
+
+       Drawn, not captured, and every line in it was read out of the live files
+       before it was written here — the band names are real key groups, the
+       brief really is copied word for word (its own `authority` field says the
+       packet wins where they disagree), and the digest really does omit the
+       bodies and carry a pointer back. What is deliberately NOT here is
+       counts. Key totals, component totals and byte sizes all move on a
+       rebuild, and this page holds itself to saying nothing about the linked
+       release that a refresh could falsify. The mass of the bodies is shown by
+       giving that band the height instead, which is true at any size: five
+       keys carry 93% of the file. */
+    .shot__map {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      gap: .34rem; gap: 2.2cqi;
+      padding: .6rem .78rem .62rem; padding: 3.4cqi 4.2cqi 3.6cqi;
+      font-family: var(--font-sans);
+      opacity: 0;
+      transition: opacity var(--t-response) ease-out;
+    }
+    .dest__frame[data-view="map"] .shot__map { opacity: 1; }
+    .map__note {
+      font-size: .55rem; font-size: 1.55cqi;
+      letter-spacing: .2em; text-transform: uppercase;
+      color: color-mix(in srgb, var(--faint) 76%, transparent);
+    }
+    .map__stack, .map__cuts { display: flex; flex-direction: column; }
+    .map__stack { flex: 1 1 auto; }
+    .map__band, .map__cut {
+      display: grid;
+      grid-template-columns: 26% minmax(0, 1fr);
+      align-items: baseline;
+      gap: .45rem; gap: 2.8cqi;
+      padding: .22rem 0; padding: 1.35cqi 0;
+      border-top: 1px solid var(--hair);
+    }
+    .map__band { flex: 1 1 auto; }
+    /* The bodies are most of the file, so they are most of the drawing. This
+       is the one proportional statement here and it is the honest one. */
+    /* The extra height alone reads as a gap. A wash makes it read as
+       material, which is what it is. */
+    .map__band--mass {
+      flex-grow: 2.4;
+      align-content: center;
+      background: linear-gradient(180deg,
+        color-mix(in srgb, var(--bone) 5%, transparent) 0%,
+        color-mix(in srgb, var(--bone) 1%, transparent) 100%);
+    }
+    .map__band--mass .map__v { color: var(--bone-soft); }
+    .map__k {
+      font-size: .55rem; font-size: 1.62cqi;
+      font-weight: 600; letter-spacing: .13em; text-transform: uppercase;
+      color: var(--faint);
+      transition: color var(--t-response) ease-out;
+    }
+    .map__v {
+      font-size: .64rem; font-size: 1.92cqi;
+      line-height: 1.36;
+      color: color-mix(in srgb, var(--bone-soft) 82%, transparent);
+    }
+    .map__w {
+      grid-column: 2;
+      justify-self: end;
+      margin-top: .04rem; margin-top: .35cqi;
+      font-size: .5rem; font-size: 1.5cqi;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: color-mix(in srgb, var(--faint) 82%, transparent);
+    }
+    .map__cuts { border-top: 1px solid var(--hair-strong); padding-top: .1rem; padding-top: .6cqi; }
+    .map__cut { border-top: 0; padding: .2rem 0 .04rem; padding: 1.15cqi 0 .3cqi; }
+    .map__cut .map__v { color: color-mix(in srgb, var(--faint) 96%, transparent); }
+    /* Hovering one of the two thinner files lights it and the band it is cut
+       from, so the relationship is shown rather than only stated. */
+    .dest__frame[data-emphasis="brief"] .map__cut[data-cut="brief"] .map__k,
+    .dest__frame[data-emphasis="digest"] .map__cut[data-cut="digest"] .map__k,
+    .dest__frame[data-emphasis="brief"] .map__band[data-band="decision"] .map__k,
+    .dest__frame[data-emphasis="digest"] .map__band[data-band="indexes"] .map__k {
+      color: var(--bone);
+    }
+    .dest__frame[data-emphasis="brief"] .map__cut[data-cut="brief"] .map__v,
+    .dest__frame[data-emphasis="digest"] .map__cut[data-cut="digest"] .map__v,
+    .dest__frame[data-emphasis="brief"] .map__band[data-band="decision"] .map__v,
+    .dest__frame[data-emphasis="digest"] .map__band[data-band="indexes"] .map__v {
+      color: var(--bone-soft);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .shot__map, .map__k, .map__v { transition: none; }
     }
 
     /* Under the row, on a phone. The wide layout puts the same stills in the
@@ -1063,7 +1162,11 @@
       .dest__panel {
         pointer-events: auto;
         position: relative;
-        width: min(30rem, 100%);
+        /* Grows with the field it stands in. At 30rem flat the window read as
+           a thumbnail pinned to a large picture rather than as the thing being
+           shown, and the map below has type in it that has to be read. */
+        width: clamp(27rem, 40vw, 40rem);
+        max-width: 100%;
       }
       /* The pour. A screenshot has hard edges and a corner radius; the plate
          has neither. Rather than cut one into the other, the window is given
@@ -1175,7 +1278,7 @@
         opacity: 0;
         transition: opacity var(--t-response) ease-out, filter var(--t-response) ease-out;
       }
-      .dest .shot__img.is-on { opacity: 1; }
+      .dest__frame:not([data-view="map"]) .shot__img.is-on { opacity: 1; }
       @media (prefers-reduced-motion: reduce) { .dest .shot__img { transition: none; } }
       /* Says what the frame does, once, and goes quiet the moment the reader
          has made it move — which is the moment the sentence stops being true
@@ -1258,6 +1361,54 @@
             <img class="shot__img is-on" data-src="assets/previews/plectis-site.jpg" alt=""
                  width="1280" height="800" decoding="async">
             <img class="shot__img" alt="" width="1280" height="800" decoding="async">
+            <!-- Shown in place of the picture when the destination is a JSON
+                 file. Read out of the live files before it was written: the
+                 bands are real key groups, the brief's own authority field
+                 says it is copied verbatim and that the packet wins where they
+                 disagree, and the digest's omitted_for_size names the bodies
+                 it drops. Deliberately count-free — see the note over
+                 .shot__map. Decorative: everything it says, the section beside
+                 it says in prose. -->
+            <span class="shot__map" aria-hidden="true">
+              <span class="map__note">in the order it reads</span>
+              <span class="map__stack">
+                <span class="map__band">
+                  <span class="map__k">How to read it</span>
+                  <span class="map__v">cold open, the execution boundary, how to cite</span>
+                </span>
+                <span class="map__band">
+                  <span class="map__k">Routing</span>
+                  <span class="map__v">a question, and the part of the file that answers it</span>
+                </span>
+                <span class="map__band" data-band="indexes">
+                  <span class="map__k">Indexes</span>
+                  <span class="map__v">every component, with the limit on its claim</span>
+                </span>
+                <span class="map__band map__band--mass">
+                  <span class="map__k">Bodies</span>
+                  <span class="map__v">the records: cards, papers, assertions, pages, glossary</span>
+                  <span class="map__w">most of the file</span>
+                </span>
+                <span class="map__band" data-band="decision">
+                  <span class="map__k">Decision layer</span>
+                  <span class="map__v">what a reader in your position can and cannot conclude</span>
+                </span>
+                <span class="map__band">
+                  <span class="map__k">Integrity</span>
+                  <span class="map__v">what the build checked, and a recap at the end</span>
+                </span>
+              </span>
+              <span class="map__cuts">
+                <span class="map__cut" data-cut="brief">
+                  <span class="map__k">Reviewer brief</span>
+                  <span class="map__v">the decision layer and the boundary rules, copied word for word</span>
+                </span>
+                <span class="map__cut" data-cut="digest">
+                  <span class="map__k">Reader digest</span>
+                  <span class="map__v">the indexes without the bodies, and a pointer back</span>
+                </span>
+              </span>
+            </span>
           </span>
         </a>
         <p class="dest__hint">Point at a route to see where it lands.</p>
@@ -1424,7 +1575,12 @@
            publication refresh must not leave the front door quoting a size the
            linked release no longer has. "Large" and "smaller" survive a
            rebuild; "12 MB" does not. -->
-      <section class="handoff" aria-labelledby="handoff-h" data-scene-key="handoff">
+      <!-- A band like the route rows above: anywhere level with this section
+           puts the shape of the packet in the window. The three links inside
+           name the three files, so each one aims the same drawing at its own
+           cut and puts its own filename in the bar. -->
+      <section class="handoff" aria-labelledby="handoff-h" data-scene-key="handoff"
+               data-dest-default="packet-json">
         <h2 class="eyebrow" id="handoff-h">Read it with an AI</h2>
         <p class="handoff__lede">
           The whole
@@ -1444,13 +1600,16 @@
              the extension carries what actually lands on disk. -->
         <p class="handoff__act">
           <a class="btn" href="https://wcook04.github.io/plectis/plectis-ai-review-packet.json"
+             data-dest="packet-json"
              download="plectis-ai-review-packet.json">Download the packet <span class="btn__ext">.json</span></a>
           <span class="handoff__alt">save it, then drag the file into ChatGPT, Claude, Gemini or
             Grok. There is a
             <a href="https://wcook04.github.io/plectis/plectis-ai-reader-digest.json"
+               data-dest="digest-json"
                download="plectis-ai-reader-digest.json">smaller digest</a>,
             also JSON, if your assistant refuses a file that size. The
             <a href="https://wcook04.github.io/plectis/plectis-reviewer-brief.json"
+               data-dest="brief-json"
                download="plectis-reviewer-brief.json">reviewer brief</a> is
             shorter still and carries only the decision layer: what a reader in
             your position can and cannot conclude from the public record.</span>
@@ -1706,7 +1865,19 @@
       "video-5min":       { to: "video", host: "youtu.be",          path: "/VoWByIOIuBE",
                             src: "assets/previews/video-5min.jpg",       href: "https://youtu.be/VoWByIOIuBE" },
       "video-29min":      { to: "video", host: "youtu.be",          path: "/jA_xC8gmdSs",
-                            src: "assets/previews/video-29min.jpg",      href: "https://youtu.be/jA_xC8gmdSs" }
+                            src: "assets/previews/video-29min.jpg",      href: "https://youtu.be/jA_xC8gmdSs" },
+      /* Three files rather than three pages, so the window draws the shape of
+         the packet instead of photographing a scrollbar. One drawing, aimed by
+         `emphasis` at whichever cut is being pointed at. */
+      "packet-json":      { to: "page", view: "map", emphasis: "packet", host: "wcook04.github.io",
+                            path: "/plectis/plectis-ai-review-packet.json",
+                            href: "https://wcook04.github.io/plectis/plectis-ai-review-packet.json" },
+      "digest-json":      { to: "page", view: "map", emphasis: "digest", host: "wcook04.github.io",
+                            path: "/plectis/plectis-ai-reader-digest.json",
+                            href: "https://wcook04.github.io/plectis/plectis-ai-reader-digest.json" },
+      "brief-json":       { to: "page", view: "map", emphasis: "brief", host: "wcook04.github.io",
+                            path: "/plectis/plectis-reviewer-brief.json",
+                            href: "https://wcook04.github.io/plectis/plectis-reviewer-brief.json" }
     };
 
     var root = document.documentElement;
@@ -1739,7 +1910,7 @@
       var idle = window.requestIdleCallback || function (f) { return setTimeout(f, 400); };
       idle(function () {
         for (var k in DEST) {
-          if (Object.prototype.hasOwnProperty.call(DEST, k)) new Image().src = DEST[k].src;
+          if (Object.prototype.hasOwnProperty.call(DEST, k) && DEST[k].src) new Image().src = DEST[k].src;
         }
       });
     }
@@ -1755,6 +1926,17 @@
       /* The hint has done its job the first time the frame answers. */
       root.setAttribute("data-dest-used", "");
       paintRow(id);
+
+      /* A drawn destination needs no fetch and no swap: the map is already in
+         the document, and only which cut it leans on changes. The token is
+         still bumped so a picture still in flight cannot land on top of it. */
+      frame.setAttribute("data-view", d.view === "map" ? "map" : "shot");
+      if (d.view === "map") {
+        frame.setAttribute("data-emphasis", d.emphasis || "packet");
+        ++token;
+        return;
+      }
+      frame.removeAttribute("data-emphasis");
 
       /* Load first, swap second. The incoming layer is only revealed once its
          file is decodable, so a slow fetch holds the picture that is already
@@ -1874,7 +2056,11 @@
     /* The row that owns the window says so. A picture that changes with the
        scroll and gives no sign of which line it belongs to is a page
        twitching, not a page answering. */
-    var rows = [].slice.call(document.querySelectorAll(".routes li[data-dest-default]"));
+    /* Every band that can own the window, in document order: the four route
+       rows, then the section about the packet. They are one list because they
+       are one device — a horizontal strip of the page that answers for a
+       destination. */
+    var rows = [].slice.call(document.querySelectorAll("[data-dest-default]"));
     function paintRow(id) {
       var owner = null;
       for (var i = 0; i < rows.length; i++) {
@@ -1907,21 +2093,48 @@
       }, { rootMargin: "-45% 0px -55% 0px", threshold: 0 });
       for (var r = 0; r < rows.length; r++) lineIO.observe(rows[r]);
 
-      /* And the stage itself has a lifecycle. It belongs to the route index;
-         once the last row has risen past 30% of the viewport the window is
-         filed away, and scrolling back brings it out again. This is a second
-         line rather than a reuse of the scene controller's because that
-         controller hands over only when the NEXT section crosses its line,
-         which leaves half a screen where the routes are gone and their
-         picture is not. It also returns early under reduced motion, and the
-         window must not depend on a runtime a reader can switch off. */
-      var stageIO = new IntersectionObserver(function (entries) {
-        for (var i = 0; i < entries.length; i++) {
-          root.setAttribute("data-stage", entries[i].isIntersecting ? "on" : "off");
-        }
-      }, { rootMargin: "-30% 0px 0px 0px", threshold: 0 });
-      if (routes) stageIO.observe(routes);
+
     }
+
+    /* And the stage itself has a lifecycle. It belongs to the bands, and to
+       nothing after them: the moment the reading line passes the foot of the
+       last one, the window is filed away and the personal sections have the
+       plate to themselves. Scrolling back brings it out again.
+
+       Stated as one comparison rather than as observers, because the two kinds
+       of band want different geometry and a rule per band flickers in the gap
+       between them. The four route rows are short and the packet section is
+       long; what they have in common is that the window belongs to whichever
+       of them the reading line is in, so the window leaves when the line
+       leaves the last of them. Measured against an earlier -30% observer pair:
+       that version held the map about sixty pixels into "Why it is here",
+       which is the exact fault this whole lifecycle exists to fix.
+
+       Not the scene controller's job: that one hands over only when the NEXT
+       section crosses its line, and it returns early under reduced motion.
+       The window must not depend on a runtime a reader can switch off. */
+    var lastBand = rows.length ? rows[rows.length - 1] : null;
+    var stageQueued = false;
+    function readStage() {
+      stageQueued = false;
+      /* Scrolling is the reader reading; pointing is the reader asking. So a
+         scroll hands the window back to the reading line and drops whatever
+         was being pointed at. Without this a pointer left resting anywhere —
+         on a row, or on the window itself, which is large enough to be a
+         comfortable place to leave it — pinned the picture for the rest of
+         the page and the reading line silently stopped working. */
+      release();
+      if (!lastBand) return;
+      var line = window.innerHeight * 0.45;
+      root.setAttribute("data-stage", line <= lastBand.getBoundingClientRect().bottom ? "on" : "off");
+    }
+    function onScroll() {
+      if (stageQueued) return;
+      stageQueued = true;
+      requestAnimationFrame(readStage);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
 
     /* Resolve once, synchronously, so a reader who lands deep in the page or
        reloads at depth gets the row they are actually looking at rather than
@@ -1931,10 +2144,7 @@
       for (var i = 0; i < rows.length; i++) {
         if (rows[i].getBoundingClientRect().top <= line) lineId = rows[i].getAttribute("data-dest-default");
       }
-      if (routes && wide.matches) {
-        var rb = routes.getBoundingClientRect();
-        root.setAttribute("data-stage", rb.bottom > window.innerHeight * 0.3 ? "on" : "off");
-      }
+      readStage();
       paintRow(current);
       if (lineId && lineId !== current) resolve();
     })();
