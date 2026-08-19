@@ -361,7 +361,10 @@
        reader who most needs telling where they are — measured before adding
        it: tabbing onto "Plectis website" left the row's border at its resting
        rgba(242,230,212,.16), exactly as if nothing were focused. */
-    .routes li { transition: border-color var(--t-response) ease-out; }
+    /* Positioned so the wide state can hang the filament that reaches from
+       the owning row towards the window off it. Relative costs nothing here:
+       nothing inside a row is absolutely positioned. */
+    .routes li { position: relative; transition: border-color var(--t-response) ease-out; }
     .routes li:hover, .routes li:focus-within { border-bottom-color: var(--hair-strong); }
     @media (prefers-reduced-motion: reduce) { .routes li { transition: none; } }
 
@@ -1076,6 +1079,86 @@
           color-mix(in srgb, var(--page) 62%, transparent) 46%,
           transparent 78%);
       }
+      /* ── The stage has a lifecycle ──────────────────────────────────────
+         The window belongs to the route index and to nothing else. Held past
+         it, it stops being evidence and becomes a second column: a screenshot
+         of a video page standing next to a paragraph about who wrote this,
+         asserting by position that it is the second most important object on
+         the page whatever the prose has moved on to.
+
+         So it is filed away as the last route rises out of the reading area.
+         The picture dissolves first and the frame and its URL hold a moment
+         longer, which is the order in which a thing is put away rather than
+         switched off, and the whole window withdraws a little to the right,
+         into the mass it was standing in front of. Scrolling back brings it
+         out again.
+
+         No attribute means visible, deliberately: if the observer never runs,
+         the window stays rather than vanishing. */
+      .dest__panel {
+        transform-origin: 100% 50%;
+        /* Coming back is a settle, so it takes the scene curve the plate uses:
+           decelerating, no overshoot. */
+        transition: opacity var(--t-scene) var(--ease-scene),
+                    transform var(--t-scene) var(--ease-scene);
+      }
+      :root[data-stage="off"] .dest__panel {
+        opacity: 0;
+        transform: translateX(1.4rem) scale(.86);
+        pointer-events: none;
+        /* Leaving is not a settle and must not borrow that curve. The scene
+           easing spends most of its travel in its first third, which on the
+           way out reads as a snap rather than a withdrawal — measured at 0.18
+           opacity and full scale 300ms in. So the exit runs the curve the
+           other way round: it holds, and then it goes. */
+        transition: opacity 520ms cubic-bezier(.5, 0, .75, .35) 120ms,
+                    transform 720ms cubic-bezier(.42, 0, .62, .3);
+      }
+      /* The picture leaves before its frame, and the URL is the last thing
+         still there. That is the order in which something is put away rather
+         than switched off. */
+      .dest .shot__stage { transition: opacity 320ms ease-out; }
+      :root[data-stage="off"] .dest .shot__stage {
+        opacity: 0;
+        transition: opacity 240ms ease-in;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .dest__panel { transition: opacity var(--t-response) ease-out; }
+        :root[data-stage="off"] .dest__panel { transform: none; }
+        .dest .shot__stage { transition: none; }
+      }
+
+      /* Which row the window belongs to. With the pointer away the picture is
+         owned by whichever route is crossing the reading line, and a picture
+         that changes with the scroll while nothing on the left acknowledges it
+         is a page twitching. So the owning row takes its own destination's
+         colour in the rule under it, and that rule runs on past the column and
+         a little way into the gap the window is standing in. One line, drawn
+         once, and the only thing on this page that crosses that gap. */
+      .routes li.is-showing {
+        --row-to: var(--to-page);
+        border-bottom-color: color-mix(in srgb, var(--row-to) 44%, transparent);
+      }
+      .routes li.is-showing[data-to="repo"]  { --row-to: var(--to-repo); }
+      .routes li.is-showing[data-to="video"] { --row-to: var(--to-video); }
+      .routes li.is-showing .kind { color: var(--bone-soft); }
+      .routes li::after {
+        content: "";
+        position: absolute;
+        left: 100%; bottom: -1px;
+        width: clamp(1.4rem, 4.5vw, 4rem);
+        height: 1px;
+        opacity: 0;
+        pointer-events: none;
+        background: linear-gradient(90deg,
+          color-mix(in srgb, var(--row-to, var(--bone-soft)) 44%, transparent) 0%,
+          transparent 100%);
+        transition: opacity var(--t-response) ease-out;
+      }
+      .routes li.is-showing::after { opacity: 1; }
+      :root[data-stage="off"] .routes li::after { opacity: 0; }
+      @media (prefers-reduced-motion: reduce) { .routes li::after { transition: none; } }
+
       /* Two pictures in one stage, one fading into the other, so a change of
          destination is a cut between two frames and never a flash of empty
          box. Both layers carry the resting dim; only opacity moves. */
@@ -1662,6 +1745,7 @@
       path.textContent = d.path;
       /* The hint has done its job the first time the frame answers. */
       root.setAttribute("data-dest-used", "");
+      paintRow(id);
 
       /* Load first, swap second. The incoming layer is only revealed once its
          file is decodable, so a slow fetch holds the picture that is already
@@ -1689,18 +1773,115 @@
       return null;
     }
 
+    /* Two things can own the window, and they are not equal. A pointer or a
+       tab key is a reader ASKING; the reading line is the page answering on
+       its own. So the ask is held until it is withdrawn, and the line is only
+       consulted when nothing is being asked. Without this the frame keeps
+       whatever was last hovered, which is how a screenshot of a video page
+       ends up standing next to a paragraph about who wrote this. */
+    var held = null;
+    var lineId = null;
+
+    function resolve() {
+      show(held || lineId || "plectis-site");
+    }
+    function hold(id) {
+      if (!id) return;
+      held = id;
+      show(id);
+    }
+    function release() {
+      if (held === null) return;
+      held = null;
+      resolve();
+    }
+
     document.addEventListener("mouseover", function (ev) {
       if (!wide.matches) return;
       warm();
-      var id = destFrom(ev.target);
-      if (id) show(id);
+      hold(destFrom(ev.target));
     });
     document.addEventListener("focusin", function (ev) {
       if (!wide.matches) return;
       warm();
       var id = destFrom(ev.target);
-      if (id) show(id);
+      if (id) hold(id);
+      else if (ev.target && ev.target.closest && !ev.target.closest(".routes")) release();
     });
+    var routes = document.querySelector(".routes");
+    var intro = document.querySelector(".intro");
+    if (routes) routes.addEventListener("mouseleave", release);
+    if (intro) intro.addEventListener("mouseleave", release);
+
+    /* The row that owns the window says so. A picture that changes with the
+       scroll and gives no sign of which line it belongs to is a page
+       twitching, not a page answering. */
+    var rows = [].slice.call(document.querySelectorAll(".routes li[data-dest-default]"));
+    function paintRow(id) {
+      var owner = null;
+      for (var i = 0; i < rows.length; i++) {
+        var hit = rows[i].querySelector('[data-dest="' + id + '"]');
+        if (hit || rows[i].getAttribute("data-dest-default") === id) { owner = rows[i]; break; }
+      }
+      for (var j = 0; j < rows.length; j++) {
+        var on = rows[j] === owner && wide.matches;
+        rows[j].classList.toggle("is-showing", on);
+        if (on) rows[j].setAttribute("data-to", (DEST[id] || {}).to || "page");
+        else rows[j].removeAttribute("data-to");
+      }
+    }
+
+    if ("IntersectionObserver" in window && rows.length) {
+      /* The same device the scene controller downstairs uses: the viewport
+         collapsed to a single line, and the last row to cross it wins. At 45%
+         rather than the scene controller's 55%, so a row owns the window
+         slightly before it owns the chapter. */
+      var lineIO = new IntersectionObserver(function (entries) {
+        var best = -1;
+        for (var i = 0; i < entries.length; i++) {
+          if (!entries[i].isIntersecting) continue;
+          var at = rows.indexOf(entries[i].target);
+          if (at > best) best = at;
+        }
+        if (best < 0) return;
+        lineId = rows[best].getAttribute("data-dest-default");
+        if (wide.matches) resolve();
+      }, { rootMargin: "-45% 0px -55% 0px", threshold: 0 });
+      for (var r = 0; r < rows.length; r++) lineIO.observe(rows[r]);
+
+      /* And the stage itself has a lifecycle. It belongs to the route index;
+         once the last row has risen past 30% of the viewport the window is
+         filed away, and scrolling back brings it out again. This is a second
+         line rather than a reuse of the scene controller's because that
+         controller hands over only when the NEXT section crosses its line,
+         which leaves half a screen where the routes are gone and their
+         picture is not. It also returns early under reduced motion, and the
+         window must not depend on a runtime a reader can switch off. */
+      var stageIO = new IntersectionObserver(function (entries) {
+        for (var i = 0; i < entries.length; i++) {
+          root.setAttribute("data-stage", entries[i].isIntersecting ? "on" : "off");
+        }
+      }, { rootMargin: "-30% 0px 0px 0px", threshold: 0 });
+      if (routes) stageIO.observe(routes);
+    }
+
+    /* Resolve once, synchronously, so a reader who lands deep in the page or
+       reloads at depth gets the row they are actually looking at rather than
+       the first one. */
+    (function () {
+      var line = window.innerHeight * 0.45;
+      for (var i = 0; i < rows.length; i++) {
+        if (rows[i].getBoundingClientRect().top <= line) lineId = rows[i].getAttribute("data-dest-default");
+      }
+      if (routes && wide.matches) {
+        var rb = routes.getBoundingClientRect();
+        root.setAttribute("data-stage", rb.bottom > window.innerHeight * 0.3 ? "on" : "off");
+      }
+      paintRow(current);
+      if (lineId && lineId !== current) resolve();
+    })();
+
+    if (wide.addEventListener) wide.addEventListener("change", function () { paintRow(current); });
   })();
   </script>
 
