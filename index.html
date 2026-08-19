@@ -359,7 +359,7 @@
        :focus-within is the same sentence said to the keyboard. Without it the
        row acknowledged a pointer and ignored a tab key, which is the one
        reader who most needs telling where they are — measured before adding
-       it: tabbing onto "Plectis" left the row's border at its resting
+       it: tabbing onto "Plectis website" left the row's border at its resting
        rgba(242,230,212,.16), exactly as if nothing were focused. */
     .routes li { transition: border-color var(--t-response) ease-out; }
     .routes li:hover, .routes li:focus-within { border-bottom-color: var(--hair-strong); }
@@ -780,6 +780,45 @@
     }
     .colophon a:hover, .colophon a:focus-visible { color: var(--bone); }
 
+    /* A still of the landing, under the row. Phone-only: the wide layout puts
+       the same stills in the plate's frame instead. The caption names the
+       destination in the kind-column register, so the picture is not asked to
+       explain itself. */
+    .row-shot {
+      grid-column: 2;
+      margin: .55rem 0 .08rem;
+    }
+    .row-shot a {
+      display: block;
+      max-width: 22rem;
+      color: inherit;
+      text-decoration: none;
+    }
+    .row-shot img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      object-position: top left;
+      border: 1px solid var(--hair);
+      background: #120e18;
+    }
+    .row-shot__cap {
+      display: block;
+      margin: .38rem 0 0;
+      font-family: var(--font-sans);
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .routes li:hover .row-shot img,
+    .routes li:focus-within .row-shot img { border-color: var(--hair-strong); }
+
+    .dest { display: none; }
+
     /* Poster state: the plate becomes the upper field, cropped to the membrane
        and the glowing flank, dissolving into the page; the type follows below
        on plum ground. No text sits over the bright body. */
@@ -813,7 +852,7 @@
        same cell, sticky on the same terms. */
     @media (min-width: 1280px) {
       .fold { display: grid; grid-template-columns: minmax(0, 1fr); }
-      .fold > picture, .fold::after, .fold > .col { grid-area: 1 / 1; }
+      .fold > picture, .fold::after, .fold > .col, .fold > .dest { grid-area: 1 / 1; }
 
       .fold > picture {
         /* Offset by the thread, which now holds at the top rather than
@@ -919,6 +958,80 @@
         margin-top: 0;
         padding: clamp(2.4rem, 6svh, 4.2rem) clamp(1.4rem, 4.5vw, 4.5rem);
       }
+
+      /* The still of where a route lands sits in the plate's frame, to the
+         right of the type. Hidden until the runtime marks the page ready, so
+         with scripting off this layout is still the plate. The row stills
+         below are a phone device and would only duplicate this one. */
+      .row-shot { display: none; }
+      :root[data-dest-ready] .fold > .dest {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: sticky;
+        top: var(--thread-h);
+        height: calc(100svh - var(--thread-h));
+        z-index: 1;
+        margin-left: min(36.5rem, 46%);
+        padding: clamp(1.8rem, 4.8svh, 3rem) clamp(1.5rem, 3.2vw, 2.8rem)
+                 clamp(1.8rem, 4.8svh, 3rem) 0;
+        pointer-events: none;
+      }
+      .dest__frame {
+        pointer-events: auto;
+        display: block;
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid var(--hair-strong);
+        background: #120e18;
+      }
+      .dest__frame:hover, .dest__frame:focus-visible { border-color: var(--bone-soft); }
+      .dest__frame:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+      .dest__shot {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top left;
+      }
+      .dest__cap {
+        margin: .7rem 0 0;
+        font-family: var(--font-sans);
+        font-size: .72rem;
+        font-weight: 600;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+        color: var(--bone-soft);
+      }
+      .dest__film {
+        pointer-events: auto;
+        list-style: none;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: .42rem;
+        margin: .7rem 0 0;
+        padding: 0;
+      }
+      .dest__film button {
+        appearance: none;
+        display: block;
+        width: 100%;
+        padding: 0;
+        border: 1px solid var(--hair);
+        background: #120e18;
+        cursor: pointer;
+      }
+      .dest__film button[aria-current="true"] { border-color: var(--bone-soft); }
+      .dest__film button:hover, .dest__film button:focus-visible { border-color: var(--bone-soft); }
+      .dest__film img {
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+        object-position: top left;
+      }
     }
   </style>
 </head>
@@ -962,6 +1075,38 @@
                    assets/plate-01.jpg 2560w"
            fetchpriority="high" decoding="async" aria-hidden="true">
     </picture>
+
+    <!-- Stills of the destinations named in the index. Hidden until a wide
+         viewport and scripting; the plate remains the picture with either
+         missing. Decorative to assistive tech: the links already name where
+         they go. Recapture from the live URLs, do not invent frames. -->
+    <aside class="dest" aria-hidden="true">
+      <a class="dest__frame" href="https://wcook04.github.io/plectis/" tabindex="-1">
+        <img class="dest__shot" src="assets/previews/plectis-site.jpg" alt=""
+             width="1280" height="800" decoding="async">
+      </a>
+      <p class="dest__cap"><span class="dest__name">Plectis website</span></p>
+      <ul class="dest__film">
+        <li><button type="button" data-dest="plectis-site" aria-current="true">
+          <img src="assets/previews/plectis-site-640.jpg" alt="" width="640" height="400" loading="lazy" decoding="async">
+        </button></li>
+        <li><button type="button" data-dest="lean-github">
+          <img src="assets/previews/lean-github-640.jpg" alt="" width="640" height="400" loading="lazy" decoding="async">
+        </button></li>
+        <li><button type="button" data-dest="papers-catalogue">
+          <img src="assets/previews/papers-catalogue-640.jpg" alt="" width="640" height="400" loading="lazy" decoding="async">
+        </button></li>
+        <li><button type="button" data-dest="videos-on-site">
+          <img src="assets/previews/videos-on-site-640.jpg" alt="" width="640" height="400" loading="lazy" decoding="async">
+        </button></li>
+      </ul>
+    </aside>
+    <script>
+    (function () {
+      var q = window.matchMedia && matchMedia("(min-width: 1280px)");
+      if (q && q.matches) document.documentElement.setAttribute("data-dest-ready", "");
+    })();
+    </script>
 
     <div class="col">
       <header>
@@ -1008,7 +1153,7 @@
         I build a private system for coding
         <a class="term" data-term="agent" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-agent">agents</a>
         to work in, and
-        <a class="cite" data-to="video" href="https://wcook04.github.io/plectis/#demo-videos">the tools to inspect what they did</a>.
+        <a class="cite" data-to="video" data-dest="videos-on-site" href="https://wcook04.github.io/plectis/#demo-videos">the tools to inspect what they did</a>.
         The public parts are the ones a stranger can
         <b><a class="term" data-term="runnable" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-runnable">run</a></b>,
         <b><a class="term" data-term="check" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-check">check</a></b>,
@@ -1021,7 +1166,7 @@
       <nav aria-label="Public routes" data-scene-key="opening">
         <h2 class="sr-only">Public routes</h2>
         <ul class="routes">
-          <li>
+          <li data-dest-default="plectis-site">
             <!-- Half of a pair. The Plectis site names this page in its
                  colophon using this row's own grammar — a kind, "Front door",
                  then the destination as it names itself, "Will Cook — public
@@ -1029,11 +1174,10 @@
                  this side needs to point back: the parent lists the child, the
                  child credits the parent, and a "back" link here would only
                  duplicate the row it sits in. What does need keeping is the
-                 wording. Rename this row, or reword the h1 or the role line,
-                 and the sentence over there stops matching anything a reader
-                 can see when they arrive. -->
+                 wording of those two. The row name can say "website" so a
+                 stranger knows the destination is a page, not a word. -->
             <p class="kind">Run</p>
-            <p class="name"><a href="https://wcook04.github.io/plectis/">Plectis</a></p>
+            <p class="name"><a href="https://wcook04.github.io/plectis/" data-dest="plectis-site">Plectis website</a></p>
             <p class="desc"><a class="term" data-term="component" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-component">Components</a> you clone and run locally. Each states a claim and writes a <a class="term" data-term="receipt" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-receipt">result file</a>.</p>
             <p class="exits">
               <!-- The exits are written to read inside their row, which leaves
@@ -1043,10 +1187,16 @@
                    own destination, aria-label supplies the row it belongs to.
                    The visible text stays first in the label, so speech and
                    sight agree (WCAG 2.5.3). -->
-              <a href="https://wcook04.github.io/plectis/">Site</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://wcook04.github.io/plectis/docs/">Docs</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="GitHub: the Plectis repository" href="https://github.com/wcook04/plectis">GitHub</a>
+              <a href="https://wcook04.github.io/plectis/" data-dest="plectis-site">Site</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://wcook04.github.io/plectis/docs/" data-dest="plectis-docs">Docs</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" data-dest="plectis-github" aria-label="GitHub: the Plectis repository" href="https://github.com/wcook04/plectis">GitHub</a>
+            </p>
+            <p class="row-shot">
+              <a href="https://wcook04.github.io/plectis/" data-dest="plectis-site">
+                <img src="assets/previews/plectis-site-640.jpg" alt="" width="640" height="400" loading="lazy" decoding="async">
+                <span class="row-shot__cap">Plectis website</span>
+              </a>
             </p>
           </li>
-          <li>
+          <li data-dest-default="lean-github">
             <p class="kind">Check</p>
             <!-- The Lean repository is the mathematical authority. Keep this row
                  count-free so a publication refresh cannot leave the host front
@@ -1054,26 +1204,44 @@
                  applies to the sentence as much as to the exits: the problems
                  are open, and the row says what the corpus checks, never what
                  it has settled. -->
-            <p class="name"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257">Lean corpus</a></p>
+            <p class="name"><a data-to="repo" data-dest="lean-github" href="https://github.com/wcook04/plectis-lean-erdos249-257">Lean corpus</a></p>
             <p class="desc"><a class="term" data-term="machine-checked" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-machine-checked">Machine-checked</a> mathematics on <a class="term" data-term="open-problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">open</a> Erd&#337;s problems. <a class="term" data-term="lean" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-lean">Lean</a> compiles a <a class="term" data-term="proof" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-proof">proof</a> or it does not.</p>
             <p class="exits">
-              <a data-to="repo" aria-label="GitHub: the Lean corpus repository" href="https://github.com/wcook04/plectis-lean-erdos249-257">GitHub</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://wcook04.github.io/plectis/#papers">What is checked</a>
+              <a data-to="repo" data-dest="lean-github" aria-label="GitHub: the Lean corpus repository" href="https://github.com/wcook04/plectis-lean-erdos249-257">GitHub</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://wcook04.github.io/plectis/#papers" data-dest="papers-on-site">What is checked</a>
+            </p>
+            <p class="row-shot">
+              <a data-to="repo" data-dest="lean-github" href="https://github.com/wcook04/plectis-lean-erdos249-257">
+                <img src="assets/previews/lean-github-640.jpg" alt="" width="640" height="400" loading="lazy" decoding="async">
+                <span class="row-shot__cap">Lean corpus on GitHub</span>
+              </a>
             </p>
           </li>
-          <li>
+          <li data-dest-default="papers-catalogue">
             <p class="kind">Read</p>
-            <p class="name"><a href="https://wcook04.github.io/plectis/docs/papers.html">Papers</a></p>
+            <p class="name"><a href="https://wcook04.github.io/plectis/docs/papers.html" data-dest="papers-catalogue">Papers</a></p>
             <p class="desc">Standalone PDFs, written for someone reading cold.</p>
             <p class="exits">
-              <a href="https://wcook04.github.io/plectis/docs/papers.html">Catalogue</a><span class="sep" aria-hidden="true">&middot;</span><a aria-label="On the site: the papers" href="https://wcook04.github.io/plectis/#papers">On the site</a>
+              <a href="https://wcook04.github.io/plectis/docs/papers.html" data-dest="papers-catalogue">Catalogue</a><span class="sep" aria-hidden="true">&middot;</span><a aria-label="On the site: the papers" href="https://wcook04.github.io/plectis/#papers" data-dest="papers-on-site">On the site</a>
+            </p>
+            <p class="row-shot">
+              <a href="https://wcook04.github.io/plectis/docs/papers.html" data-dest="papers-catalogue">
+                <img src="assets/previews/papers-catalogue-640.jpg" alt="" width="640" height="400" loading="lazy" decoding="async">
+                <span class="row-shot__cap">Papers catalogue</span>
+              </a>
             </p>
           </li>
-          <li>
+          <li data-dest-default="videos-on-site">
             <p class="kind">Watch</p>
-            <p class="name"><a href="https://wcook04.github.io/plectis/#demo-videos">Videos</a></p>
+            <p class="name"><a href="https://wcook04.github.io/plectis/#demo-videos" data-dest="videos-on-site">Videos</a></p>
             <p class="desc">Recorded demonstrations of the private system, cut by an editor inside it. No check is run in them.</p>
             <p class="exits">
-              <a aria-label="On the site: the videos" href="https://wcook04.github.io/plectis/#demo-videos">On the site</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="video" aria-label="1 minute demonstration on YouTube" href="https://youtu.be/R_--vExxWyk">1&nbsp;min</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="video" aria-label="5 minute demonstration on YouTube" href="https://youtu.be/VoWByIOIuBE">5&nbsp;min</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="video" aria-label="29 minute demonstration on YouTube" href="https://youtu.be/jA_xC8gmdSs">29&nbsp;min</a>
+              <a aria-label="On the site: the videos" href="https://wcook04.github.io/plectis/#demo-videos" data-dest="videos-on-site">On the site</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="video" data-dest="video-1min" aria-label="1 minute demonstration on YouTube" href="https://youtu.be/R_--vExxWyk">1&nbsp;min</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="video" data-dest="video-5min" aria-label="5 minute demonstration on YouTube" href="https://youtu.be/VoWByIOIuBE">5&nbsp;min</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="video" data-dest="video-29min" aria-label="29 minute demonstration on YouTube" href="https://youtu.be/jA_xC8gmdSs">29&nbsp;min</a>
+            </p>
+            <p class="row-shot">
+              <a href="https://wcook04.github.io/plectis/#demo-videos" data-dest="videos-on-site">
+                <img src="assets/previews/videos-on-site-640.jpg" alt="" width="640" height="400" loading="lazy" decoding="async">
+                <span class="row-shot__cap">Videos on the site</span>
+              </a>
             </p>
           </li>
         </ul>
@@ -1343,6 +1511,137 @@
     // Crossing the breakpoint hands the plate back to the stylesheet's resting
     // frame, so the poster state never inherits a camera position.
     if (wide.addEventListener) wide.addEventListener("change", write);
+  })();
+  </script>
+
+  <!-- Destination stills. Hover or focus a route, or press a film still, and
+       the right-hand picture becomes a screenshot of that landing. The files
+       are captures of the live URLs, not drawings. With scripting off the
+       plate stays; on a phone the still sits under the row instead. -->
+  <script>
+  (function () {
+    "use strict";
+    var DEST = {
+      "plectis-site": {
+        src: "assets/previews/plectis-site.jpg",
+        cap: "Plectis website",
+        href: "https://wcook04.github.io/plectis/"
+      },
+      "plectis-docs": {
+        src: "assets/previews/plectis-docs.jpg",
+        cap: "Plectis docs",
+        href: "https://wcook04.github.io/plectis/docs/"
+      },
+      "plectis-github": {
+        src: "assets/previews/plectis-github.jpg",
+        cap: "Plectis repository on GitHub",
+        href: "https://github.com/wcook04/plectis"
+      },
+      "lean-github": {
+        src: "assets/previews/lean-github.jpg",
+        cap: "Lean corpus on GitHub",
+        href: "https://github.com/wcook04/plectis-lean-erdos249-257"
+      },
+      "papers-catalogue": {
+        src: "assets/previews/papers-catalogue.jpg",
+        cap: "Papers catalogue",
+        href: "https://wcook04.github.io/plectis/docs/papers.html"
+      },
+      "papers-on-site": {
+        src: "assets/previews/papers-on-site.jpg",
+        cap: "Papers on the site",
+        href: "https://wcook04.github.io/plectis/#papers"
+      },
+      "videos-on-site": {
+        src: "assets/previews/videos-on-site.jpg",
+        cap: "Videos on the site",
+        href: "https://wcook04.github.io/plectis/#demo-videos"
+      },
+      "video-1min": {
+        src: "assets/previews/video-1min.jpg",
+        cap: "1 minute on YouTube",
+        href: "https://youtu.be/R_--vExxWyk"
+      },
+      "video-5min": {
+        src: "assets/previews/video-5min.jpg",
+        cap: "5 minute on YouTube",
+        href: "https://youtu.be/VoWByIOIuBE"
+      },
+      "video-29min": {
+        src: "assets/previews/video-29min.jpg",
+        cap: "29 minute on YouTube",
+        href: "https://youtu.be/jA_xC8gmdSs"
+      }
+    };
+    var FILM = ["plectis-site", "lean-github", "papers-catalogue", "videos-on-site"];
+
+    var root = document.documentElement;
+    var wide = window.matchMedia("(min-width: 1280px)");
+    var shot = document.querySelector(".dest__shot");
+    var frame = document.querySelector(".dest__frame");
+    var capName = document.querySelector(".dest__name");
+    var filmBtns = document.querySelectorAll(".dest__film button[data-dest]");
+    if (!shot || !frame || !capName) return;
+
+    var current = "plectis-site";
+    var token = 0;
+
+    function markReady() {
+      if (wide.matches) root.setAttribute("data-dest-ready", "");
+      else root.removeAttribute("data-dest-ready");
+    }
+    markReady();
+    if (wide.addEventListener) wide.addEventListener("change", markReady);
+
+    function paintFilm(id) {
+      for (var i = 0; i < filmBtns.length; i++) {
+        var on = filmBtns[i].getAttribute("data-dest") === id;
+        if (on) filmBtns[i].setAttribute("aria-current", "true");
+        else filmBtns[i].removeAttribute("aria-current");
+      }
+    }
+
+    function show(id) {
+      var d = DEST[id];
+      if (!d || id === current) return;
+      current = id;
+      paintFilm(FILM.indexOf(id) >= 0 ? id : "");
+      capName.textContent = d.cap;
+      frame.setAttribute("href", d.href);
+      var seq = ++token;
+      var img = new Image();
+      img.onload = function () {
+        if (seq !== token) return;
+        shot.src = d.src;
+      };
+      img.src = d.src;
+    }
+
+    function destFrom(node) {
+      if (!node || !node.closest) return null;
+      var a = node.closest("[data-dest]");
+      if (a) return a.getAttribute("data-dest");
+      var li = node.closest(".routes li");
+      if (li) return li.getAttribute("data-dest-default");
+      return null;
+    }
+
+    document.addEventListener("mouseover", function (ev) {
+      if (!wide.matches) return;
+      var id = destFrom(ev.target);
+      if (id) show(id);
+    });
+    document.addEventListener("focusin", function (ev) {
+      if (!wide.matches) return;
+      var id = destFrom(ev.target);
+      if (id) show(id);
+    });
+    document.addEventListener("click", function (ev) {
+      var btn = ev.target && ev.target.closest && ev.target.closest(".dest__film button[data-dest]");
+      if (!btn) return;
+      ev.preventDefault();
+      show(btn.getAttribute("data-dest"));
+    });
   })();
   </script>
 

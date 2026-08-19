@@ -52,6 +52,7 @@ anything, and the sitemap it declared had never been discovered by that route.
 | `site.webmanifest` | Root-scoped manifest. |
 | `favicon.ico`, `assets/` | The Plectis mark and its rasters. |
 | `assets/plate-01*` | The plate behind the page, and its size ladder. |
+| `assets/previews/` | Screenshots of each public destination, used as stills on the front door. |
 
 ## Destination kinds
 
@@ -81,6 +82,31 @@ Two rules are load-bearing, and both are easy to break by accident:
   `Check` / `Lean corpus` / `GitHub`. A reader who sees no hue loses a shortcut,
   not a fact. Where the visible word does not name its own destination, an
   `aria-label` supplies the row it belongs to.
+
+## Destination stills
+
+A name like "Plectis" does not say whether it is a website, a repository, or
+a word. The index now names the first row **Plectis website**, and each route
+carries a screenshot of the page that link actually opens.
+
+- Below 1280px, the still sits under the row it belongs to.
+- At 1280px and up, the stills take the plate's frame on the right. Hover or
+  focus a route (or an exit inside it) and the large still swaps to that
+  landing. The four small stills under it are the four rows.
+
+The files in `assets/previews/` are captures of the live URLs, not drawings.
+If a destination page changes enough that the still lies, recapture it:
+
+```sh
+# hero 1280w JPEG, thumb 640w JPEG, from a live screenshot
+sips -Z 1280 -s format jpeg -s formatOptions 72 \
+     --out assets/previews/<id>.jpg /tmp/<id>.png
+sips -Z 640 -s format jpeg -s formatOptions 68 \
+     --out assets/previews/<id>-640.jpg /tmp/<id>.png
+```
+
+Do not invent browser chrome around the still. The screenshot is the picture
+of the landing; the caption names it.
 
 ## The pair
 
