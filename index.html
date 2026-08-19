@@ -1068,16 +1068,25 @@
       /* The pour. A screenshot has hard edges and a corner radius; the plate
          has neither. Rather than cut one into the other, the window is given
          a little quiet ground to stand on, densest under the frame and gone
-         well before the edges of the field. */
+         before the edges of its own box.
+
+         closest-side is load-bearing and was missing. A radial-gradient with
+         no size keyword is farthest-CORNER, which puts 100% of the ramp at the
+         corner and therefore only 70.7% of it at the middle of each edge — so
+         a stop that ends at 78% has not finished when the box does, and the
+         remaining ~13% of plum is cut off in a straight line across the plate.
+         That is the seam: predicted at device row 1468 on a 1512x950 at 2x,
+         measured at 1474, gone with this keyword. closest-side puts 100% of
+         the ramp at the edge, so the ramp finishes 22% early on every side. */
       .dest__panel::before {
         content: "";
-        position: absolute; inset: -22% -16%;
+        position: absolute; inset: -24% -18%;
         z-index: -1;
         pointer-events: none;
-        background: radial-gradient(ellipse at 50% 50%,
+        background: radial-gradient(ellipse closest-side at 50% 50%,
           color-mix(in srgb, var(--page) 90%, transparent) 0%,
           color-mix(in srgb, var(--page) 62%, transparent) 46%,
-          transparent 78%);
+          transparent 100%);
       }
       /* ── The stage has a lifecycle ──────────────────────────────────────
          The window belongs to the route index and to nothing else. Held past
@@ -1796,11 +1805,64 @@
       resolve();
     }
 
-    document.addEventListener("mouseover", function (ev) {
+    var routes = document.querySelector(".routes");
+
+    /* Pointing at a route is a matter of height, not of hitting the words.
+       A row owns a band that runs the full width of the page, so anywhere
+       level with it counts — the gutter, the plate, the empty space beside
+       the exits. Landing on an exit still wins, because "Docs" and "5 min"
+       name destinations the row's own default does not.
+
+       The reason this is not merely convenient: the sentences in these rows
+       are full of defined terms, and every one of them raises a glossary card
+       on hover. Requiring the reader to reach the words to change the picture
+       meant they could not change the picture without setting off something
+       else. With the band, the whole gutter between the index and the window
+       is the control, and the glossary is left to people who want it. */
+    var ptr = { x: 0, y: 0, live: false, exact: null };
+    var frameQueued = false;
+
+    function inBox(el) {
+      if (!el) return false;
+      var b = el.getBoundingClientRect();
+      return ptr.x >= b.left && ptr.x <= b.right && ptr.y >= b.top && ptr.y <= b.bottom;
+    }
+
+    function pick() {
+      frameQueued = false;
+      if (!wide.matches || !ptr.live) return;
+      if (ptr.exact) { hold(ptr.exact); return; }
+      /* Over the window itself, nothing changes. A reader crossing it on the
+         way to clicking it should not have the picture swapped underneath. */
+      if (inBox(document.querySelector(".dest__panel"))) return;
+      for (var i = 0; i < rows.length; i++) {
+        var b = rows[i].getBoundingClientRect();
+        if (ptr.y >= b.top && ptr.y < b.bottom) {
+          hold(rows[i].getAttribute("data-dest-default"));
+          return;
+        }
+      }
+      release();
+    }
+
+    /* Coalesced onto a frame: the reads below are four rects and a box, but
+       they are layout reads, and a mousemove can arrive far more often than
+       the screen is redrawn. */
+    document.addEventListener("mousemove", function (ev) {
       if (!wide.matches) return;
       warm();
-      hold(destFrom(ev.target));
+      ptr.x = ev.clientX; ptr.y = ev.clientY; ptr.live = true;
+      ptr.exact = destFrom(ev.target);
+      if (!frameQueued) { frameQueued = true; requestAnimationFrame(pick); }
+    }, { passive: true });
+
+    /* The pointer leaving the window hands the picture back to the reading
+       line, so a wheel scroll after the mouse has gone still moves it. */
+    document.addEventListener("mouseleave", function () {
+      ptr.live = false; ptr.exact = null;
+      release();
     });
+
     document.addEventListener("focusin", function (ev) {
       if (!wide.matches) return;
       warm();
@@ -1808,10 +1870,6 @@
       if (id) hold(id);
       else if (ev.target && ev.target.closest && !ev.target.closest(".routes")) release();
     });
-    var routes = document.querySelector(".routes");
-    var intro = document.querySelector(".intro");
-    if (routes) routes.addEventListener("mouseleave", release);
-    if (intro) intro.addEventListener("mouseleave", release);
 
     /* The row that owns the window says so. A picture that changes with the
        scroll and gives no sign of which line it belongs to is a page
