@@ -16,6 +16,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
 OG_FRONTIER = ROOT / "assets" / "og-frontier.svg"
+SITEMAP = ROOT / "sitemap.xml"
+ROBOTS = ROOT / "robots.txt"
 SNAPSHOT = "11a318711096671ce1c00257a55fe5d7b9963864"
 PROBLEMS = ("68", "243", "249", "251", "257", "269", "1041", "1049")
 FRONTIER_LABELS = {
@@ -122,8 +124,15 @@ def frontier_plate(text: str) -> str:
 def main() -> int:
     text = INDEX.read_text(encoding="utf-8")
     og_frontier = OG_FRONTIER.read_text(encoding="utf-8")
+    sitemap = SITEMAP.read_text(encoding="utf-8")
+    robots = ROBOTS.read_text(encoding="utf-8")
     plate = frontier_plate(text)
     require("<h1>Eight open<br>Erd&#337;s problems</h1>" in text, "masthead no longer leads with the mathematical programme")
+    require('<link rel="canonical" href="https://wcook04.github.io/">' in text, "front door lost its canonical public URL")
+    require('<meta property="og:url" content="https://wcook04.github.io/">' in text, "social preview lost its canonical public URL")
+    require('https://wcook04.github.io/assets/og-frontier.png' in text, "social preview lost the eight-problem share image")
+    require('<loc>https://wcook04.github.io/</loc>' in sitemap, "root front door is absent from the host sitemap")
+    require('Sitemap: https://wcook04.github.io/sitemap.xml' in robots, "host robots policy no longer exposes the root sitemap")
     require("Will Cook &middot; checkable frontier" in text, "masthead lost authorship")
     require(">Eight-problem frontier<" in text, "primary entry label lost the portfolio")
     require(
