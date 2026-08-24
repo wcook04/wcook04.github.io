@@ -54,6 +54,21 @@ anything, and the sitemap it declared had never been discovered by that route.
 | `assets/plate-01*` | The plate behind the page, and its size ladder. |
 | `assets/previews/` | Screenshots of each public destination, used as stills on the front door. |
 | `assets/og-frontier.svg` / `.png` | The claim-bounded eight-problem social preview and its PNG delivery file. |
+| `scripts/check_frontier_surface.py` | Static release guard for the all-eight programme map and immutable verification links. |
+
+## Front-door release check
+
+Before publishing a root-site change, run:
+
+```sh
+python3 scripts/check_frontier_surface.py
+```
+
+It checks the local front door, not the mathematics: the masthead and opening
+still name eight open Erdős problems, every problem route remains pinned to the
+same public verification packet, every portrait sheet retains a question and
+open boundary, and the Papers route still names all eight. The Lean repository
+remains authority for theorem validity and its own release checks.
 
 ## Destination kinds
 
