@@ -38,6 +38,34 @@ PROBLEM_TOPICS = {
     "1049": "Lambert series at rational bases.",
 }
 FRONTIER_SHEET_ANCHORS = {
+    "68": (
+        "ErdosProblems.Erdos68.irrational_factorialGapSeries_iff_cofinal_strictFacTopRat_misses",
+        "Irrationality of the factorial-denominator series.",
+    ),
+    "243": (
+        "ErdosProblems.Erdos243.nextTailState_eq_sub_centered",
+        "The unrestricted problem.",
+    ),
+    "249": (
+        "ErdosProblems.Erdos249.irrational_totient_series_of_naturalPrimeTailOrbitStrictGap",
+        "The strict prime-tail orbit gap.",
+    ),
+    "251": (
+        "ErdosProblems.Erdos251.dyadicPartialSumQ_eq_start_add_differences",
+        "The target irrationality.",
+    ),
+    "257": (
+        "ErdosProblems.Erdos257.selectedMersenneTail_lt_weight",
+        "Universal irrationality, or irrationality for any new infinite support.",
+    ),
+    "269": (
+        "ErdosProblems.Erdos269.smoothPrefixLcm_eq_threePrimeHeight",
+        "Irrationality or transcendence in any three-prime case.",
+    ),
+    "1041": (
+        "ErdosProblems.Erdos1041.newtonFlow_value_hasDerivAt",
+        "Erdős Problem 1041 in unrestricted degree.",
+    ),
     "1049": (
         "ErdosProblems.Erdos1049.rationalBaseClearedTailQ_succ",
         "Irrationality at 3/2, or for any rational base.",
