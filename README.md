@@ -95,7 +95,7 @@ Two rules are load-bearing, and both are easy to break by accident:
   out of step with everything else.
 - **Colour is never the only signal.** The kind column, the route name and the
   exit text each say the same thing in words — `Watch` / `Videos` / `29 min`,
-  `Check` / `Lean corpus` / `GitHub`. A reader who sees no hue loses a shortcut,
+  `Check` / `Eight-problem frontier` / `GitHub`. A reader who sees no hue loses a shortcut,
   not a fact. Where the visible word does not name its own destination, an
   `aria-label` supplies the row it belongs to.
 

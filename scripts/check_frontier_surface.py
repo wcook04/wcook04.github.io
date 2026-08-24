@@ -37,6 +37,7 @@ def problem_sheet(text: str, number: str, following: str | None) -> str:
 def main() -> int:
     text = INDEX.read_text(encoding="utf-8")
     require("Eight open Erd&#337;s problems" in text, "masthead lost the programme")
+    require(">Eight-problem frontier<" in text, "primary entry label lost the portfolio")
     require("Eight formally checked frontiers" in text, "opening lost the frontier")
     require("none is a solution claim" in text, "open-problem boundary missing")
     require("not human mathematical peer review" in text, "review boundary missing")
