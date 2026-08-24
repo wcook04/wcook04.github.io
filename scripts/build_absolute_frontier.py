@@ -50,7 +50,7 @@ def render(payload: dict) -> str:
     return f'''{BEGIN}
       <section class="absolute-frontier" aria-labelledby="absolute-frontier-title">
         <p class="absolute-frontier__eyebrow">Start here</p>
-        <h2 id="absolute-frontier-title">The strongest objects to inspect first</h2>
+        <h2 id="absolute-frontier-title">The results worth reading first</h2>
         <p class="absolute-frontier__thesis">{esc(payload["thesis"])}</p>
         <div class="flagships">
 {chr(10).join(cards)}

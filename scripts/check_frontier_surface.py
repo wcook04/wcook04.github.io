@@ -60,8 +60,8 @@ OG_IMAGE_ALT = (
     "lemniscate paths, and rational Lambert. All eight remain open."
 )
 UNFURL_DESCRIPTION = (
-    "A public view of an AI assisted research system producing precise mathematical "
-    "objects across eight open Erdős programmes. All eight problems remain open."
+    "Mathematics written with AI and checked by Lean, on eight open Erdős problems. "
+    "All eight problems remain open."
 )
 FRONTIER_SHEET_ANCHORS = {
     "68": (
@@ -171,8 +171,25 @@ def main() -> int:
         "filter: saturate(.9) contrast(.92) brightness(.76)" not in text,
         "sticky art wrapper regained the Chrome first-paint filter regression",
     )
-    require("An AI assisted research system producing precise mathematical objects" in text, "opening lost the Plectis system thesis")
-    require("eight live Erd&#337;s programmes" in text, "opening lost the all-programme frontier")
+    # The first screen is where a cold reader meets the vocabulary, and it was
+    # the one place the glossary was never applied: zero data-term marks in the
+    # intro and zero in the shortlist above the fold, against a glossary that
+    # defines nine words and raises a card for each. Naming a term and leaving
+    # a stranger no way to find out what it means is the same omission as
+    # naming a paper and not linking it.
+    for term in ("machine-checked", "lean", "proof", "open-problem"):
+        require(
+            f'data-term="{term}"' in text,
+            f"opening prose no longer defines {term} for a cold reader",
+        )
+    require(
+        "Plectis writes mathematics with AI and has it" in text,
+        "opening lost the Plectis system thesis",
+    )
+    require(
+        "eight" in text and "posed by Erd&#337;s" in text,
+        "opening lost the all-programme frontier",
+    )
     require(
         '<a class="skip-frontier" href="#eight-problem-frontier">Skip to eight-problem frontier</a>' in text,
         "keyboard route no longer skips directly to the eight-problem frontier",
@@ -182,11 +199,16 @@ def main() -> int:
         "skip-frontier target is missing",
     )
     require("all eight remain open" in text.lower(), "front door lost its explicit open-problem boundary")
-    require("Hover or focus a number for its question, cleared frontier, and exact open boundary." in text, "desktop portrait cue missing")
-    require("Open a number for its question, checked frontier, and remaining boundary." in text, "narrow-screen frontier route missing")
+    require(
+        "Hover or tab to a number for the question, what was checked, and what is still unproved." in text, "desktop portrait cue missing")
+    require(
+        "Open a number for the question, what was checked, and what is still unproved." in text, "narrow-screen frontier route missing")
     require("all eight remain open" in text.lower(), "open-problem boundary missing")
     require("not peer review" in text, "review boundary missing")
-    require("The strongest objects to inspect first" in text, "absolute frontier is missing from first contact")
+    require(
+        "The results worth reading first" in text,
+        "absolute frontier is missing from first contact",
+    )
     thesis_at = text.find('id="absolute-frontier-title"')
     programmes_at = text.find('id="eight-problem-frontier"')
     require(0 < thesis_at < programmes_at, "cold-reader order must be thesis, flagships, then eight programmes")
@@ -318,9 +340,20 @@ def main() -> int:
         "paper route no longer opens on all eight problem papers",
     )
     for number in PROBLEMS:
+        # Attribute order is not the contract; the three facts are. The link
+        # exists, it points at that problem's own paper, and hovering it puts
+        # that paper in the destination window rather than a catalogue page.
         require(
-            f'<a class="paper" href="{PAPER_PDF_FOR[number]}"' in text,
+            f'href="{PAPER_PDF_FOR[number]}"' in text,
             f"paper route no longer links #{number} to its own paper",
+        )
+        require(
+            f'data-dest="paper-{number}"' in text,
+            f"paper #{number} no longer previews itself in the window",
+        )
+        require(
+            f'"paper-{number}":' in text and f"paper-{number}-640.jpg" in text,
+            f"paper #{number} lost its first-page still",
         )
         require(
             f'>#{number}</a>' in text,
