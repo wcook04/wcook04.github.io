@@ -43,6 +43,14 @@ ROUTES = (
         ("The 13 papers",) + PAPER_CATALOGUE_MARKERS,
     ),
     ("pinned Lean snapshot", f"https://github.com/wcook04/plectis-lean-erdos249-257/tree/{SNAPSHOT}", None),
+    (
+        "representative claim route",
+        f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/README.md#read-or-run-it",
+        (
+            "Check one of those claims before you read any of this.",
+            "python3 scripts/verify_claims.py --claim eb_full_support",
+        ),
+    ),
     ("eight-problem verification packet", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md", PROGRAMME_MARKERS),
     ("Comparator appendix", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix", "comparator-interface-appendix"),
     ("reviewer replay", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION_REPLAY.md", None),
