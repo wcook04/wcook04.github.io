@@ -38,6 +38,11 @@ PAPER_CATALOGUE_MARKERS = (
 ROUTES = (
     ("Plectis public site", "https://wcook04.github.io/plectis/", None),
     (
+        "public contact route",
+        "https://wcook04.github.io/plectis/#contact",
+        'id="contact"',
+    ),
+    (
         "13-paper catalogue",
         "https://wcook04.github.io/plectis/docs/papers.html",
         ("The 13 papers",) + PAPER_CATALOGUE_MARKERS,
@@ -83,7 +88,7 @@ def main() -> int:
         elif expected_text:
             markers = (expected_text,) if isinstance(expected_text, str) else expected_text
             text = visible_text(body)
-            missing = [marker for marker in markers if marker not in text]
+            missing = [marker for marker in markers if marker not in text and marker not in body]
             if missing:
                 failures.append(f"{label}: expected public marker missing: {missing[0]}")
 
