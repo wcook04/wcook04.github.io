@@ -134,7 +134,7 @@ def main() -> int:
     require("one for each problem in the current public cohort" in text, "opening lost the all-problem cohort framing")
     require("all eight remain open" in text, "desktop frontier plate lost its explicit open-problem boundary")
     require("Hover or focus a number for its question, cleared frontier, and exact open boundary." in text, "desktop portrait cue missing")
-    require("Open a number for its question and evidence record." in text, "narrow-screen frontier route missing")
+    require("Open a number for its question, checked frontier, and remaining boundary." in text, "narrow-screen frontier route missing")
     require("none is a solution claim" in text, "open-problem boundary missing")
     require("not human mathematical peer review" in text, "review boundary missing")
     require("Plectis is the public site for the private work system behind it." in text, "public/private hierarchy missing from the opening")
