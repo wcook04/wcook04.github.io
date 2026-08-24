@@ -478,6 +478,31 @@
     }
     .frontier-exits .sep { display: none; }
     .frontier-exits a { white-space: nowrap; }
+    /* A real verification handle belongs beside the programme map. It names
+       one representative claim without pretending that one replay speaks for
+       all eight open problems or for every result in the corpus. */
+    .frontier-proof {
+      grid-column: 2;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: .18rem .5rem;
+      margin: .52rem 0 0;
+      padding: .5rem 0 0;
+      border-top: 1px solid var(--hair);
+      font-family: var(--font-sans);
+      font-size: .68rem;
+      line-height: 1.42;
+      color: var(--faint);
+    }
+    .frontier-proof code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .65rem;
+      overflow-wrap: anywhere;
+      color: var(--to-repo);
+    }
+    .frontier-proof a:hover code,
+    .frontier-proof a:focus-visible code { color: var(--to-repo-lit); }
 
     .exits {
       margin: .34rem 0 0;
@@ -1883,6 +1908,7 @@
             <p class="exits frontier-exits">
               <a data-to="repo" data-dest="lean-github" aria-label="GitHub: the Lean corpus repository" href="https://github.com/wcook04/plectis-lean-erdos249-257">GitHub</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Check one Lean corpus claim without a Lean build" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/README.md#read-or-run-it">Check one claim</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read the eight-problem checked frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md">Eight-problem frontier</a>
             </p>
+            <p class="frontier-proof"><span>One representative claim, no Lean build:</span><a data-to="repo" aria-label="Read the no-Lean representative claim command" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/README.md#read-or-run-it"><code>python3 scripts/verify_claims.py --claim eb_full_support</code></a></p>
             <p class="row-shot">
               <a class="shot" data-to="repo" data-dest="lean-github" href="https://github.com/wcook04/plectis-lean-erdos249-257">
                 <span class="shot__bar"><span class="shot__host">github.com</span><span class="shot__path">/wcook04/plectis-lean-erdos249-257</span></span>
