@@ -38,15 +38,15 @@ PROBLEM_TOPICS = {
     "1041": "Short lemniscate connections.",
     "1049": "Lambert series at rational bases.",
 }
-OG_PROGRAMME_SUBJECTS = (
-    "factorial denominators",
-    "reciprocal tails",
-    "binary totient",
-    "prime-gap dyadics",
-    "Mersenne supports",
-    "running LCMs",
-    "lemniscate paths",
-    "rational Lambert",
+OG_FRONTIER_LABELS = (
+    "cofinal divisibility",
+    "tail-state defect",
+    "prime-tail escape",
+    "prime-gap summation",
+    "strict Mersenne tail",
+    "running-LCM structure",
+    "ray separation",
+    "rational-base tail",
 )
 OG_IMAGE_ALT = (
     "Eight open Erdős problems: factorial denominators, reciprocal tails, "
@@ -145,8 +145,9 @@ def main() -> int:
     require('if (view === "problem") frame.setAttribute("data-problem", d.problem);' in text, "destination frame no longer selects a portrait sheet")
     require('document.addEventListener("focusin", function (ev) {' in text, "frontier sheets no longer have a keyboard route")
     require("ALL EIGHT REMAIN OPEN" in og_frontier, "share card lost the open-problem boundary")
-    for subject in OG_PROGRAMME_SUBJECTS:
-        require(subject in og_frontier, f"share card no longer names {subject}")
+    require("EIGHT CHECKED FRONTIERS" in og_frontier, "share card lost its frontier heading")
+    for label in OG_FRONTIER_LABELS:
+        require(label in og_frontier, f"share card no longer names {label}")
     require(OG_IMAGE_ALT in text, "share-image alt text lost the eight-subject programme")
     require(UNFURL_DESCRIPTION in text, "link-unfurl description lost the eight-subject programme")
 

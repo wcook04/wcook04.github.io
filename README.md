@@ -138,9 +138,10 @@ because social crawlers do not reliably render SVG.
 The card carries only the programme-level facts that remain safe outside the
 page: eight open Erdős problems, one checked frontier and one stated remaining
 obligation for each, and the explicit statement that all eight remain open. It
-also names the eight subjects — factorial denominators, reciprocal tails,
-binary totient, prime-gap dyadics, Mersenne supports, running LCMs, lemniscate
-paths, and rational Lambert — so the portfolio remains visible at a glance.
+also gives one compact, claim-bounded frontier label for every problem —
+cofinal divisibility, tail-state defect, prime-tail escape, prime-gap
+summation, strict Mersenne tail, running-LCM structure, ray separation, and
+rational-base tail — so the portfolio remains visible at a glance.
 Do not replace it with a generic Plectis mark, a repository screenshot, raw
 corpus counts, or a claim that a problem has been solved.
 
