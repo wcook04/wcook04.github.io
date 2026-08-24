@@ -398,27 +398,39 @@
       color: var(--faint);
     }
 
-    /* The mathematical route needs an actual programme map before it asks a
-       reader to choose a paper, a repository, or a proof checker. Each row is
-       deliberately one checked handle plus the unresolved obligation it does
-       not discharge. Two compact columns make all eight programmes visible on
-       a wide screen without turning the root front door into a second paper
-       catalogue; the narrow view returns to a single, readable sequence. */
+    /* The mathematical route gets a real programme index before it asks a
+       reader to choose a paper, a repository, or a proof checker. This is the
+       accessible text counterpart to the larger frontier plate in the desktop
+       destination window: one checked handle and one unresolved obligation per
+       problem, never a compressed solution claim. */
     .frontier {
       grid-column: 2;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: .44rem .95rem;
+      gap: 0 .9rem;
       margin: .62rem 0 0;
-      padding: .62rem 0;
+      padding: .12rem 0;
       border-top: 1px solid var(--hair);
       border-bottom: 1px solid var(--hair);
-      font-size: .82rem;
-      line-height: 1.45;
+      font-family: var(--font-sans);
+      font-size: .72rem;
+      line-height: 1.42;
       color: var(--faint);
     }
-    .frontier p { margin: 0; }
-    .frontier a { --to: var(--to-repo); --to-lit: var(--to-repo-lit); }
+    .frontier p {
+      margin: 0;
+      padding: .46rem 0 .48rem;
+      border-top: 1px solid color-mix(in srgb, var(--hair) 86%, transparent);
+    }
+    .frontier p:nth-child(-n + 2) { border-top: 0; }
+    .frontier a {
+      --to: var(--to-repo); --to-lit: var(--to-repo-lit);
+      display: inline-block;
+      margin-right: .22rem;
+      font-size: .86rem;
+      font-weight: 650;
+      letter-spacing: .02em;
+    }
     .frontier a {
       color: var(--to);
       text-decoration: underline;
@@ -430,7 +442,21 @@
       color: var(--to-lit);
       text-decoration-color: var(--to-lit);
     }
-    @media (max-width: 34rem) { .frontier { grid-template-columns: 1fr; } }
+    @media (max-width: 34rem) {
+      .frontier { grid-template-columns: 1fr; }
+      .frontier p:nth-child(2) { border-top: 1px solid color-mix(in srgb, var(--hair) 86%, transparent); }
+    }
+
+    /* These are routes, not a prose sentence that happens to contain links.
+       Keeping each control unbroken stops a narrow left rail from producing
+       the word-by-word staircase that a normal inline exit list would make. */
+    .frontier-exits {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .36rem .72rem;
+    }
+    .frontier-exits .sep { display: none; }
+    .frontier-exits a { white-space: nowrap; }
 
     .exits {
       margin: .34rem 0 0;
@@ -1007,6 +1033,101 @@
       .shot__map, .map__k, .map__v { transition: none; }
     }
 
+    /* The Lean row is a programme, not just a repository screenshot. In the
+       desktop destination window it therefore gets its own eight-part frontier
+       plate: a small exhibition label, one visual cadence, and the exact open
+       boundary beside every checked handle. The linked source remains the
+       immutable verification packet; this panel merely makes the route
+       legible before a reader leaves the front door. */
+    .shot__frontier {
+      position: absolute; inset: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 4.2cqi 4.7cqi 4.4cqi;
+      background:
+        linear-gradient(135deg, rgba(30, 21, 42, .98), rgba(17, 13, 26, .96)),
+        radial-gradient(circle at 88% 6%, rgba(230, 178, 100, .16), transparent 34%);
+      font-family: var(--font-sans);
+      opacity: 0;
+      transition: opacity var(--t-response) ease-out;
+    }
+    .dest__frame[data-view="frontier"] .shot__frontier { opacity: 1; }
+    .dest__frame[data-view="frontier"] .shot__img,
+    .dest__frame[data-view="frontier"] .shot__map { opacity: 0; }
+    .frontier-plate__eyebrow {
+      display: block;
+      font-size: .58rem;
+      font-size: 1.62cqi;
+      font-weight: 650;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: color-mix(in srgb, var(--to-repo) 72%, var(--faint));
+    }
+    .frontier-plate__title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1.2cqi;
+      padding-bottom: 2.4cqi;
+      border-bottom: 1px solid var(--hair-strong);
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      font-size: 3.4cqi;
+      line-height: 1.08;
+      color: var(--bone);
+    }
+    .frontier-plate__title small {
+      flex: 0 0 auto;
+      font-family: var(--font-sans);
+      font-size: .58rem;
+      font-size: 1.55cqi;
+      font-weight: 500;
+      letter-spacing: .04em;
+      color: var(--faint);
+    }
+    .frontier-plate__grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+    .frontier-plate__item {
+      display: grid;
+      grid-template-columns: 5.1cqi minmax(0, 1fr);
+      align-content: center;
+      column-gap: 1.4cqi;
+      padding: 2.3cqi 1.4cqi 2.2cqi 0;
+      border-bottom: 1px solid var(--hair);
+    }
+    .frontier-plate__item:nth-child(odd) { margin-right: 2.7cqi; }
+    .frontier-plate__item:nth-child(n + 7) { border-bottom: 0; }
+    .frontier-plate__number {
+      grid-row: 1 / span 2;
+      align-self: start;
+      padding-top: .2cqi;
+      font-size: .92rem;
+      font-size: 2.4cqi;
+      font-weight: 650;
+      letter-spacing: -.04em;
+      color: var(--to-repo);
+    }
+    .frontier-plate__handle {
+      font-size: .68rem;
+      font-size: 1.78cqi;
+      font-weight: 610;
+      line-height: 1.22;
+      color: var(--bone-soft);
+    }
+    .frontier-plate__boundary {
+      margin-top: .45cqi;
+      font-size: .56rem;
+      font-size: 1.43cqi;
+      line-height: 1.25;
+      color: color-mix(in srgb, var(--faint) 92%, transparent);
+    }
+    @media (prefers-reduced-motion: reduce) { .shot__frontier { transition: none; } }
+
     /* Under the row, on a phone. The wide layout puts the same stills in the
        plate's frame, so only one of the two is ever present. No caption: the
        row names the destination two lines above and the bar gives the URL,
@@ -1312,7 +1433,7 @@
         opacity: 0;
         transition: opacity var(--t-response) ease-out, filter var(--t-response) ease-out;
       }
-      .dest__frame:not([data-view="map"]) .shot__img.is-on { opacity: 1; }
+      .dest__frame[data-view="shot"] .shot__img.is-on { opacity: 1; }
       @media (prefers-reduced-motion: reduce) { .dest .shot__img { transition: none; } }
       /* Says what the frame does, once, and goes quiet the moment the reader
          has made it move — which is the moment the sentence stops being true
@@ -1389,7 +1510,7 @@
          where they go. Recapture from the live URLs; never draw a frame. -->
     <aside class="dest" aria-hidden="true">
       <div class="dest__panel">
-        <a class="dest__frame shot" href="https://wcook04.github.io/plectis/" tabindex="-1">
+        <a class="dest__frame shot" data-view="shot" href="https://wcook04.github.io/plectis/" tabindex="-1">
           <span class="shot__bar"><span class="shot__host">wcook04.github.io</span><span class="shot__path">/plectis/</span></span>
           <span class="shot__stage">
             <img class="shot__img is-on" data-src="assets/previews/plectis-site.jpg" alt=""
@@ -1441,6 +1562,24 @@
                   <span class="map__k">Reader digest</span>
                   <span class="map__v">the indexes without the bodies, and a pointer back</span>
                 </span>
+              </span>
+            </span>
+            <!-- The Lean route's desktop destination is a programme plate, not
+                 a substitute for its linked source. It is decorative because
+                 the accessible frontier list beside it carries the same
+                 checked handles and open boundaries. -->
+            <span class="shot__frontier" aria-hidden="true">
+              <span class="frontier-plate__eyebrow">Eight open Erdős problems</span>
+              <span class="frontier-plate__title">Checked frontier <small>not a solution map</small></span>
+              <span class="frontier-plate__grid">
+                <span class="frontier-plate__item"><span class="frontier-plate__number">68</span><span class="frontier-plate__handle">Cofinal divisibility equivalence</span><span class="frontier-plate__boundary">Needs cofinal failures.</span></span>
+                <span class="frontier-plate__item"><span class="frontier-plate__number">243</span><span class="frontier-plate__handle">Tail-state defect identity</span><span class="frontier-plate__boundary">Unrestricted case remains open.</span></span>
+                <span class="frontier-plate__item"><span class="frontier-plate__number">249</span><span class="frontier-plate__handle">Finite-level dyadic rank</span><span class="frontier-plate__boundary">Not totient irrationality.</span></span>
+                <span class="frontier-plate__item"><span class="frontier-plate__number">251</span><span class="frontier-plate__handle">Integral-shift tail criterion</span><span class="frontier-plate__boundary">Prime-tail bridge is open.</span></span>
+                <span class="frontier-plate__item"><span class="frontier-plate__number">257</span><span class="frontier-plate__handle">Formalised full-support theorem</span><span class="frontier-plate__boundary">Not all infinite supports.</span></span>
+                <span class="frontier-plate__item"><span class="frontier-plate__number">269</span><span class="frontier-plate__handle">Three-prime running-LCM structure</span><span class="frontier-plate__boundary">Carry bridge is open.</span></span>
+                <span class="frontier-plate__item"><span class="frontier-plate__number">1041</span><span class="frontier-plate__handle">Ray-separation obstruction</span><span class="frontier-plate__boundary">Topology and metric gluing remain.</span></span>
+                <span class="frontier-plate__item"><span class="frontier-plate__number">1049</span><span class="frontier-plate__handle">Construction-specific no-go at 3/2</span><span class="frontier-plate__boundary">Not an irrationality proof.</span></span>
               </span>
             </span>
           </span>
@@ -1546,7 +1685,7 @@
               </a>
             </p>
           </li>
-          <li data-dest-default="lean-github">
+          <li data-dest-default="math-frontier">
             <p class="kind">Check</p>
             <!-- The Lean repository is the mathematical authority. Its first
                  contact is the full programme map: one cleared handle and one
@@ -1554,7 +1693,7 @@
                  The links use the published convergence snapshot rather than a
                  floating branch: this is a reading and verification route, not
                  a new release, peer-review, or novelty claim. -->
-            <p class="name"><a data-to="repo" data-dest="lean-github" href="https://github.com/wcook04/plectis-lean-erdos249-257">Lean corpus</a></p>
+            <p class="name"><a data-to="repo" data-dest="math-frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257">Lean corpus</a></p>
             <p class="desc"><a class="term" data-term="machine-checked" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-machine-checked">Machine-checked</a> mathematics on eight <a class="term" data-term="open-problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">open</a> Erd&#337;s problems. Each frontier below names one cleared statement and the exact step that remains open; none is a solution claim.</p>
             <div class="frontier" role="list" aria-label="One checked frontier and one open boundary for each public Erdős problem">
               <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-68">#68</a> exact cofinal-divisibility equivalence; cofinal failures remain unproved.</p>
@@ -1566,7 +1705,7 @@
               <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-1041">#1041</a> ray-separation obstruction; global topology and metric gluing remain open.</p>
               <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-1049">#1049</a> a construction-specific no-go at 3/2; irrationality remains open.</p>
             </div>
-            <p class="exits">
+            <p class="exits frontier-exits">
               <a data-to="repo" data-dest="lean-github" aria-label="GitHub: the Lean corpus repository" href="https://github.com/wcook04/plectis-lean-erdos249-257">GitHub</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Check one Lean corpus claim without a Lean build" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/README.md#read-or-run-it">Check one claim</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read the eight-problem checked frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md">Eight-problem frontier</a>
             </p>
             <p class="row-shot">
@@ -1896,6 +2035,9 @@
                             src: "assets/previews/plectis-docs.jpg",     href: "https://wcook04.github.io/plectis/docs/" },
       "plectis-github":   { to: "repo",  host: "github.com",        path: "/wcook04/plectis",
                             src: "assets/previews/plectis-github.jpg",   href: "https://github.com/wcook04/plectis" },
+      "math-frontier":   { to: "repo",  view: "frontier", host: "github.com",
+                            path: "/wcook04/plectis-lean-erdos249-257/docs/EXTERNAL_VERIFICATION.md",
+                            href: "https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md" },
       "lean-github":      { to: "repo",  host: "github.com",        path: "/wcook04/plectis-lean-erdos249-257",
                             src: "assets/previews/lean-github.jpg",      href: "https://github.com/wcook04/plectis-lean-erdos249-257" },
       "papers-catalogue": { to: "page",  host: "wcook04.github.io", path: "/plectis/docs/papers.html",
@@ -1974,13 +2116,17 @@
       /* A drawn destination needs no fetch and no swap: the map is already in
          the document, and only which cut it leans on changes. The token is
          still bumped so a picture still in flight cannot land on top of it. */
-      frame.setAttribute("data-view", d.view === "map" ? "map" : "shot");
+      frame.setAttribute("data-view", d.view === "map" ? "map" : d.view === "frontier" ? "frontier" : "shot");
       if (d.view === "map") {
         frame.setAttribute("data-emphasis", d.emphasis || "packet");
         ++token;
         return;
       }
       frame.removeAttribute("data-emphasis");
+      if (d.view === "frontier") {
+        ++token;
+        return;
+      }
 
       /* Load first, swap second. The incoming layer is only revealed once its
          file is decodable, so a slow fetch holds the picture that is already
