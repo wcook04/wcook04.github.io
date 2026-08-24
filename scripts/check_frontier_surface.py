@@ -198,6 +198,7 @@ def main() -> int:
         f"#{number}" for number in PROBLEMS[:-1]
     ) + f" and #{PROBLEMS[-1]} &mdash;"
     require(paper_sentence in text, "paper route no longer names all eight problems")
+    require("sit inside Plectis&rsquo;s 13-paper catalogue" in text, "paper route lost its catalogue context")
     print("frontier surface: 8 pinned routes, 8 portrait sheets, and all-eight paper route: ok")
     return 0
 
