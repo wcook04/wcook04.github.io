@@ -206,6 +206,14 @@ def main() -> int:
         require(route is not None, f"missing accessible frontier entry for #{number}")
         require(expected_url in route.group(1), f"#{number} does not use the pinned packet")
         require(
+            f'aria-label="#{number} — Erdős problem {number}:' in route.group(1),
+            f"#{number} accessible frontier label is missing",
+        )
+        require(
+            "? Read its verification packet." in route.group(1),
+            f"#{number} accessible frontier label no longer poses its question",
+        )
+        require(
             FRONTIER_LABELS[number].lower() in route.group(1).lower(),
             f"#{number} visible frontier heading drifted",
         )
