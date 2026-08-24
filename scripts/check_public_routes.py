@@ -72,9 +72,28 @@ ROUTES = (
         ),
     ),
     ("eight-problem verification packet", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md", PROGRAMME_MARKERS),
-    ("Comparator appendix", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix", "comparator-interface-appendix"),
-    ("reviewer replay", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION_REPLAY.md", None),
-    ("citation record", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/CITATION.cff", None),
+    (
+        "Comparator appendix",
+        f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix",
+        (
+            "Comparator is a second checker",
+            "It checks propositions only, and assesses no paper deduction, cited theorem, external computation, intended meaning, novelty, or significance.",
+        ),
+    ),
+    (
+        "reviewer replay",
+        f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION_REPLAY.md",
+        (
+            "Independent replay and immutable release identity",
+            "The bounded replay compares",
+            "one-theorem mismatch fixture",
+        ),
+    ),
+    (
+        "citation record",
+        f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/CITATION.cff",
+        "around eight Erdős problems (#68, #243, #249, #251, #257, #269, #1041, #1049)",
+    ),
     ("updates route", "https://wcook04.github.io/plectis/docs/updates.html", "Follow updates"),
 )
 
