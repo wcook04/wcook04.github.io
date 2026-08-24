@@ -38,6 +38,9 @@ PROBLEM_TOPICS = {
     "1041": "Short lemniscate connections.",
     "1049": "Lambert series at rational bases.",
 }
+ACCESSIBLE_QUESTION_MARKERS = {
+    "1049": "F of t, the series sum from n at least 1 of 1 over t to the n minus 1",
+}
 OG_FRONTIER_LABELS = (
     "cofinal divisibility",
     "tail-state defect",
@@ -202,6 +205,11 @@ def main() -> int:
             PROBLEM_TOPICS[number] in route.group(1),
             f"#{number} visible entry no longer names its mathematical subject",
         )
+        if number in ACCESSIBLE_QUESTION_MARKERS:
+            require(
+                ACCESSIBLE_QUESTION_MARKERS[number] in route.group(1),
+                f"#{number} accessible route no longer states its mathematical question",
+            )
         require(
             FRONTIER_LABELS[number].lower() in plate.lower(),
             f"#{number} desktop frontier heading drifted",
