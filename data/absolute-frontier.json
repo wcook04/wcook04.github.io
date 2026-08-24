@@ -30,7 +30,7 @@
       "attribution": "Classical factorial radix context; source specific formal synthesis; no priority claim.",
       "boundary": "No cofinal producer is known, so Erdős #68 remains open.",
       "handle": "ErdosProblems.Erdos68.irrational_factorialGapSeries_iff_cofinal_strictFacTopRat_misses",
-      "href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos68/FactorialZeroPlateau.lean#L1090"
+      "href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/docs/EXTERNAL_VERIFICATION.md#programme-68"
     },
     {
       "problem": "249",
@@ -42,7 +42,7 @@
       "attribution": "Classical radix tails, Euler periodicity and modular arithmetic; no priority claim for the packaging.",
       "boundary": "The universal gap supply is unproved, so Erdős #249 remains open.",
       "handle": "ErdosProblems.Erdos249.fullMersenneCanonicalBasepointResidueGapSupply_iff_irrational",
-      "href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos249/CyclotomicAnchoredKill.lean#L2976"
+      "href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/docs/EXTERNAL_VERIFICATION.md#programme-249"
     },
     {
       "problem": "251",
@@ -54,7 +54,7 @@
       "attribution": "Exact summation by parts with a direct public antecedent; no new prime gap theorem or novelty claim.",
       "boundary": "Finite denominator screens and generic gap countermodels do not prove irrationality, so Erdős #251 remains open.",
       "handle": "ErdosProblems.Erdos251.dyadicPartialSumQ_eq_start_add_differences",
-      "href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos251/PrimeGapDyadicTail.lean#L138"
+      "href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/docs/EXTERNAL_VERIFICATION.md#programme-251"
     },
     {
       "problem": "257",
@@ -66,7 +66,7 @@
       "attribution": "Uses the classical Erdős Borwein irrationality theorem inside a source specific greedy synthesis; no priority claim.",
       "boundary": "Finite traces and arbitrary omitted supports do not supply the canonical cofinal skips, so Erdős #257 remains open.",
       "handle": "ErdosProblems.Erdos257.rat_mem_mersenneAchievementSet_iff_cofinal_greedy_skips",
-      "href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos257/MersenneSubseriesRigidity.lean#L16"
+      "href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/docs/EXTERNAL_VERIFICATION.md#programme-257"
     },
     {
       "problem": "1041",
