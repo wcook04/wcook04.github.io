@@ -48,6 +48,11 @@ OG_PROGRAMME_SUBJECTS = (
     "lemniscate paths",
     "rational Lambert",
 )
+OG_IMAGE_ALT = (
+    "Eight open Erdős problems: factorial denominators, reciprocal tails, "
+    "binary totient, prime-gap dyadics, Mersenne supports, running LCMs, "
+    "lemniscate paths, and rational Lambert. All eight remain open."
+)
 FRONTIER_SHEET_ANCHORS = {
     "68": (
         "ErdosProblems.Erdos68.irrational_factorialGapSeries_iff_cofinal_strictFacTopRat_misses",
@@ -134,6 +139,7 @@ def main() -> int:
     require("ALL EIGHT REMAIN OPEN" in og_frontier, "share card lost the open-problem boundary")
     for subject in OG_PROGRAMME_SUBJECTS:
         require(subject in og_frontier, f"share card no longer names {subject}")
+    require(OG_IMAGE_ALT in text, "share-image alt text lost the eight-subject programme")
 
     lean_links = re.findall(
         r'https://github\.com/wcook04/plectis-lean-erdos249-257/(?:tree|blob)/[^"\s<]+',
