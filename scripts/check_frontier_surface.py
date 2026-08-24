@@ -177,6 +177,10 @@ def main() -> int:
     require('document.addEventListener("focusin", function (ev) {' in text, "frontier sheets no longer have a keyboard route")
     require("function routeFocusIsHeld()" in text, "focus-held portrait route missing")
     require("if (!routeFocusIsHeld()) release();" in text, "focus-driven scroll can erase portrait route")
+    require(
+        ".dest__frame[data-view=\"problem\"] .shot__frontier { opacity: 0; }" in text,
+        "selected portrait can bleed the eight-problem overview through its resting state",
+    )
     require("ALL EIGHT REMAIN OPEN" in og_frontier, "share card lost the open-problem boundary")
     require("EIGHT CHECKED FRONTIERS" in og_frontier, "share card lost its frontier heading")
     for label in OG_FRONTIER_LABELS:
@@ -196,6 +200,11 @@ def main() -> int:
         )
 
     for index, number in enumerate(PROBLEMS):
+        selector = (
+            f'.dest__frame[data-view="problem"][data-problem="{number}"] '
+            f'.shot__problem[data-problem="{number}"]'
+        )
+        require(selector in text, f"#{number} portrait is not selected by its frontier route")
         expected_url = (
             "https://github.com/wcook04/plectis-lean-erdos249-257/"
             f"blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md#programme-{number}"
