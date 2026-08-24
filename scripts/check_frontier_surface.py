@@ -53,6 +53,7 @@ def main() -> int:
     require("not universal #257" in text, "representative-check boundary missing")
     require("conditional cofinal 9/10 prime-tail escape" in text, "#249 heading drifted from the pinned frontier")
     require("prime/gap summation-by-parts identity" in text, "#251 heading drifted from the pinned frontier")
+    require("hereditary strict Mersenne-tail inequality" in text, "#257 heading drifted from the pinned frontier")
 
     lean_links = re.findall(
         r'https://github\.com/wcook04/plectis-lean-erdos249-257/(?:tree|blob)/[^"\s<]+',
