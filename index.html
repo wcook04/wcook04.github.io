@@ -105,6 +105,13 @@
       --to-repo-lit: #f2cc8a;
       --to-video: #d47fac;
       --to-video-lit: #dd8fba;
+      /* An account is a page, and it takes the page's own value rather than a
+         fourth hue. Inventing one would say there is a fourth KIND of thing to
+         look at here, and there is not: the glyph already says it leaves the
+         host, and two links in the colophon do not earn a colour a reader has
+         to learn. No lit pair, because nothing reads one: the only thing that
+         paints this is the window's own frame and bar. */
+      --to-profile: var(--to-page);
 
       --thread-h: 2px;
       /* The ember ramp, stated once. Both layers of the thread paint it, and
@@ -437,11 +444,23 @@
       color: var(--faint);
     }
     .frontier-instruction__narrow { display: none; }
+    /* Two columns, stated rather than fitted. auto-fit gave the rail between
+       two and three columns depending on how wide the reading column happened
+       to be, and the rules under the rows were written for four: nth-child(-n
+       + 4) is "the first row" only if there are four of them, so at three
+       columns the fourth entry sat in the second row with no rule over it
+       while the two beside it had one, and at two columns the whole second row
+       lost its rule. A count you have decided is a count you can draw against.
+
+       Two is also the shape of the plate on the right, so the list a reader
+       can use and the plate they are looking at are the same eight in the same
+       arrangement. Grid rows already give the pair a shared height, so nothing
+       else is needed to keep the rules straight. */
     .frontier {
       grid-column: 2;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
-      gap: 0 .8rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 1rem;
       margin: .5rem 0 0;
       padding: .08rem 0;
       border-top: 1px solid var(--hair);
@@ -456,15 +475,30 @@
       padding: .48rem 0;
       border-top: 1px solid color-mix(in srgb, var(--hair) 86%, transparent);
     }
-    .frontier p:nth-child(-n + 4) { border-top: 0; }
+    .frontier p:nth-child(-n + 2) { border-top: 0; }
+    /* Ownership is a rule going gold, the same answer the route rows give.
+       It used to be a filled rectangle, which on a page built entirely from
+       hairlines was the loudest object in the reading column and stopped
+       short of its neighbour's edge, so it read as a floating box rather than
+       as the row being spoken for. */
     .frontier p[data-dest] {
-      transition: background-color var(--t-interaction) ease-out, color var(--t-interaction) ease-out;
+      transition: border-color var(--t-interaction) ease-out,
+                  color var(--t-interaction) ease-out;
     }
     .frontier p[data-dest]:hover,
     .frontier p[data-dest]:focus-within {
-      background: color-mix(in srgb, var(--to-repo) 8%, transparent);
+      border-top-color: color-mix(in srgb, var(--to-repo) 55%, transparent);
       color: var(--bone-soft);
     }
+    /* The top row has no rule of its own to light, so it borrows the one the
+       list itself is standing under. */
+    .frontier:has(p:nth-child(1)[data-dest]:hover),
+    .frontier:has(p:nth-child(2)[data-dest]:hover),
+    .frontier:has(p:nth-child(1)[data-dest]:focus-within),
+    .frontier:has(p:nth-child(2)[data-dest]:focus-within) {
+      border-top-color: color-mix(in srgb, var(--to-repo) 55%, transparent);
+    }
+    .frontier { transition: border-color var(--t-interaction) ease-out; }
     .frontier a {
       --to: var(--to-repo); --to-lit: var(--to-repo-lit);
       display: inline-block;
@@ -974,8 +1008,9 @@
                   0 22px 52px -18px rgba(8, 4, 13, .95);
       transition: border-color var(--t-response) ease-out;
     }
-    .shot[data-to="repo"]  { --to: var(--to-repo); }
-    .shot[data-to="video"] { --to: var(--to-video); }
+    .shot[data-to="repo"]    { --to: var(--to-repo); }
+    .shot[data-to="video"]   { --to: var(--to-video); }
+    .shot[data-to="profile"] { --to: var(--to-profile); }
     .shot:hover, .shot:focus-visible {
       border-color: color-mix(in srgb, var(--to) 58%, transparent);
     }
@@ -997,7 +1032,8 @@
     .shot__host { color: var(--to); font-weight: 600; }
     .shot__path { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--faint); }
     .shot[data-to="repo"] .shot__bar::after,
-    .shot[data-to="video"] .shot__bar::after {
+    .shot[data-to="video"] .shot__bar::after,
+    .shot[data-to="profile"] .shot__bar::after {
       content: "\2197";
       margin-left: auto; padding-left: .6rem;
       color: var(--to); font-size: .92em; line-height: 1;
@@ -1145,7 +1181,7 @@
       opacity: 0;
       transition: opacity var(--t-response) ease-out;
     }
-    .dest__frame[data-view="frontier"] .shot__frontier { opacity: 1; }
+    .dest__frame[data-view="frontier"] .shot__frontier { opacity: 1; position: relative; }
     .dest__frame[data-view="frontier"] .shot__img,
     .dest__frame[data-view="frontier"] .shot__map { opacity: 0; }
     .frontier-plate__eyebrow {
@@ -1180,21 +1216,46 @@
       letter-spacing: .04em;
       color: var(--faint);
     }
+    /* ── The plate is a plate, not a table ─────────────────────────────────
+       Three things were making eight rows read as a spreadsheet.
+
+       The four rows were each their own height, because a row is as tall as
+       the longer of the two handles in it: measured at 39, 48, 48 and 38 on a
+       1280 screen. The pair inside a row always lined up, so this was never a
+       broken rule, but the cadence down the plate was uneven for a reason no
+       reader can see, and a plate of eight wants one beat. The rows are equal
+       now, and the eight read as a rank.
+
+       The centre had no gutter, only a margin hung off the odd items and a
+       padding hung off every item, which put 4.1 units of air on one side of
+       the join and 1.4 on the other. It is a hairline now, with the same air
+       either side of it, because the page already answers "where does this
+       column end" with a hairline everywhere else.
+
+       And the numbers were ragged: 68 and 1041 set from the same left edge in
+       a proportional face, so a column whose whole job is to be scanned had no
+       edge to scan down. Right-aligned and tabular, they line up on their
+       units and the eye can run the list. */
     .frontier-plate__grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: minmax(min-content, 1fr);
       flex: 1 1 auto;
       min-height: 0;
     }
     .frontier-plate__item {
       display: grid;
-      grid-template-columns: 5.1cqi minmax(0, 1fr);
+      grid-template-columns: 5.4cqi minmax(0, 1fr);
       align-content: center;
-      column-gap: 1.4cqi;
-      padding: 2.3cqi 1.4cqi 2.2cqi 0;
+      column-gap: 1.5cqi;
+      padding: 2.4cqi 0 2.3cqi;
       border-bottom: 1px solid var(--hair);
     }
-    .frontier-plate__item:nth-child(odd) { margin-right: 2.7cqi; }
+    .frontier-plate__item:nth-child(odd) { padding-right: 3cqi; }
+    .frontier-plate__item:nth-child(even) {
+      padding-left: 3cqi;
+      border-left: 1px solid var(--hair);
+    }
     .frontier-plate__item:nth-child(n + 7) { border-bottom: 0; }
     .frontier-plate__number {
       grid-row: 1 / span 2;
@@ -1203,7 +1264,9 @@
       font-size: .92rem;
       font-size: 2.4cqi;
       font-weight: 650;
-      letter-spacing: -.04em;
+      letter-spacing: -.02em;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
       color: var(--to-repo);
     }
     .frontier-plate__handle {
@@ -1233,7 +1296,16 @@
       z-index: 2;
       display: flex;
       flex-direction: column;
-      padding: 1.45rem 1.55rem 1.35rem;
+      padding: 1.6rem 1.8rem 1.45rem;
+      /* A floor, so the depth is not restless. On a 1728 screen all eight land
+         on it and the window never moves at all; on a 1280 one, where the same
+         sentences are taller, three land on it and the rest run to 512, which
+         is the difference between a window that answers and a window that
+         pumps. It sits on the sheet rather than on the stage so that the slack
+         it creates is inside the flex column, where the two seams below can
+         share it out; on the stage it would simply have left a strip of
+         nothing under the sheet, which is the fault this replaces. */
+      min-height: 28rem;
       background:
         radial-gradient(circle at 100% 0%, rgba(230, 178, 100, .10), transparent 33%),
         linear-gradient(150deg, #1b1427, #100d19);
@@ -1253,6 +1325,11 @@
       opacity: 1;
       visibility: visible;
       transition-delay: 0s;
+      /* The one sheet on show is the only thing in the stage that is in
+         flow, so the stage takes its height and the window is the size of
+         what it is holding. The seven behind it stay absolute and are
+         measured by nobody. */
+      position: relative;
     }
     .dest__frame[data-view="problem"] .shot__img,
     .dest__frame[data-view="problem"] .shot__map,
@@ -1269,72 +1346,206 @@
       border-bottom: 1px solid var(--hair-strong);
     }
     .problem-sheet__number {
-      font-size: .66rem;
+      font-size: .68rem;
       font-weight: 650;
       letter-spacing: .16em;
       text-transform: uppercase;
       color: var(--to-repo);
     }
     .problem-sheet__status {
-      font-size: .57rem;
+      font-size: .59rem;
       font-weight: 620;
       letter-spacing: .13em;
       text-transform: uppercase;
       color: var(--faint);
     }
     .problem-sheet__title {
-      margin-top: .82rem;
+      margin-top: .86rem;
       font-family: var(--font-serif);
-      font-size: 1.18rem;
+      font-size: 1.34rem;
       font-weight: 600;
       line-height: 1.14;
       color: var(--bone);
     }
     .problem-sheet__label {
       display: block;
-      margin-bottom: .28rem;
-      font-size: .54rem;
+      margin-bottom: .3rem;
+      font-size: .57rem;
       font-weight: 650;
       letter-spacing: .15em;
       text-transform: uppercase;
       color: var(--to-repo);
     }
+    /* ── Where the air goes ────────────────────────────────────────────────
+       The sheet is a fixed box holding eight different lengths of text, so
+       there is always slack. What matters is where it is put, and the first
+       version put all of it in one place: everything piled at the top, the
+       declaration pinned to the floor, and whatever was left over as a hole
+       between them. Measured at 130px on #68 and 70px on #251, which meant the
+       hole visibly breathed as a reader swept the eight numbers. A gap that
+       changes size with no reason a reader can see is the thing that makes a
+       panel look unfinished.
+
+       It is also grouped wrongly. The sheet says three different kinds of
+       thing: what the problem IS, what has and has not been settled about it,
+       and the machine handle for the settled part. So the slack is split into
+       exactly two seams, on those two joins, and the argument stays
+       contiguous. Two auto margins in a flex column share free space equally,
+       so both seams stay the same size as each other whatever the length, and
+       across the eight they now run 21 to 42px on a 1728 screen and 14 to 36
+       on a 1280 one: about twenty pixels of drift where the single hole drifted
+       sixty. */
     .problem-sheet__question {
-      margin: .88rem 0 0;
+      margin: .9rem 0 auto;
       font-family: var(--font-serif);
-      font-size: 1rem;
-      line-height: 1.28;
+      font-size: 1.12rem;
+      line-height: 1.3;
       color: var(--bone-soft);
     }
     .problem-sheet__section {
-      margin-top: .82rem;
-      padding-top: .72rem;
+      margin-top: .86rem;
+      padding-top: .76rem;
       border-top: 1px solid var(--hair);
     }
     .problem-sheet__text {
-      font-size: .72rem;
-      line-height: 1.38;
+      font-size: .82rem;
+      line-height: 1.44;
       color: var(--bone-soft);
     }
+    /* The open boundary is the page's whole point, and it was set as the
+       quietest thing on the sheet: same size as the note above it, dimmed to
+       --faint, reading as a footnote to the result rather than as the reason
+       the result is worth stating. It keeps the quiet label, because it is
+       still a label, and takes the serif for the sentence itself. Not louder
+       than the checked frontier: a different voice, so the sheet ends on a
+       statement in the register the rest of the page argues in. */
     .problem-sheet__section--open .problem-sheet__label { color: var(--faint); }
-    .problem-sheet__section--open .problem-sheet__text { color: var(--faint); }
+    .problem-sheet__section--open .problem-sheet__text {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      line-height: 1.32;
+      color: var(--bone-soft);
+    }
     .problem-sheet__handle {
       margin-top: auto;
-      padding-top: .78rem;
+      padding-top: .82rem;
       border-top: 1px solid var(--hair-strong);
-      font-size: .55rem;
+      font-size: .59rem;
       line-height: 1.35;
       color: var(--faint);
     }
     .problem-sheet__handle code {
       display: block;
-      margin-top: .2rem;
+      margin-top: .24rem;
       overflow-wrap: anywhere;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: .51rem;
+      font-size: .56rem;
       color: color-mix(in srgb, var(--bone-soft) 88%, transparent);
     }
     @media (prefers-reduced-motion: reduce) { .shot__problem { transition: none; } }
+
+    /* ── The account ───────────────────────────────────────────────────────
+       The closing section had no window beside it at all. The instrument was
+       filed away at the foot of the last route and the two paragraphs that
+       actually ask the reader for something ran down a narrow column with half
+       the page bare next to them.
+
+       The reason it was filed away is sound and it stands: a screenshot of a
+       video page has no business standing next to a paragraph about who wrote
+       this. But that is an objection to the wrong picture, not to a picture.
+       The right one here is the person, so the closing band answers with the
+       account and the window still goes when the page does.
+
+       Drawn rather than captured, like the packet map and the plate of eight.
+       A profile is behind a sign-in for a good share of readers, so a capture
+       would be a photograph of a sign-in wall, which is a picture of nothing
+       and would be the one dishonest frame on a page whose whole rule is that
+       a window shows where a link lands.
+
+       Small on purpose. It is the least load-bearing window here, so the
+       instrument closes down to a calling card before it leaves rather than
+       holding full size for something that proves nothing. And the card says
+       so itself, because every other panel on this page states its own limit
+       and an account is the one destination with nothing behind it to check. */
+    .shot__profile {
+      position: absolute; inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      padding: 1.6rem 1.8rem 1.5rem;
+      min-height: 15rem;
+      background:
+        radial-gradient(circle at 0% 100%, rgba(242, 230, 212, .05), transparent 42%),
+        linear-gradient(150deg, #1b1427, #100d19);
+      font-family: var(--font-sans);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--t-response) ease-out, visibility 0s linear var(--t-response);
+    }
+    .dest__frame[data-view="profile"] .shot__profile {
+      opacity: 1;
+      visibility: visible;
+      transition-delay: 0s;
+      position: relative;
+    }
+    .dest__frame[data-view="profile"] .shot__img,
+    .dest__frame[data-view="profile"] .shot__map,
+    .dest__frame[data-view="profile"] .shot__frontier,
+    .dest__frame[data-view="profile"] .shot__problem {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .profile-card__topline {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: .8rem;
+      padding-bottom: .7rem;
+      border-bottom: 1px solid var(--hair-strong);
+      font-size: .59rem;
+      font-weight: 640;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .profile-card__eyebrow { color: var(--bone-soft); }
+    /* The page opens on a byline and this is where it closes, so the card is
+       set in the same two lines the header uses: the name, then the rule and
+       the letterspaced role under it. */
+    .profile-card__name {
+      margin-top: 1.1rem;
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      font-weight: 600;
+      line-height: 1.1;
+      color: var(--bone);
+    }
+    .profile-card__role {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      margin-top: .55rem;
+      font-size: .62rem;
+      font-weight: 600;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .profile-card__role::before {
+      content: "";
+      flex: 0 0 1.6rem;
+      height: 1px;
+      background: var(--hair-strong);
+    }
+    .profile-card__note {
+      margin-top: auto;
+      padding-top: .95rem;
+      border-top: 1px solid var(--hair);
+      font-size: .78rem;
+      line-height: 1.45;
+      color: var(--faint);
+    }
+    @media (prefers-reduced-motion: reduce) { .shot__profile { transition: none; } }
 
     /* Under the row, on a phone. The wide layout puts the same stills in the
        plate's frame, so only one of the two is ever present. No caption: the
@@ -1538,8 +1749,50 @@
         background: rgba(18, 13, 28, .76);
         backdrop-filter: blur(3px);
       }
-      .dest__panel[data-view="problem"] { width: clamp(21rem, 25vw, 25rem); }
-      .dest__frame[data-view="problem"] .shot__stage { aspect-ratio: 7 / 9; }
+      /* One window, one width. Pointing at a problem used to narrow the panel
+         from 33vw to 25vw AND swing it from landscape to portrait, so the
+         whole instrument slid left, grew downward and re-proportioned at once
+         to answer a pointer that had moved four pixels. Three axes for one
+         gesture reads as a second object arriving, not as the same one
+         answering.
+
+         So the width is held and only the depth changes: the window deepens
+         to hold one problem and comes back up to hold eight. Its left and
+         right edges never move, which is what makes it legible as a zoom.
+
+         And the depth is the sheet's own. A fixed portrait cannot serve both
+         ends of the width range at once, because a narrower window makes the
+         same sentences taller: measured across the eight, 335-386px of copy
+         at a 526px window and 348-457px at 420px. Any single ratio is
+         therefore either too short somewhere or mostly empty somewhere else,
+         which is what produced the hole this whole section is about. So the
+         window is as deep as the problem in it, and the two seams below are
+         the safety net rather than the mechanism. */
+      .dest__frame[data-view="problem"] .shot__stage {
+        aspect-ratio: auto;
+        height: auto;
+      }
+      /* The plate of eight is drawn rather than photographed, so a ratio meant
+         for a screenshot has no business setting its depth: 16/10 was
+         squeezing eight rows into 263px on a 1280 screen, which is where the
+         cramped look came from. A stated depth instead, and a width-
+         independent one, because the plate's own type is set in container
+         units and so does not get taller as the window narrows the way the
+         prose sheets do. Only the captured stills keep the ratio, because for
+         those the ratio is a property of the file.
+
+         Definite is also load-bearing rather than incidental: the rank of
+         eight below asks for equal rows, and equal rows are what a grid gives
+         only when it has a height to divide. Left on auto they quietly fall
+         back to their own content heights and the plate goes ragged again. */
+      .dest__frame[data-view="frontier"] .shot__stage {
+        aspect-ratio: auto;
+        height: 22rem;
+      }
+      .dest__frame[data-view="profile"] .shot__stage {
+        aspect-ratio: auto;
+        height: auto;
+      }
       /* The pour. A screenshot has hard edges and a corner radius; the plate
          has neither. Rather than cut one into the other, the window is given
          a little quiet ground to stand on, densest under the frame and gone
@@ -1564,13 +1817,16 @@
           transparent 100%);
       }
       /* ── The stage has a lifecycle ──────────────────────────────────────
-         The window belongs to the route index and to nothing else. Held past
-         it, it stops being evidence and becomes a second column: a screenshot
-         of a video page standing next to a paragraph about who wrote this,
+         The window belongs to the bands and to nothing else. Held past them,
+         it stops being evidence and becomes a second column: a screenshot of
+         a video page standing next to a paragraph about who wrote this,
          asserting by position that it is the second most important object on
-         the page whatever the prose has moved on to.
+         the page whatever the prose has moved on to. That is an argument
+         about the wrong picture rather than about a picture, which is why the
+         closing section now has its own answer and only the accounts row ends
+         the sequence.
 
-         So it is filed away as the last route rises out of the reading area.
+         So it is filed away as the last band rises out of the reading area.
          The picture dissolves first and the frame and its URL hold a moment
          longer, which is the order in which a thing is put away rather than
          switched off, and the whole window withdraws a little to the right,
@@ -1601,7 +1857,21 @@
       /* The picture leaves before its frame, and the URL is the last thing
          still there. That is the order in which something is put away rather
          than switched off. */
-      .dest .shot__stage { transition: opacity 320ms ease-out; }
+      /* Depth is not transitioned, and that is a finding rather than an
+         omission. Two of the four views are as deep as their own contents, so
+         one end of every such transition is the keyword auto; with
+         interpolate-size that is animatable in principle, and in practice the
+         transition never arrived, leaving the frame parked at 306px where the
+         stylesheet says 352. A box that lands in the wrong place is worse
+         than a box that lands in one step, so it lands in one step. The
+         crossfade under it does the softening.
+
+         What makes the step readable is that only one axis moves. The frame
+         used to slide left, narrow and re-proportion at the same time; now
+         its edges hold and it only deepens. */
+      .dest .shot__stage {
+        transition: opacity 320ms ease-out;
+      }
       :root[data-stage="off"] .dest .shot__stage {
         opacity: 0;
         transition: opacity 240ms ease-in;
@@ -1867,6 +2137,16 @@
               <span class="problem-sheet__section problem-sheet__section--open"><span class="problem-sheet__label">Open boundary</span><span class="problem-sheet__text">Irrationality at 3/2, or for any rational base.</span></span>
               <span class="problem-sheet__handle">Representative checked declaration<code>ErdosProblems.Erdos1049.rationalBaseClearedTailQ_succ</code></span>
             </span>
+            <!-- The closing band's destination. Decorative, like every other
+                 drawn panel here: the name and the role are the page's own
+                 header, and the limit under them is the same sentence the
+                 colophon's own note makes in prose. -->
+            <span class="shot__profile" aria-hidden="true">
+              <span class="profile-card__topline"><span class="profile-card__eyebrow">LinkedIn</span><span class="profile-card__status">Account</span></span>
+              <span class="profile-card__name">Will Cook</span>
+              <span class="profile-card__role">Plectis &middot; public research system</span>
+              <span class="profile-card__note">An account, not a record. Nothing on it is checked. The checked work is on the routes above.</span>
+            </span>
           </span>
         </a>
         <p class="dest__hint">Hover or focus a frontier entry for its question, checked result, and remaining boundary.</p>
@@ -2085,7 +2365,12 @@
            accurate and stays accurate: the recorded replies show field
            mismatches and declines, not review. It would be easy, and false, to
            write that no expert has found a mistake. -->
-      <section class="note" aria-labelledby="note-h" data-scene-key="note">
+      <!-- The closing band owns the window too, and its destination is the
+           person rather than a page: see the note over .shot__profile. The
+           accounts row carries the same default so the lifecycle ends at the
+           true foot of the column and not one section early. -->
+      <section class="note" aria-labelledby="note-h" data-scene-key="note"
+               data-dest-default="profile-linkedin">
         <h2 class="eyebrow" id="note-h">Why it is here</h2>
         <p>
           I am 22, an economics undergraduate at Bristol. I built this alone
@@ -2142,9 +2427,9 @@
            The two action routes are deliberately modest: public updates stay
            in the generated feed and GitHub surfaces, while contact points to
            the one place that carries every way of reaching me. -->
-      <footer class="colophon">
+      <footer class="colophon" data-dest-default="profile-linkedin">
         <a data-to="profile" href="https://github.com/wcook04">GitHub</a>
-        <a data-to="profile" href="https://www.linkedin.com/in/will-cook-278127234/">LinkedIn</a>
+        <a data-to="profile" data-dest="profile-linkedin" href="https://www.linkedin.com/in/will-cook-278127234/">LinkedIn</a>
         <a href="https://wcook04.github.io/plectis/docs/updates.html">Follow updates</a>
         <a data-to="repo" aria-label="Citation metadata for the reviewed-core release; portfolio-wide citation metadata is pending" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/CITATION.cff">Citation metadata</a>
         <a href="https://wcook04.github.io/plectis/#contact">Contact</a>
@@ -2359,7 +2644,12 @@
                             href: "https://wcook04.github.io/plectis/plectis-ai-reader-digest.json" },
       "brief-json":       { to: "page", view: "map", emphasis: "brief", host: "wcook04.github.io",
                             path: "/plectis/plectis-reviewer-brief.json",
-                            href: "https://wcook04.github.io/plectis/plectis-reviewer-brief.json" }
+                            href: "https://wcook04.github.io/plectis/plectis-reviewer-brief.json" },
+      /* The closing band. Drawn rather than captured; see the note over
+         .shot__profile for why a screenshot would be dishonest here. */
+      "profile-linkedin": { to: "profile", view: "profile", host: "linkedin.com",
+                            path: "/in/will-cook-278127234",
+                            href: "https://www.linkedin.com/in/will-cook-278127234/" }
     };
 
     var root = document.documentElement;
@@ -2417,7 +2707,8 @@
       /* A drawn destination needs no fetch and no swap: the map is already in
          the document, and only which cut it leans on changes. The token is
          still bumped so a picture still in flight cannot land on top of it. */
-      var view = d.view === "map" ? "map" : d.view === "frontier" ? "frontier" : d.view === "problem" ? "problem" : "shot";
+      var DRAWN = { map: 1, frontier: 1, problem: 1, profile: 1 };
+      var view = DRAWN[d.view] ? d.view : "shot";
       frame.setAttribute("data-view", view);
       if (panel) panel.setAttribute("data-view", view);
       if (view === "problem") frame.setAttribute("data-problem", d.problem);
@@ -2428,11 +2719,10 @@
         return;
       }
       frame.removeAttribute("data-emphasis");
-      if (d.view === "frontier") {
-        ++token;
-        return;
-      }
-      if (d.view === "problem") {
+      /* Every drawn destination is already in the document, so there is no
+         fetch and no swap; only which panel is on top changes. The token is
+         still bumped so a picture still in flight cannot land over it. */
+      if (DRAWN[d.view]) {
         ++token;
         return;
       }
@@ -2600,14 +2890,17 @@
        last one, the window is filed away and the personal sections have the
        plate to themselves. Scrolling back brings it out again.
 
-       Stated as one comparison rather than as observers, because the two kinds
-       of band want different geometry and a rule per band flickers in the gap
-       between them. The four route rows are short and the packet section is
-       long; what they have in common is that the window belongs to whichever
-       of them the reading line is in, so the window leaves when the line
-       leaves the last of them. Measured against an earlier -30% observer pair:
-       that version held the map about sixty pixels into "Why it is here",
-       which is the exact fault this whole lifecycle exists to fix.
+       Stated as one comparison rather than as observers, because the kinds of
+       band want different geometry and a rule per band flickers in the gap
+       between them. The four route rows are short, the packet section is long
+       and the closing pair are longer still; what they have in common is that
+       the window belongs to whichever of them the reading line is in, so the
+       window leaves when the line leaves the last of them. Measured against an
+       earlier -30% observer pair: that version held the MAP about sixty pixels
+       into "Why it is here", which is the fault this exists to fix. The fault
+       was the packet map standing next to a personal paragraph, not the
+       existence of a window there, so the closing sections answer for
+       themselves and the last band is now the accounts row.
 
        Not the scene controller's job: that one hands over only when the NEXT
        section crosses its line, and it returns early under reduced motion.
