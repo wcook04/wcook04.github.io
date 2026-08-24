@@ -140,7 +140,7 @@ page: eight open Erdős problems, one checked frontier and one stated remaining
 obligation for each, and the explicit statement that all eight remain open. It
 also gives one compact, claim-bounded frontier label for every problem —
 cofinal divisibility, tail-state defect, conditional escape, prime-gap
-summation, strict Mersenne tail, running-LCM structure, ray separation, and
+summation, strict Mersenne tail, three-prime LCMs, ray separation, and
 rational-base tail — so the portfolio remains visible at a glance.
 Do not replace it with a generic Plectis mark, a repository screenshot, raw
 corpus counts, or a claim that a problem has been solved.

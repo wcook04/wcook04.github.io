@@ -44,18 +44,18 @@ OG_FRONTIER_LABELS = (
     "conditional escape",
     "prime-gap summation",
     "strict Mersenne tail",
-    "running-LCM structure",
+    "three-prime LCMs",
     "ray separation",
     "rational-base tail",
 )
 OG_IMAGE_ALT = (
     "Eight open Erdős problems: factorial denominators, reciprocal tails, "
-    "binary totient, prime-gap dyadics, Mersenne supports, running LCMs, "
+    "binary totient, prime-gap dyadics, Mersenne supports, three-prime LCMs, "
     "lemniscate paths, and rational Lambert. All eight remain open."
 )
 UNFURL_DESCRIPTION = (
     "Eight open Erdős problems: factorial denominators; reciprocal tails; "
-    "binary totient; prime-gap dyadics; Mersenne supports; running LCMs; "
+    "binary totient; prime-gap dyadics; Mersenne supports; three-prime LCMs; "
     "lemniscate paths; rational Lambert. All remain open."
 )
 FRONTIER_SHEET_ANCHORS = {
