@@ -398,6 +398,40 @@
       color: var(--faint);
     }
 
+    /* The mathematical route needs an actual programme map before it asks a
+       reader to choose a paper, a repository, or a proof checker. Each row is
+       deliberately one checked handle plus the unresolved obligation it does
+       not discharge. Two compact columns make all eight programmes visible on
+       a wide screen without turning the root front door into a second paper
+       catalogue; the narrow view returns to a single, readable sequence. */
+    .frontier {
+      grid-column: 2;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .44rem .95rem;
+      margin: .62rem 0 0;
+      padding: .62rem 0;
+      border-top: 1px solid var(--hair);
+      border-bottom: 1px solid var(--hair);
+      font-size: .82rem;
+      line-height: 1.45;
+      color: var(--faint);
+    }
+    .frontier p { margin: 0; }
+    .frontier a { --to: var(--to-repo); --to-lit: var(--to-repo-lit); }
+    .frontier a {
+      color: var(--to);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-decoration-color: color-mix(in srgb, var(--to) 30%, transparent);
+      text-underline-offset: .2em;
+    }
+    .frontier a:hover, .frontier a:focus-visible {
+      color: var(--to-lit);
+      text-decoration-color: var(--to-lit);
+    }
+    @media (max-width: 34rem) { .frontier { grid-template-columns: 1fr; } }
+
     .exits {
       margin: .34rem 0 0;
       font-family: var(--font-sans);
@@ -1514,16 +1548,24 @@
           </li>
           <li data-dest-default="lean-github">
             <p class="kind">Check</p>
-            <!-- The Lean repository is the mathematical authority. Keep this row
-                 count-free so a publication refresh cannot leave the host front
-                 door claiming a scope the linked release no longer states. The
-                 three examples make the mathematical first contact concrete,
-                 but each carries its non-solution boundary with it. Their links
-                 use the published convergence snapshot rather than a floating
-                 branch: this is a reading and verification route, not a new
-                 release claim. -->
+            <!-- The Lean repository is the mathematical authority. Its first
+                 contact is the full programme map: one cleared handle and one
+                 unresolved obligation for each of the eight open problems.
+                 The links use the published convergence snapshot rather than a
+                 floating branch: this is a reading and verification route, not
+                 a new release, peer-review, or novelty claim. -->
             <p class="name"><a data-to="repo" data-dest="lean-github" href="https://github.com/wcook04/plectis-lean-erdos249-257">Lean corpus</a></p>
-            <p class="desc"><a class="term" data-term="machine-checked" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-machine-checked">Machine-checked</a> mathematics on <a class="term" data-term="open-problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">open</a> Erd&#337;s problems. Start with <a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-249">#249&rsquo;s exact finite-level rank</a> (not irrationality), <a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-257">#257&rsquo;s formalised full-support theorem</a> (not every infinite support), or <a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-1049">#1049&rsquo;s construction-specific no-go</a> (not an irrationality proof).</p>
+            <p class="desc"><a class="term" data-term="machine-checked" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-machine-checked">Machine-checked</a> mathematics on eight <a class="term" data-term="open-problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">open</a> Erd&#337;s problems. Each frontier below names one cleared statement and the exact step that remains open; none is a solution claim.</p>
+            <div class="frontier" role="list" aria-label="One checked frontier and one open boundary for each public Erdős problem">
+              <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-68">#68</a> exact cofinal-divisibility equivalence; cofinal failures remain unproved.</p>
+              <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-243">#243</a> exact tail-state defect identity; the unrestricted case remains open.</p>
+              <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-249">#249</a> finite-level dyadic rank; irrationality remains open.</p>
+              <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-251">#251</a> integral-shift tail criterion; the prime-tail bridge remains open.</p>
+              <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-257">#257</a> formalised full-support theorem; arbitrary infinite supports remain open.</p>
+              <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-269">#269</a> three-prime running-LCM structure; the carry bridge remains open.</p>
+              <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-1041">#1041</a> ray-separation obstruction; global topology and metric gluing remain open.</p>
+              <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-1049">#1049</a> a construction-specific no-go at 3/2; irrationality remains open.</p>
+            </div>
             <p class="exits">
               <a data-to="repo" data-dest="lean-github" aria-label="GitHub: the Lean corpus repository" href="https://github.com/wcook04/plectis-lean-erdos249-257">GitHub</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Check one Lean corpus claim without a Lean build" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/README.md#read-or-run-it">Check one claim</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read the eight-problem checked frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md">Eight-problem frontier</a>
             </p>
