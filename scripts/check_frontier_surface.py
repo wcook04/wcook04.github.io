@@ -178,8 +178,8 @@ def main() -> int:
         "public contact exit missing",
     )
     require(
-        f'<a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/CITATION.cff">Cite the corpus</a>' in text,
-        "public citation exit missing",
+        f'<a data-to="repo" aria-label="Citation metadata for the reviewed-core release; portfolio-wide citation metadata is pending" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/CITATION.cff">Citation metadata</a>' in text,
+        "public citation route no longer discloses its reviewed-core boundary",
     )
     require('frame.setAttribute("data-view", view);' in text, "destination frame no longer switches its view")
     require('if (view === "problem") frame.setAttribute("data-problem", d.problem);' in text, "destination frame no longer selects a portrait sheet")
