@@ -208,6 +208,24 @@
       position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
       overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
     }
+    .skip-frontier {
+      position: fixed;
+      z-index: 20;
+      top: .7rem;
+      left: .8rem;
+      padding: .45rem .65rem;
+      border: 1px solid var(--accent-bright);
+      background: var(--page);
+      color: var(--bone);
+      font-family: var(--font-sans);
+      font-size: .78rem;
+      line-height: 1.2;
+      text-decoration: none;
+      transform: translateY(-180%);
+      transition: transform var(--t-response) ease-out;
+    }
+    .skip-frontier:focus { transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) { .skip-frontier { transition: none; } }
 
     /* The clip belongs to the poster state, where the plate is a full-width
        block that would otherwise push a scrollbar. It must NOT apply to the
@@ -1653,6 +1671,7 @@
   </style>
 </head>
 <body>
+  <a class="skip-frontier" href="#eight-problem-frontier">Skip to eight-problem frontier</a>
   <!-- Two layers of one ramp. The second is the read part, clipped to nothing
        until the runtime says otherwise. Decorative throughout: it carries no
        information the page does not also say in words. -->
@@ -1909,7 +1928,7 @@
       <!-- The three scene owners. data-scene-key is read by the runtime at the
            foot of the page and by nothing else; the sections are what they were
            without it. -->
-      <nav aria-label="Public routes" data-scene-key="opening">
+      <nav id="eight-problem-frontier" tabindex="-1" aria-label="Public routes" data-scene-key="opening">
         <h2 class="sr-only">Public routes</h2>
         <ul class="routes">
           <li data-dest-default="math-frontier">

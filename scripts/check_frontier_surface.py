@@ -139,6 +139,14 @@ def main() -> int:
     require('<template id="archived-plate">' in text, "archived plate regained a live delivery path")
     require("Eight formally checked frontiers" in text, "opening lost the frontier")
     require("one for each problem in the current public cohort" in text, "opening lost the all-problem cohort framing")
+    require(
+        '<a class="skip-frontier" href="#eight-problem-frontier">Skip to eight-problem frontier</a>' in text,
+        "keyboard route no longer skips directly to the eight-problem frontier",
+    )
+    require(
+        '<nav id="eight-problem-frontier" tabindex="-1" aria-label="Public routes"' in text,
+        "skip-frontier target is missing",
+    )
     require("all eight remain open" in text, "desktop frontier plate lost its explicit open-problem boundary")
     require("Hover or focus a number for its question, cleared frontier, and exact open boundary." in text, "desktop portrait cue missing")
     require("Open a number for its question, checked frontier, and remaining boundary." in text, "narrow-screen frontier route missing")
