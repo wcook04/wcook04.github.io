@@ -95,6 +95,21 @@ ROUTES = (
         "around eight Erdős problems (#68, #243, #249, #251, #257, #269, #1041, #1049)",
     ),
     ("updates route", "https://wcook04.github.io/plectis/docs/updates.html", "Follow updates"),
+    (
+        "full AI review packet",
+        "https://wcook04.github.io/plectis/plectis-ai-review-packet.json",
+        ("microcosm_ai_review_packet", "Plectis AI review packet"),
+    ),
+    (
+        "AI reader digest",
+        "https://wcook04.github.io/plectis/plectis-ai-reader-digest.json",
+        ("public_site_json_map_packet", "cold-reader verification budgeting"),
+    ),
+    (
+        "AI reviewer brief",
+        "https://wcook04.github.io/plectis/plectis-reviewer-brief.json",
+        ("plectis_reviewer_decision_brief", "Projection only."),
+    ),
 )
 
 
