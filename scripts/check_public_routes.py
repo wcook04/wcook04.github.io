@@ -35,6 +35,16 @@ PAPER_CATALOGUE_MARKERS = (
     "Erdős #1041",
     "Erdős #1049",
 )
+PAPER_PDF_LINKS = (
+    "https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf",
+    "https://wcook04.github.io/plectis/papers/erdos-243-reciprocal-tail-rigidity.pdf",
+    "https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf",
+    "https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf",
+    "https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf",
+    "https://wcook04.github.io/plectis/papers/erdos-269-three-prime-running-lcm.pdf",
+    "https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf",
+    "https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf",
+)
 ROUTES = (
     ("Plectis public site", "https://wcook04.github.io/plectis/", None),
     (
@@ -45,7 +55,7 @@ ROUTES = (
     (
         "13-paper catalogue",
         "https://wcook04.github.io/plectis/docs/papers.html",
-        ("The 13 papers",) + PAPER_CATALOGUE_MARKERS,
+        ("The 13 papers",) + PAPER_CATALOGUE_MARKERS + PAPER_PDF_LINKS,
     ),
     ("pinned Lean snapshot", f"https://github.com/wcook04/plectis-lean-erdos249-257/tree/{SNAPSHOT}", None),
     (
