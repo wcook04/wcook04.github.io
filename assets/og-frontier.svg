@@ -45,10 +45,10 @@
       <text x="0" y="339">1041</text><text x="234" y="339">1049</text>
     </g>
     <g fill="#c8bcb2" font-size="15" letter-spacing=".4">
-      <text x="55" y="75">frontier recorded</text><text x="288" y="75">frontier recorded</text>
-      <text x="55" y="163">frontier recorded</text><text x="288" y="163">frontier recorded</text>
-      <text x="55" y="251">frontier recorded</text><text x="288" y="251">frontier recorded</text>
-      <text x="65" y="339">frontier recorded</text><text x="299" y="339">frontier recorded</text>
+      <text x="55" y="75">factorial denominators</text><text x="288" y="75">reciprocal tails</text>
+      <text x="55" y="163">binary totient</text><text x="288" y="163">prime-gap dyadics</text>
+      <text x="55" y="251">Mersenne supports</text><text x="288" y="251">running LCMs</text>
+      <text x="65" y="339">lemniscate paths</text><text x="299" y="339">rational Lambert</text>
     </g>
   </g>
   <g font-family="Arial, Helvetica, sans-serif" fill="#c8bcb2">

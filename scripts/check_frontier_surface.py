@@ -15,6 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
+OG_FRONTIER = ROOT / "assets" / "og-frontier.svg"
 SNAPSHOT = "11a318711096671ce1c00257a55fe5d7b9963864"
 PROBLEMS = ("68", "243", "249", "251", "257", "269", "1041", "1049")
 FRONTIER_LABELS = {
@@ -37,6 +38,16 @@ PROBLEM_TOPICS = {
     "1041": "Short lemniscate connections.",
     "1049": "Lambert series at rational bases.",
 }
+OG_PROGRAMME_SUBJECTS = (
+    "factorial denominators",
+    "reciprocal tails",
+    "binary totient",
+    "prime-gap dyadics",
+    "Mersenne supports",
+    "running LCMs",
+    "lemniscate paths",
+    "rational Lambert",
+)
 FRONTIER_SHEET_ANCHORS = {
     "68": (
         "ErdosProblems.Erdos68.irrational_factorialGapSeries_iff_cofinal_strictFacTopRat_misses",
@@ -97,6 +108,7 @@ def frontier_plate(text: str) -> str:
 
 def main() -> int:
     text = INDEX.read_text(encoding="utf-8")
+    og_frontier = OG_FRONTIER.read_text(encoding="utf-8")
     plate = frontier_plate(text)
     require("<h1>Eight open<br>Erd&#337;s problems</h1>" in text, "masthead no longer leads with the mathematical programme")
     require("Will Cook &middot; checkable frontier" in text, "masthead lost authorship")
@@ -119,6 +131,9 @@ def main() -> int:
     require('frame.setAttribute("data-view", view);' in text, "destination frame no longer switches its view")
     require('if (view === "problem") frame.setAttribute("data-problem", d.problem);' in text, "destination frame no longer selects a portrait sheet")
     require('document.addEventListener("focusin", function (ev) {' in text, "frontier sheets no longer have a keyboard route")
+    require("ALL EIGHT REMAIN OPEN" in og_frontier, "share card lost the open-problem boundary")
+    for subject in OG_PROGRAMME_SUBJECTS:
+        require(subject in og_frontier, f"share card no longer names {subject}")
 
     lean_links = re.findall(
         r'https://github\.com/wcook04/plectis-lean-erdos249-257/(?:tree|blob)/[^"\s<]+',
