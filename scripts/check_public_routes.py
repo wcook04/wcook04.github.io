@@ -8,6 +8,8 @@ that local root edits have been deployed.
 
 from __future__ import annotations
 
+from html import unescape
+import re
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
@@ -23,9 +25,23 @@ PROGRAMME_MARKERS = (
     "#1041 — Short connections inside polynomial lemniscates",
     "#1049 — Lambert-type series at rational bases",
 )
+PAPER_CATALOGUE_MARKERS = (
+    "Erdős #68",
+    "Erdős #243",
+    "Erdős #249",
+    "Erdős #251",
+    "Erdős #257",
+    "Erdős #269",
+    "Erdős #1041",
+    "Erdős #1049",
+)
 ROUTES = (
     ("Plectis public site", "https://wcook04.github.io/plectis/", None),
-    ("13-paper catalogue", "https://wcook04.github.io/plectis/docs/papers.html", "The 13 papers"),
+    (
+        "13-paper catalogue",
+        "https://wcook04.github.io/plectis/docs/papers.html",
+        ("The 13 papers",) + PAPER_CATALOGUE_MARKERS,
+    ),
     ("pinned Lean snapshot", f"https://github.com/wcook04/plectis-lean-erdos249-257/tree/{SNAPSHOT}", None),
     ("eight-problem verification packet", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md", PROGRAMME_MARKERS),
     ("Comparator appendix", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix", "comparator-interface-appendix"),
@@ -41,6 +57,11 @@ def fetch(url: str) -> tuple[int, str]:
         return response.status, response.read().decode("utf-8", errors="replace")
 
 
+def visible_text(body: str) -> str:
+    """Give text markers a stable surface across harmless HTML wrappers."""
+    return re.sub(r"\s+", " ", unescape(re.sub(r"<[^>]+>", " ", body)))
+
+
 def main() -> int:
     failures: list[str] = []
     for label, url, expected_text in ROUTES:
@@ -53,7 +74,8 @@ def main() -> int:
             failures.append(f"{label}: HTTP {code}")
         elif expected_text:
             markers = (expected_text,) if isinstance(expected_text, str) else expected_text
-            missing = [marker for marker in markers if marker not in body]
+            text = visible_text(body)
+            missing = [marker for marker in markers if marker not in text]
             if missing:
                 failures.append(f"{label}: expected public marker missing: {missing[0]}")
 
