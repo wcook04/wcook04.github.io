@@ -6,7 +6,7 @@
     "posture": "committed snapshot of internal review triage, not external significance or acceptance authority"
   },
   "public_source_commit": "c10393a7420adc1ac3f9097df4c940e02047218d",
-  "thesis": "These are the ones I would put in front of a mathematician first. Each either turns a hard question into a sharper one, or pins down exactly what is left to prove. Hover one to see the problem it belongs to, what has been checked, and what is still open.",
+  "thesis": "Five results to inspect first. Hover or focus one for the question, the evidence and the part that remains open.",
   "selection_note": "Each one links to source you can read for yourself. The #1041 result is an ordinary written proof, not checked by Lean and not peer reviewed. This is me choosing what to show you first, not peer review, community acceptance, priority or a claim of canonical status.",
   "tao_pipeline_receipt": {
     "input_stage": "verified and internally adjudicated programme objects",

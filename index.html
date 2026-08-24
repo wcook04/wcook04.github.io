@@ -361,8 +361,8 @@
     .intro b { font-weight: 600; color: var(--bone); }
 
     .absolute-frontier {
-      margin: 2rem 0 0;
-      padding: 1rem 0 .2rem;
+      margin: 1.65rem 0 0;
+      padding: .85rem 0 .2rem;
       border-top: 1px solid var(--hair-strong);
     }
     .absolute-frontier__eyebrow {
@@ -380,46 +380,34 @@
       line-height: 1.1;
     }
     .absolute-frontier__thesis {
-      margin: .55rem 0 .75rem;
-      max-width: 30rem;
+      margin: .4rem 0 .58rem;
+      max-width: 36rem;
       color: var(--bone-soft);
       font-size: .95rem;
       line-height: 1.5;
     }
     .flagships {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: 1fr;
       border-top: 1px solid var(--hair);
       border-bottom: 1px solid var(--hair);
     }
     .flagship {
       position: relative;
       min-width: 0;
-      padding: .68rem .8rem .72rem 0;
+      display: grid;
+      grid-template-columns: 8.5rem minmax(0, 1fr);
+      align-items: baseline;
+      gap: .7rem;
+      padding: .48rem 0 .5rem;
       border-bottom: 1px solid var(--hair);
       outline: none;
     }
-    .flagship:nth-child(odd) { padding-right: 1rem; }
-    .flagship:nth-child(even) { padding-left: 1rem; border-left: 1px solid var(--hair); }
-    .flagship:nth-last-child(-n + 2) { border-bottom: 0; }
-    .flagship:last-child:nth-child(odd) {
-      grid-column: 1 / -1;
-      padding-right: 0;
-      display: grid;
-      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
-      column-gap: 1.25rem;
-    }
-    .flagship:last-child:nth-child(odd) .flagship__line,
-    .flagship:last-child:nth-child(odd) h3 { grid-column: 1; }
-    .flagship:last-child:nth-child(odd) .flagship__why {
-      grid-column: 2;
-      grid-row: 1 / span 2;
-      align-self: center;
-    }
+    .flagship:last-child { border-bottom: 0; }
     .flagship__line {
       display: flex;
       gap: .45rem;
-      margin: 0 0 .2rem;
+      margin: 0;
       font-family: var(--font-sans);
       font-size: .64rem;
       letter-spacing: .08em;
@@ -427,15 +415,9 @@
     }
     .flagship__number { color: var(--to-repo); font-weight: 700; }
     .flagship__kind { color: var(--faint); }
-    .flagship h3 { margin: 0; font-size: .96rem; line-height: 1.2; }
+    .flagship h3 { margin: 0; font-size: 1rem; line-height: 1.18; }
     .flagship h3 a { color: var(--bone); text-decoration-color: transparent; }
     .flagship h3 a:hover, .flagship h3 a:focus-visible { color: var(--to-repo-lit); }
-    .flagship__why {
-      margin: .25rem 0 0;
-      font-size: .75rem;
-      line-height: 1.35;
-      color: var(--faint);
-    }
     /* No card hangs off these. A flagship raises the destination window, which
        is the one instrument on this page that answers "what is this problem",
        and it is already standing to the right of the column when the reader
@@ -445,11 +427,7 @@
        article carries data-dest and the runtime does the rest. */
     .absolute-frontier__note { margin: .48rem 0 0; font-size: .65rem; line-height: 1.4; color: var(--faint); }
     @media (max-width: 34rem) {
-      .flagships { grid-template-columns: 1fr; }
-      .flagship:nth-child(even) { padding-left: 0; border-left: 0; }
-      .flagship:nth-last-child(-n + 2) { border-bottom: 1px solid var(--hair); }
-      .flagship:last-child { border-bottom: 0; }
-      .flagship:last-child:nth-child(odd) { display: block; }
+      .flagship { grid-template-columns: 1fr; gap: .16rem; }
     }
 
     /* The route index, in the register of the Plectis right-hand rail:
@@ -2494,32 +2472,27 @@
       <section class="absolute-frontier" aria-labelledby="absolute-frontier-title">
         <p class="absolute-frontier__eyebrow">Start here</p>
         <h2 id="absolute-frontier-title">The results worth reading first</h2>
-        <p class="absolute-frontier__thesis">These are the ones I would put in front of a mathematician first. Each either turns a hard question into a sharper one, or pins down exactly what is left to prove. Hover one to see the problem it belongs to, what has been checked, and what is still open.</p>
+        <p class="absolute-frontier__thesis">Five results to inspect first. Hover or focus one for the question, the evidence and the part that remains open.</p>
         <div class="flagships">
           <article class="flagship" tabindex="0" data-dest="problem-68">
             <p class="flagship__line"><span class="flagship__number">#68</span><span class="flagship__kind">Exact endpoint</span></p>
             <h3><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/docs/EXTERNAL_VERIFICATION.md#programme-68">Irrationality becomes one cofinal divisibility question</a></h3>
-            <p class="flagship__why">The original series problem is reduced without loss to an integer event that can be attacked directly.</p>
           </article>
           <article class="flagship" tabindex="0" data-dest="problem-249">
             <p class="flagship__line"><span class="flagship__number">#249</span><span class="flagship__kind">Canonical reduction</span></p>
             <h3><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/docs/EXTERNAL_VERIFICATION.md#programme-249">One universal Mersenne residue gap is the exact frontier</a></h3>
-            <p class="flagship__why">Several competing attack languages collapse to one forced basepoint modular supply with the full quantifier order visible.</p>
           </article>
           <article class="flagship" tabindex="0" data-dest="problem-251">
             <p class="flagship__line"><span class="flagship__number">#251</span><span class="flagship__kind">Coordinate change</span></p>
             <h3><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/docs/EXTERNAL_VERIFICATION.md#programme-251">The prime series is exactly a weighted gap tail</a></h3>
-            <p class="flagship__why">Summation by parts keeps the endpoint and identifies the actual infinite obstruction, instead of treating prime irregularity as evidence by itself.</p>
           </article>
           <article class="flagship" tabindex="0" data-dest="problem-257">
             <p class="flagship__line"><span class="flagship__number">#257</span><span class="flagship__kind">Canonical normal form</span></p>
             <h3><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/docs/EXTERNAL_VERIFICATION.md#programme-257">Rational membership means actual skips forever</a></h3>
-            <p class="flagship__why">A set existence question becomes a statement about one canonical greedy orbit, with no freedom to choose a convenient support.</p>
           </article>
           <article class="flagship" tabindex="0" data-dest="problem-1041">
             <p class="flagship__line"><span class="flagship__number">#1041</span><span class="flagship__kind">All degree partial theorem</span></p>
             <h3><a href="https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf">A constant factor path exists in every degree</a></h3>
-            <p class="flagship__why">The unrestricted geometry has an absolute all degree bound, while the critical level singularity becomes the precise obstruction to the sharp target.</p>
           </article>
         </div>
         <p class="absolute-frontier__note">Each one links to source you can read for yourself. The #1041 result is an ordinary written proof, not checked by Lean and not peer reviewed. This is me choosing what to show you first, not peer review, community acceptance, priority or a claim of canonical status.</p>

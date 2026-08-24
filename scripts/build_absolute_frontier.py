@@ -44,7 +44,6 @@ def render(payload: dict) -> str:
             f'''          <article class="flagship" tabindex="0" data-dest="problem-{esc(row["problem"])}">
             <p class="flagship__line"><span class="flagship__number">#{esc(row["problem"])}</span><span class="flagship__kind">{esc(row["kind"])}</span></p>
             <h3><a href="{esc(row["href"])}">{esc(row["title"])}</a></h3>
-            <p class="flagship__why">{esc(row["why"])}</p>
           </article>'''
         )
     return f'''{BEGIN}
