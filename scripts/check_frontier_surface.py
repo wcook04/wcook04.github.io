@@ -135,6 +135,8 @@ def main() -> int:
     require("Open a number for its question and evidence record." in text, "narrow-screen frontier route missing")
     require("none is a solution claim" in text, "open-problem boundary missing")
     require("not human mathematical peer review" in text, "review boundary missing")
+    require("Plectis is the public site for the private work system behind it." in text, "public/private hierarchy missing from the opening")
+    require("The public site for the private work system:" in text, "Plectis route no longer distinguishes public site from private system")
     require("Comparator rechecks selected propositions" in text, "Comparator scope missing")
     require("it does not assess papers, citations, intended meaning, novelty or significance" in text, "Comparator limit missing")
     require("not universal #257" in text, "representative-check boundary missing")
