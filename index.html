@@ -70,8 +70,8 @@
        readable; the plate supplies the atmosphere it is being read inside. */
     :root {
       /* Nocturnal in both schemes, so say so: this makes the user agent paint
-         its own furniture — scrollbars, overscroll, the canvas behind the
-         page — dark to match, instead of framing a dark page in light chrome. */
+         its own furniture: scrollbars, overscroll and the canvas behind the
+         page, dark to match, instead of framing a dark page in light chrome. */
       color-scheme: dark;
 
       --page: #171020;
@@ -152,7 +152,7 @@
        device, so its weight and its ramp are both taken from that sheet's
        --thread rather than restated here: two pixels, warm mass left of
        centre, a single magenta flare right of it, navy cooling at both ends.
-       The asymmetry is the point — it must not read as an ordered spectrum,
+       The asymmetry is the point; it must not read as an ordered spectrum,
        which the seven-stop version this replaces did, with its amber peak
        sitting exactly at the midpoint. The alpha is that sheet's dark-scheme
        value, since this page is nocturnal in every scheme. The height is a
@@ -166,7 +166,7 @@
        gradient across the SAME width and is revealed by a clip, so a colour
        sits at the same x at every scroll position. Scaling a gradient to the
        read length would squeeze all nine stops into the lit part and turn the
-       device into a compressed rainbow that slides as you scroll — which is
+       device into a compressed rainbow that slides as you scroll, which is
        precisely the ordered-spectrum reading the asymmetry above exists to
        prevent. Light the ramp; do not resize it.
 
@@ -264,7 +264,7 @@
       object-fit: cover;
       /* The mass occupies 50%–84% of the plate's width. In the poster state a
          phone sees only the middle 56% of the picture, so a crop centred at
-         52% — which is what 55% resolves to once cover has scaled the file —
+         52%, which is what 55% resolves to once cover has scaled the file,
          put the body just off the right edge and opened the page with four
          hundred pixels of near-black. Centring the window at 62% instead lands
          the membrane and the lit flank inside it at every phone width. */
@@ -281,7 +281,7 @@
       padding: 0 clamp(1.4rem, 4.5vw, 4.5rem) clamp(2.4rem, 6svh, 4.2rem);
     }
 
-    /* Transitions only. There are no @keyframes on this page — but the reason
+    /* Transitions only. There are no @keyframes on this page, but the reason
        is no longer the one that used to be written here, and the difference
        matters to whoever reads this next.
 
@@ -304,7 +304,7 @@
        missing, and the keyframe runs did not do that once.
 
        So keyframes are safe here. The page still carries none, because nothing
-       it does needs one — the scene changes and the reading progress below are
+       it does needs one; the scene changes and the reading progress below are
        both driven from state the runtime already has, and a transition
        expresses them exactly. Held by measurement now, not by superstition.
        If a later pass wants an animation, it may have one; re-run that cold
@@ -314,7 +314,7 @@
        have to agree across the breakpoint they share. At 3.1rem they did not,
        and the name shrank as the window got wider: 54.4px at 760px, 49.6px at
        761px, and flat until 855px. At 3.4rem the scale is continuous and never
-       runs backwards — fluid to 760, held to 938, fluid again. */
+       runs backwards: fluid to 760, held to 938, fluid again. */
     h1 {
       margin: 0;
       font-family: var(--font-serif);
@@ -349,7 +349,7 @@
       border-top: 1px solid var(--hair-strong);
     }
     /* The index sits at the foot of the column wherever the column is taller
-       than what fills it — the side-by-side state below. The auto margin has
+       than what fills it, the side-by-side state below. The auto margin has
        to sit on the flex item, which is the nav, not on the list inside it:
        on the list it is a block margin in normal flow, so it resolved to zero
        and took the list's own top margin down with it. The visible symptom was
@@ -357,7 +357,7 @@
     .col > nav { margin-top: auto; }
     .routes li {
       display: grid;
-      /* The kind column holds one short uppercase word — "Watch" is the widest
+      /* The kind column holds one short uppercase word. "Watch" is the widest
          at 55px. Five rem reserved 80px of it at 375px, where the name column
          has only 236px and the four video exits need 247. Letting it shrink to
          four rem below ~570px returns those pixels to the exits and keeps that
@@ -378,7 +378,7 @@
 
        :focus-within is the same sentence said to the keyboard. Without it the
        row acknowledged a pointer and ignored a tab key, which is the one
-       reader who most needs telling where they are — measured before adding
+       reader who most needs telling where they are. Measured before adding
        it: tabbing onto "Plectis website" left the row's border at its resting
        rgba(242,230,212,.16), exactly as if nothing were focused. */
     /* Positioned so the wide state can hang the filament that reaches from
@@ -405,7 +405,7 @@
     .name { margin: 0; font-size: 1.3rem; font-weight: 600; line-height: 1.3; }
 
     /* One line saying what the row actually gets you. It is the same grammar
-       the Plectis hero's right-hand rail uses — a role, a name, a sentence —
+       the Plectis hero's right-hand rail uses: a role, a name and a sentence.
        so the two pages read as one object seen at two scales rather than two
        sites that happen to share a host. Deliberately free of counts: a
        publication refresh must never leave the host front door claiming a
@@ -556,14 +556,14 @@
 
     /* Every destination link, name or exit, takes its colour from one pair of
        custom properties. The kind sets the pair; nothing else touches colour.
-       That is what stops a kind being half-applied — you cannot give a link
+       That is what stops a kind being half-applied; you cannot give a link
        the gold and forget the glyph, because both hang off the same
        attribute. */
     .name a  { --to: var(--bone);    --to-lit: var(--accent); }
     .exits a { --to: var(--to-page); --to-lit: var(--to-page-lit); }
     /* Qualified by the two defaults above on purpose. A bare [data-to] selector
        is one specificity point short of `.name a`, so the kind silently lost
-       and every link stayed bone — the rule was in the file and did nothing. */
+       and every link stayed bone; the rule was in the file and did nothing. */
     .name a[data-to="repo"],  .exits a[data-to="repo"]  { --to: var(--to-repo);  --to-lit: var(--to-repo-lit); }
     .name a[data-to="video"], .exits a[data-to="video"] { --to: var(--to-video); --to-lit: var(--to-video-lit); }
 
@@ -585,7 +585,7 @@
       text-decoration-color: var(--to-lit);
     }
 
-    /* The outbound mark answers one question only — does this leave the host?
+    /* The outbound mark answers one question only: does this leave the host?
        It is generated rather than typed into the markup so it cannot drift out
        of step with the colour. Kept off the underline, and out of the
        accessibility tree, since the link text already names the destination. */
@@ -643,8 +643,8 @@
       position: relative;
     }
     /* The band you are in says so on its own rule, and nowhere else. A short
-       segment draws along the top border — the same 2.4rem the role line uses
-       under the name, so the mark introduces no new measurement — and the
+       segment draws along the top border, the same 2.4rem the role line uses
+       under the name, so the mark introduces no new measurement, and the
        eyebrow comes up from grey. The prose does not move, fade or blur. A
        reader mid-sentence must not be told anything by the sentence shifting. */
     .handoff::before, .note::before {
@@ -681,7 +681,7 @@
     }
 
     /* The one filled control on the page. Everything else here is a link on
-       plum, so inverting the ground is the whole emphasis — no accent, no
+       plum, so inverting the ground is the whole emphasis: no accent, no
        shadow, no scale. Bone on plum measures 11.4:1 read one way and is the
        same pair read the other. */
     .handoff__act {
@@ -728,7 +728,7 @@
       margin-left: .12em;
       /* Offset rather than transformed. A transform would need
          display: inline-block, and giving this span its own block box moves the
-         button's baseline — the label shifts to make room for a decoration.
+         button's baseline; the label shifts to make room for a decoration.
          Relative offset moves the painted glyphs and nothing else. */
       position: relative; top: 0; left: 0;
       transition: opacity var(--t-interaction) ease-out,
@@ -790,7 +790,7 @@
        Every anchor points at the real glossary entry, so the word works with
        no JavaScript at all: it is a link before it is a tooltip. The previews
        themselves are copied verbatim from that glossary rather than rewritten
-       here — see the note over TERMS below for why they are copied and not
+       here; see the note over TERMS below for why they are copied and not
        fetched, and what to do when one changes. */
     a.term {
       color: inherit;
@@ -941,7 +941,7 @@
        it: a still of the real landing, captured from the live URL, under the
        row on a phone and in the plate's frame beside the column on a desktop.
 
-       One idiom serves both, and it is a window rather than a card — a
+       One idiom serves both, and it is a window rather than a card: a
        hairline frame, a slim bar carrying the destination address or pinned
        source handle, the picture under it. The bar is the part that does the
        work. A picture says "a page"; only the label says WHICH page or source
@@ -954,7 +954,7 @@
        word that raised it and carries the same outbound mark; a frame that
        stays on this host carries neither.
 
-       The picture rests a shade under full — dimmed, slightly desaturated —
+       The picture rests a shade under full, dimmed and slightly desaturated,
        so a screenshot of another site cannot out-shout the page it is sitting
        on, and comes up to its own colours under the pointer. */
     .shot {
@@ -1023,7 +1023,7 @@
     }
     .shot:hover .shot__img, .shot:focus-visible .shot__img { filter: none; }
     /* A YouTube still is 16:9 and this frame is 16:10, so covering it shaves a
-       slice off both sides — enough to cut the first letter off the title
+       slice off both sides, enough to cut the first letter off the title
        burnt into the frame. Letterboxing is both the honest fit and the one a
        reader already associates with video, and it keeps the window a fixed
        size across every kind, which is the whole reason the stage is fixed. */
@@ -1040,7 +1040,7 @@
        same build.
 
        Drawn, not captured, and every line in it was read out of the live files
-       before it was written here — the band names are real key groups, the
+       before it was written here; the band names are real key groups, the
        brief really is copied word for word (its own `authority` field says the
        packet wins where they disagree), and the digest really does omit the
        bodies and carry a pointer back. What is deliberately NOT here is
@@ -1374,7 +1374,7 @@
        the obvious way to hold a picture still and it does not paint at all on
        first load in this engine: the image lays out, reports correct position,
        size, opacity and a decoded source, and is simply never drawn until some
-       repaint — a hover, a resize, one stray style write — reveals it. It
+       repaint: a hover, a resize, one stray style write, reveals it. It
        cannot be caught by measurement, and going to inspect it is itself
        enough to fix it, so it ships broken and looks fine to whoever checks.
        `background-attachment: fixed` paints but repaints the whole viewport on
@@ -1403,7 +1403,7 @@
         align-self: start;
         z-index: 0;
         /* The frame the plate is reframed inside. overflow on an ANCESTOR of a
-           sticky box is the bug documented above — it makes that ancestor the
+           sticky box is the bug documented above; it makes that ancestor the
            scroll container and the sticky box rides away. This is overflow on
            the sticky box ITSELF, which clips its own children and leaves its
            own stickiness alone. Verified at 1600, 1440, 1280: the plate's top
@@ -1425,7 +1425,7 @@
            screen leaves a reader scrolling text across wallpaper: by the time
            the page is talking about who wrote it, the picture is still saying
            exactly what it said over the route index. Measured before changing
-           it — the composited ground behind the prose was the same pixel,
+           it; the composited ground behind the prose was the same pixel,
            (46,32,40), at every scroll depth on the page.
 
            So the plate is over-scaled ONCE, and then pans as you scroll. The
@@ -1433,7 +1433,7 @@
            easy to get wrong: an earlier version ran the scale itself from the
            scroll position, growing the picture from 1.02 to 1.26 on the way
            down, and a zoom that changes continuously under a reader is a dolly
-           — the frame is rescaling around them the entire time they are trying
+           the frame is rescaling around them the entire time they are trying
            to read, and it is genuinely unpleasant. Scale is set once and never
            touched again. Only the vertical offset moves.
 
@@ -1459,7 +1459,7 @@
            file to the box with about a pixel to spare, so every percent of
            travel has to be bought with scale first: at a 52% vertical origin,
            1.18 buys 9.4% of margin above and 8.6% below, against a 7% swing
-           either way. It also happens to be free — 1.18 of a 1600px box is
+           either way. It also happens to be free: 1.18 of a 1600px box is
            1888px drawn from the 1920 rung, so the plate is very slightly
            downscaled rather than stretched. The check that no bare ground ever
            shows is done on PIXELS, not arithmetic: a script repaints the ground
@@ -1503,7 +1503,7 @@
       /* The window sits in the plate's frame, right of the type, and it is a
          SMALL object in a large picture on purpose. The plate is the page's
          own artwork; a screenshot pasted over it at full bleed does not
-         complement it, it deletes it — which is exactly what the first
+         complement it, it deletes it, which is exactly what the first
          version of this did, leaving the plate as a two-pixel border around
          somebody else's website. So the window takes about a third of the
          field, holds the centre of it, and floats on a short pour of the
@@ -1547,7 +1547,7 @@
 
          closest-side is load-bearing and was missing. A radial-gradient with
          no size keyword is farthest-CORNER, which puts 100% of the ramp at the
-         corner and therefore only 70.7% of it at the middle of each edge — so
+         corner and therefore only 70.7% of it at the middle of each edge, so
          a stop that ends at 78% has not finished when the box does, and the
          remaining ~13% of plum is cut off in a straight line across the plate.
          That is the seam: predicted at device row 1468 on a 1512x950 at 2x,
@@ -1592,7 +1592,7 @@
         pointer-events: none;
         /* Leaving is not a settle and must not borrow that curve. The scene
            easing spends most of its travel in its first third, which on the
-           way out reads as a snap rather than a withdrawal — measured at 0.18
+           way out reads as a snap rather than a withdrawal, measured at 0.18
            opacity and full scale 300ms in. So the exit runs the curve the
            other way round: it holds, and then it goes. */
         transition: opacity 520ms cubic-bezier(.5, 0, .75, .35) 120ms,
@@ -1653,7 +1653,7 @@
       .dest__frame[data-view="shot"] .shot__img.is-on { opacity: 1; }
       @media (prefers-reduced-motion: reduce) { .dest .shot__img { transition: none; } }
       /* Says what the frame does, once, and goes quiet the moment the reader
-         has made it move — which is the moment the sentence stops being true
+         has made it move, which is the moment the sentence stops being true
          of anything they still need to be told. */
       .dest__hint {
         margin: .8rem 0 0;
@@ -1695,8 +1695,8 @@
          downscales of it, same crop and same 16:10, so a phone fetches a
          phone-sized plate and a retina desktop still gets the full one.
          README.md has the commands. AVIF leads because smooth pigment is the
-         case it encodes best — 123 KB at 2560 against the JPEG's 247, with no
-         difference visible at 1:1 — and the JPEG srcset carries anything that
+         case it encodes best: 123 KB at 2560 against the JPEG's 247, with no
+         difference visible at 1:1, and the JPEG srcset carries anything that
          cannot read it, never serving more than the file it replaces. sizes is
          100vw in both layouts, the plate being full-width below 1280px and
          full-bleed above it; cover then magnifies the chosen file by about
@@ -1722,7 +1722,7 @@
 
          Hidden until a wide viewport and scripting; the plate remains the
          picture with either missing. That is also why the first still is
-         fetched by the script below rather than carried in the markup — a
+         fetched by the script below rather than carried in the markup; a
          phone would otherwise pay a hundred kilobytes for a picture it is
          never shown. Decorative to assistive tech: the links already name
          where they go. Recapture from the live URLs; never draw a frame. -->
@@ -1739,7 +1739,7 @@
                  bands are real key groups, the brief's own authority field
                  says it is copied verbatim and that the packet wins where they
                  disagree, and the digest's omitted_for_size names the bodies
-                 it drops. Deliberately count-free — see the note over
+                 it drops. Deliberately count-free; see the note over
                  .shot__map. Decorative: everything it says, the section beside
                  it says in prose. -->
             <span class="shot__map" aria-hidden="true">
@@ -1892,9 +1892,9 @@
            informative arrangement rather than an unfinished one.
 
            Run and check are house terms: each names a specific promise this
-           site makes and can fail to keep. Runnable is stricter than public —
+           site makes and can fail to keep. Runnable is stricter than public:
            the fixtures have to be committed, the dependencies declared, the
-           command written down — and check means a real command that tests one
+           command written down; check means a real command that tests one
            stated claim and leaves a record. A stranger who does not know that
            reads both words as ordinary English and misses what is being
            offered. Read and watch ARE ordinary English: you read a PDF, you
@@ -1904,8 +1904,8 @@
            Checked before wiring, against the live glossary rather than assumed:
            #glossary-runnable and #glossary-check resolve, #glossary-watch does
            not exist at all, and the entry behind #glossary-read is about
-           programs parsing files — "distinguish byte access, parsing, and
-           semantic understanding" — which is the wrong sense for a person
+           programs parsing files: "distinguish byte access, parsing, and
+           semantic understanding", which is the wrong sense for a person
            reading a paper. Marking those two would have been decoration
            pointing at a definition that did not fit, and in one case a link to
            an anchor that is not there. If watch is ever wanted here it needs an
@@ -2021,7 +2021,7 @@
       </nav>
 
       <!-- The fifth route, held back from the index above because it is not a
-           kind of thing to look at — it is a way of reading the other four. It
+           kind of thing to look at; it is a way of reading the other four. It
            gets the only filled control on the page, and that is the honest
            weighting: the reason most of this work has gone unread is that
            reading it properly costs hours, and this is the one route that does
@@ -2158,7 +2158,7 @@
 
        Everything here is an enhancement over a page that is already finished.
        With scripting off, no attribute is ever set, the plate holds its opening
-       frame, the thread is one ramp at .85, and the sections keep their rules —
+       frame, the thread is one ramp at .85, and the sections keep their rules:
        which is exactly the page as it was before any of this existed. Nothing
        is hidden waiting to be revealed, so nothing can fail to be revealed.
 
@@ -2179,7 +2179,7 @@
     // rather than at it, because the last section is short and the page ends
     // just after it: on a 1000px viewport, a line at 50% would leave the
     // closing note current for the final 140px of scroll, and at 55% it gets
-    // 245px — the difference between a state and a flicker.
+    // 245px: the difference between a state and a flicker.
     var scenes = [].slice.call(document.querySelectorAll("[data-scene-key]"));
     if (scenes.length) {
       var current = null;
@@ -2202,7 +2202,7 @@
       if ("IntersectionObserver" in window) {
         var io = new IntersectionObserver(function (entries) {
           // Between two sections there is a margin where nothing crosses the
-          // line. The scene is never cleared there — it simply stays where it
+          // line. The scene is never cleared there; it simply stays where it
           // was, which is what stops the boundary from flickering. When a
           // batch does contain more than one crossing, the later section in
           // document order wins, so the state can never run backwards inside a
@@ -2235,7 +2235,7 @@
     // root invalidates everything that could inherit it, which here is the
     // whole document. Same scroll, 61 frames, both ways: the recalculation
     // COUNT is identical either way at about 130, because a value still
-    // changes once a frame — what changes is how much each one costs, 83ms on
+    // changes once a frame; what changes is how much each one costs, 83ms on
     // the root against 15ms on .thread, where the only elements that inherit
     // it are .thread and the one span inside it. The clip reads it by
     // inheritance in both cases; nothing about the CSS changes.
@@ -2247,7 +2247,7 @@
     // a camera: at this page's length the steps are a few hundred pixels of
     // scroll apart, so either they are small enough to read as a flicker or
     // big enough to read as a lurch. Off a continuous reading position it is
-    // neither — it tracks, and it is still whenever the reader is.
+    // neither: it tracks, and it is still whenever the reader is.
     //
     // Only above the breakpoint. Below it the plate is a fixed block at the
     // head of the page and there is nothing to move it against.
@@ -2490,7 +2490,7 @@
 
     /* Pointing at a route is a matter of height, not of hitting the words.
        A row owns a band that runs the full width of the page, so anywhere
-       level with it counts — the gutter, the plate, the empty space beside
+       level with it counts: the gutter, the plate, the empty space beside
        the exits. Landing on an exit still wins, because "Docs" and "5 min"
        name destinations the row's own default does not.
 
@@ -2557,7 +2557,7 @@
        twitching, not a page answering. */
     /* Every band that can own the window, in document order: the four route
        rows, then the section about the packet. They are one list because they
-       are one device — a horizontal strip of the page that answers for a
+       are one device: a horizontal strip of the page that answers for a
        destination. */
     var rows = [].slice.call(document.querySelectorAll("[data-dest-default]"));
     function paintRow(id) {
@@ -2625,9 +2625,9 @@
          was being pointed at. Keyboard focus is a distinct ask: moving focus
          to a route may scroll it into view, and that scroll must not erase the
          very portrait sheet the focus just selected. Without this a pointer
-         left resting anywhere —
+         left resting anywhere:
          on a row, or on the window itself, which is large enough to be a
-         comfortable place to leave it — pinned the picture for the rest of
+         comfortable place to leave it, pinned the picture for the rest of
          the page and the reading line silently stopped working. */
       if (!routeFocusIsHeld()) release();
       if (!lastBand) return;

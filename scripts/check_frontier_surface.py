@@ -190,7 +190,7 @@ def main() -> int:
     require("function routeFocusIsHeld()" in text, "focus-held portrait route missing")
     require("if (!routeFocusIsHeld()) release();" in text, "focus-driven scroll can erase portrait route")
     require(
-        ".dest__frame[data-view=\"problem\"] .shot__frontier { opacity: 0; }" in text,
+        ".dest__frame[data-view=\"problem\"] .shot__frontier {\n      opacity: 0;\n      visibility: hidden;" in text,
         "selected portrait can bleed the eight-problem overview through its resting state",
     )
     require("ALL EIGHT REMAIN OPEN" in og_frontier, "share card lost the open-problem boundary")
