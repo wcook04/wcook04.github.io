@@ -38,6 +38,11 @@ def main() -> int:
     text = INDEX.read_text(encoding="utf-8")
     require("Eight open Erd&#337;s problems" in text, "masthead lost the programme")
     require(">Eight-problem frontier<" in text, "primary entry label lost the portfolio")
+    primary_route = (
+        "https://github.com/wcook04/plectis-lean-erdos249-257/"
+        f"blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md"
+    )
+    require(primary_route in text, "primary frontier entry no longer opens the programme map")
     require("main.fold > picture { display: none; }" in text, "decorative plate returned to the reading surface")
     require("Eight formally checked frontiers" in text, "opening lost the frontier")
     require("none is a solution claim" in text, "open-problem boundary missing")
