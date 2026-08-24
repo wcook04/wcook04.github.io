@@ -44,6 +44,7 @@ def main() -> int:
     )
     require(primary_route in text, "primary frontier entry no longer opens the programme map")
     require("main.fold > picture { display: none; }" in text, "decorative plate returned to the reading surface")
+    require("<picture hidden>" in text and 'loading="lazy"' in text, "archived plate regained eager delivery")
     require("Eight formally checked frontiers" in text, "opening lost the frontier")
     require("none is a solution claim" in text, "open-problem boundary missing")
     require("not human mathematical peer review" in text, "review boundary missing")

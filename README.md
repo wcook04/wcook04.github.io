@@ -51,7 +51,7 @@ anything, and the sitemap it declared had never been discovered by that route.
 | `robots.txt` | The host-root robots.txt. Declares the Plectis sitemap. |
 | `site.webmanifest` | Root-scoped manifest. |
 | `favicon.ico`, `assets/` | The Plectis mark and its rasters. |
-| `assets/plate-01*` | The plate behind the page, and its size ladder. |
+| `assets/plate-01*` | Archived artwork retained locally; it is not part of the reading surface. |
 | `assets/previews/` | Screenshots of each public destination, used as stills on the front door. |
 | `assets/og-frontier.svg` / `.png` | The claim-bounded eight-problem social preview and its PNG delivery file. |
 | `scripts/check_frontier_surface.py` | Static release guard for the all-eight programme map and immutable verification links. |
@@ -106,9 +106,9 @@ a word. The index now names the first row **Plectis website**, and each route
 carries a screenshot of the page that link actually opens.
 
 - Below 1280px, the still sits under the row it belongs to.
-- At 1280px and up, the stills take the plate's frame on the right. Hover or
-  focus a route (or an exit inside it) and the large still swaps to that
-  landing. The four small stills under it are the four rows.
+- At 1280px and up, the stills occupy a quiet panel on the right. Hover or
+  focus a route (or an exit inside it) and the panel swaps to that landing.
+  Hovering a problem number switches the panel to its 7:9 question sheet.
 
 The files in `assets/previews/` are captures of the live URLs, not drawings.
 If a destination page changes enough that the still lies, recapture it:
@@ -166,20 +166,15 @@ open Erdős problems**. If you change either return label, change the Plectis
 header, its colophon, and `PARENT_SITE_LABEL` in that site's builder in the same
 pass.
 
-## The plate
+## Archived plate
 
-`assets/plate-01.jpg` is the artwork behind the page: Wet Proof, plate 01, seed
-5 at 2560x1600, made by `assets/plate-01.lab.py` and then selected. It is the
-one thing here that is neither type nor mark, and it was also, for a while, the
-entire weight of the page — 247 KB against 18 KB of everything else. On a
-throttled phone the download alone accounted for 1.9s of a 2.6s paint, which
-put the front door outside the threshold the two pages it links to sit inside.
+`assets/plate-01.jpg` is former artwork: Wet Proof, plate 01, seed 5 at
+2560x1600, made by `assets/plate-01.lab.py`. It is retained for provenance,
+not shown on the root front door, and no longer receives priority loading. The
+programme index and portrait problem sheets now carry the visual hierarchy.
 
-So the plate is now served as a size ladder. Every file in it is a plain
-downscale of `plate-01.jpg` — same seed, same crop, same 16:10. **None of them
-is a fresh render.** If the plate itself ever changes, re-run the lab to make a
-new `plate-01.jpg` and then rebuild the ladder from it; do not re-run the lab
-per size, because a different render is a different picture.
+The ladder below is archival source material. Do not restore it to the reading
+surface as incidental polish: decoration must not compete with the programme.
 
 ```sh
 # JPEG rungs. sips ships with macOS and writes progressive JPEG by default,
@@ -219,17 +214,9 @@ measurably worse at the same size, and the browsers that read WebP but not AVIF
 are a narrow band that the JPEG already serves correctly. Two formats is the
 most this page should carry.
 
-The markup is `<picture>` with an AVIF `<source>` and the JPEG on the `<img>`,
-`sizes="100vw"` on both, and `fetchpriority="high"` and explicit `width`/
-`height` kept on the `<img>`. `sizes` is `100vw` because the plate is
-full-width below 1280px and full-bleed above it, so its box is the viewport in
-either layout. Note that `object-fit: cover` then magnifies whichever file was
-chosen by about 1.8x in the poster state, so a 3x phone is really served nearer
-2x — deliberate, and checked against the original at 1:1 rather than assumed.
-
-Measured on a cold load at 375x812 DPR3, 4x CPU, Slow 4G: 261 KB and a 2608 ms
-paint before, 60 KB and 1512 ms after. At 1440x900 DPR2: 253 KB and 2604 ms
-before, 131 KB and 2104 ms after. Layout shift stayed at zero throughout.
+The retained markup is hidden, and its fallback image is lazy-loaded. Any
+intentional return of the artwork requires a fresh visual and performance
+review; do not reinstate the former eager `fetchpriority` setting.
 
 ## The mark
 
