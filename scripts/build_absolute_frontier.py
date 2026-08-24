@@ -29,18 +29,22 @@ def render(payload: dict) -> str:
         raise ValueError("absolute frontier must contain three to five items")
     cards = []
     for row in items:
+        # The card raises the destination window rather than a card of its own.
+        # There is already one instrument on this page that answers "what is
+        # this problem", it is pinned to the right of the column at every
+        # desktop width, and it holds a sheet for all eight problems. A second
+        # hover surface for the same gesture meant the reader got two answers
+        # at once, one of them covering the column it was hovering over, while
+        # the dedicated window sat there showing something else. data-dest is
+        # the page's own contract for this: the runtime reads it off the
+        # nearest ancestor on hover and on focus, so the article needs the
+        # attribute and nothing else. tabindex stays, because that is what
+        # makes the keyboard raise the window too.
         cards.append(
-            f'''          <article class="flagship" tabindex="0">
+            f'''          <article class="flagship" tabindex="0" data-dest="problem-{esc(row["problem"])}">
             <p class="flagship__line"><span class="flagship__number">#{esc(row["problem"])}</span><span class="flagship__kind">{esc(row["kind"])}</span></p>
             <h3><a href="{esc(row["href"])}">{esc(row["title"])}</a></h3>
             <p class="flagship__why">{esc(row["why"])}</p>
-            <div class="flagship__detail">
-              <p><b>Evidence</b> {esc(row["evidence"])}</p>
-              <p><b>Hard step</b> {esc(row["hard_step"])}</p>
-              <p><b>Attribution</b> {esc(row["attribution"])}</p>
-              <p><b>Open boundary</b> {esc(row["boundary"])}</p>
-              <p class="flagship__handle"><b>Proof handle</b><code>{esc(row["handle"])}</code></p>
-            </div>
           </article>'''
         )
     return f'''{BEGIN}

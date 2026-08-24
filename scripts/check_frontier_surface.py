@@ -196,7 +196,14 @@ def main() -> int:
             require(item.get(field), f"absolute-frontier #{item.get('problem')} lacks {field}")
         if item.get("publication_state", "public") == "public":
             require(item["title"] in text, f"absolute-frontier #{item['problem']} is stale")
-            require(item["handle"] in text, f"absolute-frontier #{item['problem']} lost its proof handle")
+            require(
+                f'data-dest="problem-{item["problem"]}"' in text,
+                f"absolute-frontier #{item['problem']} lost its problem-sheet route",
+            )
+            require(
+                item["handle"].strip(),
+                f"absolute-frontier #{item['problem']} lost its proof handle in authority",
+            )
         else:
             require(item["title"] not in text, f"withheld absolute-frontier #{item['problem']} leaked publicly")
     require("The public site for the private work system:" in text, "Plectis route no longer distinguishes public site from private system")
@@ -204,7 +211,7 @@ def main() -> int:
     require("This does not review the papers, citations, meaning, novelty or significance" in text, "formal checking limit missing")
     require("How checking works" in text, "formal checking reader exit missing")
     require("Reproduce the checks" in text, "verification replay reader exit missing")
-    require("not universal #257" in text, "representative-check boundary missing")
+    require("Trace one classical benchmark after reading the programme and papers." in text, "representative-check boundary missing")
     require("The route returns the statement, exact declaration, Comparator interface, paper and boundary:" in text, "representative replay no longer explains its evidence route")
     require(
         '<a href="https://wcook04.github.io/plectis/docs/updates.html">Follow updates</a>' in text,

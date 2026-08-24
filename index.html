@@ -390,7 +390,6 @@
     .flagship:nth-child(odd) { padding-right: 1rem; }
     .flagship:nth-child(even) { padding-left: 1rem; border-left: 1px solid var(--hair); }
     .flagship:nth-last-child(-n + 2) { border-bottom: 0; }
-    .flagship:hover, .flagship:focus-within { z-index: 8; }
     .flagship__line {
       display: flex;
       gap: .45rem;
@@ -411,42 +410,20 @@
       line-height: 1.35;
       color: var(--faint);
     }
-    .flagship__detail {
-      position: absolute;
-      z-index: 7;
-      left: 0;
-      width: min(32rem, calc(200% + 1rem));
-      top: calc(100% - .18rem);
-      padding: .65rem .75rem .72rem;
-      border: 1px solid color-mix(in srgb, var(--to-repo) 46%, var(--hair));
-      background: #171020;
-      box-shadow: 0 1rem 2.5rem rgba(0,0,0,.72);
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-.25rem);
-      transition: opacity var(--t-response) ease-out, transform var(--t-response) ease-out, visibility 0s linear var(--t-response);
-    }
-    .flagship:nth-child(even) .flagship__detail { left: auto; right: 0; }
-    .flagship:hover .flagship__detail,
-    .flagship:focus-within .flagship__detail {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-      transition-delay: 0s;
-    }
-    .flagship__detail p { margin: .22rem 0; font-size: .7rem; line-height: 1.38; color: var(--bone-soft); }
-    .flagship__detail b { color: var(--bone); font-weight: 650; }
-    .flagship__handle code { display: block; margin-top: .18rem; overflow-wrap: anywhere; color: var(--to-repo); }
+    /* No card hangs off these. A flagship raises the destination window, which
+       is the one instrument on this page that answers "what is this problem",
+       and it is already standing to the right of the column when the reader
+       hovers. The popover that used to live here gave the same gesture two
+       answers at once and put one of them over the column being read, while
+       the window it was competing with went on showing something else. The
+       article carries data-dest and the runtime does the rest. */
     .absolute-frontier__note { margin: .48rem 0 0; font-size: .65rem; line-height: 1.4; color: var(--faint); }
     @media (max-width: 34rem) {
       .flagships { grid-template-columns: 1fr; }
       .flagship:nth-child(even) { padding-left: 0; border-left: 0; }
       .flagship:nth-last-child(-n + 2) { border-bottom: 1px solid var(--hair); }
       .flagship:last-child { border-bottom: 0; }
-      .flagship__detail,
-      .flagship:nth-child(even) .flagship__detail { left: 0; right: 0; width: auto; }
     }
-    @media (prefers-reduced-motion: reduce) { .flagship__detail { transition: none; } }
 
     /* The route index, in the register of the Plectis right-hand rail:
        a kind, a name, and destination-named exits. No cards, no icons. */
@@ -1856,9 +1833,29 @@
         position: sticky;
         top: var(--thread-h);
         height: calc(100svh - var(--thread-h));
-        z-index: 1;
-        margin-left: 62vw;
-        padding: clamp(1.6rem, 4svh, 2.6rem) 2.5vw;
+        /* Above the column, which now overlaps this lane. The column box runs
+           to 62vw while its type stops at 55vw, so the 7vw of right padding is
+           empty column sitting over the near edge of the window. Both boxes
+           share one grid cell and the column is later in the document, so at
+           equal z-index the column won the hit test and the left edge of the
+           window could not be hovered or clicked. The lane carries
+           pointer-events: none and only the panel takes them back, so nothing
+           in the column loses a target by this. */
+        z-index: 2;
+        /* The lane, and it has to be stated against what the column actually
+           uses rather than against the column's box. At 62vw the lane was 38vw
+           wide, 33vw of it inside its own padding, and a window asking for 37vw
+           was silently cut to 33 by max-width: 100%: measured 499px at 1512,
+           which is exactly the width it had before it was widened at all. The
+           window looked no bigger because it was not bigger.
+
+           The type stops at 55vw at every width from 1280 up, so the lane can
+           start at 58vw and still clear it, and the padding can come down to
+           1.5vw because the window's own slack is the air here, not the lane's.
+           That gives 39vw of usable lane against a 37vw window: 559px at 1512
+           and 710 at 1920, against 499 and 576 before. */
+        margin-left: 58vw;
+        padding: clamp(1.6rem, 4svh, 2.6rem) 1.5vw;
         pointer-events: none;
         /* clip, not hidden, and on the sticky box itself. Same distinction the
            plate above turns on: hidden would make this a scroll container,
@@ -2421,53 +2418,25 @@
         <h2 id="absolute-frontier-title">The strongest objects to inspect first</h2>
         <p class="absolute-frontier__thesis">These are the strongest current internal review candidates across the whole programme. Each changes the shape of an attack, exposes an exact endpoint, or raises the known claim ceiling. Focus an item for its evidence, hard step and limit.</p>
         <div class="flagships">
-          <article class="flagship" tabindex="0">
+          <article class="flagship" tabindex="0" data-dest="problem-68">
             <p class="flagship__line"><span class="flagship__number">#68</span><span class="flagship__kind">Exact endpoint</span></p>
             <h3><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos68/FactorialZeroPlateau.lean#L1090">Irrationality becomes one cofinal divisibility question</a></h3>
             <p class="flagship__why">The original series problem is reduced without loss to an integer event that can be attacked directly.</p>
-            <div class="flagship__detail">
-              <p><b>Evidence</b> Lean checked exact equivalence</p>
-              <p><b>Hard step</b> Force failures of m dividing the strict successor beyond every cutoff.</p>
-              <p><b>Attribution</b> Classical factorial radix context; source specific formal synthesis; no priority claim.</p>
-              <p><b>Open boundary</b> No cofinal producer is known, so Erdős #68 remains open.</p>
-              <p class="flagship__handle"><b>Proof handle</b><code>ErdosProblems.Erdos68.irrational_factorialGapSeries_iff_cofinal_strictFacTopRat_misses</code></p>
-            </div>
           </article>
-          <article class="flagship" tabindex="0">
+          <article class="flagship" tabindex="0" data-dest="problem-249">
             <p class="flagship__line"><span class="flagship__number">#249</span><span class="flagship__kind">Canonical reduction</span></p>
             <h3><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos249/CyclotomicAnchoredKill.lean#L2976">One universal Mersenne residue gap is the exact frontier</a></h3>
             <p class="flagship__why">Several competing attack languages collapse to one forced basepoint modular supply with the full quantifier order visible.</p>
-            <div class="flagship__detail">
-              <p><b>Evidence</b> Lean checked exact equivalence</p>
-              <p><b>Hard step</b> Produce the strict centered gap for every basepoint and every positive odd denominator shape.</p>
-              <p><b>Attribution</b> Classical radix tails, Euler periodicity and modular arithmetic; no priority claim for the packaging.</p>
-              <p><b>Open boundary</b> The universal gap supply is unproved, so Erdős #249 remains open.</p>
-              <p class="flagship__handle"><b>Proof handle</b><code>ErdosProblems.Erdos249.fullMersenneCanonicalBasepointResidueGapSupply_iff_irrational</code></p>
-            </div>
           </article>
-          <article class="flagship" tabindex="0">
+          <article class="flagship" tabindex="0" data-dest="problem-251">
             <p class="flagship__line"><span class="flagship__number">#251</span><span class="flagship__kind">Coordinate change</span></p>
             <h3><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos251/PrimeGapDyadicTail.lean#L138">The prime series is exactly a weighted gap tail</a></h3>
             <p class="flagship__why">Summation by parts keeps the endpoint and identifies the actual infinite obstruction, instead of treating prime irregularity as evidence by itself.</p>
-            <div class="flagship__detail">
-              <p><b>Evidence</b> Lean checked identity, convergence and rational affine equivalence</p>
-              <p><b>Hard step</b> Prove an infinite obstruction for the genuine consecutive prime gap tail.</p>
-              <p><b>Attribution</b> Exact summation by parts with a direct public antecedent; no new prime gap theorem or novelty claim.</p>
-              <p><b>Open boundary</b> Finite denominator screens and generic gap countermodels do not prove irrationality, so Erdős #251 remains open.</p>
-              <p class="flagship__handle"><b>Proof handle</b><code>ErdosProblems.Erdos251.dyadicPartialSumQ_eq_start_add_differences</code></p>
-            </div>
           </article>
-          <article class="flagship" tabindex="0">
+          <article class="flagship" tabindex="0" data-dest="problem-257">
             <p class="flagship__line"><span class="flagship__number">#257</span><span class="flagship__kind">Canonical normal form</span></p>
             <h3><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos257/MersenneSubseriesRigidity.lean#L16">Rational membership means actual skips forever</a></h3>
             <p class="flagship__why">A set existence question becomes a statement about one canonical greedy orbit, with no freedom to choose a convenient support.</p>
-            <div class="flagship__detail">
-              <p><b>Evidence</b> Lean checked exact equivalence for every nonnegative rational target</p>
-              <p><b>Hard step</b> Produce cofinal actual skips for 1/2, 1/21 or another unresolved target.</p>
-              <p><b>Attribution</b> Uses the classical Erdős Borwein irrationality theorem inside a source specific greedy synthesis; no priority claim.</p>
-              <p><b>Open boundary</b> Finite traces and arbitrary omitted supports do not supply the canonical cofinal skips, so Erdős #257 remains open.</p>
-              <p class="flagship__handle"><b>Proof handle</b><code>ErdosProblems.Erdos257.rat_mem_mersenneAchievementSet_iff_cofinal_greedy_skips</code></p>
-            </div>
           </article>
         </div>
         <p class="absolute-frontier__note">Four have source current public proof routes. The fifth remains withheld until its authored proof has a stable route. This is internal reading triage, not peer review, community acceptance, priority or a claim of canonical status.</p>
@@ -2504,8 +2473,6 @@
             <p class="exits frontier-exits">
               <a data-to="repo" data-dest="lean-github" aria-label="Open the pinned Lean source" href="https://github.com/wcook04/plectis-lean-erdos249-257/tree/fd25c0b5f11a5d0c1834740991a008da56643808">Lean source</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Check one theorem without building Lean" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/README.md#read-or-run-it">Check one theorem</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read the programme map for all eight open problems" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md">Read all eight</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="See how selected formal statements are checked" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix">How checking works</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Reproduce the public verification checks" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION_REPLAY.md">Reproduce the checks</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Cite the eight-problem Lean corpus" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/CITATION.cff">Cite the corpus</a>
             </p>
-            <p class="frontier-comparator">For selected propositions, a second Lean file states the theorem again without its proof. The build checks that the original proof has exactly that type and stays within a fixed axiom budget. This does not review the papers, citations, meaning, novelty or significance.</p>
-            <p class="frontier-proof"><span>Trace the classical full-support theorem for every integer base b &ge; 2. It is not universal #257. No Lean build is needed. The route returns the statement, exact declaration, Comparator interface, paper and boundary:</span><a data-to="repo" aria-label="Trace the classical full-support benchmark without a Lean build" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/README.md#read-or-run-it"><code>python3 scripts/verify_claims.py --claim eb_full_support</code></a></p>
             <p class="row-shot">
               <a class="shot" data-to="repo" data-dest="lean-github" href="https://github.com/wcook04/plectis-lean-erdos249-257/tree/fd25c0b5f11a5d0c1834740991a008da56643808">
                 <span class="shot__bar"><span class="shot__host">github.com</span><span class="shot__path">…/tree/fd25c0b</span></span>
@@ -2566,6 +2533,8 @@
             </p>
           </li>
         </ul>
+        <p class="frontier-comparator">For selected propositions, a second Lean file states the theorem again without its proof. The build checks that the original proof has exactly that type and stays within a fixed axiom budget. This does not review the papers, citations, meaning, novelty or significance.</p>
+        <p class="frontier-proof"><span>Trace one classical benchmark after reading the programme and papers. No Lean build is needed. The route returns the statement, exact declaration, Comparator interface, paper and boundary:</span><a data-to="repo" aria-label="Trace the classical full-support benchmark without a Lean build" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/README.md#read-or-run-it"><code>python3 scripts/verify_claims.py --claim eb_full_support</code></a></p>
       </nav>
 
       <!-- The fifth route, held back from the index above because it is not a
