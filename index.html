@@ -9,15 +9,15 @@
        what favicon and what site name to attach to everything under this host.
        Google resolves both per host, not per directory, so without a real page
        here the whole host inherits GitHub's "Site not found" error page. -->
-  <title>Plectis | Eight open Erdős problems</title>
-  <meta name="description" content="Plectis is a research system for producing, checking and explaining mathematics. Its public frontier is eight open Erdős problems, each with a checked object and an explicit open boundary.">
+  <title>Plectis | A checkable mathematical research system</title>
+  <meta name="description" content="Plectis is an AI assisted research system producing checkable mathematics, readable papers and explicit research boundaries across eight open Erdős programmes.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://wcook04.github.io/">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Will Cook">
-  <meta property="og:title" content="Plectis: eight open Erdős problems">
-  <meta property="og:description" content="A public mathematical frontier from Plectis: eight open Erdős problems, each with a checked object and an explicit open boundary. All eight remain open.">
+  <meta property="og:title" content="Plectis: a checkable mathematical research system">
+  <meta property="og:description" content="A public view of an AI assisted research system producing precise mathematical objects across eight open Erdős programmes. All eight problems remain open.">
   <meta property="og:url" content="https://wcook04.github.io/">
   <meta property="og:image" content="https://wcook04.github.io/assets/og-frontier.png">
   <meta property="og:image:type" content="image/png">
@@ -25,8 +25,8 @@
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Eight open Erdős problems: factorial denominators, reciprocal tails, binary totient, prime-gap dyadics, Mersenne supports, three-prime LCMs, lemniscate paths, and rational Lambert. All eight remain open.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Plectis: eight open Erdős problems">
-  <meta name="twitter:description" content="A public mathematical frontier from Plectis: eight open Erdős problems, each with a checked object and an explicit open boundary. All eight remain open.">
+  <meta name="twitter:title" content="Plectis: a checkable mathematical research system">
+  <meta name="twitter:description" content="A public view of an AI assisted research system producing precise mathematical objects across eight open Erdős programmes. All eight problems remain open.">
   <meta name="twitter:image" content="https://wcook04.github.io/assets/og-frontier.png">
   <meta name="twitter:image:alt" content="Eight open Erdős problems: factorial denominators, reciprocal tails, binary totient, prime-gap dyadics, Mersenne supports, three-prime LCMs, lemniscate paths, and rational Lambert. All eight remain open.">
 
@@ -326,7 +326,7 @@
       margin: 0;
       font-family: var(--font-serif);
       font-weight: 600;
-      font-size: clamp(3.5rem, 10vw, 5.5rem);
+      font-size: clamp(4.5rem, 10vw, 7.5rem);
       line-height: .96;
       letter-spacing: -.04em;
     }
@@ -341,12 +341,112 @@
     .role::before { content: ""; width: 2.4rem; height: 1px; background: var(--hair-strong); }
 
     .intro {
-      margin: 1.7rem 0 0;
-      max-width: 39rem;
+      margin: 1.35rem 0 0;
+      max-width: 46rem;
       color: var(--bone-soft);
       font-size: 1.15rem;
     }
     .intro b { font-weight: 600; color: var(--bone); }
+
+    .absolute-frontier {
+      margin: 2rem 0 0;
+      padding: 1rem 0 .2rem;
+      border-top: 1px solid var(--hair-strong);
+    }
+    .absolute-frontier__eyebrow {
+      margin: 0 0 .28rem;
+      font-family: var(--font-sans);
+      font-size: .67rem;
+      font-weight: 650;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--to-repo);
+    }
+    .absolute-frontier h2 {
+      margin: 0;
+      font-size: clamp(1.45rem, 2.5vw, 1.85rem);
+      line-height: 1.1;
+    }
+    .absolute-frontier__thesis {
+      margin: .55rem 0 .75rem;
+      max-width: 46rem;
+      color: var(--bone-soft);
+      font-size: .95rem;
+      line-height: 1.5;
+    }
+    .flagships {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border-top: 1px solid var(--hair);
+      border-bottom: 1px solid var(--hair);
+    }
+    .flagship {
+      position: relative;
+      min-width: 0;
+      padding: .68rem .8rem .72rem 0;
+      border-bottom: 1px solid var(--hair);
+      outline: none;
+    }
+    .flagship:nth-child(odd) { padding-right: 1rem; }
+    .flagship:nth-child(even) { padding-left: 1rem; border-left: 1px solid var(--hair); }
+    .flagship:nth-last-child(-n + 2) { border-bottom: 0; }
+    .flagship:hover, .flagship:focus-within { z-index: 8; }
+    .flagship__line {
+      display: flex;
+      gap: .45rem;
+      margin: 0 0 .2rem;
+      font-family: var(--font-sans);
+      font-size: .64rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .flagship__number { color: var(--to-repo); font-weight: 700; }
+    .flagship__kind { color: var(--faint); }
+    .flagship h3 { margin: 0; font-size: .96rem; line-height: 1.2; }
+    .flagship h3 a { color: var(--bone); text-decoration-color: transparent; }
+    .flagship h3 a:hover, .flagship h3 a:focus-visible { color: var(--to-repo-lit); }
+    .flagship__why {
+      margin: .25rem 0 0;
+      font-size: .75rem;
+      line-height: 1.35;
+      color: var(--faint);
+    }
+    .flagship__detail {
+      position: absolute;
+      z-index: 7;
+      left: 0;
+      width: min(32rem, calc(200% + 1rem));
+      top: calc(100% - .18rem);
+      padding: .65rem .75rem .72rem;
+      border: 1px solid color-mix(in srgb, var(--to-repo) 46%, var(--hair));
+      background: #171020;
+      box-shadow: 0 1rem 2.5rem rgba(0,0,0,.72);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-.25rem);
+      transition: opacity var(--t-response) ease-out, transform var(--t-response) ease-out, visibility 0s linear var(--t-response);
+    }
+    .flagship:nth-child(even) .flagship__detail { left: auto; right: 0; }
+    .flagship:hover .flagship__detail,
+    .flagship:focus-within .flagship__detail {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      transition-delay: 0s;
+    }
+    .flagship__detail p { margin: .22rem 0; font-size: .7rem; line-height: 1.38; color: var(--bone-soft); }
+    .flagship__detail b { color: var(--bone); font-weight: 650; }
+    .flagship__handle code { display: block; margin-top: .18rem; overflow-wrap: anywhere; color: var(--to-repo); }
+    .absolute-frontier__note { margin: .48rem 0 0; font-size: .65rem; line-height: 1.4; color: var(--faint); }
+    @media (max-width: 34rem) {
+      .flagships { grid-template-columns: 1fr; }
+      .flagship:nth-child(even) { padding-left: 0; border-left: 0; }
+      .flagship:nth-last-child(-n + 2) { border-bottom: 1px solid var(--hair); }
+      .flagship:last-child { border-bottom: 0; }
+      .flagship__detail,
+      .flagship:nth-child(even) .flagship__detail { left: 0; right: 0; width: auto; }
+    }
+    @media (prefers-reduced-motion: reduce) { .flagship__detail { transition: none; } }
 
     /* The route index, in the register of the Plectis right-hand rail:
        a kind, a name, and destination-named exits. No cards, no icons. */
@@ -954,7 +1054,18 @@
       margin: 1.7rem 0 0;
       display: flex;
       flex-wrap: wrap;
-      column-gap: 1.4rem;
+      /* 1.4rem left the five exits 10.4px short of one line in the column the
+         side-by-side state gives them, and a five item row that is ten pixels
+         too long does not wrap into two even rows, it drops CONTACT onto a line
+         of its own. A widow, at 1440 to 1590, which is most laptops. The five
+         items need 615.2px of line at 1.4rem and the column offers 604.8 at
+         1512; 1.15rem takes four gaps down by 16px and they fit, with the row
+         holding as one at every width above that too. Below 1440 the column is
+         short enough that they break three and two, which reads as a wrap
+         rather than as something left behind. The caps keep .18em of their own
+         letterspacing after the last glyph, so the space between two exits is
+         still about 20px, not the 18 this declares. */
+      column-gap: 1.15rem;
       row-gap: .56rem;
       font-family: var(--font-sans);
       font-size: .72rem; font-weight: 600;
@@ -1235,7 +1346,17 @@
        And the numbers were ragged: 68 and 1041 set from the same left edge in
        a proportional face, so a column whose whole job is to be scanned had no
        edge to scan down. Right-aligned and tabular, they line up on their
-       units and the eye can run the list. */
+       units and the eye can run the list.
+
+       That last part was true of six of the eight. The track was 5.4cqi and a
+       tabular digit in this face is .6455em at 2.4cqi, so four of them need
+       6.2cqi and 1041 and 1049 did not fit: a number that cannot fit its track
+       does not slide left inside it, it overflows the end of the line box, so
+       the only two four-digit numbers on the plate sat 4px right of the edge
+       the other six were aligned to. Measured at 1280, 1512 and 1920, and the
+       same 4px at all three, because both the track and the type are in cqi.
+       Widening the track to 6.5cqi is the whole fix and it holds at every
+       width for the same reason. */
     .frontier-plate__grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1245,7 +1366,7 @@
     }
     .frontier-plate__item {
       display: grid;
-      grid-template-columns: 5.4cqi minmax(0, 1fr);
+      grid-template-columns: 6.5cqi minmax(0, 1fr);
       align-content: center;
       column-gap: 1.5cqi;
       padding: 2.4cqi 0 2.3cqi;
@@ -1708,7 +1829,7 @@
       .col {
         position: relative; z-index: 1;
         min-height: calc(100svh - var(--thread-h));
-        max-width: min(58rem, 54vw);
+        max-width: min(74rem, 62vw);
         margin-top: 0;
         padding: clamp(3.5rem, 7vw, 7.5rem) clamp(4.5rem, 7vw, 8.5rem) 4.5rem;
       }
@@ -1736,20 +1857,55 @@
         top: var(--thread-h);
         height: calc(100svh - var(--thread-h));
         z-index: 1;
-        margin-left: 54vw;
+        margin-left: 62vw;
         padding: clamp(1.6rem, 4svh, 2.6rem) 2.5vw;
         pointer-events: none;
+        /* clip, not hidden, and on the sticky box itself. Same distinction the
+           plate above turns on: hidden would make this a scroll container,
+           clip does not make one at all, and either way this is the sticky
+           element rather than an ancestor of one, so its own stickiness is
+           untouched. x only, so the hint that now hangs below the panel is
+           still free to paint. */
+        overflow-x: clip;
       }
       .dest__panel {
         pointer-events: auto;
         position: relative;
         /* Grows with the field it stands in. At 30rem flat the window read as
            a thumbnail pinned to a large picture rather than as the thing being
-           shown, and the map below has type in it that has to be read. */
-        width: clamp(25rem, 33vw, 36rem);
+           shown, and the map below has type in it that has to be read.
+
+           33vw held that reading at the breakpoint and lost it above: the 36rem
+           ceiling is reached at 1745, so from there up the field keeps growing
+           and the window does not. Measured as slack either side of it inside
+           its own lane, which is the honest measure of how small it looks: 60px
+           at 1512, 106 at 1920, 237 at 2560. That is the thumbnail reading
+           coming back at exactly the widths most likely to be reading it.
+
+           The lane is 41vw once its own padding is off, so 37vw is the window
+           taking about nine tenths of it and the plate keeping everything
+           either side. Slack now: 26px at 1280, 30 at 1512, 38 at 1920, 141 at
+           2560. It is still a window in a picture and not a page over one.
+
+           This is also the control on how big the plate of eight is, since
+           everything drawn in it is sized in container units. Widen the window
+           and that type grows with it, which is why the stage below states a
+           ratio rather than a fixed depth. */
+        width: clamp(26rem, 37vw, 48rem);
         max-width: 100%;
-        background: rgba(18, 13, 28, .76);
-        backdrop-filter: blur(3px);
+        /* The ground has gone. It was rgba(18, 13, 28, .76) with a 3px
+           backdrop blur, and the window it wrapped is opaque and rounded, so
+           the only pixels it ever painted were the strip under the frame where
+           the hint stands. That strip read as a square cornered slab stuck to
+           the foot of a window with 8px corners: 29px of it at 1512, 45 at 1280
+           where the hint wraps, hard edged on three sides, and there whether or
+           not the sentence in it was visible. The pour below is what separates
+           this window from the plate, and it was always doing that job alone.
+
+           Kept as its own stacking context, because the pour hangs off it at
+           z-index -1 and that was previously true only as a side effect of the
+           backdrop filter. */
+        isolation: isolate;
       }
       /* One window, one width. Pointing at a problem used to narrow the panel
          from 33vw to 25vw AND swing it from landscape to portrait, so the
@@ -1788,9 +1944,33 @@
          only when it has a height to divide. Left on auto they quietly fall
          back to their own content heights and the plate goes ragged again. */
       .dest__frame[data-view="frontier"] .shot__stage {
-        aspect-ratio: auto;
-        height: 22rem;
+        /* A ratio, not a depth. Everything drawn in this plate is sized in
+           container units and therefore already scales with the window's
+           width, so a constant depth can only be right at one width, and it
+           was. Measured against the plate's own content height: 22rem left 80px
+           of empty stage at 1280, 31px at 1512, and CLIPPED the last row by 18px
+           at 1920, cutting the bottom off both open boundaries on the widest
+           screens. The instrument was losing the two sentences it exists to
+           show, and losing them silently, since the frame crops rather than
+           scrolls.
+
+           The plate's natural ratio is flat, as it must be when type and
+           padding are both in cqi: width over height reads 1.545 at 1280, 1.549
+           at 1512, 1.553 at 1920. 3/2 is that ratio with a little depth to
+           spare, so the slack is small, always positive, and scales with
+           everything else instead of drifting. min-content is the backstop: if
+           a handle ever grows a line the stage takes the depth rather than the
+           crop. */
+        aspect-ratio: 3 / 2;
+        height: auto;
+        min-height: min-content;
       }
+      /* And the plate fills the stage instead of resting at the top of it, so
+         the spare depth runs through the grid, which shares it equally across
+         the four rows and keeps the rank of eight on one beat. Unstretched, all
+         of the slack collected under the last row as a strip of nothing, which
+         is the fault the definite height above existed to avoid. */
+      .dest__frame[data-view="frontier"] .shot__frontier { min-height: 100%; }
       .dest__frame[data-view="profile"] .shot__stage {
         aspect-ratio: auto;
         height: auto;
@@ -1810,7 +1990,20 @@
          the ramp at the edge, so the ramp finishes 22% early on every side. */
       .dest__panel::before {
         content: "";
-        position: absolute; inset: -24% -18%;
+        /* The horizontal reach is what the lane can actually give, not a round
+           number. At -18% a wider window pushed this box past the right edge of
+           the viewport and the whole document gained a horizontal scroll of 28
+           to 41px, measured at 1280 through 1920: a decorative gradient nobody
+           can see was making the page slide sideways. The room to the right is
+           the window's own slack plus the lane's padding, and because both are
+           set in vw that is 12.2% of the window at every width below the cap
+           and 26.7% above it. -12% is inside that everywhere.
+
+           The clip on .dest is the guarantee rather than the mechanism: at 12%
+           the ramp is already transparent by the edge, so it removes nothing
+           visible, and it means no future change to this box can put a
+           scrollbar under the page. */
+        position: absolute; inset: -24% -12%;
         z-index: -1;
         pointer-events: none;
         background: radial-gradient(ellipse closest-side at 50% 50%,
@@ -1928,6 +2121,20 @@
          has made it move, which is the moment the sentence stops being true
          of anything they still need to be told. */
       .dest__hint {
+        /* Hung off the panel rather than standing inside it. In flow it gave
+           the panel height the panel kept after the runtime hid the sentence,
+           which is the strip the note above is about, and collapsing it on
+           `used` would have jerked the window up half that height at the exact
+           moment a reader first touched it. Out of flow the panel is exactly as
+           tall as the window at every width and in every view, and the hint can
+           go without anything moving.
+
+           It still lands on ground: the pour reaches 24% of the panel's height
+           below it, which at the shallowest view here is 65px against the 29
+           this needs, and the halo below is what carries it over the lit mass
+           anyway. */
+        position: absolute;
+        top: 100%; left: 0; right: 0;
         margin: .8rem 0 0;
         font-family: var(--font-sans);
         font-size: .72rem;
@@ -2059,8 +2266,8 @@
                  the accessible frontier list beside it carries the same
                  checked handles and open boundaries. -->
             <span class="shot__frontier" aria-hidden="true">
-              <span class="frontier-plate__eyebrow">Eight open Erdős problems</span>
-              <span class="frontier-plate__title">Checked frontier <small>all eight remain open</small></span>
+              <span class="frontier-plate__eyebrow">Plectis research system</span>
+              <span class="frontier-plate__title">Eight programme map <small>all eight remain open</small></span>
               <span class="frontier-plate__grid">
                 <span class="frontier-plate__item"><span class="frontier-plate__number">68</span><span class="frontier-plate__handle">Exact cofinal-divisibility equivalence</span><span class="frontier-plate__boundary">Needs cofinal failures.</span></span>
                 <span class="frontier-plate__item"><span class="frontier-plate__number">243</span><span class="frontier-plate__handle">Exact tail-state defect identity</span><span class="frontier-plate__boundary">Unrestricted case remains open.</span></span>
@@ -2166,8 +2373,8 @@
 
     <div class="col">
       <header>
-        <h1>Eight open<br>Erd&#337;s problems</h1>
-        <p class="role">Plectis &middot; Will Cook &middot; public research system</p>
+        <h1>Plectis</h1>
+        <p class="role">Will Cook &middot; checkable mathematical research</p>
       </header>
 
       <!-- Two of the four verbs carry a preview and two do not, and that is the
@@ -2203,10 +2410,69 @@
            research programme actually is. "Large" is gone: the routes show
            scale through concrete objects, not a generic adjective. -->
       <p class="intro">
-        Plectis is a research system for producing, checking and explaining mathematics.
-        This is its public frontier: eight live Erd&#337;s programmes, each with a representative checked object,
-        a route to inspect the evidence, and an explicit open boundary. None is presented as a solution.
+        An AI assisted research system producing precise mathematical objects, formal checks,
+        readable papers and explicit next questions. This public corpus follows eight live Erd&#337;s programmes.
+        All eight remain open.
       </p>
+
+      <!-- BEGIN generated absolute frontier -->
+      <section class="absolute-frontier" aria-labelledby="absolute-frontier-title">
+        <p class="absolute-frontier__eyebrow">Start here</p>
+        <h2 id="absolute-frontier-title">The strongest objects to inspect first</h2>
+        <p class="absolute-frontier__thesis">These are the strongest current internal review candidates across the whole programme. Each changes the shape of an attack, exposes an exact endpoint, or raises the known claim ceiling. Focus an item for its evidence, hard step and limit.</p>
+        <div class="flagships">
+          <article class="flagship" tabindex="0">
+            <p class="flagship__line"><span class="flagship__number">#68</span><span class="flagship__kind">Exact endpoint</span></p>
+            <h3><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos68/FactorialZeroPlateau.lean#L1090">Irrationality becomes one cofinal divisibility question</a></h3>
+            <p class="flagship__why">The original series problem is reduced without loss to an integer event that can be attacked directly.</p>
+            <div class="flagship__detail">
+              <p><b>Evidence</b> Lean checked exact equivalence</p>
+              <p><b>Hard step</b> Force failures of m dividing the strict successor beyond every cutoff.</p>
+              <p><b>Attribution</b> Classical factorial radix context; source specific formal synthesis; no priority claim.</p>
+              <p><b>Open boundary</b> No cofinal producer is known, so Erdős #68 remains open.</p>
+              <p class="flagship__handle"><b>Proof handle</b><code>ErdosProblems.Erdos68.irrational_factorialGapSeries_iff_cofinal_strictFacTopRat_misses</code></p>
+            </div>
+          </article>
+          <article class="flagship" tabindex="0">
+            <p class="flagship__line"><span class="flagship__number">#249</span><span class="flagship__kind">Canonical reduction</span></p>
+            <h3><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos249/CyclotomicAnchoredKill.lean#L2976">One universal Mersenne residue gap is the exact frontier</a></h3>
+            <p class="flagship__why">Several competing attack languages collapse to one forced basepoint modular supply with the full quantifier order visible.</p>
+            <div class="flagship__detail">
+              <p><b>Evidence</b> Lean checked exact equivalence</p>
+              <p><b>Hard step</b> Produce the strict centered gap for every basepoint and every positive odd denominator shape.</p>
+              <p><b>Attribution</b> Classical radix tails, Euler periodicity and modular arithmetic; no priority claim for the packaging.</p>
+              <p><b>Open boundary</b> The universal gap supply is unproved, so Erdős #249 remains open.</p>
+              <p class="flagship__handle"><b>Proof handle</b><code>ErdosProblems.Erdos249.fullMersenneCanonicalBasepointResidueGapSupply_iff_irrational</code></p>
+            </div>
+          </article>
+          <article class="flagship" tabindex="0">
+            <p class="flagship__line"><span class="flagship__number">#251</span><span class="flagship__kind">Coordinate change</span></p>
+            <h3><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos251/PrimeGapDyadicTail.lean#L138">The prime series is exactly a weighted gap tail</a></h3>
+            <p class="flagship__why">Summation by parts keeps the endpoint and identifies the actual infinite obstruction, instead of treating prime irregularity as evidence by itself.</p>
+            <div class="flagship__detail">
+              <p><b>Evidence</b> Lean checked identity, convergence and rational affine equivalence</p>
+              <p><b>Hard step</b> Prove an infinite obstruction for the genuine consecutive prime gap tail.</p>
+              <p><b>Attribution</b> Exact summation by parts with a direct public antecedent; no new prime gap theorem or novelty claim.</p>
+              <p><b>Open boundary</b> Finite denominator screens and generic gap countermodels do not prove irrationality, so Erdős #251 remains open.</p>
+              <p class="flagship__handle"><b>Proof handle</b><code>ErdosProblems.Erdos251.dyadicPartialSumQ_eq_start_add_differences</code></p>
+            </div>
+          </article>
+          <article class="flagship" tabindex="0">
+            <p class="flagship__line"><span class="flagship__number">#257</span><span class="flagship__kind">Canonical normal form</span></p>
+            <h3><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos257/MersenneSubseriesRigidity.lean#L16">Rational membership means actual skips forever</a></h3>
+            <p class="flagship__why">A set existence question becomes a statement about one canonical greedy orbit, with no freedom to choose a convenient support.</p>
+            <div class="flagship__detail">
+              <p><b>Evidence</b> Lean checked exact equivalence for every nonnegative rational target</p>
+              <p><b>Hard step</b> Produce cofinal actual skips for 1/2, 1/21 or another unresolved target.</p>
+              <p><b>Attribution</b> Uses the classical Erdős Borwein irrationality theorem inside a source specific greedy synthesis; no priority claim.</p>
+              <p><b>Open boundary</b> Finite traces and arbitrary omitted supports do not supply the canonical cofinal skips, so Erdős #257 remains open.</p>
+              <p class="flagship__handle"><b>Proof handle</b><code>ErdosProblems.Erdos257.rat_mem_mersenneAchievementSet_iff_cofinal_greedy_skips</code></p>
+            </div>
+          </article>
+        </div>
+        <p class="absolute-frontier__note">Four have source current public proof routes. The fifth remains withheld until its authored proof has a stable route. This is internal reading triage, not peer review, community acceptance, priority or a claim of canonical status.</p>
+      </section>
+      <!-- END generated absolute frontier -->
 
       <!-- The three scene owners. data-scene-key is read by the runtime at the
            foot of the page and by nothing else; the sections are what they were
@@ -2222,8 +2488,8 @@
                  The links use the published convergence snapshot rather than a
                  floating branch: this is a reading and verification route, not
                  a new release, peer-review, or novelty claim. -->
-            <p class="name"><a data-to="repo" data-dest="math-frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md">Eight-problem frontier</a></p>
-            <p class="desc"><a class="term" data-term="machine-checked" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-machine-checked">Machine-checked</a> mathematics on eight <a class="term" data-term="open-problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">open</a> Erd&#337;s problems. Each frontier below names one cleared statement and the exact step that remains open; none is a solution claim. These are verification records, not human mathematical peer review.</p>
+            <p class="name"><a data-to="repo" data-dest="math-frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md">Eight programme map</a></p>
+            <p class="desc">One representative object for each programme. Focus a number for the question, evidence class and exact open boundary.</p>
             <p class="frontier-instruction"><span class="frontier-instruction__wide">Hover or focus a number for its question, cleared frontier, and exact open boundary.</span><span class="frontier-instruction__narrow">Open a number for its question, checked frontier, and remaining boundary.</span></p>
             <div class="frontier" role="list" aria-label="One checked frontier and one open boundary for each public Erdős problem">
               <p role="listitem" data-dest="problem-68"><a data-to="repo" data-dest="problem-68" aria-label="#68: factorial denominator. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md#programme-68">#68</a> <span class="frontier-topic">Factorial denominator</span></p>

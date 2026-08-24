@@ -9,6 +9,7 @@ substitutes for the Lean repository's release checks.
 from __future__ import annotations
 
 import re
+import json
 import sys
 from pathlib import Path
 
@@ -59,8 +60,8 @@ OG_IMAGE_ALT = (
     "lemniscate paths, and rational Lambert. All eight remain open."
 )
 UNFURL_DESCRIPTION = (
-    "A public mathematical frontier from Plectis: eight open Erdős problems, "
-    "each with a checked object and an explicit open boundary. All eight remain open."
+    "A public view of an AI assisted research system producing precise mathematical "
+    "objects across eight open Erdős programmes. All eight problems remain open."
 )
 FRONTIER_SHEET_ANCHORS = {
     "68": (
@@ -97,6 +98,8 @@ FRONTIER_SHEET_ANCHORS = {
     ),
 }
 
+ABSOLUTE_FRONTIER_SOURCE = ROOT / "data" / "absolute-frontier.json"
+
 
 def require(condition: bool, message: str) -> None:
     if not condition:
@@ -126,17 +129,21 @@ def main() -> int:
     sitemap = SITEMAP.read_text(encoding="utf-8")
     robots = ROBOTS.read_text(encoding="utf-8")
     plate = frontier_plate(text)
-    require("<h1>Eight open<br>Erd&#337;s problems</h1>" in text, "masthead no longer leads with the mathematical programme")
+    absolute_frontier = json.loads(ABSOLUTE_FRONTIER_SOURCE.read_text(encoding="utf-8"))
+    selection_authority = absolute_frontier.get("selection_authority", {})
+    require(len(selection_authority.get("commit", "")) == 40, "absolute-frontier selection authority is not pinned")
+    require("not external significance or acceptance authority" in selection_authority.get("posture", ""), "absolute-frontier selection authority overclaims internal triage")
+    require("<h1>Plectis</h1>" in text, "masthead no longer leads with Plectis")
     require('<link rel="canonical" href="https://wcook04.github.io/">' in text, "front door lost its canonical public URL")
     require('<meta property="og:url" content="https://wcook04.github.io/">' in text, "social preview lost its canonical public URL")
     require('https://wcook04.github.io/assets/og-frontier.png' in text, "social preview lost the eight-problem share image")
     require('<loc>https://wcook04.github.io/</loc>' in sitemap, "root front door is absent from the host sitemap")
     require('Sitemap: https://wcook04.github.io/sitemap.xml' in robots, "host robots policy no longer exposes the root sitemap")
     require(
-        "Plectis &middot; Will Cook &middot; public research system" in text,
+        "Will Cook &middot; checkable mathematical research" in text,
         "masthead lost Plectis or authorship",
     )
-    require(">Eight-problem frontier<" in text, "primary entry label lost the portfolio")
+    require(">Eight programme map<" in text, "primary entry label lost the portfolio")
     require(
         "#249/#257" not in text,
         "front door reintroduced the two-problem historical core as its programme identity",
@@ -152,7 +159,7 @@ def main() -> int:
         "filter: saturate(.9) contrast(.92) brightness(.76)" not in text,
         "sticky art wrapper regained the Chrome first-paint filter regression",
     )
-    require("Plectis is a research system for producing, checking and explaining mathematics." in text, "opening lost the Plectis system")
+    require("An AI assisted research system producing precise mathematical objects" in text, "opening lost the Plectis system thesis")
     require("eight live Erd&#337;s programmes" in text, "opening lost the all-programme frontier")
     require(
         '<a class="skip-frontier" href="#eight-problem-frontier">Skip to eight-problem frontier</a>' in text,
@@ -162,12 +169,36 @@ def main() -> int:
         '<nav id="eight-problem-frontier" tabindex="-1" aria-label="Public routes"' in text,
         "skip-frontier target is missing",
     )
-    require("all eight remain open" in text, "desktop frontier plate lost its explicit open-problem boundary")
+    require("all eight remain open" in text.lower(), "front door lost its explicit open-problem boundary")
     require("Hover or focus a number for its question, cleared frontier, and exact open boundary." in text, "desktop portrait cue missing")
     require("Open a number for its question, checked frontier, and remaining boundary." in text, "narrow-screen frontier route missing")
-    require("none is a solution claim" in text, "open-problem boundary missing")
-    require("not human mathematical peer review" in text, "review boundary missing")
-    require("This is its public frontier" in text, "public programme hierarchy missing from the opening")
+    require("all eight remain open" in text.lower(), "open-problem boundary missing")
+    require("not peer review" in text, "review boundary missing")
+    require("The strongest objects to inspect first" in text, "absolute frontier is missing from first contact")
+    thesis_at = text.find('id="absolute-frontier-title"')
+    programmes_at = text.find('id="eight-problem-frontier"')
+    require(0 < thesis_at < programmes_at, "cold-reader order must be thesis, flagships, then eight programmes")
+    require(3 <= len(absolute_frontier["items"]) <= 5, "absolute-frontier shortlist must contain three to five items")
+    public_flagships = [item for item in absolute_frontier["items"] if item.get("publication_state", "public") == "public"]
+    require(3 <= len(public_flagships) <= 5, "absolute frontier must expose three to five public items")
+    require(text.count('class="flagship"') == len(public_flagships), "absolute-frontier projection count drifted")
+    require("not peer review, community acceptance, priority or a claim of canonical status" in text, "internal shortlist is missing its external-review boundary")
+    tao_receipt = absolute_frontier.get("tao_pipeline_receipt", {})
+    for field in (
+        "input_stage", "output_stage", "artifact", "human_understanding_delta",
+        "verification_state", "publication_or_review_state",
+        "canonicalization_state", "unresolved_downstream_bottleneck",
+        "next_stage_owner",
+    ):
+        require(tao_receipt.get(field), f"absolute frontier Tao receipt lacks {field}")
+    for item in absolute_frontier["items"]:
+        for field in ("why", "evidence", "hard_step", "attribution", "boundary", "handle", "href"):
+            require(item.get(field), f"absolute-frontier #{item.get('problem')} lacks {field}")
+        if item.get("publication_state", "public") == "public":
+            require(item["title"] in text, f"absolute-frontier #{item['problem']} is stale")
+            require(item["handle"] in text, f"absolute-frontier #{item['problem']} lost its proof handle")
+        else:
+            require(item["title"] not in text, f"withheld absolute-frontier #{item['problem']} leaked publicly")
     require("The public site for the private work system:" in text, "Plectis route no longer distinguishes public site from private system")
     require("a second Lean file states the theorem again without its proof" in text, "formal checking scope missing")
     require("This does not review the papers, citations, meaning, novelty or significance" in text, "formal checking limit missing")
@@ -208,9 +239,10 @@ def main() -> int:
         text,
     )
     require(lean_links, "front door has no Lean evidence links")
+    allowed_source_commits = {SNAPSHOT, absolute_frontier["public_source_commit"]}
     for link in lean_links:
         require(
-            f"/{SNAPSHOT}" in link,
+            any(f"/{commit}" in link for commit in allowed_source_commits),
             f"floating or mismatched Lean evidence link: {link}",
         )
 

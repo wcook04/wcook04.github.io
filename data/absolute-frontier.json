@@ -1,0 +1,85 @@
+{
+  "schema": "plectis_absolute_frontier_v1",
+  "selection_authority": {
+    "artifact": "state/formal_math/reviewer_theorem_card_coverage_audit.json",
+    "commit": "3cd77b17f9829bf236b5b9cbe373e8bf6512d1dc",
+    "posture": "committed snapshot of internal review triage, not external significance or acceptance authority"
+  },
+  "public_source_commit": "c10393a7420adc1ac3f9097df4c940e02047218d",
+  "thesis": "These are the strongest current internal review candidates across the whole programme. Each changes the shape of an attack, exposes an exact endpoint, or raises the known claim ceiling. Focus an item for its evidence, hard step and limit.",
+  "selection_note": "Four have source current public proof routes. The fifth remains withheld until its authored proof has a stable route. This is internal reading triage, not peer review, community acceptance, priority or a claim of canonical status.",
+  "tao_pipeline_receipt": {
+    "input_stage": "verified and internally adjudicated programme objects",
+    "output_stage": "public exposition and review routing",
+    "artifact": "generated absolute-frontier first-contact layer",
+    "human_understanding_delta": "A cold reader sees the programme thesis, then a scarce cross-programme mathematical shortlist, then one frontier for each of eight problems. Counts and registries no longer compete with the mathematical first contact.",
+    "verification_state": "Each public flagship names its exact evidence class and immutable proof handle. The #1041 ordinary theorem is withheld until its proof has a stable public route.",
+    "publication_or_review_state": "Internal review triage and public exposition only. No community acceptance, peer review, priority or canonical status is implied.",
+    "canonicalization_state": "Five selected programme objects; four source-current public projections and one explicit withheld projection. Subordinate mechanisms remain in programme papers and registries.",
+    "unresolved_downstream_bottleneck": "Publish the reviewed #1041 proof route, then reassess whether it can join first contact without weakening its ordinary-proof and specialist-review boundary.",
+    "next_stage_owner": "Public release owner for source parity and external specialist reviewers for mathematical digestion"
+  },
+  "items": [
+    {
+      "problem": "68",
+      "kind": "Exact endpoint",
+      "title": "Irrationality becomes one cofinal divisibility question",
+      "why": "The original series problem is reduced without loss to an integer event that can be attacked directly.",
+      "evidence": "Lean checked exact equivalence",
+      "hard_step": "Force failures of m dividing the strict successor beyond every cutoff.",
+      "attribution": "Classical factorial radix context; source specific formal synthesis; no priority claim.",
+      "boundary": "No cofinal producer is known, so Erdős #68 remains open.",
+      "handle": "ErdosProblems.Erdos68.irrational_factorialGapSeries_iff_cofinal_strictFacTopRat_misses",
+      "href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos68/FactorialZeroPlateau.lean#L1090"
+    },
+    {
+      "problem": "249",
+      "kind": "Canonical reduction",
+      "title": "One universal Mersenne residue gap is the exact frontier",
+      "why": "Several competing attack languages collapse to one forced basepoint modular supply with the full quantifier order visible.",
+      "evidence": "Lean checked exact equivalence",
+      "hard_step": "Produce the strict centered gap for every basepoint and every positive odd denominator shape.",
+      "attribution": "Classical radix tails, Euler periodicity and modular arithmetic; no priority claim for the packaging.",
+      "boundary": "The universal gap supply is unproved, so Erdős #249 remains open.",
+      "handle": "ErdosProblems.Erdos249.fullMersenneCanonicalBasepointResidueGapSupply_iff_irrational",
+      "href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos249/CyclotomicAnchoredKill.lean#L2976"
+    },
+    {
+      "problem": "251",
+      "kind": "Coordinate change",
+      "title": "The prime series is exactly a weighted gap tail",
+      "why": "Summation by parts keeps the endpoint and identifies the actual infinite obstruction, instead of treating prime irregularity as evidence by itself.",
+      "evidence": "Lean checked identity, convergence and rational affine equivalence",
+      "hard_step": "Prove an infinite obstruction for the genuine consecutive prime gap tail.",
+      "attribution": "Exact summation by parts with a direct public antecedent; no new prime gap theorem or novelty claim.",
+      "boundary": "Finite denominator screens and generic gap countermodels do not prove irrationality, so Erdős #251 remains open.",
+      "handle": "ErdosProblems.Erdos251.dyadicPartialSumQ_eq_start_add_differences",
+      "href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos251/PrimeGapDyadicTail.lean#L138"
+    },
+    {
+      "problem": "257",
+      "kind": "Canonical normal form",
+      "title": "Rational membership means actual skips forever",
+      "why": "A set existence question becomes a statement about one canonical greedy orbit, with no freedom to choose a convenient support.",
+      "evidence": "Lean checked exact equivalence for every nonnegative rational target",
+      "hard_step": "Produce cofinal actual skips for 1/2, 1/21 or another unresolved target.",
+      "attribution": "Uses the classical Erdős Borwein irrationality theorem inside a source specific greedy synthesis; no priority claim.",
+      "boundary": "Finite traces and arbitrary omitted supports do not supply the canonical cofinal skips, so Erdős #257 remains open.",
+      "handle": "ErdosProblems.Erdos257.rat_mem_mersenneAchievementSet_iff_cofinal_greedy_skips",
+      "href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos257/MersenneSubseriesRigidity.lean#L16"
+    },
+    {
+      "problem": "1041",
+      "kind": "All degree partial theorem",
+      "title": "A constant factor path exists in every degree",
+      "why": "The unrestricted geometry has an absolute all degree bound, while the critical level singularity becomes the precise obstruction to the sharp target.",
+      "evidence": "Authored ordinary universal proof with finite regression; no Lean or independent specialist review",
+      "hard_step": "Review the component coarea calculation and remove the enlargement from K_mu to K_(2mu).",
+      "attribution": "Classical length area, coarea and lemniscate mechanisms; the exact synthesis was not located in bounded search and no priority is claimed.",
+      "boundary": "The constant is 8, the path lies in K_(2mu), and Erdős #1041 remains open.",
+      "handle": "UnconditionalConstantFactorBound.md::unconditional_constant_factor_pair_geodesic",
+      "href": "https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf",
+      "publication_state": "withheld_until_stable_public_proof_route"
+    }
+  ]
+}
