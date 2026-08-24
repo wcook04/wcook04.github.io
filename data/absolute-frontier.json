@@ -7,17 +7,17 @@
   },
   "public_source_commit": "c10393a7420adc1ac3f9097df4c940e02047218d",
   "thesis": "These are the strongest current internal review candidates across the whole programme. Each changes the shape of an attack, exposes an exact endpoint, or raises the known claim ceiling. Focus an item for its evidence, hard step and limit.",
-  "selection_note": "Four have source current public proof routes. The fifth remains withheld until its authored proof has a stable route. This is internal reading triage, not peer review, community acceptance, priority or a claim of canonical status.",
+  "selection_note": "Five inspectable objects are shown with their evidence classes. The #1041 theorem is an authored ordinary proof with finite regression, not a Lean theorem or peer-reviewed result. This is internal reading triage, not peer review, community acceptance, priority or a claim of canonical status.",
   "tao_pipeline_receipt": {
     "input_stage": "verified and internally adjudicated programme objects",
     "output_stage": "public exposition and review routing",
     "artifact": "generated absolute-frontier first-contact layer",
     "human_understanding_delta": "A cold reader sees the programme thesis, then a scarce cross-programme mathematical shortlist, then one frontier for each of eight problems. Counts and registries no longer compete with the mathematical first contact.",
-    "verification_state": "Each public flagship names its exact evidence class and immutable proof handle. The #1041 ordinary theorem is withheld until its proof has a stable public route.",
+    "verification_state": "Each public flagship names its exact evidence class and immutable proof handle. The #1041 ordinary theorem is public with its non-Lean and no-independent-review boundary adjacent.",
     "publication_or_review_state": "Internal review triage and public exposition only. No community acceptance, peer review, priority or canonical status is implied.",
-    "canonicalization_state": "Five selected programme objects; four source-current public projections and one explicit withheld projection. Subordinate mechanisms remain in programme papers and registries.",
-    "unresolved_downstream_bottleneck": "Publish the reviewed #1041 proof route, then reassess whether it can join first contact without weakening its ordinary-proof and specialist-review boundary.",
-    "next_stage_owner": "Public release owner for source parity and external specialist reviewers for mathematical digestion"
+    "canonicalization_state": "Five selected programme objects with status-tagged public projections. Subordinate mechanisms remain in programme papers and registries.",
+    "unresolved_downstream_bottleneck": "Obtain external mathematical scrutiny of the five inspectable objects without confusing publication with acceptance, then replace a flagship only when stronger evidence changes the programme frontier.",
+    "next_stage_owner": "External mathematical reviewers for digestion and the public release owner for source parity"
   },
   "items": [
     {
@@ -79,7 +79,7 @@
       "boundary": "The constant is 8, the path lies in K_(2mu), and Erdős #1041 remains open.",
       "handle": "UnconditionalConstantFactorBound.md::unconditional_constant_factor_pair_geodesic",
       "href": "https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf",
-      "publication_state": "withheld_until_stable_public_proof_route"
+      "publication_state": "public"
     }
   ]
 }

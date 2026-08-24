@@ -402,6 +402,20 @@
     .flagship:nth-child(odd) { padding-right: 1rem; }
     .flagship:nth-child(even) { padding-left: 1rem; border-left: 1px solid var(--hair); }
     .flagship:nth-last-child(-n + 2) { border-bottom: 0; }
+    .flagship:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+      padding-right: 0;
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      column-gap: 1.25rem;
+    }
+    .flagship:last-child:nth-child(odd) .flagship__line,
+    .flagship:last-child:nth-child(odd) h3 { grid-column: 1; }
+    .flagship:last-child:nth-child(odd) .flagship__why {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      align-self: center;
+    }
     .flagship__line {
       display: flex;
       gap: .45rem;
@@ -435,6 +449,7 @@
       .flagship:nth-child(even) { padding-left: 0; border-left: 0; }
       .flagship:nth-last-child(-n + 2) { border-bottom: 1px solid var(--hair); }
       .flagship:last-child { border-bottom: 0; }
+      .flagship:last-child:nth-child(odd) { display: block; }
     }
 
     /* The route index, in the register of the Plectis right-hand rail:
@@ -2506,7 +2521,7 @@
             <p class="flagship__why">The unrestricted geometry has an absolute all degree bound, while the critical level singularity becomes the precise obstruction to the sharp target.</p>
           </article>
         </div>
-        <p class="absolute-frontier__note">Five inspectable objects are shown with their evidence classes. The #1041 theorem is an authored ordinary proof with finite regression, not a Lean theorem or peer-reviewed result. This is internal reading triage, not community acceptance, priority or a claim of canonical status.</p>
+        <p class="absolute-frontier__note">Five inspectable objects are shown with their evidence classes. The #1041 theorem is an authored ordinary proof with finite regression, not a Lean theorem or peer-reviewed result. This is internal reading triage, not peer review, community acceptance, priority or a claim of canonical status.</p>
       </section>
       <!-- END generated absolute frontier -->
 
