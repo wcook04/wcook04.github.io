@@ -88,6 +88,9 @@ def main() -> int:
     require("it does not assess papers, citations, intended meaning, novelty or significance" in text, "Comparator limit missing")
     require("not universal #257" in text, "representative-check boundary missing")
     require("It returns the statement, exact declaration, Comparator interface, paper, and boundary:" in text, "representative replay no longer explains its evidence route")
+    require('frame.setAttribute("data-view", view);' in text, "destination frame no longer switches its view")
+    require('if (view === "problem") frame.setAttribute("data-problem", d.problem);' in text, "destination frame no longer selects a portrait sheet")
+    require('document.addEventListener("focusin", function (ev) {' in text, "frontier sheets no longer have a keyboard route")
 
     lean_links = re.findall(
         r'https://github\.com/wcook04/plectis-lean-erdos249-257/(?:tree|blob)/[^"\s<]+',
