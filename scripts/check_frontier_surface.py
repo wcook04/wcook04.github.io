@@ -74,6 +74,7 @@ def main() -> int:
     require(" / snapshot 11a3187 · docs/EXTERNAL_VERIFICATION.md" in text, "destination plate no longer discloses its evidence snapshot")
     require('<template id="archived-plate">' in text, "archived plate regained a live delivery path")
     require("Eight formally checked frontiers" in text, "opening lost the frontier")
+    require("Open a number for its question and evidence record." in text, "narrow-screen frontier route missing")
     require("none is a solution claim" in text, "open-problem boundary missing")
     require("not human mathematical peer review" in text, "review boundary missing")
     require("Comparator rechecks selected propositions" in text, "Comparator scope missing")
