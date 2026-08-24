@@ -416,6 +416,19 @@
        accessible text counterpart to the larger frontier plate in the desktop
        destination window: one checked handle and one unresolved obligation per
        problem, never a compressed solution claim. */
+    /* The portrait sheets are deliberately a preview, not a second navigation
+       system. Make the gesture legible in the reading rail itself: the hint
+       beside the changing desktop frame can sit outside a reader's first
+       viewport. */
+    .frontier-instruction {
+      grid-column: 2;
+      margin: .42rem 0 .12rem;
+      font-family: var(--font-sans);
+      font-size: .66rem;
+      letter-spacing: .035em;
+      line-height: 1.35;
+      color: var(--faint);
+    }
     .frontier {
       grid-column: 2;
       display: grid;
@@ -1901,6 +1914,7 @@
                  a new release, peer-review, or novelty claim. -->
             <p class="name"><a data-to="repo" data-dest="math-frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/tree/11a318711096671ce1c00257a55fe5d7b9963864">Lean corpus</a></p>
             <p class="desc"><a class="term" data-term="machine-checked" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-machine-checked">Machine-checked</a> mathematics on eight <a class="term" data-term="open-problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">open</a> Erd&#337;s problems. Each frontier below names one cleared statement and the exact step that remains open; none is a solution claim. These are verification records, not human mathematical peer review.</p>
+            <p class="frontier-instruction">Hover or focus a problem number for its one-page brief.</p>
             <div class="frontier" role="list" aria-label="One checked frontier and one open boundary for each public Erdős problem">
               <p role="listitem" data-dest="problem-68"><a data-to="repo" data-dest="problem-68" aria-label="#68 — Erdős problem 68: Is the series sum from n at least 2 of 1 over n factorial minus 1 irrational? Read its verification packet." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-68">#68</a> exact cofinal-divisibility equivalence; cofinal failures remain unproved.</p>
               <p role="listitem" data-dest="problem-243"><a data-to="repo" data-dest="problem-243" aria-label="#243 — Erdős problem 243: Under rapid growth, does rationality of an integer sequence's reciprocal sum force the Sylvester recurrence eventually? Read its verification packet." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-243">#243</a> exact tail-state defect identity; the unrestricted case remains open.</p>
