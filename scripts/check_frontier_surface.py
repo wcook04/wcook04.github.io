@@ -19,7 +19,12 @@ INDEX = ROOT / "index.html"
 OG_FRONTIER = ROOT / "assets" / "og-frontier.svg"
 SITEMAP = ROOT / "sitemap.xml"
 ROBOTS = ROOT / "robots.txt"
-SNAPSHOT = "fd25c0b5f11a5d0c1834740991a008da56643808"
+ABSOLUTE_FRONTIER_SOURCE = ROOT / "data" / "absolute-frontier.json"
+SNAPSHOT = json.loads(ABSOLUTE_FRONTIER_SOURCE.read_text(encoding="utf-8"))[
+    "public_source_commit"
+]
+if not isinstance(SNAPSHOT, str) or re.fullmatch(r"[0-9a-f]{40}", SNAPSHOT) is None:
+    raise ValueError("absolute-frontier public_source_commit must be a full commit")
 PROBLEMS = ("68", "243", "249", "251", "257", "269", "1041", "1049")
 FRONTIER_LABELS = {
     "68": "exact cofinal-divisibility equivalence",
@@ -40,6 +45,16 @@ PROBLEM_TOPICS = {
     "269": "Three-prime running LCMs",
     "1041": "Short lemniscate connections",
     "1049": "Lambert series at rational bases",
+}
+PROBLEM_PAPERS = {
+    "68": "erdos-68-factorial-denominator-irrationality.pdf",
+    "243": "erdos-243-reciprocal-tail-rigidity.pdf",
+    "249": "erdos-249-binary-totient-series.pdf",
+    "251": "erdos-251-prime-gap-dyadic-series.pdf",
+    "257": "erdos-257-mersenne-support-subseries.pdf",
+    "269": "erdos-269-three-prime-running-lcm.pdf",
+    "1041": "erdos-1041-lemniscate-newton-flow.pdf",
+    "1049": "erdos-1049-rational-base-lambert.pdf",
 }
 ACCESSIBLE_QUESTION_MARKERS = {
     "1049": "For which rational t &gt; 1 is F(t)",
@@ -97,9 +112,6 @@ FRONTIER_SHEET_ANCHORS = {
         "Irrationality at 3/2, or for any rational base.",
     ),
 }
-
-ABSOLUTE_FRONTIER_SOURCE = ROOT / "data" / "absolute-frontier.json"
-
 
 def require(condition: bool, message: str) -> None:
     if not condition:
@@ -162,10 +174,13 @@ def main() -> int:
     )
     primary_route = (
         "https://github.com/wcook04/plectis-lean-erdos249-257/"
-        f"blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md"
+        f"blob/{SNAPSHOT}/README.md#eight-programme-map"
     )
     require(primary_route in text, "primary frontier entry no longer opens the programme map")
-    require(" / snapshot fd25c0b · docs/EXTERNAL_VERIFICATION.md" in text, "destination plate no longer discloses its evidence snapshot")
+    require(
+        f" / snapshot {SNAPSHOT[:7]} · README.md" in text,
+        "destination plate no longer discloses its evidence snapshot",
+    )
     require('<picture>\n      <source type="image/avif"' in text, "art plate is no longer delivered on the front door")
     require(
         "filter: saturate(.9) contrast(.92) brightness(.76)" not in text,
@@ -280,7 +295,7 @@ def main() -> int:
         text,
     )
     require(lean_links, "front door has no Lean evidence links")
-    allowed_source_commits = {SNAPSHOT, absolute_frontier["public_source_commit"]}
+    allowed_source_commits = {SNAPSHOT}
     for link in lean_links:
         require(
             any(f"/{commit}" in link for commit in allowed_source_commits),
@@ -294,14 +309,14 @@ def main() -> int:
         )
         require(selector in text, f"#{number} portrait is not selected by its frontier route")
         expected_url = (
-            "https://github.com/wcook04/plectis-lean-erdos249-257/"
-            f"blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md#programme-{number}"
+            "https://wcook04.github.io/plectis/papers/"
+            f"{PROBLEM_PAPERS[number]}"
         )
         route = re.search(
             rf'<p role="listitem" data-dest="problem-{number}">(.*?)</p>', text
         )
         require(route is not None, f"missing accessible frontier entry for #{number}")
-        require(expected_url in route.group(1), f"#{number} does not use the pinned packet")
+        require(expected_url in route.group(1), f"#{number} does not open its readable paper")
         require(
             "Hover or focus for the question, checked object and open boundary." in route.group(1),
             f"#{number} compact route no longer points to its portrait sheet",

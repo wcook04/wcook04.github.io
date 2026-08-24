@@ -396,10 +396,10 @@
       position: relative;
       min-width: 0;
       display: grid;
-      grid-template-columns: 8.5rem minmax(0, 1fr);
-      align-items: baseline;
+      grid-template-columns: 7.4rem minmax(0, 1fr);
+      align-items: center;
       gap: .7rem;
-      padding: .48rem 0 .5rem;
+      padding: .62rem 0;
       border-bottom: 1px solid var(--hair);
       outline: none;
     }
@@ -416,18 +416,33 @@
     .flagship__number { color: var(--to-repo); font-weight: 700; }
     .flagship__kind { color: var(--faint); }
     .flagship h3 { margin: 0; font-size: 1rem; line-height: 1.18; color: var(--bone); }
-    /* The result is stated here, not behind the link and not behind a hover.
-       A flagship still raises the destination window, which is the instrument
-       that answers "what is this problem" for all eight; but a reader who
-       never hovers, or who is on a phone where there is no hover, still gets
-       the question, what the reduction buys, the evidence and the missing
-       step. The links below are cited as evidence, not used as the
-       destination: sending a cold reader to a Comparator routing registry to
-       find out what a result says is how this section used to fail. */
-    .flagship__body { min-width: 0; display: flex; flex-direction: column; gap: .28rem; }
+    /* The shortlist is an index, not five miniature theorem cards. The right
+       inspection plate already supplies the question, checked frontier and
+       open boundary on hover or keyboard focus. Keep the full wording in the
+       document for accessibility and source inspection, but let the visible
+       first pass stay compact. */
+    .flagship__body {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: .75rem;
+    }
     .flagship__question,
     .flagship__why,
-    .flagship__fact { margin: 0; font-size: .82rem; line-height: 1.45; color: var(--bone-soft); }
+    .flagship__fact,
+    .flagship__attribution,
+    .flagship__caveat {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
     .flagship__question { margin-top: .16rem; }
     .flagship__why { color: var(--bone); }
     .flagship__tag {
@@ -442,13 +457,12 @@
       color: var(--faint);
     }
     .flagship__fact--open .flagship__tag { color: var(--to-repo); }
-    .flagship__attribution,
-    .flagship__caveat { margin: 0; font-size: .65rem; line-height: 1.4; color: var(--faint); }
     .flagship__exits {
-      margin: .1rem 0 0;
+      margin: 0;
       font-family: var(--font-sans);
       font-size: .68rem;
       letter-spacing: .02em;
+      white-space: nowrap;
     }
     .flagship__exits .sep { padding: 0 .38rem; color: var(--hair-strong); }
     .flagship__exits a { color: var(--to-repo); }
@@ -456,6 +470,7 @@
     .absolute-frontier__note { margin: .48rem 0 0; font-size: .65rem; line-height: 1.4; color: var(--faint); }
     @media (max-width: 34rem) {
       .flagship { grid-template-columns: 1fr; gap: .16rem; }
+      .flagship__body { grid-template-columns: 1fr; gap: .3rem; }
       .flagship__tag { display: block; min-width: 0; margin-right: 0; }
     }
 
@@ -2512,7 +2527,7 @@
               <p class="flagship__fact"><span class="flagship__tag">Evidence</span>Lean checked exact equivalence</p>
               <p class="flagship__fact flagship__fact--open"><span class="flagship__tag">Still open</span>Force failures of m dividing the strict successor beyond every cutoff.</p>
               <p class="flagship__attribution">Classical factorial radix context; source specific formal synthesis; no priority claim.</p>
-              <p class="flagship__exits"><a href="https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf">Paper</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos68/EndpointWeightedPrivateSupport.lean">Lean statement</a></p>
+              <p class="flagship__exits"><a href="https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf">Paper</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/ErdosProblems/Erdos68/EndpointWeightedPrivateSupport.lean">Lean statement</a></p>
             </div>
           </article>
           <article class="flagship" tabindex="0" data-dest="problem-249">
@@ -2524,7 +2539,7 @@
               <p class="flagship__fact"><span class="flagship__tag">Evidence</span>Lean checked exact equivalence</p>
               <p class="flagship__fact flagship__fact--open"><span class="flagship__tag">Still open</span>Produce the strict centered gap for every basepoint and every positive odd denominator shape.</p>
               <p class="flagship__attribution">Classical radix tails, Euler periodicity and modular arithmetic; no priority claim for the packaging.</p>
-              <p class="flagship__exits"><a href="https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf">Paper</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos249/CyclotomicAnchoredKill.lean">Lean statement</a></p>
+              <p class="flagship__exits"><a href="https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf">Paper</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/ErdosProblems/Erdos249/CyclotomicAnchoredKill.lean">Lean statement</a></p>
               <p class="flagship__caveat">The paper covers the problem; this particular equivalence is in the Lean source, not in it.</p>
             </div>
           </article>
@@ -2537,7 +2552,7 @@
               <p class="flagship__fact"><span class="flagship__tag">Evidence</span>Lean checked identity, convergence and rational affine equivalence</p>
               <p class="flagship__fact flagship__fact--open"><span class="flagship__tag">Still open</span>Prove an infinite obstruction for the genuine consecutive prime gap tail.</p>
               <p class="flagship__attribution">Exact summation by parts with a direct public antecedent; no new prime gap theorem or novelty claim.</p>
-              <p class="flagship__exits"><a href="https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf">Paper</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos251/PrimeGapDyadicTail.lean">Lean statement</a></p>
+              <p class="flagship__exits"><a href="https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf">Paper</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/ErdosProblems/Erdos251/PrimeGapDyadicTail.lean">Lean statement</a></p>
             </div>
           </article>
           <article class="flagship" tabindex="0" data-dest="problem-257">
@@ -2549,7 +2564,7 @@
               <p class="flagship__fact"><span class="flagship__tag">Evidence</span>Lean checked exact equivalence for every nonnegative rational target</p>
               <p class="flagship__fact flagship__fact--open"><span class="flagship__tag">Still open</span>Produce cofinal actual skips for 1/2, 1/21 or another unresolved target.</p>
               <p class="flagship__attribution">Uses the classical Erdős Borwein irrationality theorem inside a source specific greedy synthesis; no priority claim.</p>
-              <p class="flagship__exits"><a href="https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf">Paper</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/Erdos249257/GreedyAchievementSet.lean">Lean statement</a></p>
+              <p class="flagship__exits"><a href="https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf">Paper</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/Erdos249257/GreedyAchievementSet.lean">Lean statement</a></p>
             </div>
           </article>
           <article class="flagship" tabindex="0" data-dest="problem-1041">
@@ -2584,26 +2599,26 @@
                  The links use the published convergence snapshot rather than a
                  floating branch: this is a reading and verification route, not
                  a new release, peer-review, or novelty claim. -->
-            <p class="name"><a data-to="repo" data-dest="math-frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md">Eight programme map</a></p>
+            <p class="name"><a data-to="repo" data-dest="math-frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/README.md#eight-programme-map">Eight programme map</a></p>
             <p class="desc">One <a class="term" data-term="machine-checked" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-machine-checked">machine-checked</a> statement for each problem, and the exact thing that is still unproved. Hover a number to read both.</p>
             <p class="frontier-instruction"><span class="frontier-instruction__wide">Hover or tab to a number for the question, what was checked, and what is still unproved.</span><span class="frontier-instruction__narrow">Open a number for the question, what was checked, and what is still unproved.</span></p>
             <div class="frontier" role="list" aria-label="One checked frontier and one open boundary for each public Erdős problem">
-              <p role="listitem" data-dest="problem-68"><a data-to="repo" data-dest="problem-68" aria-label="#68: factorial denominator. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md#programme-68">#68</a> <span class="frontier-topic">Factorial denominator</span></p>
-              <p role="listitem" data-dest="problem-243"><a data-to="repo" data-dest="problem-243" aria-label="#243: reciprocal tails. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md#programme-243">#243</a> <span class="frontier-topic">Reciprocal tails</span></p>
-              <p role="listitem" data-dest="problem-249"><a data-to="repo" data-dest="problem-249" aria-label="#249: binary totient series. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md#programme-249">#249</a> <span class="frontier-topic">Binary totient series</span></p>
-              <p role="listitem" data-dest="problem-251"><a data-to="repo" data-dest="problem-251" aria-label="#251: prime-gap dyadic series. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md#programme-251">#251</a> <span class="frontier-topic">Prime-gap dyadic series</span></p>
-              <p role="listitem" data-dest="problem-257"><a data-to="repo" data-dest="problem-257" aria-label="#257: infinite exponent supports. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md#programme-257">#257</a> <span class="frontier-topic">Infinite exponent supports</span></p>
-              <p role="listitem" data-dest="problem-269"><a data-to="repo" data-dest="problem-269" aria-label="#269: three-prime running LCMs. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md#programme-269">#269</a> <span class="frontier-topic">Three-prime running LCMs</span></p>
-              <p role="listitem" data-dest="problem-1041"><a data-to="repo" data-dest="problem-1041" aria-label="#1041: short lemniscate connections. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md#programme-1041">#1041</a> <span class="frontier-topic">Short lemniscate connections</span></p>
-              <p role="listitem" data-dest="problem-1049"><a data-to="repo" data-dest="problem-1049" aria-label="#1049: Lambert series at rational bases. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md#programme-1049">#1049</a> <span class="frontier-topic">Lambert series at rational bases</span></p>
+              <p role="listitem" data-dest="problem-68"><a data-to="repo" data-dest="problem-68" aria-label="#68: factorial denominator. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf">#68</a> <span class="frontier-topic">Factorial denominator</span></p>
+              <p role="listitem" data-dest="problem-243"><a data-to="repo" data-dest="problem-243" aria-label="#243: reciprocal tails. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-243-reciprocal-tail-rigidity.pdf">#243</a> <span class="frontier-topic">Reciprocal tails</span></p>
+              <p role="listitem" data-dest="problem-249"><a data-to="repo" data-dest="problem-249" aria-label="#249: binary totient series. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf">#249</a> <span class="frontier-topic">Binary totient series</span></p>
+              <p role="listitem" data-dest="problem-251"><a data-to="repo" data-dest="problem-251" aria-label="#251: prime-gap dyadic series. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf">#251</a> <span class="frontier-topic">Prime-gap dyadic series</span></p>
+              <p role="listitem" data-dest="problem-257"><a data-to="repo" data-dest="problem-257" aria-label="#257: infinite exponent supports. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf">#257</a> <span class="frontier-topic">Infinite exponent supports</span></p>
+              <p role="listitem" data-dest="problem-269"><a data-to="repo" data-dest="problem-269" aria-label="#269: three-prime running LCMs. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-269-three-prime-running-lcm.pdf">#269</a> <span class="frontier-topic">Three-prime running LCMs</span></p>
+              <p role="listitem" data-dest="problem-1041"><a data-to="repo" data-dest="problem-1041" aria-label="#1041: short lemniscate connections. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf">#1041</a> <span class="frontier-topic">Short lemniscate connections</span></p>
+              <p role="listitem" data-dest="problem-1049"><a data-to="repo" data-dest="problem-1049" aria-label="#1049: Lambert series at rational bases. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf">#1049</a> <span class="frontier-topic">Lambert series at rational bases</span></p>
             </div>
             <p class="exits frontier-exits">
-              <a data-to="repo" data-dest="lean-github" aria-label="Open the pinned Lean source" href="https://github.com/wcook04/plectis-lean-erdos249-257/tree/fd25c0b5f11a5d0c1834740991a008da56643808">Lean source</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Check one theorem without building Lean" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/README.md#read-or-run-it">Check one theorem</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read the programme map for all eight open problems" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md">Read all eight</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="See how selected formal statements are checked" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix">How checking works</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Reproduce the public verification checks" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION_REPLAY.md">Reproduce the checks</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Cite the eight-problem Lean corpus" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/CITATION.cff">Cite the corpus</a>
+              <a data-to="repo" data-dest="lean-github" aria-label="Open the pinned Lean source" href="https://github.com/wcook04/plectis-lean-erdos249-257/tree/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77">Lean source</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Check one theorem without building Lean" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/README.md#read-or-run-it">Check one theorem</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read the programme map for all eight open problems" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/docs/EXTERNAL_VERIFICATION.md">Read all eight</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="See how selected formal statements are checked" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix">How checking works</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Reproduce the public verification checks" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/docs/EXTERNAL_VERIFICATION_REPLAY.md">Reproduce the checks</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Cite the eight-problem Lean corpus" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/CITATION.cff">Cite the corpus</a>
             </p>
             <p class="frontier-comparator">For selected propositions, a second Lean file states the theorem again without its proof. The build checks that the original proof has exactly that type and stays within a fixed axiom budget. This does not review the papers, citations, meaning, novelty or significance.</p>
-            <p class="frontier-proof"><span>Trace one classical benchmark after reading the programme and papers. No Lean build is needed. The route returns the statement, exact declaration, Comparator interface, paper and boundary:</span><a data-to="repo" aria-label="Trace the classical full-support benchmark without a Lean build" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/README.md#read-or-run-it"><code>python3 scripts/verify_claims.py --claim eb_full_support</code></a></p>
+            <p class="frontier-proof"><span>Trace one classical benchmark after reading the programme and papers. No Lean build is needed. The route returns the statement, exact declaration, Comparator interface, paper and boundary:</span><a data-to="repo" aria-label="Trace the classical full-support benchmark without a Lean build" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/README.md#read-or-run-it"><code>python3 scripts/verify_claims.py --claim eb_full_support</code></a></p>
             <p class="row-shot">
-              <a class="shot" data-to="repo" data-dest="lean-github" href="https://github.com/wcook04/plectis-lean-erdos249-257/tree/fd25c0b5f11a5d0c1834740991a008da56643808">
+              <a class="shot" data-to="repo" data-dest="lean-github" href="https://github.com/wcook04/plectis-lean-erdos249-257/tree/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77">
                 <span class="shot__bar"><span class="shot__host">github.com</span><span class="shot__path">…/tree/fd25c0b</span></span>
                 <span class="shot__stage"><img class="shot__img" src="assets/previews/lean-github-640.jpg" alt="" width="640" height="400" loading="lazy" decoding="async"></span>
               </a>
@@ -2749,11 +2764,11 @@
           mathematics is written in
           <a class="term" data-term="lean" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-lean">Lean</a>,
           which checks every step, so you do not have to take my word for
-          <a class="cite" data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md">those claims</a>.
+          <a class="cite" data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/docs/EXTERNAL_VERIFICATION.md">those claims</a>.
           The Erd&#337;s problems the work covers are
           <a class="term" data-term="open-problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">open</a>,
           and
-          <a class="cite" data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md">none of it solves one</a>.
+          <a class="cite" data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/docs/EXTERNAL_VERIFICATION.md">none of it solves one</a>.
         </p>
         <!-- The fact, not the diary. This said the replies so far had been
              out-of-field or no-time, which is true and was the wrong thing to
@@ -2778,7 +2793,7 @@
           Nobody independent has checked the mathematics yet, and nobody
           outside has seen the whole system. If you can evaluate work like
           this, the most useful thing is bounded:
-          <a class="cite" data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/README.md#read-or-run-it">take one representative public claim, follow it to its source and its evidence</a>,
+          <a class="cite" data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/README.md#read-or-run-it">take one representative public claim, follow it to its source and its evidence</a>,
           and tell me where the wording goes further than the record does. If
           you are in a position to look at all
           of it, I would like to show you. I am also looking for work or
@@ -2795,7 +2810,7 @@
         <a data-to="profile" href="https://github.com/wcook04">GitHub</a>
         <a data-to="profile" data-dest="profile-linkedin" href="https://www.linkedin.com/in/will-cook-278127234/">LinkedIn</a>
         <a href="https://wcook04.github.io/plectis/docs/updates.html">Follow updates</a>
-        <a data-to="repo" aria-label="Citation metadata for the reviewed-core release; portfolio-wide citation metadata is pending" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/CITATION.cff">Citation metadata</a>
+        <a data-to="repo" aria-label="Citation metadata for the reviewed-core release; portfolio-wide citation metadata is pending" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/CITATION.cff">Citation metadata</a>
         <a href="https://wcook04.github.io/plectis/#contact">Contact</a>
       </footer>
     </div>
@@ -2955,8 +2970,8 @@
     /* This is presentation text for the destination bar, not the href. The
        abbreviated revision makes the fixed evidence snapshot legible before a
        reader clicks, while the full immutable hash remains in verificationUrl. */
-    var verificationDisplayPath = " / snapshot fd25c0b · docs/EXTERNAL_VERIFICATION.md";
-    var verificationUrl = "https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md";
+    var verificationDisplayPath = " / snapshot 35a5aa0 · README.md";
+    var verificationUrl = "https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/README.md#eight-programme-map";
     var DEST = {
       "plectis-site":     { to: "page",  host: "wcook04.github.io", path: "/plectis/",
                             src: "assets/previews/plectis-site.jpg",     href: "https://wcook04.github.io/plectis/" },
@@ -2966,7 +2981,7 @@
                             src: "assets/previews/plectis-github.jpg",   href: "https://github.com/wcook04/plectis" },
       "math-frontier":   { to: "repo",  view: "frontier", host: "github.com",
                             path: verificationDisplayPath,
-                            href: "https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md" },
+                            href: "https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/docs/EXTERNAL_VERIFICATION.md" },
       "problem-68":      { to: "repo",  view: "problem", problem: "68", host: "github.com",
                             path: verificationDisplayPath + "#programme-68", href: verificationUrl + "#programme-68" },
       "problem-243":     { to: "repo",  view: "problem", problem: "243", host: "github.com",
@@ -3011,7 +3026,7 @@
       "paper-1049":     { to: "page",  host: "wcook04.github.io", path: "/plectis/papers/erdos-1049-rational-base-lambert.pdf",
                             src: "assets/previews/paper-1049-640.jpg", href: "https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf" },
       "lean-github":      { to: "repo",  host: "github.com",        path: "…/tree/fd25c0b",
-                            src: "assets/previews/lean-github.jpg",      href: "https://github.com/wcook04/plectis-lean-erdos249-257/tree/fd25c0b5f11a5d0c1834740991a008da56643808" },
+                            src: "assets/previews/lean-github.jpg",      href: "https://github.com/wcook04/plectis-lean-erdos249-257/tree/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77" },
       "papers-catalogue": { to: "page",  host: "wcook04.github.io", path: "/plectis/docs/papers.html",
                             src: "assets/previews/papers-catalogue.jpg", href: "https://wcook04.github.io/plectis/docs/papers.html" },
       "papers-on-site":   { to: "page",  host: "wcook04.github.io", path: "/plectis/#papers",

@@ -9,12 +9,20 @@ that local root edits have been deployed.
 from __future__ import annotations
 
 from html import unescape
+import json
+from pathlib import Path
 import re
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 
-SNAPSHOT = "fd25c0b5f11a5d0c1834740991a008da56643808"
+ROOT = Path(__file__).resolve().parents[1]
+ABSOLUTE_FRONTIER_SOURCE = ROOT / "data" / "absolute-frontier.json"
+SNAPSHOT = json.loads(ABSOLUTE_FRONTIER_SOURCE.read_text(encoding="utf-8"))[
+    "public_source_commit"
+]
+if not isinstance(SNAPSHOT, str) or re.fullmatch(r"[0-9a-f]{40}", SNAPSHOT) is None:
+    raise ValueError("absolute-frontier public_source_commit must be a full commit")
 PROGRAMME_MARKERS = (
     "#68: Factorial-denominator series",
     "#243: Reciprocal-tail rigidity near the Sylvester recurrence",
@@ -67,7 +75,7 @@ ROUTES = (
         "representative claim route",
         f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/README.md#read-or-run-it",
         (
-            "Start with the mathematics.",
+            "Four source current objects give the shortest route into the mathematics:",
             "python3 scripts/verify_claims.py --claim eb_full_support",
         ),
     ),
@@ -76,7 +84,7 @@ ROUTES = (
         "Comparator appendix",
         f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix",
         (
-            "Nineteen selected propositions are declared again without proofs.",
+            "Twenty selected propositions are declared again without proofs.",
             "A named altered statement must fail.",
             "It does not assess exposition, citations, intended meaning, novelty, or significance.",
         ),

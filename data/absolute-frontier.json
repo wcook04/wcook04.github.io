@@ -5,7 +5,7 @@
     "commit": "3cd77b17f9829bf236b5b9cbe373e8bf6512d1dc",
     "posture": "committed snapshot of internal review triage, not external significance or acceptance authority"
   },
-  "public_source_commit": "c10393a7420adc1ac3f9097df4c940e02047218d",
+  "public_source_commit": "35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77",
   "thesis": "Five results, stated here. Each gives the question, what was actually proved, what backs it and what is still missing.",
   "selection_note": "Every claim above links to the thing that carries it: the paper for the written mathematics, the Lean file for the checked statement. The #1041 result is an ordinary written proof, not checked by Lean and not peer reviewed. This is me choosing what to show you first, not peer review, community acceptance, priority or a claim of canonical status.",
   "tao_pipeline_receipt": {
@@ -33,7 +33,7 @@
       "href": "https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf",
       "question_html": "Is &sum;<sub>n &ge; 2</sub> 1/(n! &minus; 1) irrational?",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf",
-      "lean_href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos68/EndpointWeightedPrivateSupport.lean"
+      "lean_href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/ErdosProblems/Erdos68/EndpointWeightedPrivateSupport.lean"
     },
     {
       "problem": "249",
@@ -48,7 +48,7 @@
       "href": "https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf",
       "question_html": "Is &sum;<sub>n &ge; 1</sub> &phi;(n)/2<sup>n</sup> irrational?",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf",
-      "lean_href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos249/CyclotomicAnchoredKill.lean",
+      "lean_href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/ErdosProblems/Erdos249/CyclotomicAnchoredKill.lean",
       "paper_caveat": "The paper covers the problem; this particular equivalence is in the Lean source, not in it."
     },
     {
@@ -64,7 +64,7 @@
       "href": "https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf",
       "question_html": "Is &sum; p<sub>n</sub>/2<sup>n</sup> over the consecutive primes irrational?",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf",
-      "lean_href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos251/PrimeGapDyadicTail.lean"
+      "lean_href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/ErdosProblems/Erdos251/PrimeGapDyadicTail.lean"
     },
     {
       "problem": "257",
@@ -79,7 +79,7 @@
       "href": "https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf",
       "question_html": "Is &sum;<sub>a &isin; A</sub> 1/(2<sup>a</sup> &minus; 1) irrational for every infinite set A of positive integers?",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf",
-      "lean_href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/Erdos249257/GreedyAchievementSet.lean"
+      "lean_href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/Erdos249257/GreedyAchievementSet.lean"
     },
     {
       "problem": "1041",
