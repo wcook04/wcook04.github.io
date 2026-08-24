@@ -40,6 +40,8 @@ def main() -> int:
     require("Eight formally checked frontiers" in text, "opening lost the frontier")
     require("none is a solution claim" in text, "open-problem boundary missing")
     require("not human mathematical peer review" in text, "review boundary missing")
+    require("Comparator rechecks selected propositions" in text, "Comparator scope missing")
+    require("it does not assess papers, citations, intended meaning, novelty or significance" in text, "Comparator limit missing")
     require("not universal #257" in text, "representative-check boundary missing")
 
     for index, number in enumerate(PROBLEMS):

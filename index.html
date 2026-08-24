@@ -519,6 +519,14 @@
     }
     .frontier-proof a:hover code,
     .frontier-proof a:focus-visible code { color: var(--to-repo-lit); }
+    .frontier-comparator {
+      grid-column: 2;
+      margin: .48rem 0 0;
+      max-width: 31rem;
+      font-size: .68rem;
+      line-height: 1.42;
+      color: var(--faint);
+    }
 
     .exits {
       margin: .34rem 0 0;
@@ -1925,6 +1933,7 @@
             <p class="exits frontier-exits">
               <a data-to="repo" data-dest="lean-github" aria-label="GitHub: the pinned Lean corpus snapshot" href="https://github.com/wcook04/plectis-lean-erdos249-257/tree/11a318711096671ce1c00257a55fe5d7b9963864">GitHub</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Check one Lean corpus claim without a Lean build" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/README.md#read-or-run-it">Check one claim</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read the eight-problem checked frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md">Eight-problem frontier</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read Comparator interfaces checked against separate statements and an axiom budget" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix">Comparator interfaces</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read the reviewer-run replay route for the public verification packet" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION_REPLAY.md">Reviewer replay</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read the citation record for this eight-problem Lean corpus" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/CITATION.cff">Citation record</a>
             </p>
+            <p class="frontier-comparator">Comparator rechecks selected propositions against separate declarations and a fixed axiom budget; it does not assess papers, citations, intended meaning, novelty or significance.</p>
             <p class="frontier-proof"><span>Trace the classical full-support theorem for every integer base b &ge; 2 &mdash; not universal #257 &mdash; with no Lean build:</span><a data-to="repo" aria-label="Trace the classical full-support benchmark without a Lean build" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/README.md#read-or-run-it"><code>python3 scripts/verify_claims.py --claim eb_full_support</code></a></p>
             <p class="row-shot">
               <a class="shot" data-to="repo" data-dest="lean-github" href="https://github.com/wcook04/plectis-lean-erdos249-257/tree/11a318711096671ce1c00257a55fe5d7b9963864">
