@@ -156,6 +156,8 @@ def main() -> int:
     require('frame.setAttribute("data-view", view);' in text, "destination frame no longer switches its view")
     require('if (view === "problem") frame.setAttribute("data-problem", d.problem);' in text, "destination frame no longer selects a portrait sheet")
     require('document.addEventListener("focusin", function (ev) {' in text, "frontier sheets no longer have a keyboard route")
+    require("function routeFocusIsHeld()" in text, "focus-held portrait route missing")
+    require("if (!routeFocusIsHeld()) release();" in text, "focus-driven scroll can erase portrait route")
     require("ALL EIGHT REMAIN OPEN" in og_frontier, "share card lost the open-problem boundary")
     require("EIGHT CHECKED FRONTIERS" in og_frontier, "share card lost its frontier heading")
     for label in OG_FRONTIER_LABELS:

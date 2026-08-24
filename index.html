@@ -2593,15 +2593,22 @@
        The window must not depend on a runtime a reader can switch off. */
     var lastBand = rows.length ? rows[rows.length - 1] : null;
     var stageQueued = false;
+    function routeFocusIsHeld() {
+      var active = document.activeElement;
+      return Boolean(active && active.closest && active.closest(".routes"));
+    }
     function readStage() {
       stageQueued = false;
       /* Scrolling is the reader reading; pointing is the reader asking. So a
          scroll hands the window back to the reading line and drops whatever
-         was being pointed at. Without this a pointer left resting anywhere —
+         was being pointed at. Keyboard focus is a distinct ask: moving focus
+         to a route may scroll it into view, and that scroll must not erase the
+         very portrait sheet the focus just selected. Without this a pointer
+         left resting anywhere —
          on a row, or on the window itself, which is large enough to be a
          comfortable place to leave it — pinned the picture for the rest of
          the page and the reading line silently stopped working. */
-      release();
+      if (!routeFocusIsHeld()) release();
       if (!lastBand) return;
       var line = window.innerHeight * 0.45;
       root.setAttribute("data-stage", line <= lastBand.getBoundingClientRect().bottom ? "on" : "off");
