@@ -64,7 +64,8 @@ def frontier_plate(text: str) -> str:
 def main() -> int:
     text = INDEX.read_text(encoding="utf-8")
     plate = frontier_plate(text)
-    require("Eight open Erd&#337;s problems" in text, "masthead lost the programme")
+    require("<h1>Eight open<br>Erd&#337;s problems</h1>" in text, "masthead no longer leads with the mathematical programme")
+    require("Will Cook &middot; checkable frontier" in text, "masthead lost authorship")
     require(">Eight-problem frontier<" in text, "primary entry label lost the portfolio")
     primary_route = (
         "https://github.com/wcook04/plectis-lean-erdos249-257/"
