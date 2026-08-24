@@ -55,6 +55,7 @@ anything, and the sitemap it declared had never been discovered by that route.
 | `assets/previews/` | Screenshots of each public destination, used as stills on the front door. |
 | `assets/og-frontier.svg` / `.png` | The claim-bounded eight-problem social preview and its PNG delivery file. |
 | `scripts/check_frontier_surface.py` | Static release guard for the all-eight programme map and immutable verification links. |
+| `scripts/check_public_routes.py` | Live smoke check for the public Plectis, paper, Lean, verification, Comparator, replay, citation, and updates hand-offs. |
 
 ## Front-door release check
 
@@ -62,6 +63,7 @@ Before publishing a root-site change, run:
 
 ```sh
 python3 scripts/check_frontier_surface.py
+python3 scripts/check_public_routes.py
 ```
 
 It checks the local front door, not the mathematics: the masthead and opening
@@ -72,6 +74,10 @@ stated open boundary. It also keeps the desktop overview and accessible index
 on the same eight headings, and protects the desktop hover/focus route that
 selects each portrait sheet. The Lean repository remains authority for theorem
 validity and its own release checks.
+
+The live route check follows the external records named by the page, including
+the exact Lean snapshot and the Plectis papers, replay, citation, and updates
+routes. It intentionally does not treat this local root checkout as deployed.
 
 ## Destination kinds
 
