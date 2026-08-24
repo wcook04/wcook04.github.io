@@ -45,6 +45,11 @@ PAPER_PDF_LINKS = (
     "https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf",
     "https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf",
 )
+PAPER_PROBLEM_NUMBERS = ("68", "243", "249", "251", "257", "269", "1041", "1049")
+PAPER_PDF_ROUTES = tuple(
+    (f"public paper PDF #{number}", url)
+    for number, url in zip(PAPER_PROBLEM_NUMBERS, PAPER_PDF_LINKS, strict=True)
+)
 ROUTES = (
     ("Plectis public site", "https://wcook04.github.io/plectis/", None),
     (
@@ -80,6 +85,16 @@ def fetch(url: str) -> tuple[int, str]:
         return response.status, response.read().decode("utf-8", errors="replace")
 
 
+def head(url: str) -> tuple[int, str]:
+    request = Request(
+        url,
+        headers={"User-Agent": "PlectisPublicRouteCheck/1.0"},
+        method="HEAD",
+    )
+    with urlopen(request, timeout=20) as response:  # nosec B310: fixed public URLs
+        return response.status, response.headers.get_content_type()
+
+
 def visible_text(body: str) -> str:
     """Give text markers a stable surface across harmless HTML wrappers."""
     return re.sub(r"\s+", " ", unescape(re.sub(r"<[^>]+>", " ", body)))
@@ -102,9 +117,23 @@ def main() -> int:
             if missing:
                 failures.append(f"{label}: expected public marker missing: {missing[0]}")
 
+    for label, url in PAPER_PDF_ROUTES:
+        try:
+            code, content_type = head(url)
+        except (HTTPError, URLError, TimeoutError) as error:
+            failures.append(f"{label}: {error}")
+            continue
+        if code != 200:
+            failures.append(f"{label}: HTTP {code}")
+        elif content_type != "application/pdf":
+            failures.append(f"{label}: expected PDF, got {content_type}")
+
     if failures:
         raise SystemExit("public routes: FAIL\n" + "\n".join(failures))
-    print(f"public routes: {len(ROUTES)} reader hand-offs reachable at pinned snapshot {SNAPSHOT[:7]}: ok")
+    print(
+        f"public routes: {len(ROUTES)} reader hand-offs and {len(PAPER_PDF_ROUTES)} paper PDFs "
+        f"reachable at pinned snapshot {SNAPSHOT[:7]}: ok"
+    )
     return 0
 
 
