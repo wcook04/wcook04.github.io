@@ -17,6 +17,16 @@ ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
 SNAPSHOT = "11a318711096671ce1c00257a55fe5d7b9963864"
 PROBLEMS = ("68", "243", "249", "251", "257", "269", "1041", "1049")
+FRONTIER_LABELS = {
+    "68": "exact cofinal-divisibility equivalence",
+    "243": "exact tail-state defect identity",
+    "249": "conditional cofinal 9/10 prime-tail escape",
+    "251": "prime/gap summation-by-parts identity",
+    "257": "hereditary strict Mersenne-tail inequality",
+    "269": "three-prime running-LCM structure",
+    "1041": "ray-separation obstruction",
+    "1049": "a construction-specific no-go at 3/2",
+}
 
 
 def require(condition: bool, message: str) -> None:
@@ -51,9 +61,6 @@ def main() -> int:
     require("Comparator rechecks selected propositions" in text, "Comparator scope missing")
     require("it does not assess papers, citations, intended meaning, novelty or significance" in text, "Comparator limit missing")
     require("not universal #257" in text, "representative-check boundary missing")
-    require("conditional cofinal 9/10 prime-tail escape" in text, "#249 heading drifted from the pinned frontier")
-    require("prime/gap summation-by-parts identity" in text, "#251 heading drifted from the pinned frontier")
-    require("hereditary strict Mersenne-tail inequality" in text, "#257 heading drifted from the pinned frontier")
 
     lean_links = re.findall(
         r'https://github\.com/wcook04/plectis-lean-erdos249-257/(?:tree|blob)/[^"\s<]+',
@@ -76,6 +83,10 @@ def main() -> int:
         )
         require(route is not None, f"missing accessible frontier entry for #{number}")
         require(expected_url in route.group(1), f"#{number} does not use the pinned packet")
+        require(
+            FRONTIER_LABELS[number] in route.group(1),
+            f"#{number} visible frontier heading drifted",
+        )
         following = PROBLEMS[index + 1] if index + 1 < len(PROBLEMS) else None
         sheet = problem_sheet(text, number, following)
         require("problem-sheet__question" in sheet, f"#{number} sheet lacks a question")
