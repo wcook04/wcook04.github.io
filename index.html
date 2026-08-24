@@ -876,12 +876,16 @@
 
     .colophon {
       margin: 1.7rem 0 0;
-      display: flex; gap: 1.4rem;
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 1.4rem;
+      row-gap: .56rem;
       font-family: var(--font-sans);
       font-size: .72rem; font-weight: 600;
       letter-spacing: .18em; text-transform: uppercase;
     }
     .colophon a {
+      white-space: nowrap;
       color: var(--faint);
       text-decoration: underline;
       text-decoration-thickness: 1px;
@@ -2090,14 +2094,14 @@
         </p>
       </section>
 
-      <!-- Accounts, not routes, which is why they sit apart from the index and
-           stay in the quiet uppercase rather than taking a destination colour.
-           Contact is a route and points at the section of the Plectis site that
-           already carries every way of reaching me, so the address itself is
-           published in exactly one place. -->
+      <!-- Accounts sit apart from the route index and stay in quiet uppercase.
+           The two action routes are deliberately modest: public updates stay
+           in the generated feed and GitHub surfaces, while contact points to
+           the one place that carries every way of reaching me. -->
       <footer class="colophon">
         <a data-to="profile" href="https://github.com/wcook04">GitHub</a>
         <a data-to="profile" href="https://www.linkedin.com/in/will-cook-278127234/">LinkedIn</a>
+        <a href="https://wcook04.github.io/plectis/docs/updates.html">Follow updates</a>
         <a href="https://wcook04.github.io/plectis/#contact">Contact</a>
       </footer>
     </div>
