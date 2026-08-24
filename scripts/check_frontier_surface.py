@@ -139,6 +139,8 @@ def main() -> int:
     require("The public site for the private work system:" in text, "Plectis route no longer distinguishes public site from private system")
     require("Comparator rechecks selected propositions" in text, "Comparator scope missing")
     require("it does not assess papers, citations, intended meaning, novelty or significance" in text, "Comparator limit missing")
+    require("Comparator: selected claims" in text, "Comparator reader exit missing")
+    require("Run a reviewer replay" in text, "reviewer replay reader exit missing")
     require("not universal #257" in text, "representative-check boundary missing")
     require("It returns the statement, exact declaration, Comparator interface, paper, and boundary:" in text, "representative replay no longer explains its evidence route")
     require('frame.setAttribute("data-view", view);' in text, "destination frame no longer switches its view")
