@@ -64,12 +64,9 @@
   </script>
 
   <style>
-    /* The root is the wet state of the Plectis world: the same plum ground,
-       the same serif register, the same quiet sans wayfinding, with one
-       material plate behind it that has not finished drying. The plate is a
-       committed artwork (assets/plate-01.jpg), selected from the art lab, not
-       drawn at runtime. The page stays nocturnal in both colour schemes; a
-       plate is not something you invert. */
+    /* A restrained dark field lets the research objects, rather than a
+       decorative image, make the first impression. The retained plate is a
+       low-contrast material residue, not the page's subject. */
     :root {
       /* Nocturnal in both schemes, so say so: this makes the user agent paint
          its own furniture — scrollbars, overscroll, the canvas behind the
@@ -217,8 +214,24 @@
        scrolls, so the plate silently rides away with the page instead of
        holding. Measured before scoping it: at scrollY 700 the plate's top read
        -698, which is the scroll, exactly. */
-    .fold { position: relative; }
-    @media (max-width: 1279.98px) { .fold { overflow: hidden; } }
+    .fold {
+      position: relative;
+      background:
+        radial-gradient(ellipse 52% 82% at 78% 38%, rgba(88, 75, 125, .18), transparent 72%),
+        radial-gradient(ellipse 48% 72% at 17% 88%, rgba(91, 48, 77, .12), transparent 72%),
+        linear-gradient(135deg, #15101e 0%, #181420 48%, #121019 100%);
+    }
+    @media (max-width: 1279.98px) {
+      .fold { overflow: hidden; }
+      /* On a narrow screen the plate used to consume the first view before a
+         reader encountered any mathematics. The front door now opens straight
+         onto the programme; the field supplies atmosphere without hiding it. */
+      main.fold > picture { display: none; }
+      main.fold > .col {
+        margin-top: 0;
+        padding-top: clamp(2.4rem, 8svh, 4.2rem);
+      }
+    }
 
     /* One mass, one boundary, one residue field.
 
@@ -299,7 +312,7 @@
       margin: 0;
       font-family: var(--font-serif);
       font-weight: 600;
-      font-size: clamp(3.4rem, 5.8vw, 5.4rem);
+      font-size: clamp(3.1rem, 4.8vw, 4.45rem);
       line-height: 1.04;
       letter-spacing: -0.012em;
     }
@@ -1201,6 +1214,10 @@
            own stickiness alone. Verified at 1600, 1440, 1280: the plate's top
            still reads 2 at rest and 2 while scrolled. */
         overflow: hidden;
+        /* The original wet plate is intentionally demoted: an atmospheric
+           trace behind a public mathematical index, never a competing hero. */
+        opacity: .10;
+        filter: saturate(.62) contrast(.88);
       }
       .plate {
         width: 100%; height: 100%;
@@ -1269,12 +1286,13 @@
         position: sticky; top: var(--thread-h);
         align-self: start;
         height: calc(100svh - var(--thread-h));
-        width: min(46rem, 60%);
+        width: 100%;
         justify-self: start;
         background: linear-gradient(90deg,
-          var(--page) 0%,
-          color-mix(in srgb, var(--page) 78%, transparent) 32%,
-          transparent 100%);
+          rgba(21, 16, 30, .94) 0%,
+          rgba(21, 16, 30, .76) 37%,
+          rgba(21, 16, 30, .36) 70%,
+          rgba(21, 16, 30, .14) 100%);
         pointer-events: none;
         z-index: 0;
       }
@@ -1342,8 +1360,8 @@
         z-index: -1;
         pointer-events: none;
         background: radial-gradient(ellipse closest-side at 50% 50%,
-          color-mix(in srgb, var(--page) 90%, transparent) 0%,
-          color-mix(in srgb, var(--page) 62%, transparent) 46%,
+          rgba(18, 14, 28, .97) 0%,
+          rgba(18, 14, 28, .88) 46%,
           transparent 100%);
       }
       /* ── The stage has a lifecycle ──────────────────────────────────────
@@ -2070,7 +2088,11 @@
     var layers = frame.querySelectorAll(".shot__img");
     if (!host || !path || layers.length < 2) return;
 
-    var current = "plectis-site";
+    /* The first thing a cold reader sees is the programme itself.  Plectis
+       becomes the destination when they ask for the system; it must not win
+       the opening screen merely because it used to be the first still. */
+    var current = null;
+    var openingDestination = "math-frontier";
     var token = 0;
     var warmed = false;
 
@@ -2330,8 +2352,7 @@
         if (rows[i].getBoundingClientRect().top <= line) lineId = rows[i].getAttribute("data-dest-default");
       }
       readStage();
-      paintRow(current);
-      if (lineId && lineId !== current) resolve();
+      show(lineId || openingDestination);
     })();
 
     if (wide.addEventListener) wide.addEventListener("change", function () { paintRow(current); });
