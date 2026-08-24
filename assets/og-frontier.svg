@@ -46,7 +46,7 @@
     </g>
     <g fill="#c8bcb2" font-size="15" letter-spacing=".4">
       <text x="55" y="75">cofinal divisibility</text><text x="288" y="75">tail-state defect</text>
-      <text x="55" y="163">prime-tail escape</text><text x="288" y="163">prime-gap summation</text>
+      <text x="55" y="163">conditional escape</text><text x="288" y="163">prime-gap summation</text>
       <text x="55" y="251">strict Mersenne tail</text><text x="288" y="251">running-LCM structure</text>
       <text x="65" y="339">ray separation</text><text x="299" y="339">rational-base tail</text>
     </g>

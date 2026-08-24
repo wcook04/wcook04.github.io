@@ -41,7 +41,7 @@ PROBLEM_TOPICS = {
 OG_FRONTIER_LABELS = (
     "cofinal divisibility",
     "tail-state defect",
-    "prime-tail escape",
+    "conditional escape",
     "prime-gap summation",
     "strict Mersenne tail",
     "running-LCM structure",
