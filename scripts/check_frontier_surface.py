@@ -25,7 +25,7 @@ FRONTIER_LABELS = {
     "257": "hereditary strict Mersenne-tail inequality",
     "269": "three-prime running-LCM structure",
     "1041": "ray-separation obstruction",
-    "1049": "construction-specific no-go at 3/2",
+    "1049": "rational-base cleared-tail recurrence",
 }
 PROBLEM_TOPICS = {
     "68": "Factorial denominator.",
