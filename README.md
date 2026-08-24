@@ -10,7 +10,7 @@ it lists lives one directory down or in its own repository.
 | **Front door** | <https://wcook04.github.io/> — this repository |
 | **Plectis, the site** | <https://wcook04.github.io/plectis/> · [docs](https://wcook04.github.io/plectis/docs/) · [papers](https://wcook04.github.io/plectis/docs/papers.html) |
 | **Plectis, the repository** | <https://github.com/wcook04/plectis> |
-| **Lean corpus** | <https://github.com/wcook04/plectis-lean-erdos249-257> |
+| **Lean corpus — pinned public snapshot** | <https://github.com/wcook04/plectis-lean-erdos249-257/tree/11a318711096671ce1c00257a55fe5d7b9963864> |
 | **Videos** | [1 min](https://youtu.be/R_--vExxWyk) · [5 min](https://youtu.be/VoWByIOIuBE) · [29 min](https://youtu.be/jA_xC8gmdSs) |
 
 The Plectis site is a separate GitHub Pages deployment — the `gh-pages` branch
