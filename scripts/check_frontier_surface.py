@@ -81,6 +81,7 @@ def main() -> int:
     require("Comparator rechecks selected propositions" in text, "Comparator scope missing")
     require("it does not assess papers, citations, intended meaning, novelty or significance" in text, "Comparator limit missing")
     require("not universal #257" in text, "representative-check boundary missing")
+    require("It returns the statement, exact declaration, Comparator interface, paper, and boundary:" in text, "representative replay no longer explains its evidence route")
 
     lean_links = re.findall(
         r'https://github\.com/wcook04/plectis-lean-erdos249-257/(?:tree|blob)/[^"\s<]+',
