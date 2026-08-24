@@ -53,6 +53,7 @@ anything, and the sitemap it declared had never been discovered by that route.
 | `favicon.ico`, `assets/` | The Plectis mark and its rasters. |
 | `assets/plate-01*` | The plate behind the page, and its size ladder. |
 | `assets/previews/` | Screenshots of each public destination, used as stills on the front door. |
+| `assets/og-frontier.svg` / `.png` | The claim-bounded eight-problem social preview and its PNG delivery file. |
 
 ## Destination kinds
 
@@ -107,6 +108,32 @@ sips -Z 640 -s format jpeg -s formatOptions 68 \
 
 Do not invent browser chrome around the still. The screenshot is the picture
 of the landing; the caption names it.
+
+## Social preview
+
+The share card is a separate object from the destination stills. It has to
+communicate the mathematical first contact before a reader opens the page, so
+`assets/og-frontier.svg` is the source of truth for the eight-problem
+composition. `index.html` points Open Graph and Twitter at the 1200 by 630 PNG
+because social crawlers do not reliably render SVG.
+
+The card carries only the programme-level facts that remain safe outside the
+page: eight open Erdős problems, one checked frontier and one stated remaining
+obligation for each, and the explicit statement that all eight remain open.
+Do not replace it with a generic Plectis mark, a repository screenshot, raw
+corpus counts, or a claim that a problem has been solved.
+
+After changing the SVG, regenerate and inspect the PNG before changing the
+metadata:
+
+```sh
+sips -s format png assets/og-frontier.svg --out assets/og-frontier.png
+sips -g pixelWidth -g pixelHeight -g format assets/og-frontier.png
+```
+
+The expected delivery format is a 1200 by 630 PNG. Keep the `og:image`,
+`og:image:width`, `og:image:height`, `og:image:alt`, `twitter:card`, and
+`twitter:image` fields in `index.html` synchronized with that file.
 
 ## The pair
 
