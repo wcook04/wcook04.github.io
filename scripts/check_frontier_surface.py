@@ -59,9 +59,8 @@ OG_IMAGE_ALT = (
     "lemniscate paths, and rational Lambert. All eight remain open."
 )
 UNFURL_DESCRIPTION = (
-    "Eight open Erdős problems: factorial denominators; reciprocal tails; "
-    "binary totient; prime-gap dyadics; Mersenne supports; three-prime LCMs; "
-    "lemniscate paths; rational Lambert. All remain open."
+    "A public mathematical frontier from Plectis: eight open Erdős problems, "
+    "each with a checked object and an explicit open boundary. All eight remain open."
 )
 FRONTIER_SHEET_ANCHORS = {
     "68": (
