@@ -44,6 +44,17 @@ def main() -> int:
     require("it does not assess papers, citations, intended meaning, novelty or significance" in text, "Comparator limit missing")
     require("not universal #257" in text, "representative-check boundary missing")
 
+    lean_links = re.findall(
+        r'https://github\.com/wcook04/plectis-lean-erdos249-257/(?:tree|blob)/[^"\s<]+',
+        text,
+    )
+    require(lean_links, "front door has no Lean evidence links")
+    for link in lean_links:
+        require(
+            f"/{SNAPSHOT}" in link,
+            f"floating or mismatched Lean evidence link: {link}",
+        )
+
     for index, number in enumerate(PROBLEMS):
         expected_url = (
             "https://github.com/wcook04/plectis-lean-erdos249-257/"
