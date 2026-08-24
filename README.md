@@ -144,11 +144,12 @@ that could check it.
 - Up: the Plectis header carries `Will Cook / Plectis` beside its wordmark, and
   its colophon carries a `Front door` row reading *Will Cook — public work*.
 
-Those two labels are quotations of this page: `Will Cook` is its `<h1>`, and
-*public work* is the role line under it. Rename either, and a sentence on the
-other site stops matching anything a reader can see when they arrive. If you
-change them, change the Plectis header, its colophon, and `PARENT_SITE_LABEL` in
-that site's builder in the same pass.
+Those labels preserve the cross-site return route: `Will Cook` is this page's
+`<h1>`, and *public work* describes the front door in the Plectis colophon. They
+must not be used as a paraphrase of the programme line, which is now **Eight
+open Erdős problems**. If you change either return label, change the Plectis
+header, its colophon, and `PARENT_SITE_LABEL` in that site's builder in the same
+pass.
 
 ## The plate
 
