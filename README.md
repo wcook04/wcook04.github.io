@@ -76,8 +76,9 @@ selects each portrait sheet. The Lean repository remains authority for theorem
 validity and its own release checks.
 
 The live route check follows the external records named by the page, including
-the exact Lean snapshot and the Plectis papers, replay, citation, and updates
-routes. It intentionally does not treat this local root checkout as deployed.
+all eight exact section headings in the pinned verification packet, plus the
+Plectis papers, Comparator, replay, citation, and updates routes. It
+intentionally does not treat this local root checkout as deployed.
 
 ## Destination kinds
 
