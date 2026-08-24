@@ -6,14 +6,14 @@
     "posture": "committed snapshot of internal review triage, not external significance or acceptance authority"
   },
   "public_source_commit": "c10393a7420adc1ac3f9097df4c940e02047218d",
-  "thesis": "Five results to inspect first. Hover or focus one for the question, the evidence and the part that remains open.",
-  "selection_note": "Each one links to source you can read for yourself. The #1041 result is an ordinary written proof, not checked by Lean and not peer reviewed. This is me choosing what to show you first, not peer review, community acceptance, priority or a claim of canonical status.",
+  "thesis": "Five results to read first. Hover or focus one for the question, the evidence and the part that remains open.",
+  "selection_note": "Each one opens the paper for that problem, written for someone reading cold. The Lean statement and the machine check are one row down, under Check. The #1041 result is an ordinary written proof, not checked by Lean and not peer reviewed. This is me choosing what to show you first, not peer review, community acceptance, priority or a claim of canonical status.",
   "tao_pipeline_receipt": {
     "input_stage": "verified and internally adjudicated programme objects",
     "output_stage": "public exposition and review routing",
     "artifact": "generated absolute-frontier first-contact layer",
-    "human_understanding_delta": "A cold reader sees the programme thesis, then a scarce cross-programme mathematical shortlist, then one frontier for each of eight problems. Counts and registries no longer compete with the mathematical first contact.",
-    "verification_state": "Each public flagship names its exact evidence class and immutable proof handle. The #1041 ordinary theorem is public with its non-Lean and no-independent-review boundary adjacent.",
+    "human_understanding_delta": "A cold reader sees the programme thesis, then a scarce cross-programme mathematical shortlist, then one frontier for each of eight problems. Each shortlist result opens the problem paper, so first contact is an abstract that states the theorem, not a Comparator routing registry. Counts and registries no longer compete with the mathematical first contact.",
+    "verification_state": "Each public flagship opens its problem paper, which carries the statement, the proof and a commit-pinned Lean source appendix. The immutable verification packet stays one row down under Check. The #1041 ordinary theorem is public with its non-Lean and no-independent-review boundary adjacent.",
     "publication_or_review_state": "Internal review triage and public exposition only. No community acceptance, peer review, priority or canonical status is implied.",
     "canonicalization_state": "Five selected programme objects with status-tagged public projections. Subordinate mechanisms remain in programme papers and registries.",
     "unresolved_downstream_bottleneck": "Obtain external mathematical scrutiny of the five inspectable objects without confusing publication with acceptance, then replace a flagship only when stronger evidence changes the programme frontier.",
@@ -30,7 +30,7 @@
       "attribution": "Classical factorial radix context; source specific formal synthesis; no priority claim.",
       "boundary": "No cofinal producer is known, so Erdős #68 remains open.",
       "handle": "ErdosProblems.Erdos68.irrational_factorialGapSeries_iff_cofinal_strictFacTopRat_misses",
-      "href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/docs/EXTERNAL_VERIFICATION.md#programme-68"
+      "href": "https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf"
     },
     {
       "problem": "249",
@@ -42,7 +42,7 @@
       "attribution": "Classical radix tails, Euler periodicity and modular arithmetic; no priority claim for the packaging.",
       "boundary": "The universal gap supply is unproved, so Erdős #249 remains open.",
       "handle": "ErdosProblems.Erdos249.fullMersenneCanonicalBasepointResidueGapSupply_iff_irrational",
-      "href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/docs/EXTERNAL_VERIFICATION.md#programme-249"
+      "href": "https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf"
     },
     {
       "problem": "251",
@@ -54,7 +54,7 @@
       "attribution": "Exact summation by parts with a direct public antecedent; no new prime gap theorem or novelty claim.",
       "boundary": "Finite denominator screens and generic gap countermodels do not prove irrationality, so Erdős #251 remains open.",
       "handle": "ErdosProblems.Erdos251.dyadicPartialSumQ_eq_start_add_differences",
-      "href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/docs/EXTERNAL_VERIFICATION.md#programme-251"
+      "href": "https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf"
     },
     {
       "problem": "257",
@@ -66,7 +66,7 @@
       "attribution": "Uses the classical Erdős Borwein irrationality theorem inside a source specific greedy synthesis; no priority claim.",
       "boundary": "Finite traces and arbitrary omitted supports do not supply the canonical cofinal skips, so Erdős #257 remains open.",
       "handle": "ErdosProblems.Erdos257.rat_mem_mersenneAchievementSet_iff_cofinal_greedy_skips",
-      "href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/docs/EXTERNAL_VERIFICATION.md#programme-257"
+      "href": "https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf"
     },
     {
       "problem": "1041",
