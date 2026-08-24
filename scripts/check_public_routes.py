@@ -14,33 +14,35 @@ from urllib.request import Request, urlopen
 
 SNAPSHOT = "11a318711096671ce1c00257a55fe5d7b9963864"
 ROUTES = (
-    ("Plectis public site", "https://wcook04.github.io/plectis/"),
-    ("13-paper catalogue", "https://wcook04.github.io/plectis/docs/papers.html"),
-    ("pinned Lean snapshot", f"https://github.com/wcook04/plectis-lean-erdos249-257/tree/{SNAPSHOT}"),
-    ("eight-problem verification packet", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md"),
-    ("Comparator appendix", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix"),
-    ("reviewer replay", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION_REPLAY.md"),
-    ("citation record", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/CITATION.cff"),
-    ("updates route", "https://wcook04.github.io/plectis/docs/updates.html"),
+    ("Plectis public site", "https://wcook04.github.io/plectis/", None),
+    ("13-paper catalogue", "https://wcook04.github.io/plectis/docs/papers.html", "The 13 papers"),
+    ("pinned Lean snapshot", f"https://github.com/wcook04/plectis-lean-erdos249-257/tree/{SNAPSHOT}", None),
+    ("eight-problem verification packet", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md", "#68 — Factorial-denominator series"),
+    ("Comparator appendix", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix", "comparator-interface-appendix"),
+    ("reviewer replay", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION_REPLAY.md", None),
+    ("citation record", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/CITATION.cff", None),
+    ("updates route", "https://wcook04.github.io/plectis/docs/updates.html", "Follow updates"),
 )
 
 
-def status(url: str) -> int:
+def fetch(url: str) -> tuple[int, str]:
     request = Request(url, headers={"User-Agent": "PlectisPublicRouteCheck/1.0"})
     with urlopen(request, timeout=20) as response:  # nosec B310: fixed public URLs
-        return response.status
+        return response.status, response.read().decode("utf-8", errors="replace")
 
 
 def main() -> int:
     failures: list[str] = []
-    for label, url in ROUTES:
+    for label, url, expected_text in ROUTES:
         try:
-            code = status(url)
+            code, body = fetch(url)
         except (HTTPError, URLError, TimeoutError) as error:
             failures.append(f"{label}: {error}")
             continue
         if code != 200:
             failures.append(f"{label}: HTTP {code}")
+        elif expected_text and expected_text not in body:
+            failures.append(f"{label}: expected public marker missing")
 
     if failures:
         raise SystemExit("public routes: FAIL\n" + "\n".join(failures))
