@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">Eight open Erdős problems — a checkable frontier</title>
+  <desc id="description">One checked frontier and one stated remaining obligation for each of eight open Erdős problems.</desc>
+  <defs>
+    <linearGradient id="wash" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#171020"/>
+      <stop offset="1" stop-color="#211527"/>
+    </linearGradient>
+    <radialGradient id="ember" cx="85%" cy="10%" r="84%">
+      <stop offset="0" stop-color="#742f4d" stop-opacity=".34"/>
+      <stop offset=".46" stop-color="#381d40" stop-opacity=".16"/>
+      <stop offset="1" stop-color="#171020" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#wash)"/>
+  <rect width="1200" height="630" fill="url(#ember)"/>
+  <rect x="0" width="1200" height="4" fill="#b74c78"/>
+  <g fill="none" stroke="#d2a04f" stroke-opacity=".33" stroke-width="1">
+    <path d="M72 174H532"/>
+    <path d="M670 128H1128"/>
+    <path d="M670 538H1128"/>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#c8bcb2">
+    <text x="72" y="96" font-size="15" font-weight="700" letter-spacing="4">FORMAL MATHEMATICS</text>
+    <text x="72" y="143" font-size="16" font-weight="700" letter-spacing="3" fill="#d8a44f">EIGHT OPEN ERDŐS PROBLEMS</text>
+  </g>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#f5ead8">
+    <text x="72" y="248" font-size="67" letter-spacing="-2">A checkable frontier.</text>
+    <text x="72" y="315" font-size="28" fill="#ded2c5">One checked frontier and one stated</text>
+    <text x="72" y="351" font-size="28" fill="#ded2c5">remaining obligation for each.</text>
+  </g>
+  <text x="72" y="430" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="1.2" fill="#d8a44f">ALL EIGHT REMAIN OPEN</text>
+  <g transform="translate(670 170)" font-family="Arial, Helvetica, sans-serif">
+    <text x="0" y="0" font-size="15" font-weight="700" letter-spacing="2.5" fill="#c8bcb2">THE PUBLIC PROGRAMME</text>
+    <g fill="none" stroke="#9b7750" stroke-opacity=".5" stroke-width="1">
+      <path d="M0 28H458"/>
+      <path d="M0 116H458"/>
+      <path d="M0 204H458"/>
+      <path d="M0 292H458"/>
+    </g>
+    <g fill="#d8a44f" font-size="28" font-weight="700">
+      <text x="0" y="75">68</text><text x="234" y="75">243</text>
+      <text x="0" y="163">249</text><text x="234" y="163">251</text>
+      <text x="0" y="251">257</text><text x="234" y="251">269</text>
+      <text x="0" y="339">1041</text><text x="234" y="339">1049</text>
+    </g>
+    <g fill="#c8bcb2" font-size="15" letter-spacing=".4">
+      <text x="55" y="75">frontier recorded</text><text x="288" y="75">frontier recorded</text>
+      <text x="55" y="163">frontier recorded</text><text x="288" y="163">frontier recorded</text>
+      <text x="55" y="251">frontier recorded</text><text x="288" y="251">frontier recorded</text>
+      <text x="65" y="339">frontier recorded</text><text x="299" y="339">frontier recorded</text>
+    </g>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#c8bcb2">
+    <text x="72" y="557" font-size="15" letter-spacing="1.3">PUBLIC LEAN RECORD · PROBLEM PAPERS · REVIEWER REPLAY</text>
+    <text x="72" y="588" font-size="16" fill="#d8a44f">wcook04.github.io</text>
+  </g>
+</svg>
