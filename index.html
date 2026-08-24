@@ -258,11 +258,6 @@
       mask-image: linear-gradient(180deg, #000 74%, transparent 100%);
     }
 
-    /* The front door is a research index, not a poster. The former wet plate
-       made the mathematics compete with decorative colour, so it is retained
-       as an archival asset but deliberately absent from the reading surface. */
-    main.fold > picture { display: none; }
-
     .col {
       position: relative; z-index: 1;
       display: flex; flex-direction: column;
@@ -1671,7 +1666,7 @@
          100vw in both layouts, the plate being full-width below 1280px and
          full-bleed above it; cover then magnifies the chosen file by about
          1.8x in the poster state, which lands a 3x phone nearer 2x. -->
-    <picture hidden>
+    <template id="archived-plate">
       <source type="image/avif" sizes="100vw"
               srcset="assets/plate-01-960.avif 960w,
                       assets/plate-01-1280.avif 1280w,
@@ -1682,8 +1677,8 @@
            srcset="assets/plate-01-960.jpg 960w,
                    assets/plate-01-1280.jpg 1280w,
                    assets/plate-01.jpg 2560w"
-           loading="lazy" decoding="async" aria-hidden="true">
-    </picture>
+           decoding="async" aria-hidden="true">
+    </template>
 
     <!-- One window, showing the page a route actually lands on and the URL it
          lands at. There is no picker: the index IS the picker, and the strip

@@ -171,8 +171,8 @@ pass.
 ## Archived plate
 
 `assets/plate-01.jpg` is former artwork: Wet Proof, plate 01, seed 5 at
-2560x1600, made by `assets/plate-01.lab.py`. It is retained for provenance,
-not shown on the root front door, and no longer receives priority loading. The
+2560x1600, made by `assets/plate-01.lab.py`. It is retained for provenance in
+an inert HTML template, not shown or loaded by the root front door. The
 programme index and portrait problem sheets now carry the visual hierarchy.
 
 The ladder below is archival source material. Do not restore it to the reading
@@ -216,9 +216,8 @@ measurably worse at the same size, and the browsers that read WebP but not AVIF
 are a narrow band that the JPEG already serves correctly. Two formats is the
 most this page should carry.
 
-The retained markup is hidden, and its fallback image is lazy-loaded. Any
-intentional return of the artwork requires a fresh visual and performance
-review; do not reinstate the former eager `fetchpriority` setting.
+Any intentional return of the artwork requires a fresh visual and performance
+review; do not reinstate it as an eager decorative hero.
 
 ## The mark
 
