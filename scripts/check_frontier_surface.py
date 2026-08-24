@@ -145,6 +145,14 @@ def main() -> int:
     require("Run a reviewer replay" in text, "reviewer replay reader exit missing")
     require("not universal #257" in text, "representative-check boundary missing")
     require("It returns the statement, exact declaration, Comparator interface, paper, and boundary:" in text, "representative replay no longer explains its evidence route")
+    require(
+        '<a href="https://wcook04.github.io/plectis/docs/updates.html">Follow updates</a>' in text,
+        "public updates exit missing",
+    )
+    require(
+        '<a href="https://wcook04.github.io/plectis/#contact">Contact</a>' in text,
+        "public contact exit missing",
+    )
     require('frame.setAttribute("data-view", view);' in text, "destination frame no longer switches its view")
     require('if (view === "problem") frame.setAttribute("data-problem", d.problem);' in text, "destination frame no longer selects a portrait sheet")
     require('document.addEventListener("focusin", function (ev) {' in text, "frontier sheets no longer have a keyboard route")
