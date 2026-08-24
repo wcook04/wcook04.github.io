@@ -153,6 +153,10 @@ def main() -> int:
         '<a href="https://wcook04.github.io/plectis/#contact">Contact</a>' in text,
         "public contact exit missing",
     )
+    require(
+        f'<a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/CITATION.cff">Cite the corpus</a>' in text,
+        "public citation exit missing",
+    )
     require('frame.setAttribute("data-view", view);' in text, "destination frame no longer switches its view")
     require('if (view === "problem") frame.setAttribute("data-problem", d.problem);' in text, "destination frame no longer selects a portrait sheet")
     require('document.addEventListener("focusin", function (ev) {' in text, "frontier sheets no longer have a keyboard route")
