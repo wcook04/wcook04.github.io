@@ -123,6 +123,10 @@ def main() -> int:
     require("<h1>Eight open<br>Erd&#337;s problems</h1>" in text, "masthead no longer leads with the mathematical programme")
     require("Will Cook &middot; checkable frontier" in text, "masthead lost authorship")
     require(">Eight-problem frontier<" in text, "primary entry label lost the portfolio")
+    require(
+        "#249/#257" not in text,
+        "front door reintroduced the two-problem historical core as its programme identity",
+    )
     primary_route = (
         "https://github.com/wcook04/plectis-lean-erdos249-257/"
         f"blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md"
