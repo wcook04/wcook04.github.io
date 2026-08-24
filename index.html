@@ -340,9 +340,21 @@
     }
     .role::before { content: ""; width: 2.4rem; height: 1px; background: var(--hair-strong); }
 
+    /* Measure is set in CHARACTERS, not pixels, and that is the whole reason
+       these two caps differ. A pixel cap shared by two different sizes gives
+       the smaller face more characters per line, which is backwards: smaller
+       type needs a SHORTER line, not a longer one. Both of these were at 46rem
+       and measured 80 characters a line for the intro and 97 for the thesis
+       under it, against 60 to 63 everywhere else on the page. Ninety-seven is
+       roughly half as long again as anything a reader has been trained on, and
+       it is the second paragraph a cold reader meets.
+
+       42rem puts the intro at 73 and 30rem puts the thesis at 63, which is the
+       measure .desc, .handoff__lede and .note p already share. Two measures on
+       the page now: display and body. */
     .intro {
       margin: 1.35rem 0 0;
-      max-width: 46rem;
+      max-width: 42rem;
       color: var(--bone-soft);
       font-size: 1.15rem;
     }
@@ -369,7 +381,7 @@
     }
     .absolute-frontier__thesis {
       margin: .55rem 0 .75rem;
-      max-width: 46rem;
+      max-width: 30rem;
       color: var(--bone-soft);
       font-size: .95rem;
       line-height: 1.5;
@@ -658,6 +670,35 @@
       color: var(--faint);
     }
 
+    /* The eight numbers in the paper sentence are routes, not decoration.
+       The sentence already named all eight and linked none of them, so a
+       reader who wanted #249's paper had to go out to a 13-paper catalogue and
+       find it again by hand. On a page whose rule is that a claim names its
+       evidence, naming the eight and then withholding the eight was the
+       omission.
+
+       They take the page pair rather than a colour of their own, because these
+       land on this host and stay on it, and they carry no outbound glyph for
+       the same reason. Tabular figures so eight numbers of three different
+       widths still read as one rank inside the prose, and nowrap so a number
+       never breaks across a line from the hash that introduces it. */
+    .desc a.paper {
+      --to: var(--to-page); --to-lit: var(--to-page-lit);
+      color: var(--to);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: .18em;
+      text-decoration-color: color-mix(in srgb, var(--to) 34%, transparent);
+      transition: color 140ms ease-out, text-decoration-color 140ms ease-out;
+    }
+    .desc a.paper:hover, .desc a.paper:focus-visible {
+      color: var(--to-lit);
+      text-decoration-color: var(--to-lit);
+    }
+    @media (prefers-reduced-motion: reduce) { .desc a.paper { transition: none; } }
+
     .exits {
       margin: .34rem 0 0;
       font-family: var(--font-sans);
@@ -795,10 +836,22 @@
        plum, so inverting the ground is the whole emphasis: no accent, no
        shadow, no scale. Bone on plum measures 11.4:1 read one way and is the
        same pair read the other. */
+    /* A stack, not a wrapping row. The control and the sentence that follows it
+       are two things in sequence, and as a baseline-aligned row they were only
+       ever in sequence by accident of width: the sentence is four lines against
+       a 45px button, so at 1512 and 1920 three of them hung past its foot
+       (46px of overhang, measured) and only at 1280 was the row narrow enough
+       to push it under. Two arrangements either side of a breakpoint, and the
+       wide one reads as a button stuck to the top-left corner of a paragraph.
+
+       flex-basis: 100% does NOT fix this, which is worth writing down: flex
+       line-breaking uses the hypothetical main size, and that is already
+       clamped by the item's own max-width, so a 30rem cap wins and the item
+       still fits beside the button. The direction is the fix. */
     .handoff__act {
       margin: 1.15rem 0 0;
-      display: flex; flex-wrap: wrap; align-items: baseline;
-      gap: .55rem .95rem;
+      display: flex; flex-direction: column; align-items: flex-start;
+      gap: .85rem;
     }
     .btn {
       flex: none;
@@ -857,6 +910,15 @@
       .btn:hover .btn__ext, .btn:focus-visible .btn__ext { top: 0; left: 0; }
     }
 
+    /* Under the button, always. Beside it this paragraph is four lines against
+       a forty-five pixel control, so three of them hang past its foot: measured
+       46px of overhang at 1512 and at 1920, while at 1280 the row is too narrow
+       and it wraps under instead. One arrangement either side of a breakpoint,
+       for a control and its own follow-on sentence, and neither of them is the
+       one that reads: the button ends up looking like an ornament stuck to the
+       top-left of a paragraph. Taking the whole line means it sits under the
+       thing it is about, at the same measure as every other paragraph here,
+       and it does that at every width. */
     .handoff__alt {
       max-width: 30rem;
       font-family: var(--font-sans);
@@ -2438,8 +2500,13 @@
             <h3><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/docs/EXTERNAL_VERIFICATION.md#programme-257">Rational membership means actual skips forever</a></h3>
             <p class="flagship__why">A set existence question becomes a statement about one canonical greedy orbit, with no freedom to choose a convenient support.</p>
           </article>
+          <article class="flagship" tabindex="0" data-dest="problem-1041">
+            <p class="flagship__line"><span class="flagship__number">#1041</span><span class="flagship__kind">All degree partial theorem</span></p>
+            <h3><a href="https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf">A constant factor path exists in every degree</a></h3>
+            <p class="flagship__why">The unrestricted geometry has an absolute all degree bound, while the critical level singularity becomes the precise obstruction to the sharp target.</p>
+          </article>
         </div>
-        <p class="absolute-frontier__note">Four have source current public proof routes. The fifth remains withheld until its authored proof has a stable route. This is internal reading triage, not peer review, community acceptance, priority or a claim of canonical status.</p>
+        <p class="absolute-frontier__note">Five inspectable objects are shown with their evidence classes. The #1041 theorem is an authored ordinary proof with finite regression, not a Lean theorem or peer-reviewed result. This is internal reading triage, not community acceptance, priority or a claim of canonical status.</p>
       </section>
       <!-- END generated absolute frontier -->
 
@@ -2473,6 +2540,8 @@
             <p class="exits frontier-exits">
               <a data-to="repo" data-dest="lean-github" aria-label="Open the pinned Lean source" href="https://github.com/wcook04/plectis-lean-erdos249-257/tree/fd25c0b5f11a5d0c1834740991a008da56643808">Lean source</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Check one theorem without building Lean" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/README.md#read-or-run-it">Check one theorem</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read the programme map for all eight open problems" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md">Read all eight</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="See how selected formal statements are checked" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix">How checking works</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Reproduce the public verification checks" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/docs/EXTERNAL_VERIFICATION_REPLAY.md">Reproduce the checks</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Cite the eight-problem Lean corpus" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/CITATION.cff">Cite the corpus</a>
             </p>
+            <p class="frontier-comparator">For selected propositions, a second Lean file states the theorem again without its proof. The build checks that the original proof has exactly that type and stays within a fixed axiom budget. This does not review the papers, citations, meaning, novelty or significance.</p>
+            <p class="frontier-proof"><span>Trace one classical benchmark after reading the programme and papers. No Lean build is needed. The route returns the statement, exact declaration, Comparator interface, paper and boundary:</span><a data-to="repo" aria-label="Trace the classical full-support benchmark without a Lean build" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/README.md#read-or-run-it"><code>python3 scripts/verify_claims.py --claim eb_full_support</code></a></p>
             <p class="row-shot">
               <a class="shot" data-to="repo" data-dest="lean-github" href="https://github.com/wcook04/plectis-lean-erdos249-257/tree/fd25c0b5f11a5d0c1834740991a008da56643808">
                 <span class="shot__bar"><span class="shot__host">github.com</span><span class="shot__path">…/tree/fd25c0b</span></span>
@@ -2483,7 +2552,7 @@
           <li data-dest-default="papers-catalogue">
             <p class="kind">Read</p>
             <p class="name"><a href="https://wcook04.github.io/plectis/docs/papers.html" data-dest="papers-catalogue">Papers</a></p>
-            <p class="desc">Eight problem papers, for #68, #243, #249, #251, #257, #269, #1041 and #1049, sit inside Plectis&rsquo;s 13-paper catalogue alongside audit and routing material. They are written for someone reading cold.</p>
+            <p class="desc">Eight problem papers, for <a class="paper" href="https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf" aria-label="Paper, PDF: Erd&#337;s #68, factorial denominator irrationality">#68</a>, <a class="paper" href="https://wcook04.github.io/plectis/papers/erdos-243-reciprocal-tail-rigidity.pdf" aria-label="Paper, PDF: Erd&#337;s #243, reciprocal tail rigidity">#243</a>, <a class="paper" href="https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf" aria-label="Paper, PDF: Erd&#337;s #249, the binary totient series">#249</a>, <a class="paper" href="https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf" aria-label="Paper, PDF: Erd&#337;s #251, the prime-gap dyadic series">#251</a>, <a class="paper" href="https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf" aria-label="Paper, PDF: Erd&#337;s #257, Mersenne support subseries">#257</a>, <a class="paper" href="https://wcook04.github.io/plectis/papers/erdos-269-three-prime-running-lcm.pdf" aria-label="Paper, PDF: Erd&#337;s #269, three-prime running LCMs">#269</a>, <a class="paper" href="https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf" aria-label="Paper, PDF: Erd&#337;s #1041, the lemniscate Newton flow">#1041</a> and <a class="paper" href="https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf" aria-label="Paper, PDF: Erd&#337;s #1049, rational-base Lambert series">#1049</a>, sit inside Plectis&rsquo;s 13-paper catalogue alongside audit and routing material. They are written for someone reading cold.</p>
             <p class="exits">
               <a href="https://wcook04.github.io/plectis/docs/papers.html" data-dest="papers-catalogue">Catalogue</a><span class="sep" aria-hidden="true">&middot;</span><a aria-label="On the site: the papers" href="https://wcook04.github.io/plectis/#papers" data-dest="papers-on-site">On the site</a>
             </p>
@@ -2533,8 +2602,6 @@
             </p>
           </li>
         </ul>
-        <p class="frontier-comparator">For selected propositions, a second Lean file states the theorem again without its proof. The build checks that the original proof has exactly that type and stays within a fixed axiom budget. This does not review the papers, citations, meaning, novelty or significance.</p>
-        <p class="frontier-proof"><span>Trace one classical benchmark after reading the programme and papers. No Lean build is needed. The route returns the statement, exact declaration, Comparator interface, paper and boundary:</span><a data-to="repo" aria-label="Trace the classical full-support benchmark without a Lean build" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/fd25c0b5f11a5d0c1834740991a008da56643808/README.md#read-or-run-it"><code>python3 scripts/verify_claims.py --claim eb_full_support</code></a></p>
       </nav>
 
       <!-- The fifth route, held back from the index above because it is not a

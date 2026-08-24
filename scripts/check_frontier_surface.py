@@ -123,6 +123,18 @@ def frontier_plate(text: str) -> str:
     return text[start:end]
 
 
+PAPER_PDF_FOR = {
+    "68": "https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf",
+    "243": "https://wcook04.github.io/plectis/papers/erdos-243-reciprocal-tail-rigidity.pdf",
+    "249": "https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf",
+    "251": "https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf",
+    "257": "https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf",
+    "269": "https://wcook04.github.io/plectis/papers/erdos-269-three-prime-running-lcm.pdf",
+    "1041": "https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf",
+    "1049": "https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf",
+}
+
+
 def main() -> int:
     text = INDEX.read_text(encoding="utf-8")
     og_frontier = OG_FRONTIER.read_text(encoding="utf-8")
@@ -295,10 +307,25 @@ def main() -> int:
             require(declaration in sheet, f"#{number} sheet no longer names its cleared declaration")
             require(boundary in sheet, f"#{number} sheet no longer preserves its exact open boundary")
 
-    paper_sentence = "Eight problem papers, for " + ", ".join(
-        f"#{number}" for number in PROBLEMS[:-1]
-    ) + f" and #{PROBLEMS[-1]},"
-    require(paper_sentence in text, "paper route no longer names all eight problems")
+    # The eight numbers in the paper sentence are now routes, so the old
+    # contiguous-string test could not survive the markup and would have been
+    # the wrong test anyway: it proved the page NAMED all eight, not that a
+    # reader could REACH all eight. Assert the reachable form instead, which is
+    # strictly stronger: the sentence still opens the same way, and every one
+    # of the eight numbers still carries a link to its own paper.
+    require(
+        "Eight problem papers, for " in text,
+        "paper route no longer opens on all eight problem papers",
+    )
+    for number in PROBLEMS:
+        require(
+            f'<a class="paper" href="{PAPER_PDF_FOR[number]}"' in text,
+            f"paper route no longer links #{number} to its own paper",
+        )
+        require(
+            f'>#{number}</a>' in text,
+            f"paper route no longer names #{number} as a reachable number",
+        )
     require("sit inside Plectis&rsquo;s 13-paper catalogue" in text, "paper route lost its catalogue context")
     print("frontier surface: 8 pinned routes, 8 portrait sheets, and all-eight paper route: ok")
     return 0
