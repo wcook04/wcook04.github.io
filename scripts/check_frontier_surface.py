@@ -25,7 +25,7 @@ FRONTIER_LABELS = {
     "257": "hereditary strict Mersenne-tail inequality",
     "269": "three-prime running-LCM structure",
     "1041": "ray-separation obstruction",
-    "1049": "a construction-specific no-go at 3/2",
+    "1049": "construction-specific no-go at 3/2",
 }
 
 
@@ -44,8 +44,16 @@ def problem_sheet(text: str, number: str, following: str | None) -> str:
     return text[start:end]
 
 
+def frontier_plate(text: str) -> str:
+    start = text.find('<span class="shot__frontier"')
+    end = text.find('<!-- One portrait sheet per public problem.', start)
+    require(start >= 0 and end >= 0, "missing or unterminated desktop frontier plate")
+    return text[start:end]
+
+
 def main() -> int:
     text = INDEX.read_text(encoding="utf-8")
+    plate = frontier_plate(text)
     require("Eight open Erd&#337;s problems" in text, "masthead lost the programme")
     require(">Eight-problem frontier<" in text, "primary entry label lost the portfolio")
     primary_route = (
@@ -86,6 +94,10 @@ def main() -> int:
         require(
             FRONTIER_LABELS[number] in route.group(1),
             f"#{number} visible frontier heading drifted",
+        )
+        require(
+            FRONTIER_LABELS[number].lower() in plate.lower(),
+            f"#{number} desktop frontier heading drifted",
         )
         following = PROBLEMS[index + 1] if index + 1 < len(PROBLEMS) else None
         sheet = problem_sheet(text, number, following)
