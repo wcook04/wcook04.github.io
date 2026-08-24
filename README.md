@@ -78,7 +78,7 @@ validity and its own release checks.
 The live route check follows the external records named by the page, including
 all eight exact section headings in the pinned verification packet, plus the
 Plectis papers, representative no-build claim, Comparator, replay, citation,
-and updates routes. It
+updates, full AI review packet, reader digest, and reviewer-brief routes. It
 intentionally does not treat this local root checkout as deployed.
 
 ## Destination kinds
