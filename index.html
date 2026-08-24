@@ -9,14 +9,14 @@
        what favicon and what site name to attach to everything under this host.
        Google resolves both per host, not per directory, so without a real page
        here the whole host inherits GitHub's "Site not found" error page. -->
-  <title>Eight open Erdős problems — Will Cook</title>
+  <title>Eight open Erdős problems | Will Cook</title>
   <meta name="description" content="A checkable frontier for eight open Erdős problems: one formal statement, an explicit remaining obligation, and a route to inspect each.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://wcook04.github.io/">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Will Cook">
-  <meta property="og:title" content="Eight open Erdős problems — a checkable frontier">
+  <meta property="og:title" content="Eight open Erdős problems: a checkable frontier">
   <meta property="og:description" content="Eight open Erdős problems: factorial denominators; reciprocal tails; binary totient; prime-gap dyadics; Mersenne supports; three-prime LCMs; lemniscate paths; rational Lambert. All remain open.">
   <meta property="og:url" content="https://wcook04.github.io/">
   <meta property="og:image" content="https://wcook04.github.io/assets/og-frontier.png">
@@ -25,7 +25,7 @@
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Eight open Erdős problems: factorial denominators, reciprocal tails, binary totient, prime-gap dyadics, Mersenne supports, three-prime LCMs, lemniscate paths, and rational Lambert. All eight remain open.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Eight open Erdős problems — a checkable frontier">
+  <meta name="twitter:title" content="Eight open Erdős problems: a checkable frontier">
   <meta name="twitter:description" content="Eight open Erdős problems: factorial denominators; reciprocal tails; binary totient; prime-gap dyadics; Mersenne supports; three-prime LCMs; lemniscate paths; rational Lambert. All remain open.">
   <meta name="twitter:image" content="https://wcook04.github.io/assets/og-frontier.png">
   <meta name="twitter:image:alt" content="Eight open Erdős problems: factorial denominators, reciprocal tails, binary totient, prime-gap dyadics, Mersenne supports, three-prime LCMs, lemniscate paths, and rational Lambert. All eight remain open.">
@@ -66,9 +66,8 @@
   </script>
 
   <style>
-    /* A restrained dark field lets the research objects, rather than a
-       decorative image, make the first impression. The retained plate is a
-       low-contrast material residue, not the page's subject. */
+    /* A visual field for the public research system. The mathematics remains
+       readable; the plate supplies the atmosphere it is being read inside. */
     :root {
       /* Nocturnal in both schemes, so say so: this makes the user agent paint
          its own furniture — scrollbars, overscroll, the canvas behind the
@@ -243,10 +242,8 @@
     }
     @media (max-width: 1279.98px) {
       .fold { overflow: hidden; }
-      /* On a narrow screen the plate used to consume the first view before a
-         reader encountered any mathematics. The front door now opens straight
-         onto the programme; the field supplies atmosphere without hiding it. */
-      main.fold > picture { display: none; }
+      /* The plate is part of the front door at every size. */
+      main.fold > picture { display: block; opacity: .7; }
       main.fold > .col {
         margin-top: 0;
         padding-top: clamp(2.4rem, 8svh, 4.2rem);
@@ -279,7 +276,7 @@
     .col {
       position: relative; z-index: 1;
       display: flex; flex-direction: column;
-      max-width: 38rem;
+      max-width: 48rem;
       margin-top: -2.2rem;
       padding: 0 clamp(1.4rem, 4.5vw, 4.5rem) clamp(2.4rem, 6svh, 4.2rem);
     }
@@ -322,9 +319,9 @@
       margin: 0;
       font-family: var(--font-serif);
       font-weight: 600;
-      font-size: clamp(3.1rem, 4.8vw, 4.45rem);
-      line-height: 1.04;
-      letter-spacing: -0.012em;
+      font-size: clamp(3.5rem, 10vw, 5.5rem);
+      line-height: .96;
+      letter-spacing: -.04em;
     }
     .role {
       margin: 1.05rem 0 0;
@@ -338,9 +335,9 @@
 
     .intro {
       margin: 1.7rem 0 0;
-      max-width: 30rem;
+      max-width: 39rem;
       color: var(--bone-soft);
-      font-size: 1.09rem;
+      font-size: 1.15rem;
     }
     .intro b { font-weight: 600; color: var(--bone); }
 
@@ -443,23 +440,23 @@
     .frontier {
       grid-column: 2;
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0 .9rem;
-      margin: .62rem 0 0;
-      padding: .12rem 0;
+      grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+      gap: 0 .8rem;
+      margin: .5rem 0 0;
+      padding: .08rem 0;
       border-top: 1px solid var(--hair);
       border-bottom: 1px solid var(--hair);
       font-family: var(--font-sans);
-      font-size: .72rem;
-      line-height: 1.42;
+      font-size: .82rem;
+      line-height: 1.28;
       color: var(--faint);
     }
     .frontier p {
       margin: 0;
-      padding: .46rem 0 .48rem;
+      padding: .48rem 0;
       border-top: 1px solid color-mix(in srgb, var(--hair) 86%, transparent);
     }
-    .frontier p:nth-child(-n + 2) { border-top: 0; }
+    .frontier p:nth-child(-n + 4) { border-top: 0; }
     .frontier p[data-dest] {
       transition: background-color var(--t-interaction) ease-out, color var(--t-interaction) ease-out;
     }
@@ -495,6 +492,7 @@
       font-weight: 600;
       color: var(--bone-soft);
     }
+    .frontier-topic::after { content: ""; }
     @media (max-width: 34rem) {
       .frontier { grid-template-columns: 1fr; }
       .frontier p:nth-child(2) { border-top: 1px solid color-mix(in srgb, var(--hair) 86%, transparent); }
@@ -1232,12 +1230,13 @@
        The accessible list at left remains the non-scripted source of truth. */
     .shot__problem {
       position: absolute; inset: 0;
+      z-index: 2;
       display: flex;
       flex-direction: column;
       padding: 1.45rem 1.55rem 1.35rem;
       background:
         radial-gradient(circle at 100% 0%, rgba(230, 178, 100, .10), transparent 33%),
-        linear-gradient(150deg, rgba(27, 20, 39, .995), rgba(16, 13, 25, .995));
+        linear-gradient(150deg, #1b1427, #100d19);
       font-family: var(--font-sans);
       opacity: 0;
       visibility: hidden;
@@ -1257,7 +1256,10 @@
     }
     .dest__frame[data-view="problem"] .shot__img,
     .dest__frame[data-view="problem"] .shot__map,
-    .dest__frame[data-view="problem"] .shot__frontier { opacity: 0; }
+    .dest__frame[data-view="problem"] .shot__frontier {
+      opacity: 0;
+      visibility: hidden;
+    }
     .problem-sheet__topline {
       display: flex;
       align-items: baseline;
@@ -1407,16 +1409,14 @@
            own stickiness alone. Verified at 1600, 1440, 1280: the plate's top
            still reads 2 at rest and 2 while scrolled. */
         overflow: hidden;
-        /* The original wet plate is intentionally demoted: an atmospheric
-           trace behind a public mathematical index, never a competing hero. */
-        opacity: .10;
-        filter: saturate(.62) contrast(.88);
+        opacity: .92;
+        filter: saturate(.9) contrast(.92) brightness(.76);
       }
       .plate {
         width: 100%; height: 100%;
-        /* Left-anchored: a viewport narrower than the plate crops the right
-           rim, never the column the type stands on. */
-        object-position: 0% 50%;
+        /* The glowing flank is visible on the right, while the copy has a
+           dark field to inhabit on the left. */
+        object-position: 64% 50%;
         -webkit-mask-image: none; mask-image: none;
 
         /* THE CAMERA.
@@ -1468,14 +1468,14 @@
            prove it by algebra disagreed with each other; the pixels do not care
            which was right. Change these numbers and re-run that check. */
         transform-origin: 49% 52%;
-        transform: scale(1.18);
+        transform: scale(1.08);
       }
 
       /* The ground the column stands on: a short pour of the page's own plum
          from the left edge, gone before it reaches the mass. It travels with
          the plate, so the type keeps its footing the whole way down. */
       .fold::after {
-        display: none;
+        display: block;
         content: "";
         position: sticky; top: var(--thread-h);
         align-self: start;
@@ -1483,10 +1483,11 @@
         width: 100%;
         justify-self: start;
         background: linear-gradient(90deg,
-          rgba(21, 16, 30, .94) 0%,
-          rgba(21, 16, 30, .76) 37%,
-          rgba(21, 16, 30, .36) 70%,
-          rgba(21, 16, 30, .14) 100%);
+          rgba(18, 13, 28, .96) 0%,
+          rgba(18, 13, 28, .84) 31%,
+          rgba(18, 13, 28, .57) 51%,
+          rgba(18, 13, 28, .19) 74%,
+          rgba(18, 13, 28, .04) 100%);
         pointer-events: none;
         z-index: 0;
       }
@@ -1494,9 +1495,9 @@
       .col {
         position: relative; z-index: 1;
         min-height: calc(100svh - var(--thread-h));
-        max-width: 34rem;
+        max-width: min(58rem, 54vw);
         margin-top: 0;
-        padding: clamp(2.4rem, 6svh, 4.2rem) clamp(1.4rem, 4.5vw, 4.5rem);
+        padding: clamp(3.5rem, 7vw, 7.5rem) clamp(4.5rem, 7vw, 8.5rem) 4.5rem;
       }
 
       /* The window sits in the plate's frame, right of the type, and it is a
@@ -1522,8 +1523,8 @@
         top: var(--thread-h);
         height: calc(100svh - var(--thread-h));
         z-index: 1;
-        margin-left: min(35rem, 45%);
-        padding: clamp(1.6rem, 4svh, 2.6rem) clamp(1.2rem, 3vw, 3rem);
+        margin-left: 54vw;
+        padding: clamp(1.6rem, 4svh, 2.6rem) 2.5vw;
         pointer-events: none;
       }
       .dest__panel {
@@ -1532,8 +1533,10 @@
         /* Grows with the field it stands in. At 30rem flat the window read as
            a thumbnail pinned to a large picture rather than as the thing being
            shown, and the map below has type in it that has to be read. */
-        width: clamp(27rem, 40vw, 40rem);
+        width: clamp(25rem, 33vw, 36rem);
         max-width: 100%;
+        background: rgba(18, 13, 28, .76);
+        backdrop-filter: blur(3px);
       }
       .dest__panel[data-view="problem"] { width: clamp(21rem, 25vw, 25rem); }
       .dest__frame[data-view="problem"] .shot__stage { aspect-ratio: 7 / 9; }
@@ -1698,7 +1701,7 @@
          100vw in both layouts, the plate being full-width below 1280px and
          full-bleed above it; cover then magnifies the chosen file by about
          1.8x in the poster state, which lands a 3x phone nearer 2x. -->
-    <template id="archived-plate">
+    <picture>
       <source type="image/avif" sizes="100vw"
               srcset="assets/plate-01-960.avif 960w,
                       assets/plate-01-1280.avif 1280w,
@@ -1710,7 +1713,7 @@
                    assets/plate-01-1280.jpg 1280w,
                    assets/plate-01.jpg 2560w"
            decoding="async" aria-hidden="true">
-    </template>
+    </picture>
 
     <!-- One window, showing the page a route actually lands on and the URL it
          lands at. There is no picker: the index IS the picker, and the strip
@@ -1882,7 +1885,7 @@
     <div class="col">
       <header>
         <h1>Eight open<br>Erd&#337;s problems</h1>
-        <p class="role">Will Cook &middot; checkable frontier</p>
+        <p class="role">Plectis &middot; Will Cook &middot; public research system</p>
       </header>
 
       <!-- Two of the four verbs carry a preview and two do not, and that is the
@@ -1918,11 +1921,9 @@
            research programme actually is. "Large" is gone: the routes show
            scale through concrete objects, not a generic adjective. -->
       <p class="intro">
-        Eight formally checked frontiers &mdash; one for each problem in the current public cohort. Each entry names
-        the question, exposes one checked theorem, and says exactly what remains open.
-        The public record is here to <b>read</b>,
-        <b><a class="term" data-term="check" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-check">check</a></b> and replay;
-        Plectis is the public site for the private work system behind it.
+        Plectis is a research system for producing, checking and explaining mathematics.
+        This is its public frontier: eight live Erd&#337;s programmes, each with a representative checked object,
+        a route to inspect the evidence, and an explicit open boundary. None is presented as a solution.
       </p>
 
       <!-- The three scene owners. data-scene-key is read by the runtime at the
@@ -1943,20 +1944,20 @@
             <p class="desc"><a class="term" data-term="machine-checked" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-machine-checked">Machine-checked</a> mathematics on eight <a class="term" data-term="open-problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">open</a> Erd&#337;s problems. Each frontier below names one cleared statement and the exact step that remains open; none is a solution claim. These are verification records, not human mathematical peer review.</p>
             <p class="frontier-instruction"><span class="frontier-instruction__wide">Hover or focus a number for its question, cleared frontier, and exact open boundary.</span><span class="frontier-instruction__narrow">Open a number for its question, checked frontier, and remaining boundary.</span></p>
             <div class="frontier" role="list" aria-label="One checked frontier and one open boundary for each public Erdős problem">
-              <p role="listitem" data-dest="problem-68"><a data-to="repo" data-dest="problem-68" aria-label="#68 — Erdős problem 68: Is the series sum from n at least 2 of 1 over n factorial minus 1 irrational? Read its verification packet." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-68">#68</a> <span class="frontier-topic">Factorial denominator.</span> Exact cofinal-divisibility equivalence; cofinal failures remain unproved.</p>
-              <p role="listitem" data-dest="problem-243"><a data-to="repo" data-dest="problem-243" aria-label="#243 — Erdős problem 243: Under rapid growth, does rationality of an integer sequence's reciprocal sum force the Sylvester recurrence eventually? Read its verification packet." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-243">#243</a> <span class="frontier-topic">Reciprocal tails.</span> Exact tail-state defect identity; the unrestricted case remains open.</p>
-              <p role="listitem" data-dest="problem-249"><a data-to="repo" data-dest="problem-249" aria-label="#249 — Erdős problem 249: Is the binary Lambert series sum of Euler phi of n over 2 to the n irrational? Read its verification packet." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-249">#249</a> <span class="frontier-topic">Binary totient series.</span> Conditional cofinal 9/10 prime-tail escape; the strict gap remains open.</p>
-              <p role="listitem" data-dest="problem-251"><a data-to="repo" data-dest="problem-251" aria-label="#251 — Erdős problem 251: Is the dyadic series over consecutive primes irrational, equivalently its prime-gap series? Read its verification packet." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-251">#251</a> <span class="frontier-topic">Prime-gap dyadic series.</span> Prime/gap summation-by-parts identity; target irrationality remains open.</p>
-              <p role="listitem" data-dest="problem-257"><a data-to="repo" data-dest="problem-257" aria-label="#257 — Erdős problem 257: Is the sum of 1 over 2 to the n minus 1 over every infinite set of positive exponents irrational? Read its verification packet." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-257">#257</a> <span class="frontier-topic">Infinite exponent supports.</span> Hereditary strict Mersenne-tail inequality; arbitrary infinite supports remain open.</p>
-              <p role="listitem" data-dest="problem-269"><a data-to="repo" data-dest="problem-269" aria-label="#269 — Erdős problem 269: For a finite set of at least two primes, is the reciprocal series of running LCMs of smooth numbers irrational? Read its verification packet." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-269">#269</a> <span class="frontier-topic">Three-prime running LCMs.</span> Three-prime running-LCM structure; the carry bridge remains open.</p>
-              <p role="listitem" data-dest="problem-1041"><a data-to="repo" data-dest="problem-1041" aria-label="#1041 — Erdős problem 1041: For a monic polynomial with roots in the unit disc, must two roots be joined by a curve of length under two inside its open unit lemniscate? Read its verification packet." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-1041">#1041</a> <span class="frontier-topic">Short lemniscate connections.</span> Ray-separation obstruction; global topology and metric gluing remain open.</p>
-              <p role="listitem" data-dest="problem-1049"><a data-to="repo" data-dest="problem-1049" aria-label="#1049 — Erdős problem 1049: For which rational t greater than 1 is F of t, the series sum from n at least 1 of 1 over t to the n minus 1, irrational? Read its verification packet." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-1049">#1049</a> <span class="frontier-topic">Lambert series at rational bases.</span> Rational-base cleared-tail recurrence; denominator tax is not an irrationality proof.</p>
+              <p role="listitem" data-dest="problem-68"><a data-to="repo" data-dest="problem-68" aria-label="#68: factorial denominator. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-68">#68</a> <span class="frontier-topic">Factorial denominator</span></p>
+              <p role="listitem" data-dest="problem-243"><a data-to="repo" data-dest="problem-243" aria-label="#243: reciprocal tails. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-243">#243</a> <span class="frontier-topic">Reciprocal tails</span></p>
+              <p role="listitem" data-dest="problem-249"><a data-to="repo" data-dest="problem-249" aria-label="#249: binary totient series. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-249">#249</a> <span class="frontier-topic">Binary totient series</span></p>
+              <p role="listitem" data-dest="problem-251"><a data-to="repo" data-dest="problem-251" aria-label="#251: prime-gap dyadic series. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-251">#251</a> <span class="frontier-topic">Prime-gap dyadic series</span></p>
+              <p role="listitem" data-dest="problem-257"><a data-to="repo" data-dest="problem-257" aria-label="#257: infinite exponent supports. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-257">#257</a> <span class="frontier-topic">Infinite exponent supports</span></p>
+              <p role="listitem" data-dest="problem-269"><a data-to="repo" data-dest="problem-269" aria-label="#269: three-prime running LCMs. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-269">#269</a> <span class="frontier-topic">Three-prime running LCMs</span></p>
+              <p role="listitem" data-dest="problem-1041"><a data-to="repo" data-dest="problem-1041" aria-label="#1041: short lemniscate connections. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-1041">#1041</a> <span class="frontier-topic">Short lemniscate connections</span></p>
+              <p role="listitem" data-dest="problem-1049"><a data-to="repo" data-dest="problem-1049" aria-label="#1049: Lambert series at rational bases. Hover or focus for the question, checked object and open boundary." href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#programme-1049">#1049</a> <span class="frontier-topic">Lambert series at rational bases</span></p>
             </div>
             <p class="exits frontier-exits">
               <a data-to="repo" data-dest="lean-github" aria-label="GitHub: the pinned Lean corpus snapshot" href="https://github.com/wcook04/plectis-lean-erdos249-257/tree/11a318711096671ce1c00257a55fe5d7b9963864">GitHub</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Check one Lean corpus claim without a Lean build" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/README.md#read-or-run-it">Check one claim</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read the eight-problem checked frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md">Eight-problem frontier</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read Comparator interfaces checked against separate statements and an axiom budget" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix">Comparator: selected claims</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read the reviewer-run replay route for the public verification packet" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/docs/EXTERNAL_VERIFICATION_REPLAY.md">Run a reviewer replay</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read the citation record for this eight-problem Lean corpus" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/CITATION.cff">Citation record</a>
             </p>
             <p class="frontier-comparator">Comparator rechecks selected propositions against separate declarations and a fixed axiom budget; it does not assess papers, citations, intended meaning, novelty or significance.</p>
-            <p class="frontier-proof"><span>Trace the classical full-support theorem for every integer base b &ge; 2 &mdash; not universal #257 &mdash; with no Lean build. It returns the statement, exact declaration, Comparator interface, paper, and boundary:</span><a data-to="repo" aria-label="Trace the classical full-support benchmark without a Lean build" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/README.md#read-or-run-it"><code>python3 scripts/verify_claims.py --claim eb_full_support</code></a></p>
+            <p class="frontier-proof"><span>Trace the classical full-support theorem for every integer base b &ge; 2. It is not universal #257. No Lean build is needed. The route returns the statement, exact declaration, Comparator interface, paper and boundary:</span><a data-to="repo" aria-label="Trace the classical full-support benchmark without a Lean build" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/11a318711096671ce1c00257a55fe5d7b9963864/README.md#read-or-run-it"><code>python3 scripts/verify_claims.py --claim eb_full_support</code></a></p>
             <p class="row-shot">
               <a class="shot" data-to="repo" data-dest="lean-github" href="https://github.com/wcook04/plectis-lean-erdos249-257/tree/11a318711096671ce1c00257a55fe5d7b9963864">
                 <span class="shot__bar"><span class="shot__host">github.com</span><span class="shot__path">…/tree/11a3187</span></span>
@@ -1967,7 +1968,7 @@
           <li data-dest-default="papers-catalogue">
             <p class="kind">Read</p>
             <p class="name"><a href="https://wcook04.github.io/plectis/docs/papers.html" data-dest="papers-catalogue">Papers</a></p>
-            <p class="desc">Eight problem papers &mdash; #68, #243, #249, #251, #257, #269, #1041 and #1049 &mdash; sit inside Plectis&rsquo;s 13-paper catalogue, alongside audit and routing material; written for someone reading cold.</p>
+            <p class="desc">Eight problem papers, for #68, #243, #249, #251, #257, #269, #1041 and #1049, sit inside Plectis&rsquo;s 13-paper catalogue alongside audit and routing material. They are written for someone reading cold.</p>
             <p class="exits">
               <a href="https://wcook04.github.io/plectis/docs/papers.html" data-dest="papers-catalogue">Catalogue</a><span class="sep" aria-hidden="true">&middot;</span><a aria-label="On the site: the papers" href="https://wcook04.github.io/plectis/#papers" data-dest="papers-on-site">On the site</a>
             </p>

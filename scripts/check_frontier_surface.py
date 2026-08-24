@@ -31,17 +31,17 @@ FRONTIER_LABELS = {
     "1049": "rational-base cleared-tail recurrence",
 }
 PROBLEM_TOPICS = {
-    "68": "Factorial denominator.",
-    "243": "Reciprocal tails.",
-    "249": "Binary totient series.",
-    "251": "Prime-gap dyadic series.",
-    "257": "Infinite exponent supports.",
-    "269": "Three-prime running LCMs.",
-    "1041": "Short lemniscate connections.",
-    "1049": "Lambert series at rational bases.",
+    "68": "Factorial denominator",
+    "243": "Reciprocal tails",
+    "249": "Binary totient series",
+    "251": "Prime-gap dyadic series",
+    "257": "Infinite exponent supports",
+    "269": "Three-prime running LCMs",
+    "1041": "Short lemniscate connections",
+    "1049": "Lambert series at rational bases",
 }
 ACCESSIBLE_QUESTION_MARKERS = {
-    "1049": "F of t, the series sum from n at least 1 of 1 over t to the n minus 1",
+    "1049": "For which rational t &gt; 1 is F(t)",
 }
 OG_FRONTIER_LABELS = (
     "cofinal divisibility",
@@ -133,7 +133,10 @@ def main() -> int:
     require('https://wcook04.github.io/assets/og-frontier.png' in text, "social preview lost the eight-problem share image")
     require('<loc>https://wcook04.github.io/</loc>' in sitemap, "root front door is absent from the host sitemap")
     require('Sitemap: https://wcook04.github.io/sitemap.xml' in robots, "host robots policy no longer exposes the root sitemap")
-    require("Will Cook &middot; checkable frontier" in text, "masthead lost authorship")
+    require(
+        "Plectis &middot; Will Cook &middot; public research system" in text,
+        "masthead lost Plectis or authorship",
+    )
     require(">Eight-problem frontier<" in text, "primary entry label lost the portfolio")
     require(
         "#249/#257" not in text,
@@ -145,9 +148,9 @@ def main() -> int:
     )
     require(primary_route in text, "primary frontier entry no longer opens the programme map")
     require(" / snapshot 11a3187 · docs/EXTERNAL_VERIFICATION.md" in text, "destination plate no longer discloses its evidence snapshot")
-    require('<template id="archived-plate">' in text, "archived plate regained a live delivery path")
-    require("Eight formally checked frontiers" in text, "opening lost the frontier")
-    require("one for each problem in the current public cohort" in text, "opening lost the all-problem cohort framing")
+    require('<picture>\n      <source type="image/avif"' in text, "art plate is no longer delivered on the front door")
+    require("Plectis is a research system for producing, checking and explaining mathematics." in text, "opening lost the Plectis system")
+    require("eight live Erd&#337;s programmes" in text, "opening lost the all-programme frontier")
     require(
         '<a class="skip-frontier" href="#eight-problem-frontier">Skip to eight-problem frontier</a>' in text,
         "keyboard route no longer skips directly to the eight-problem frontier",
@@ -161,14 +164,14 @@ def main() -> int:
     require("Open a number for its question, checked frontier, and remaining boundary." in text, "narrow-screen frontier route missing")
     require("none is a solution claim" in text, "open-problem boundary missing")
     require("not human mathematical peer review" in text, "review boundary missing")
-    require("Plectis is the public site for the private work system behind it." in text, "public/private hierarchy missing from the opening")
+    require("This is its public frontier" in text, "public programme hierarchy missing from the opening")
     require("The public site for the private work system:" in text, "Plectis route no longer distinguishes public site from private system")
     require("Comparator rechecks selected propositions" in text, "Comparator scope missing")
     require("it does not assess papers, citations, intended meaning, novelty or significance" in text, "Comparator limit missing")
     require("Comparator: selected claims" in text, "Comparator reader exit missing")
     require("Run a reviewer replay" in text, "reviewer replay reader exit missing")
     require("not universal #257" in text, "representative-check boundary missing")
-    require("It returns the statement, exact declaration, Comparator interface, paper, and boundary:" in text, "representative replay no longer explains its evidence route")
+    require("The route returns the statement, exact declaration, Comparator interface, paper and boundary:" in text, "representative replay no longer explains its evidence route")
     require(
         '<a href="https://wcook04.github.io/plectis/docs/updates.html">Follow updates</a>' in text,
         "public updates exit missing",
@@ -224,26 +227,13 @@ def main() -> int:
         require(route is not None, f"missing accessible frontier entry for #{number}")
         require(expected_url in route.group(1), f"#{number} does not use the pinned packet")
         require(
-            f'aria-label="#{number} — Erdős problem {number}:' in route.group(1),
-            f"#{number} accessible frontier label is missing",
-        )
-        require(
-            "? Read its verification packet." in route.group(1),
-            f"#{number} accessible frontier label no longer poses its question",
-        )
-        require(
-            FRONTIER_LABELS[number].lower() in route.group(1).lower(),
-            f"#{number} visible frontier heading drifted",
+            "Hover or focus for the question, checked object and open boundary." in route.group(1),
+            f"#{number} compact route no longer points to its portrait sheet",
         )
         require(
             PROBLEM_TOPICS[number] in route.group(1),
             f"#{number} visible entry no longer names its mathematical subject",
         )
-        if number in ACCESSIBLE_QUESTION_MARKERS:
-            require(
-                ACCESSIBLE_QUESTION_MARKERS[number] in route.group(1),
-                f"#{number} accessible route no longer states its mathematical question",
-            )
         require(
             FRONTIER_LABELS[number].lower() in plate.lower(),
             f"#{number} desktop frontier heading drifted",
@@ -251,6 +241,11 @@ def main() -> int:
         following = PROBLEMS[index + 1] if index + 1 < len(PROBLEMS) else None
         sheet = problem_sheet(text, number, following)
         require("problem-sheet__question" in sheet, f"#{number} sheet lacks a question")
+        if number in ACCESSIBLE_QUESTION_MARKERS:
+            require(
+                ACCESSIBLE_QUESTION_MARKERS[number] in sheet,
+                f"#{number} sheet no longer states its mathematical question",
+            )
         require("problem-sheet__section--open" in sheet, f"#{number} sheet lacks its open boundary")
         require('problem-sheet__status">Open<' in sheet, f"#{number} sheet lost open status")
         if number in FRONTIER_SHEET_ANCHORS:
@@ -258,9 +253,9 @@ def main() -> int:
             require(declaration in sheet, f"#{number} sheet no longer names its cleared declaration")
             require(boundary in sheet, f"#{number} sheet no longer preserves its exact open boundary")
 
-    paper_sentence = "Eight problem papers &mdash; " + ", ".join(
+    paper_sentence = "Eight problem papers, for " + ", ".join(
         f"#{number}" for number in PROBLEMS[:-1]
-    ) + f" and #{PROBLEMS[-1]} &mdash;"
+    ) + f" and #{PROBLEMS[-1]},"
     require(paper_sentence in text, "paper route no longer names all eight problems")
     require("sit inside Plectis&rsquo;s 13-paper catalogue" in text, "paper route lost its catalogue context")
     print("frontier surface: 8 pinned routes, 8 portrait sheets, and all-eight paper route: ok")
