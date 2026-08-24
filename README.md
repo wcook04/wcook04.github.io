@@ -66,10 +66,11 @@ python3 scripts/check_frontier_surface.py
 
 It checks the local front door, not the mathematics: the masthead and opening
 still name eight open Erdős problems, every problem route remains pinned to the
-same public verification packet and retains its reviewed frontier heading,
-every portrait sheet retains a question and open boundary, and the Papers route
-still names all eight. It also keeps the desktop overview and accessible index
-on the same eight headings. The Lean repository remains authority for theorem
+same public verification packet and retains its reviewed frontier heading, and
+every portrait sheet retains its question, exact checked declaration, and
+stated open boundary. It also keeps the desktop overview and accessible index
+on the same eight headings, and protects the desktop hover/focus route that
+selects each portrait sheet. The Lean repository remains authority for theorem
 validity and its own release checks.
 
 ## Destination kinds
