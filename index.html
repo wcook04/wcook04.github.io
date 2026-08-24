@@ -436,6 +436,14 @@
       border-top: 1px solid color-mix(in srgb, var(--hair) 86%, transparent);
     }
     .frontier p:nth-child(-n + 2) { border-top: 0; }
+    .frontier p[data-dest] {
+      transition: background-color var(--t-interaction) ease-out, color var(--t-interaction) ease-out;
+    }
+    .frontier p[data-dest]:hover,
+    .frontier p[data-dest]:focus-within {
+      background: color-mix(in srgb, var(--to-repo) 8%, transparent);
+      color: var(--bone-soft);
+    }
     .frontier a {
       --to: var(--to-repo); --to-lit: var(--to-repo-lit);
       display: inline-block;
@@ -1141,6 +1149,116 @@
     }
     @media (prefers-reduced-motion: reduce) { .shot__frontier { transition: none; } }
 
+    /* Each frontier entry has a compact research sheet, rather than another
+       landscape screenshot. The sheet opens on the problem as stated, then
+       gives one exact cleared frontier, the remaining boundary, and a named
+       theorem handle. It is deliberately a portrait: a reader considers one
+       problem at a time instead of reading eight as undifferentiated telemetry.
+       The accessible list at left remains the non-scripted source of truth. */
+    .shot__problem {
+      position: absolute; inset: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 1.45rem 1.55rem 1.35rem;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(230, 178, 100, .10), transparent 33%),
+        linear-gradient(150deg, rgba(27, 20, 39, .995), rgba(16, 13, 25, .995));
+      font-family: var(--font-sans);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--t-response) ease-out, visibility 0s linear var(--t-response);
+    }
+    .dest__frame[data-view="problem"][data-problem="68"] .shot__problem[data-problem="68"],
+    .dest__frame[data-view="problem"][data-problem="243"] .shot__problem[data-problem="243"],
+    .dest__frame[data-view="problem"][data-problem="249"] .shot__problem[data-problem="249"],
+    .dest__frame[data-view="problem"][data-problem="251"] .shot__problem[data-problem="251"],
+    .dest__frame[data-view="problem"][data-problem="257"] .shot__problem[data-problem="257"],
+    .dest__frame[data-view="problem"][data-problem="269"] .shot__problem[data-problem="269"],
+    .dest__frame[data-view="problem"][data-problem="1041"] .shot__problem[data-problem="1041"],
+    .dest__frame[data-view="problem"][data-problem="1049"] .shot__problem[data-problem="1049"] {
+      opacity: 1;
+      visibility: visible;
+      transition-delay: 0s;
+    }
+    .dest__frame[data-view="problem"] .shot__img,
+    .dest__frame[data-view="problem"] .shot__map,
+    .dest__frame[data-view="problem"] .shot__frontier { opacity: 0; }
+    .problem-sheet__topline {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: .8rem;
+      padding-bottom: .7rem;
+      border-bottom: 1px solid var(--hair-strong);
+    }
+    .problem-sheet__number {
+      font-size: .66rem;
+      font-weight: 650;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--to-repo);
+    }
+    .problem-sheet__status {
+      font-size: .57rem;
+      font-weight: 620;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .problem-sheet__title {
+      margin-top: .82rem;
+      font-family: var(--font-serif);
+      font-size: 1.18rem;
+      font-weight: 600;
+      line-height: 1.14;
+      color: var(--bone);
+    }
+    .problem-sheet__label {
+      display: block;
+      margin-bottom: .28rem;
+      font-size: .54rem;
+      font-weight: 650;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--to-repo);
+    }
+    .problem-sheet__question {
+      margin: .88rem 0 0;
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      line-height: 1.28;
+      color: var(--bone-soft);
+    }
+    .problem-sheet__section {
+      margin-top: .82rem;
+      padding-top: .72rem;
+      border-top: 1px solid var(--hair);
+    }
+    .problem-sheet__text {
+      font-size: .72rem;
+      line-height: 1.38;
+      color: var(--bone-soft);
+    }
+    .problem-sheet__section--open .problem-sheet__label { color: var(--faint); }
+    .problem-sheet__section--open .problem-sheet__text { color: var(--faint); }
+    .problem-sheet__handle {
+      margin-top: auto;
+      padding-top: .78rem;
+      border-top: 1px solid var(--hair-strong);
+      font-size: .55rem;
+      line-height: 1.35;
+      color: var(--faint);
+    }
+    .problem-sheet__handle code {
+      display: block;
+      margin-top: .2rem;
+      overflow-wrap: anywhere;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .51rem;
+      color: color-mix(in srgb, var(--bone-soft) 88%, transparent);
+    }
+    @media (prefers-reduced-motion: reduce) { .shot__problem { transition: none; } }
+
     /* Under the row, on a phone. The wide layout puts the same stills in the
        plate's frame, so only one of the two is ever present. No caption: the
        row names the destination two lines above and the bar gives the URL,
@@ -1341,6 +1459,8 @@
         width: clamp(27rem, 40vw, 40rem);
         max-width: 100%;
       }
+      .dest__panel[data-view="problem"] { width: clamp(21rem, 25vw, 25rem); }
+      .dest__frame[data-view="problem"] .shot__stage { aspect-ratio: 7 / 9; }
       /* The pour. A screenshot has hard edges and a corner radius; the plate
          has neither. Rather than cut one into the other, the window is given
          a little quiet ground to stand on, densest under the frame and gone
@@ -1600,9 +1720,76 @@
                 <span class="frontier-plate__item"><span class="frontier-plate__number">1049</span><span class="frontier-plate__handle">Construction-specific no-go at 3/2</span><span class="frontier-plate__boundary">Not an irrationality proof.</span></span>
               </span>
             </span>
+            <!-- One portrait sheet per public problem. The question, frontier,
+                 boundary and theorem handle below are transcribed from the
+                 immutable external verification packet linked by this frame. -->
+            <span class="shot__problem" data-problem="68" aria-hidden="true">
+              <span class="problem-sheet__topline"><span class="problem-sheet__number">Erdős #68</span><span class="problem-sheet__status">Open</span></span>
+              <span class="problem-sheet__title">The factorial-denominator series</span>
+              <span class="problem-sheet__question"><span class="problem-sheet__label">Question</span>Is the series &sum;<sub>n &ge; 2</sub> 1/(n! &minus; 1) irrational?</span>
+              <span class="problem-sheet__section"><span class="problem-sheet__label">Checked frontier</span><span class="problem-sheet__text">The series is irrational exactly when the strict factorial successor misses divisibility by its index cofinally.</span></span>
+              <span class="problem-sheet__section problem-sheet__section--open"><span class="problem-sheet__label">Open boundary</span><span class="problem-sheet__text">Irrationality of the factorial-denominator series.</span></span>
+              <span class="problem-sheet__handle">Representative checked declaration<code>ErdosProblems.Erdos68.irrational_factorialGapSeries_iff_cofinal_strictFacTopRat_misses</code></span>
+            </span>
+            <span class="shot__problem" data-problem="243" aria-hidden="true">
+              <span class="problem-sheet__topline"><span class="problem-sheet__number">Erdős #243</span><span class="problem-sheet__status">Open</span></span>
+              <span class="problem-sheet__title">Reciprocal-tail rigidity</span>
+              <span class="problem-sheet__question"><span class="problem-sheet__label">Question</span>Under rapid growth, does rationality of an integer sequence's reciprocal sum force the Sylvester recurrence eventually?</span>
+              <span class="problem-sheet__section"><span class="problem-sheet__label">Checked frontier</span><span class="problem-sheet__text">Exact product-cleared tail dynamics and the defect identity in integer state variables.</span></span>
+              <span class="problem-sheet__section problem-sheet__section--open"><span class="problem-sheet__label">Open boundary</span><span class="problem-sheet__text">The unrestricted problem.</span></span>
+              <span class="problem-sheet__handle">Representative checked declaration<code>ErdosProblems.Erdos243.nextTailState_eq_sub_centered</code></span>
+            </span>
+            <span class="shot__problem" data-problem="249" aria-hidden="true">
+              <span class="problem-sheet__topline"><span class="problem-sheet__number">Erdős #249</span><span class="problem-sheet__status">Open</span></span>
+              <span class="problem-sheet__title">The binary totient series</span>
+              <span class="problem-sheet__question"><span class="problem-sheet__label">Question</span>Is the binary Lambert series &sum; &phi;(n)/2<sup>n</sup> irrational?</span>
+              <span class="problem-sheet__section"><span class="problem-sheet__label">Checked frontier</span><span class="problem-sheet__text">Conditionally, a cofinal strict 9/10 gap in the exact natural prime-tail orbit supplies the existing finite pivot-point escape.</span></span>
+              <span class="problem-sheet__section problem-sheet__section--open"><span class="problem-sheet__label">Open boundary</span><span class="problem-sheet__text">The strict prime-tail orbit gap.</span></span>
+              <span class="problem-sheet__handle">Representative checked declaration<code>ErdosProblems.Erdos249.irrational_totient_series_of_naturalPrimeTailOrbitStrictGap</code></span>
+            </span>
+            <span class="shot__problem" data-problem="251" aria-hidden="true">
+              <span class="problem-sheet__topline"><span class="problem-sheet__number">Erdős #251</span><span class="problem-sheet__status">Open</span></span>
+              <span class="problem-sheet__title">The prime-gap dyadic series</span>
+              <span class="problem-sheet__question"><span class="problem-sheet__label">Question</span>Is the dyadic series &sum; p<sub>n</sub>/2<sup>n</sup> over consecutive primes irrational? Equivalently, is its prime-gap series irrational?</span>
+              <span class="problem-sheet__section"><span class="problem-sheet__label">Checked frontier</span><span class="problem-sheet__text">The finite summation-by-parts identity relating prime dyadic partial sums to prime-gap dyadic partial sums, with its exact endpoint.</span></span>
+              <span class="problem-sheet__section problem-sheet__section--open"><span class="problem-sheet__label">Open boundary</span><span class="problem-sheet__text">The target irrationality.</span></span>
+              <span class="problem-sheet__handle">Representative checked declaration<code>ErdosProblems.Erdos251.dyadicPartialSumQ_eq_start_add_differences</code></span>
+            </span>
+            <span class="shot__problem" data-problem="257" aria-hidden="true">
+              <span class="problem-sheet__topline"><span class="problem-sheet__number">Erdős #257</span><span class="problem-sheet__status">Open</span></span>
+              <span class="problem-sheet__title">Infinite exponent supports</span>
+              <span class="problem-sheet__question"><span class="problem-sheet__label">Question</span>Is the sum of 1/(2<sup>n</sup> &minus; 1) over every infinite set of positive exponents irrational?</span>
+              <span class="problem-sheet__section"><span class="problem-sheet__label">Checked frontier</span><span class="problem-sheet__text">The strict Mersenne tail inequality remains true after deleting any collection of future weights.</span></span>
+              <span class="problem-sheet__section problem-sheet__section--open"><span class="problem-sheet__label">Open boundary</span><span class="problem-sheet__text">Universal irrationality, or irrationality for any new infinite support.</span></span>
+              <span class="problem-sheet__handle">Representative checked declaration<code>ErdosProblems.Erdos257.selectedMersenneTail_lt_weight</code></span>
+            </span>
+            <span class="shot__problem" data-problem="269" aria-hidden="true">
+              <span class="problem-sheet__topline"><span class="problem-sheet__number">Erdős #269</span><span class="problem-sheet__status">Open</span></span>
+              <span class="problem-sheet__title">Three-prime running LCMs</span>
+              <span class="problem-sheet__question"><span class="problem-sheet__label">Question</span>For a finite set of at least two primes, is the reciprocal series of running LCMs of smooth numbers irrational? This corpus treats three primes.</span>
+              <span class="problem-sheet__section"><span class="problem-sheet__label">Checked frontier</span><span class="problem-sheet__text">For three distinct primes, the smooth-prefix LCM is the product of the three maximal pure prime powers below the cutoff.</span></span>
+              <span class="problem-sheet__section problem-sheet__section--open"><span class="problem-sheet__label">Open boundary</span><span class="problem-sheet__text">Irrationality or transcendence in any three-prime case.</span></span>
+              <span class="problem-sheet__handle">Representative checked declaration<code>ErdosProblems.Erdos269.smoothPrefixLcm_eq_threePrimeHeight</code></span>
+            </span>
+            <span class="shot__problem" data-problem="1041" aria-hidden="true">
+              <span class="problem-sheet__topline"><span class="problem-sheet__number">Erdős #1041</span><span class="problem-sheet__status">Open</span></span>
+              <span class="problem-sheet__title">Short lemniscate connections</span>
+              <span class="problem-sheet__question"><span class="problem-sheet__label">Question</span>For a monic polynomial with roots in the unit disc, must two roots be joined by a curve of length under two inside its open unit lemniscate?</span>
+              <span class="problem-sheet__section"><span class="problem-sheet__label">Checked frontier</span><span class="problem-sheet__text">Along a trajectory tangent to the complex Newton field &minus;f/f', the polynomial value satisfies w' = &minus;w.</span></span>
+              <span class="problem-sheet__section problem-sheet__section--open"><span class="problem-sheet__label">Open boundary</span><span class="problem-sheet__text">Erdős Problem 1041 in unrestricted degree.</span></span>
+              <span class="problem-sheet__handle">Representative checked declaration<code>ErdosProblems.Erdos1041.newtonFlow_value_hasDerivAt</code></span>
+            </span>
+            <span class="shot__problem" data-problem="1049" aria-hidden="true">
+              <span class="problem-sheet__topline"><span class="problem-sheet__number">Erdős #1049</span><span class="problem-sheet__status">Open</span></span>
+              <span class="problem-sheet__title">Lambert series at rational bases</span>
+              <span class="problem-sheet__question"><span class="problem-sheet__label">Question</span>For which rational bases is the corresponding series irrational? The smallest resistant explicit base is 3/2.</span>
+              <span class="problem-sheet__section"><span class="problem-sheet__label">Checked frontier</span><span class="problem-sheet__text">Literal coordinatewise integer-base clearing forces a power-versus-linear inequality, impossible at base 3/2.</span></span>
+              <span class="problem-sheet__section problem-sheet__section--open"><span class="problem-sheet__label">Open boundary</span><span class="problem-sheet__text">Irrationality at 3/2, or for any rational base.</span></span>
+              <span class="problem-sheet__handle">Representative checked declaration<code>ErdosProblems.Erdos1049.threeHalves_no_coordinatewiseCorridor</code></span>
+            </span>
           </span>
         </a>
-        <p class="dest__hint">Point at a route to see where it lands.</p>
+        <p class="dest__hint">Hover or focus a frontier entry for its question, checked result, and remaining boundary.</p>
       </div>
     </aside>
     <script>
@@ -1684,14 +1871,14 @@
             <p class="name"><a data-to="repo" data-dest="math-frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257">Lean corpus</a></p>
             <p class="desc"><a class="term" data-term="machine-checked" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-machine-checked">Machine-checked</a> mathematics on eight <a class="term" data-term="open-problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">open</a> Erd&#337;s problems. Each frontier below names one cleared statement and the exact step that remains open; none is a solution claim.</p>
             <div class="frontier" role="list" aria-label="One checked frontier and one open boundary for each public Erdős problem">
-              <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-68">#68</a> exact cofinal-divisibility equivalence; cofinal failures remain unproved.</p>
-              <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-243">#243</a> exact tail-state defect identity; the unrestricted case remains open.</p>
-              <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-249">#249</a> finite-level dyadic rank; irrationality remains open.</p>
-              <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-251">#251</a> integral-shift tail criterion; the prime-tail bridge remains open.</p>
-              <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-257">#257</a> formalised full-support theorem; arbitrary infinite supports remain open.</p>
-              <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-269">#269</a> three-prime running-LCM structure; the carry bridge remains open.</p>
-              <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-1041">#1041</a> ray-separation obstruction; global topology and metric gluing remain open.</p>
-              <p role="listitem"><a data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-1049">#1049</a> a construction-specific no-go at 3/2; irrationality remains open.</p>
+              <p role="listitem" data-dest="problem-68"><a data-to="repo" data-dest="problem-68" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-68">#68</a> exact cofinal-divisibility equivalence; cofinal failures remain unproved.</p>
+              <p role="listitem" data-dest="problem-243"><a data-to="repo" data-dest="problem-243" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-243">#243</a> exact tail-state defect identity; the unrestricted case remains open.</p>
+              <p role="listitem" data-dest="problem-249"><a data-to="repo" data-dest="problem-249" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-249">#249</a> finite-level dyadic rank; irrationality remains open.</p>
+              <p role="listitem" data-dest="problem-251"><a data-to="repo" data-dest="problem-251" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-251">#251</a> integral-shift tail criterion; the prime-tail bridge remains open.</p>
+              <p role="listitem" data-dest="problem-257"><a data-to="repo" data-dest="problem-257" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-257">#257</a> formalised full-support theorem; arbitrary infinite supports remain open.</p>
+              <p role="listitem" data-dest="problem-269"><a data-to="repo" data-dest="problem-269" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-269">#269</a> three-prime running-LCM structure; the carry bridge remains open.</p>
+              <p role="listitem" data-dest="problem-1041"><a data-to="repo" data-dest="problem-1041" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-1041">#1041</a> ray-separation obstruction; global topology and metric gluing remain open.</p>
+              <p role="listitem" data-dest="problem-1049"><a data-to="repo" data-dest="problem-1049" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md#programme-1049">#1049</a> a construction-specific no-go at 3/2; irrationality remains open.</p>
             </div>
             <p class="exits frontier-exits">
               <a data-to="repo" data-dest="lean-github" aria-label="GitHub: the Lean corpus repository" href="https://github.com/wcook04/plectis-lean-erdos249-257">GitHub</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Check one Lean corpus claim without a Lean build" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/README.md#read-or-run-it">Check one claim</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read the eight-problem checked frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md">Eight-problem frontier</a>
@@ -2041,6 +2228,8 @@
   <script>
   (function () {
     "use strict";
+    var verificationPath = "/wcook04/plectis-lean-erdos249-257/docs/EXTERNAL_VERIFICATION.md";
+    var verificationUrl = "https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md";
     var DEST = {
       "plectis-site":     { to: "page",  host: "wcook04.github.io", path: "/plectis/",
                             src: "assets/previews/plectis-site.jpg",     href: "https://wcook04.github.io/plectis/" },
@@ -2051,6 +2240,22 @@
       "math-frontier":   { to: "repo",  view: "frontier", host: "github.com",
                             path: "/wcook04/plectis-lean-erdos249-257/docs/EXTERNAL_VERIFICATION.md",
                             href: "https://github.com/wcook04/plectis-lean-erdos249-257/blob/1ceb5549efda01509b4feae6e02ec57c45e8200e/docs/EXTERNAL_VERIFICATION.md" },
+      "problem-68":      { to: "repo",  view: "problem", problem: "68", host: "github.com",
+                            path: verificationPath + "#programme-68", href: verificationUrl + "#programme-68" },
+      "problem-243":     { to: "repo",  view: "problem", problem: "243", host: "github.com",
+                            path: verificationPath + "#programme-243", href: verificationUrl + "#programme-243" },
+      "problem-249":     { to: "repo",  view: "problem", problem: "249", host: "github.com",
+                            path: verificationPath + "#programme-249", href: verificationUrl + "#programme-249" },
+      "problem-251":     { to: "repo",  view: "problem", problem: "251", host: "github.com",
+                            path: verificationPath + "#programme-251", href: verificationUrl + "#programme-251" },
+      "problem-257":     { to: "repo",  view: "problem", problem: "257", host: "github.com",
+                            path: verificationPath + "#programme-257", href: verificationUrl + "#programme-257" },
+      "problem-269":     { to: "repo",  view: "problem", problem: "269", host: "github.com",
+                            path: verificationPath + "#programme-269", href: verificationUrl + "#programme-269" },
+      "problem-1041":    { to: "repo",  view: "problem", problem: "1041", host: "github.com",
+                            path: verificationPath + "#programme-1041", href: verificationUrl + "#programme-1041" },
+      "problem-1049":    { to: "repo",  view: "problem", problem: "1049", host: "github.com",
+                            path: verificationPath + "#programme-1049", href: verificationUrl + "#programme-1049" },
       "lean-github":      { to: "repo",  host: "github.com",        path: "/wcook04/plectis-lean-erdos249-257",
                             src: "assets/previews/lean-github.jpg",      href: "https://github.com/wcook04/plectis-lean-erdos249-257" },
       "papers-catalogue": { to: "page",  host: "wcook04.github.io", path: "/plectis/docs/papers.html",
@@ -2082,6 +2287,7 @@
     var root = document.documentElement;
     var wide = window.matchMedia("(min-width: 1280px)");
     var frame = document.querySelector(".dest__frame");
+    var panel = document.querySelector(".dest__panel");
     if (!frame) return;
     var host = frame.querySelector(".shot__host");
     var path = frame.querySelector(".shot__path");
@@ -2133,7 +2339,11 @@
       /* A drawn destination needs no fetch and no swap: the map is already in
          the document, and only which cut it leans on changes. The token is
          still bumped so a picture still in flight cannot land on top of it. */
-      frame.setAttribute("data-view", d.view === "map" ? "map" : d.view === "frontier" ? "frontier" : "shot");
+      var view = d.view === "map" ? "map" : d.view === "frontier" ? "frontier" : d.view === "problem" ? "problem" : "shot";
+      frame.setAttribute("data-view", view);
+      if (panel) panel.setAttribute("data-view", view);
+      if (view === "problem") frame.setAttribute("data-problem", d.problem);
+      else frame.removeAttribute("data-problem");
       if (d.view === "map") {
         frame.setAttribute("data-emphasis", d.emphasis || "packet");
         ++token;
@@ -2141,6 +2351,10 @@
       }
       frame.removeAttribute("data-emphasis");
       if (d.view === "frontier") {
+        ++token;
+        return;
+      }
+      if (d.view === "problem") {
         ++token;
         return;
       }
