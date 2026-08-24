@@ -71,6 +71,7 @@ def main() -> int:
         f"blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md"
     )
     require(primary_route in text, "primary frontier entry no longer opens the programme map")
+    require(" / snapshot 11a3187 · docs/EXTERNAL_VERIFICATION.md" in text, "destination plate no longer discloses its evidence snapshot")
     require('<template id="archived-plate">' in text, "archived plate regained a live delivery path")
     require("Eight formally checked frontiers" in text, "opening lost the frontier")
     require("none is a solution claim" in text, "open-problem boundary missing")
