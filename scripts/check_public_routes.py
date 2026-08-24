@@ -14,16 +14,16 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 
-SNAPSHOT = "11a318711096671ce1c00257a55fe5d7b9963864"
+SNAPSHOT = "fd25c0b5f11a5d0c1834740991a008da56643808"
 PROGRAMME_MARKERS = (
-    "#68 — Factorial-denominator series",
-    "#243 — Reciprocal-tail rigidity near the Sylvester recurrence",
-    "#249 — Binary totient series",
-    "#251 — Prime-gap dyadic series",
-    "#257 — Reciprocal sums over infinite exponent supports",
-    "#269 — Three-prime running least common multiples",
-    "#1041 — Short connections inside polynomial lemniscates",
-    "#1049 — Lambert-type series at rational bases",
+    "#68: Factorial-denominator series",
+    "#243: Reciprocal-tail rigidity near the Sylvester recurrence",
+    "#249: Binary totient series",
+    "#251: Prime-gap dyadic series",
+    "#257: Reciprocal sums over infinite exponent supports",
+    "#269: Three-prime running least common multiples",
+    "#1041: Short connections inside polynomial lemniscates",
+    "#1049: Lambert-type series at rational bases",
 )
 PAPER_CATALOGUE_MARKERS = (
     "Erdős #68",
@@ -67,7 +67,7 @@ ROUTES = (
         "representative claim route",
         f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/README.md#read-or-run-it",
         (
-            "Check one of those claims before you read any of this.",
+            "Start with the mathematics.",
             "python3 scripts/verify_claims.py --claim eb_full_support",
         ),
     ),
@@ -76,8 +76,9 @@ ROUTES = (
         "Comparator appendix",
         f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix",
         (
-            "Comparator is a second checker",
-            "It checks propositions only, and assesses no paper deduction, cited theorem, external computation, intended meaning, novelty, or significance.",
+            "Nineteen selected propositions are declared again without proofs.",
+            "A named altered statement must fail.",
+            "It does not assess exposition, citations, intended meaning, novelty, or significance.",
         ),
     ),
     (

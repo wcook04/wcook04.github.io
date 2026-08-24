@@ -7,14 +7,14 @@ it lists lives one directory down or in its own repository.
 
 | | |
 |---|---|
-| **Front door** | <https://wcook04.github.io/> — this repository |
+| **Front door** | <https://wcook04.github.io/>: this repository |
 | **Plectis, the site** | <https://wcook04.github.io/plectis/> · [docs](https://wcook04.github.io/plectis/docs/) · [papers](https://wcook04.github.io/plectis/docs/papers.html) |
 | **Plectis, the repository** | <https://github.com/wcook04/plectis> |
-| **Lean corpus — pinned public snapshot** | <https://github.com/wcook04/plectis-lean-erdos249-257/tree/11a318711096671ce1c00257a55fe5d7b9963864> |
+| **Lean corpus: pinned public snapshot** | <https://github.com/wcook04/plectis-lean-erdos249-257/tree/fd25c0b5f11a5d0c1834740991a008da56643808> |
 | **Videos** | [1 min](https://youtu.be/R_--vExxWyk) · [5 min](https://youtu.be/VoWByIOIuBE) · [29 min](https://youtu.be/jA_xC8gmdSs) |
 
-The Plectis site is a separate GitHub Pages deployment — the `gh-pages` branch
-of `wcook04/plectis` — that happens to be served under a path on this host.
+The Plectis site is a separate GitHub Pages deployment: the `gh-pages` branch
+of `wcook04/plectis`, served under a path on this host.
 Nothing here builds it, and nothing in it builds this. The only thing binding
 them is the pair of links described under [The pair](#the-pair) below.
 
@@ -25,7 +25,7 @@ the host, and a place to point at the published work.
 
 The second is the reason it was written. Google resolves a site's favicon and
 its displayed site name **per host, not per directory**. Everything published
-here lives under a path — `/plectis/` — so before this page existed, the crawler
+here lives under the `/plectis/` path, so before this page existed, the crawler
 fetched `https://wcook04.github.io/` and got GitHub's own error page:
 
 ```
@@ -35,7 +35,7 @@ GET /favicon.ico  → 404
 
 Google attributed that page to the whole host. Search results for `/plectis/`
 were shown with a generic globe and the site name "GitHub Pages documentation",
-and no amount of correct metadata *inside* `/plectis/` could override it — the
+and no amount of correct metadata *inside* `/plectis/` could override it. The
 markup there was already right, and was simply never consulted.
 
 `/robots.txt` was a 404 for the same reason. Crawlers only ever read robots.txt
@@ -88,7 +88,7 @@ before clicking whether a word takes them to a page, a repository, or a video.
 
 | Kind | Attribute | Colour | Mark |
 |---|---|---|---|
-| a page on this host | *(none)* | bone, lifting to the blue accent | — |
+| a page on this host | *(none)* | bone, lifting to the blue accent | none |
 | a repository | `data-to="repo"` | `--to-repo` `#e6b264` | `↗` |
 | a video | `data-to="video"` | `--to-video` `#d47fac` | `↗` |
 | an account | `data-to="profile"` | inherits the colophon's `--faint` | `↗` |
@@ -105,7 +105,7 @@ Two rules are load-bearing, and both are easy to break by accident:
   stylesheet generates it. The colophon used to carry typed ones and they drifted
   out of step with everything else.
 - **Colour is never the only signal.** The kind column, the route name and the
-  exit text each say the same thing in words — `Watch` / `Videos` / `29 min`,
+  exit text each say the same thing in words: `Watch` / `Videos` / `29 min`,
   `Check` / `Eight-problem frontier` / `GitHub`. A reader who sees no hue loses a shortcut,
   not a fact. Where the visible word does not name its own destination, an
   `aria-label` supplies the row it belongs to.
@@ -146,10 +146,10 @@ because social crawlers do not reliably render SVG.
 The card carries only the programme-level facts that remain safe outside the
 page: eight open Erdős problems, one checked frontier and one stated remaining
 obligation for each, and the explicit statement that all eight remain open. It
-also gives one compact, claim-bounded frontier label for every problem —
+also gives one compact, claim-bounded frontier label for every problem:
 cofinal divisibility, tail-state defect, conditional escape, prime-gap
 summation, strict Mersenne tail, three-prime LCMs, ray separation, and
-rational-base tail — so the portfolio remains visible at a glance.
+rational-base tail. The portfolio remains visible at a glance.
 Do not replace it with a generic Plectis mark, a repository screenshot, raw
 corpus counts, or a claim that a problem has been solved.
 
@@ -172,7 +172,7 @@ that could check it.
 
 - Down: the `Run` row of the route index points at `/plectis/`.
 - Up: the Plectis header carries `Will Cook / Plectis` beside its wordmark, and
-  its colophon carries a `Front door` row reading *Will Cook — public work*.
+  its colophon carries a `Front door` row reading *Will Cook: public work*.
 
 Those labels preserve the cross-site return route: `Will Cook` is this page's
 `<h1>`, and *public work* describes the front door in the Plectis colophon. They
@@ -212,7 +212,7 @@ done
 |---|---|---|
 | 960w | 29,252 B | 79,662 B |
 | 1280w | 44,641 B | 129,922 B |
-| 1920w | 72,397 B | — |
+| 1920w | 72,397 B | none |
 | 2560w | 123,399 B | 246,660 B (`plate-01.jpg`) |
 
 Three of those choices are worth a sentence, since they are the ones a later
@@ -241,7 +241,7 @@ here; do not edit it in place.
 
 None of the icons in `site.webmanifest` is declared `maskable`, and none should
 be. A maskable icon is cropped to a circle inscribed in the middle 80% of the
-canvas, and the braid runs the full height of every raster we have — declaring
+canvas, and the braid runs the full height of every raster we have. Declaring
 it maskable cuts the top and bottom strands off on Android. A real maskable
 variant would need its own padded render from the Plectis tool, not a flag
 here. Until that exists, the plain `any` purpose is the honest one: the

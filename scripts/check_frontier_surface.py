@@ -18,7 +18,7 @@ INDEX = ROOT / "index.html"
 OG_FRONTIER = ROOT / "assets" / "og-frontier.svg"
 SITEMAP = ROOT / "sitemap.xml"
 ROBOTS = ROOT / "robots.txt"
-SNAPSHOT = "11a318711096671ce1c00257a55fe5d7b9963864"
+SNAPSHOT = "fd25c0b5f11a5d0c1834740991a008da56643808"
 PROBLEMS = ("68", "243", "249", "251", "257", "269", "1041", "1049")
 FRONTIER_LABELS = {
     "68": "exact cofinal-divisibility equivalence",
@@ -146,8 +146,12 @@ def main() -> int:
         f"blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md"
     )
     require(primary_route in text, "primary frontier entry no longer opens the programme map")
-    require(" / snapshot 11a3187 · docs/EXTERNAL_VERIFICATION.md" in text, "destination plate no longer discloses its evidence snapshot")
+    require(" / snapshot fd25c0b · docs/EXTERNAL_VERIFICATION.md" in text, "destination plate no longer discloses its evidence snapshot")
     require('<picture>\n      <source type="image/avif"' in text, "art plate is no longer delivered on the front door")
+    require(
+        "filter: saturate(.9) contrast(.92) brightness(.76)" not in text,
+        "sticky art wrapper regained the Chrome first-paint filter regression",
+    )
     require("Plectis is a research system for producing, checking and explaining mathematics." in text, "opening lost the Plectis system")
     require("eight live Erd&#337;s programmes" in text, "opening lost the all-programme frontier")
     require(
@@ -165,10 +169,10 @@ def main() -> int:
     require("not human mathematical peer review" in text, "review boundary missing")
     require("This is its public frontier" in text, "public programme hierarchy missing from the opening")
     require("The public site for the private work system:" in text, "Plectis route no longer distinguishes public site from private system")
-    require("Comparator rechecks selected propositions" in text, "Comparator scope missing")
-    require("it does not assess papers, citations, intended meaning, novelty or significance" in text, "Comparator limit missing")
-    require("Comparator: selected claims" in text, "Comparator reader exit missing")
-    require("Run a reviewer replay" in text, "reviewer replay reader exit missing")
+    require("a second Lean file states the theorem again without its proof" in text, "formal checking scope missing")
+    require("This does not review the papers, citations, meaning, novelty or significance" in text, "formal checking limit missing")
+    require("How checking works" in text, "formal checking reader exit missing")
+    require("Reproduce the checks" in text, "verification replay reader exit missing")
     require("not universal #257" in text, "representative-check boundary missing")
     require("The route returns the statement, exact declaration, Comparator interface, paper and boundary:" in text, "representative replay no longer explains its evidence route")
     require(

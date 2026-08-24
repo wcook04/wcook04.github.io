@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Plectis">
-  <!-- The site's identity at tab scale. Plectis is plectere — to plait — so the
+  <!-- The site's identity at tab scale. Plectis is plectere, to plait, so the
        mark is a plait: two strands crossing three times, over and under, cut off
        by the tile rather than tucked inside it.
 
        One geometry, two palettes, because the sheet has two registers and the
        mark should obey the same law as the page it heads:
 
-         night — the incandescent register. The two strands are the sheet's two
+         night: the incandescent register. The two strands are the sheet's two
          keys held against each other: the warm strand is the ember line that
          heads every page, phrased vertically (plum entering cold, the mass
          peaking amber at the centre crossing, one magenta flare after the peak,
@@ -14,7 +14,7 @@
          entering, ultramarine rising, ice at the centre crossing where it rides
          over, indigo cooling out). Wine-black ground.
 
-         day — the printed register. No temperature to spend, so the strands
+         day: the printed register. No temperature to spend, so the strands
          separate on value alone: one goes to ink exactly where the other goes to
          bone, so they are furthest apart at the crossings. Paper ground, and a
          real edge, because on a white search card the paper tile would otherwise
@@ -23,12 +23,12 @@
        Both strands take their light from the same direction in both palettes, so
        the tile reads as one object under one source rather than as two ribbons.
 
-       Geometry: strands are cosines about x=32, amplitude 13, pitch 24 — so the
+       Geometry: strands are cosines about x=32, amplitude 13, pitch 24, so the
        crossings land at y=8, 32 and 56, symmetric about the centre. Over/under
        alternates (cold over at 32, warm over at 8 and 56); that alternation is
        the whole reason it reads as woven and not as a pair of stripes.
 
-       Both palettes put their extremes at the centre of the tile — the cold
+       Both palettes put their extremes at the centre of the tile. The cold
        strand's ice and the ink strand's black land on the y=32 crossing they
        ride over. That shared centre is what keeps the plait legible down at
        16px, where each strand is four pixels wide and only value survives, and
@@ -36,7 +36,7 @@
 
        Switching: the media query is the auto case, and is what the browser tab
        reads. The .force-day / .force-night classes are for consumers that must
-       pin a palette — tools/brand/plectis_favicon.py stamps one on the root to
+       pin a palette. tools/brand/plectis_favicon.py stamps one on the root to
        render the rasters and to project the two pinned sibling files that the
        site's own theme toggle swaps between (the site's toggle can be set
        against the OS preference, and an <img> cannot see data-theme). -->
