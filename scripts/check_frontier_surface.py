@@ -131,6 +131,7 @@ def main() -> int:
     require(" / snapshot 11a3187 · docs/EXTERNAL_VERIFICATION.md" in text, "destination plate no longer discloses its evidence snapshot")
     require('<template id="archived-plate">' in text, "archived plate regained a live delivery path")
     require("Eight formally checked frontiers" in text, "opening lost the frontier")
+    require("all eight remain open" in text, "desktop frontier plate lost its explicit open-problem boundary")
     require("Hover or focus a number for its question, cleared frontier, and exact open boundary." in text, "desktop portrait cue missing")
     require("Open a number for its question and evidence record." in text, "narrow-screen frontier route missing")
     require("none is a solution claim" in text, "open-problem boundary missing")
