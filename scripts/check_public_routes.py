@@ -13,11 +13,21 @@ from urllib.request import Request, urlopen
 
 
 SNAPSHOT = "11a318711096671ce1c00257a55fe5d7b9963864"
+PROGRAMME_MARKERS = (
+    "#68 — Factorial-denominator series",
+    "#243 — Reciprocal-tail rigidity near the Sylvester recurrence",
+    "#249 — Binary totient series",
+    "#251 — Prime-gap dyadic series",
+    "#257 — Reciprocal sums over infinite exponent supports",
+    "#269 — Three-prime running least common multiples",
+    "#1041 — Short connections inside polynomial lemniscates",
+    "#1049 — Lambert-type series at rational bases",
+)
 ROUTES = (
     ("Plectis public site", "https://wcook04.github.io/plectis/", None),
     ("13-paper catalogue", "https://wcook04.github.io/plectis/docs/papers.html", "The 13 papers"),
     ("pinned Lean snapshot", f"https://github.com/wcook04/plectis-lean-erdos249-257/tree/{SNAPSHOT}", None),
-    ("eight-problem verification packet", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md", "#68 — Factorial-denominator series"),
+    ("eight-problem verification packet", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md", PROGRAMME_MARKERS),
     ("Comparator appendix", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix", "comparator-interface-appendix"),
     ("reviewer replay", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION_REPLAY.md", None),
     ("citation record", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/CITATION.cff", None),
@@ -41,8 +51,11 @@ def main() -> int:
             continue
         if code != 200:
             failures.append(f"{label}: HTTP {code}")
-        elif expected_text and expected_text not in body:
-            failures.append(f"{label}: expected public marker missing")
+        elif expected_text:
+            markers = (expected_text,) if isinstance(expected_text, str) else expected_text
+            missing = [marker for marker in markers if marker not in body]
+            if missing:
+                failures.append(f"{label}: expected public marker missing: {missing[0]}")
 
     if failures:
         raise SystemExit("public routes: FAIL\n" + "\n".join(failures))
