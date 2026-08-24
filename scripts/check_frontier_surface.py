@@ -37,6 +37,12 @@ PROBLEM_TOPICS = {
     "1041": "Short lemniscate connections.",
     "1049": "Lambert series at rational bases.",
 }
+FRONTIER_SHEET_ANCHORS = {
+    "1049": (
+        "ErdosProblems.Erdos1049.rationalBaseClearedTailQ_succ",
+        "Irrationality at 3/2, or for any rational base.",
+    ),
+}
 
 
 def require(condition: bool, message: str) -> None:
@@ -121,6 +127,10 @@ def main() -> int:
         require("problem-sheet__question" in sheet, f"#{number} sheet lacks a question")
         require("problem-sheet__section--open" in sheet, f"#{number} sheet lacks its open boundary")
         require('problem-sheet__status">Open<' in sheet, f"#{number} sheet lost open status")
+        if number in FRONTIER_SHEET_ANCHORS:
+            declaration, boundary = FRONTIER_SHEET_ANCHORS[number]
+            require(declaration in sheet, f"#{number} sheet no longer names its cleared declaration")
+            require(boundary in sheet, f"#{number} sheet no longer preserves its exact open boundary")
 
     paper_sentence = "Eight problem papers &mdash; " + ", ".join(
         f"#{number}" for number in PROBLEMS[:-1]
