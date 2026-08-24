@@ -6,14 +6,14 @@
     "posture": "committed snapshot of internal review triage, not external significance or acceptance authority"
   },
   "public_source_commit": "c10393a7420adc1ac3f9097df4c940e02047218d",
-  "thesis": "Five results to read first. Hover or focus one for the question, the evidence and the part that remains open.",
-  "selection_note": "Each one opens the paper for that problem, written for someone reading cold. The Lean statement and the machine check are one row down, under Check. The #1041 result is an ordinary written proof, not checked by Lean and not peer reviewed. This is me choosing what to show you first, not peer review, community acceptance, priority or a claim of canonical status.",
+  "thesis": "Five results, stated here. Each gives the question, what was actually proved, what backs it and what is still missing.",
+  "selection_note": "Every claim above links to the thing that carries it: the paper for the written mathematics, the Lean file for the checked statement. The #1041 result is an ordinary written proof, not checked by Lean and not peer reviewed. This is me choosing what to show you first, not peer review, community acceptance, priority or a claim of canonical status.",
   "tao_pipeline_receipt": {
     "input_stage": "verified and internally adjudicated programme objects",
     "output_stage": "public exposition and review routing",
     "artifact": "generated absolute-frontier first-contact layer",
-    "human_understanding_delta": "A cold reader sees the programme thesis, then a scarce cross-programme mathematical shortlist, then one frontier for each of eight problems. Each shortlist result opens the problem paper, so first contact is an abstract that states the theorem, not a Comparator routing registry. Counts and registries no longer compete with the mathematical first contact.",
-    "verification_state": "Each public flagship opens its problem paper, which carries the statement, the proof and a commit-pinned Lean source appendix. The immutable verification packet stays one row down under Check. The #1041 ordinary theorem is public with its non-Lean and no-independent-review boundary adjacent.",
+    "human_understanding_delta": "A cold reader gets the mathematics on the page: for each shortlisted result, the question in symbols, what the reduction buys, the evidence class, and the step that is still missing. Nothing is behind a hover and nothing is behind an outbound link. The paper and the Lean declaration are cited as evidence, not used as the destination.",
+    "verification_state": "Each flagship states its evidence class inline and links the artifact that carries it: the problem paper for written mathematics, the commit-pinned Lean file for a checked statement. The #1041 ordinary theorem states its non-Lean and no-independent-review boundary on the card.",
     "publication_or_review_state": "Internal review triage and public exposition only. No community acceptance, peer review, priority or canonical status is implied.",
     "canonicalization_state": "Five selected programme objects with status-tagged public projections. Subordinate mechanisms remain in programme papers and registries.",
     "unresolved_downstream_bottleneck": "Obtain external mathematical scrutiny of the five inspectable objects without confusing publication with acceptance, then replace a flagship only when stronger evidence changes the programme frontier.",
@@ -30,7 +30,10 @@
       "attribution": "Classical factorial radix context; source specific formal synthesis; no priority claim.",
       "boundary": "No cofinal producer is known, so Erdős #68 remains open.",
       "handle": "ErdosProblems.Erdos68.irrational_factorialGapSeries_iff_cofinal_strictFacTopRat_misses",
-      "href": "https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf"
+      "href": "https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf",
+      "question_html": "Is &sum;<sub>n &ge; 2</sub> 1/(n! &minus; 1) irrational?",
+      "paper_href": "https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf",
+      "lean_href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos68/EndpointWeightedPrivateSupport.lean"
     },
     {
       "problem": "249",
@@ -42,7 +45,11 @@
       "attribution": "Classical radix tails, Euler periodicity and modular arithmetic; no priority claim for the packaging.",
       "boundary": "The universal gap supply is unproved, so Erdős #249 remains open.",
       "handle": "ErdosProblems.Erdos249.fullMersenneCanonicalBasepointResidueGapSupply_iff_irrational",
-      "href": "https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf"
+      "href": "https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf",
+      "question_html": "Is &sum;<sub>n &ge; 1</sub> &phi;(n)/2<sup>n</sup> irrational?",
+      "paper_href": "https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf",
+      "lean_href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos249/CyclotomicAnchoredKill.lean",
+      "paper_caveat": "The paper covers the problem; this particular equivalence is in the Lean source, not in it."
     },
     {
       "problem": "251",
@@ -54,7 +61,10 @@
       "attribution": "Exact summation by parts with a direct public antecedent; no new prime gap theorem or novelty claim.",
       "boundary": "Finite denominator screens and generic gap countermodels do not prove irrationality, so Erdős #251 remains open.",
       "handle": "ErdosProblems.Erdos251.dyadicPartialSumQ_eq_start_add_differences",
-      "href": "https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf"
+      "href": "https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf",
+      "question_html": "Is &sum; p<sub>n</sub>/2<sup>n</sup> over the consecutive primes irrational?",
+      "paper_href": "https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf",
+      "lean_href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos251/PrimeGapDyadicTail.lean"
     },
     {
       "problem": "257",
@@ -66,7 +76,10 @@
       "attribution": "Uses the classical Erdős Borwein irrationality theorem inside a source specific greedy synthesis; no priority claim.",
       "boundary": "Finite traces and arbitrary omitted supports do not supply the canonical cofinal skips, so Erdős #257 remains open.",
       "handle": "ErdosProblems.Erdos257.rat_mem_mersenneAchievementSet_iff_cofinal_greedy_skips",
-      "href": "https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf"
+      "href": "https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf",
+      "question_html": "Is &sum;<sub>a &isin; A</sub> 1/(2<sup>a</sup> &minus; 1) irrational for every infinite set A of positive integers?",
+      "paper_href": "https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf",
+      "lean_href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/Erdos249257/GreedyAchievementSet.lean"
     },
     {
       "problem": "1041",
@@ -79,7 +92,10 @@
       "boundary": "The constant is 8, the path lies in K_(2mu), and Erdős #1041 remains open.",
       "handle": "UnconditionalConstantFactorBound.md::unconditional_constant_factor_pair_geodesic",
       "href": "https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf",
-      "publication_state": "public"
+      "publication_state": "public",
+      "question_html": "For a monic polynomial with every root inside the unit disc, can two roots always be joined by a curve shorter than 2 that stays inside the lemniscate |f| &lt; 1?",
+      "paper_href": "https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf",
+      "paper_caveat": "No Lean statement: this one is an ordinary written proof."
     }
   ]
 }

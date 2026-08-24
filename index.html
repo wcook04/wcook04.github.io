@@ -415,19 +415,48 @@
     }
     .flagship__number { color: var(--to-repo); font-weight: 700; }
     .flagship__kind { color: var(--faint); }
-    .flagship h3 { margin: 0; font-size: 1rem; line-height: 1.18; }
-    .flagship h3 a { color: var(--bone); text-decoration-color: transparent; }
-    .flagship h3 a:hover, .flagship h3 a:focus-visible { color: var(--to-repo-lit); }
-    /* No card hangs off these. A flagship raises the destination window, which
-       is the one instrument on this page that answers "what is this problem",
-       and it is already standing to the right of the column when the reader
-       hovers. The popover that used to live here gave the same gesture two
-       answers at once and put one of them over the column being read, while
-       the window it was competing with went on showing something else. The
-       article carries data-dest and the runtime does the rest. */
+    .flagship h3 { margin: 0; font-size: 1rem; line-height: 1.18; color: var(--bone); }
+    /* The result is stated here, not behind the link and not behind a hover.
+       A flagship still raises the destination window, which is the instrument
+       that answers "what is this problem" for all eight; but a reader who
+       never hovers, or who is on a phone where there is no hover, still gets
+       the question, what the reduction buys, the evidence and the missing
+       step. The links below are cited as evidence, not used as the
+       destination: sending a cold reader to a Comparator routing registry to
+       find out what a result says is how this section used to fail. */
+    .flagship__body { min-width: 0; display: flex; flex-direction: column; gap: .28rem; }
+    .flagship__question,
+    .flagship__why,
+    .flagship__fact { margin: 0; font-size: .82rem; line-height: 1.45; color: var(--bone-soft); }
+    .flagship__question { margin-top: .16rem; }
+    .flagship__why { color: var(--bone); }
+    .flagship__tag {
+      display: inline-block;
+      min-width: 4.6rem;
+      margin-right: .3rem;
+      font-family: var(--font-sans);
+      font-size: .6rem;
+      font-weight: 650;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .flagship__fact--open .flagship__tag { color: var(--to-repo); }
+    .flagship__attribution,
+    .flagship__caveat { margin: 0; font-size: .65rem; line-height: 1.4; color: var(--faint); }
+    .flagship__exits {
+      margin: .1rem 0 0;
+      font-family: var(--font-sans);
+      font-size: .68rem;
+      letter-spacing: .02em;
+    }
+    .flagship__exits .sep { padding: 0 .38rem; color: var(--hair-strong); }
+    .flagship__exits a { color: var(--to-repo); }
+    .flagship__exits a:hover, .flagship__exits a:focus-visible { color: var(--to-repo-lit); }
     .absolute-frontier__note { margin: .48rem 0 0; font-size: .65rem; line-height: 1.4; color: var(--faint); }
     @media (max-width: 34rem) {
       .flagship { grid-template-columns: 1fr; gap: .16rem; }
+      .flagship__tag { display: block; min-width: 0; margin-right: 0; }
     }
 
     /* The route index, in the register of the Plectis right-hand rail:
@@ -2472,30 +2501,72 @@
       <section class="absolute-frontier" aria-labelledby="absolute-frontier-title">
         <p class="absolute-frontier__eyebrow">Start here</p>
         <h2 id="absolute-frontier-title">The results worth reading first</h2>
-        <p class="absolute-frontier__thesis">Five results to read first. Hover or focus one for the question, the evidence and the part that remains open.</p>
+        <p class="absolute-frontier__thesis">Five results, stated here. Each gives the question, what was actually proved, what backs it and what is still missing.</p>
         <div class="flagships">
           <article class="flagship" tabindex="0" data-dest="problem-68">
             <p class="flagship__line"><span class="flagship__number">#68</span><span class="flagship__kind">Exact endpoint</span></p>
-            <h3><a href="https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf">Irrationality becomes one cofinal divisibility question</a></h3>
+            <div class="flagship__body">
+              <h3>Irrationality becomes one cofinal divisibility question</h3>
+              <p class="flagship__question"><span class="flagship__tag">Question</span>Is &sum;<sub>n &ge; 2</sub> 1/(n! &minus; 1) irrational?</p>
+              <p class="flagship__why">The original series problem is reduced without loss to an integer event that can be attacked directly.</p>
+              <p class="flagship__fact"><span class="flagship__tag">Evidence</span>Lean checked exact equivalence</p>
+              <p class="flagship__fact flagship__fact--open"><span class="flagship__tag">Still open</span>Force failures of m dividing the strict successor beyond every cutoff.</p>
+              <p class="flagship__attribution">Classical factorial radix context; source specific formal synthesis; no priority claim.</p>
+              <p class="flagship__exits"><a href="https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf">Paper</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos68/EndpointWeightedPrivateSupport.lean">Lean statement</a></p>
+            </div>
           </article>
           <article class="flagship" tabindex="0" data-dest="problem-249">
             <p class="flagship__line"><span class="flagship__number">#249</span><span class="flagship__kind">Canonical reduction</span></p>
-            <h3><a href="https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf">One universal Mersenne residue gap is the exact frontier</a></h3>
+            <div class="flagship__body">
+              <h3>One universal Mersenne residue gap is the exact frontier</h3>
+              <p class="flagship__question"><span class="flagship__tag">Question</span>Is &sum;<sub>n &ge; 1</sub> &phi;(n)/2<sup>n</sup> irrational?</p>
+              <p class="flagship__why">Several competing attack languages collapse to one forced basepoint modular supply with the full quantifier order visible.</p>
+              <p class="flagship__fact"><span class="flagship__tag">Evidence</span>Lean checked exact equivalence</p>
+              <p class="flagship__fact flagship__fact--open"><span class="flagship__tag">Still open</span>Produce the strict centered gap for every basepoint and every positive odd denominator shape.</p>
+              <p class="flagship__attribution">Classical radix tails, Euler periodicity and modular arithmetic; no priority claim for the packaging.</p>
+              <p class="flagship__exits"><a href="https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf">Paper</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos249/CyclotomicAnchoredKill.lean">Lean statement</a></p>
+              <p class="flagship__caveat">The paper covers the problem; this particular equivalence is in the Lean source, not in it.</p>
+            </div>
           </article>
           <article class="flagship" tabindex="0" data-dest="problem-251">
             <p class="flagship__line"><span class="flagship__number">#251</span><span class="flagship__kind">Coordinate change</span></p>
-            <h3><a href="https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf">The prime series is exactly a weighted gap tail</a></h3>
+            <div class="flagship__body">
+              <h3>The prime series is exactly a weighted gap tail</h3>
+              <p class="flagship__question"><span class="flagship__tag">Question</span>Is &sum; p<sub>n</sub>/2<sup>n</sup> over the consecutive primes irrational?</p>
+              <p class="flagship__why">Summation by parts keeps the endpoint and identifies the actual infinite obstruction, instead of treating prime irregularity as evidence by itself.</p>
+              <p class="flagship__fact"><span class="flagship__tag">Evidence</span>Lean checked identity, convergence and rational affine equivalence</p>
+              <p class="flagship__fact flagship__fact--open"><span class="flagship__tag">Still open</span>Prove an infinite obstruction for the genuine consecutive prime gap tail.</p>
+              <p class="flagship__attribution">Exact summation by parts with a direct public antecedent; no new prime gap theorem or novelty claim.</p>
+              <p class="flagship__exits"><a href="https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf">Paper</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/ErdosProblems/Erdos251/PrimeGapDyadicTail.lean">Lean statement</a></p>
+            </div>
           </article>
           <article class="flagship" tabindex="0" data-dest="problem-257">
             <p class="flagship__line"><span class="flagship__number">#257</span><span class="flagship__kind">Canonical normal form</span></p>
-            <h3><a href="https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf">Rational membership means actual skips forever</a></h3>
+            <div class="flagship__body">
+              <h3>Rational membership means actual skips forever</h3>
+              <p class="flagship__question"><span class="flagship__tag">Question</span>Is &sum;<sub>a &isin; A</sub> 1/(2<sup>a</sup> &minus; 1) irrational for every infinite set A of positive integers?</p>
+              <p class="flagship__why">A set existence question becomes a statement about one canonical greedy orbit, with no freedom to choose a convenient support.</p>
+              <p class="flagship__fact"><span class="flagship__tag">Evidence</span>Lean checked exact equivalence for every nonnegative rational target</p>
+              <p class="flagship__fact flagship__fact--open"><span class="flagship__tag">Still open</span>Produce cofinal actual skips for 1/2, 1/21 or another unresolved target.</p>
+              <p class="flagship__attribution">Uses the classical Erdős Borwein irrationality theorem inside a source specific greedy synthesis; no priority claim.</p>
+              <p class="flagship__exits"><a href="https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf">Paper</a><span class="sep" aria-hidden="true">&middot;</span><a href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/c10393a7420adc1ac3f9097df4c940e02047218d/Erdos249257/GreedyAchievementSet.lean">Lean statement</a></p>
+            </div>
           </article>
           <article class="flagship" tabindex="0" data-dest="problem-1041">
             <p class="flagship__line"><span class="flagship__number">#1041</span><span class="flagship__kind">All degree partial theorem</span></p>
-            <h3><a href="https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf">A constant factor path exists in every degree</a></h3>
+            <div class="flagship__body">
+              <h3>A constant factor path exists in every degree</h3>
+              <p class="flagship__question"><span class="flagship__tag">Question</span>For a monic polynomial with every root inside the unit disc, can two roots always be joined by a curve shorter than 2 that stays inside the lemniscate |f| &lt; 1?</p>
+              <p class="flagship__why">The unrestricted geometry has an absolute all degree bound, while the critical level singularity becomes the precise obstruction to the sharp target.</p>
+              <p class="flagship__fact"><span class="flagship__tag">Evidence</span>Authored ordinary universal proof with finite regression; no Lean or independent specialist review</p>
+              <p class="flagship__fact flagship__fact--open"><span class="flagship__tag">Still open</span>Review the component coarea calculation and remove the enlargement from K_mu to K_(2mu).</p>
+              <p class="flagship__attribution">Classical length area, coarea and lemniscate mechanisms; the exact synthesis was not located in bounded search and no priority is claimed.</p>
+              <p class="flagship__exits"><a href="https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf">Paper</a></p>
+              <p class="flagship__caveat">No Lean statement: this one is an ordinary written proof.</p>
+            </div>
           </article>
         </div>
-        <p class="absolute-frontier__note">Each one opens the paper for that problem, written for someone reading cold. The Lean statement and the machine check are one row down, under Check. The #1041 result is an ordinary written proof, not checked by Lean and not peer reviewed. This is me choosing what to show you first, not peer review, community acceptance, priority or a claim of canonical status.</p>
+        <p class="absolute-frontier__note">Every claim above links to the thing that carries it: the paper for the written mathematics, the Lean file for the checked statement. The #1041 result is an ordinary written proof, not checked by Lean and not peer reviewed. This is me choosing what to show you first, not peer review, community acceptance, priority or a claim of canonical status.</p>
       </section>
       <!-- END generated absolute frontier -->
 

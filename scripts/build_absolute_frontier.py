@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import re
 from pathlib import Path
 
 
@@ -15,9 +16,85 @@ INDEX = ROOT / "index.html"
 BEGIN = "      <!-- BEGIN generated absolute frontier -->"
 END = "      <!-- END generated absolute frontier -->"
 
+# The question is the only field allowed to carry markup, because a reader
+# meeting the problem for the first time needs the series itself and not a
+# transliteration of it. Nothing but sub, sup and character entities gets
+# through; the builder refuses anything else rather than trusting the file.
+SAFE_QUESTION = re.compile(r"\A(?:[^<>&]|</?su[bp]>|&[a-zA-Z]+;|&#\d+;)*\Z")
+
 
 def esc(value: str) -> str:
     return html.escape(value, quote=True)
+
+
+def question(value: str) -> str:
+    if not SAFE_QUESTION.fullmatch(value):
+        raise ValueError(
+            f"question_html carries markup that is not sub, sup or an entity: {value!r}"
+        )
+    return value
+
+
+# A shortlisted result has to be legible where it is listed. These fields are
+# what a reader needs before deciding whether to open anything, so a card that
+# is missing one is a build failure and not a thinner card: the section used to
+# render a bare title and an outbound link, and the mathematics that was
+# already sitting in this file went unrendered.
+REQUIRED = ("title", "kind", "question_html", "why", "evidence", "hard_step",
+            "attribution", "paper_href")
+
+
+def check_row(row: dict) -> None:
+    for field in REQUIRED:
+        if not str(row.get(field, "")).strip():
+            raise ValueError(f"absolute-frontier #{row.get('problem')} has no {field}")
+
+
+def card(row: dict) -> str:
+    check_row(row)
+    # data-dest still raises the destination window on hover and on focus, but
+    # the card no longer depends on it for its content. Everything a reader
+    # needs in order to judge the result is in the article itself: the
+    # question, what the reduction buys, the evidence class, and the step
+    # nobody has. A hover is an extra. On a phone there is no hover at all.
+    exits = ['<a href="{}">Paper</a>'.format(esc(row["paper_href"]))]
+    if row.get("lean_href"):
+        exits.append('<a href="{}">Lean statement</a>'.format(esc(row["lean_href"])))
+    exit_html = '<span class="sep" aria-hidden="true">&middot;</span>'.join(exits)
+    caveat = row.get("paper_caveat")
+    caveat_html = (
+        '\n              <p class="flagship__caveat">{}</p>'.format(esc(caveat))
+        if caveat
+        else ""
+    )
+    return "\n".join(
+        [
+            '          <article class="flagship" tabindex="0" data-dest="problem-{}">'.format(
+                esc(row["problem"])
+            ),
+            '            <p class="flagship__line"><span class="flagship__number">#{}</span>'
+            '<span class="flagship__kind">{}</span></p>'.format(
+                esc(row["problem"]), esc(row["kind"])
+            ),
+            '            <div class="flagship__body">',
+            "              <h3>{}</h3>".format(esc(row["title"])),
+            '              <p class="flagship__question">'
+            '<span class="flagship__tag">Question</span>{}</p>'.format(
+                question(row["question_html"])
+            ),
+            '              <p class="flagship__why">{}</p>'.format(esc(row["why"])),
+            '              <p class="flagship__fact">'
+            '<span class="flagship__tag">Evidence</span>{}</p>'.format(esc(row["evidence"])),
+            '              <p class="flagship__fact flagship__fact--open">'
+            '<span class="flagship__tag">Still open</span>{}</p>'.format(esc(row["hard_step"])),
+            '              <p class="flagship__attribution">{}</p>'.format(
+                esc(row["attribution"])
+            ),
+            '              <p class="flagship__exits">{}</p>{}'.format(exit_html, caveat_html),
+            "            </div>",
+            "          </article>",
+        ]
+    )
 
 
 def render(payload: dict) -> str:
@@ -27,36 +104,24 @@ def render(payload: dict) -> str:
     ]
     if not 3 <= len(items) <= 5:
         raise ValueError("absolute frontier must contain three to five items")
-    cards = []
-    for row in items:
-        # The card raises the destination window rather than a card of its own.
-        # There is already one instrument on this page that answers "what is
-        # this problem", it is pinned to the right of the column at every
-        # desktop width, and it holds a sheet for all eight problems. A second
-        # hover surface for the same gesture meant the reader got two answers
-        # at once, one of them covering the column it was hovering over, while
-        # the dedicated window sat there showing something else. data-dest is
-        # the page's own contract for this: the runtime reads it off the
-        # nearest ancestor on hover and on focus, so the article needs the
-        # attribute and nothing else. tabindex stays, because that is what
-        # makes the keyboard raise the window too.
-        cards.append(
-            f'''          <article class="flagship" tabindex="0" data-dest="problem-{esc(row["problem"])}">
-            <p class="flagship__line"><span class="flagship__number">#{esc(row["problem"])}</span><span class="flagship__kind">{esc(row["kind"])}</span></p>
-            <h3><a href="{esc(row["href"])}">{esc(row["title"])}</a></h3>
-          </article>'''
-        )
-    return f'''{BEGIN}
-      <section class="absolute-frontier" aria-labelledby="absolute-frontier-title">
-        <p class="absolute-frontier__eyebrow">Start here</p>
-        <h2 id="absolute-frontier-title">The results worth reading first</h2>
-        <p class="absolute-frontier__thesis">{esc(payload["thesis"])}</p>
-        <div class="flagships">
-{chr(10).join(cards)}
-        </div>
-        <p class="absolute-frontier__note">{esc(payload["selection_note"])}</p>
-      </section>
-{END}'''
+    cards = "\n".join(card(row) for row in items)
+    return "\n".join(
+        [
+            BEGIN,
+            '      <section class="absolute-frontier" aria-labelledby="absolute-frontier-title">',
+            '        <p class="absolute-frontier__eyebrow">Start here</p>',
+            '        <h2 id="absolute-frontier-title">The results worth reading first</h2>',
+            '        <p class="absolute-frontier__thesis">{}</p>'.format(esc(payload["thesis"])),
+            '        <div class="flagships">',
+            cards,
+            "        </div>",
+            '        <p class="absolute-frontier__note">{}</p>'.format(
+                esc(payload["selection_note"])
+            ),
+            "      </section>",
+            END,
+        ]
+    )
 
 
 def replace_region(text: str, region: str) -> str:
@@ -78,7 +143,19 @@ def main() -> int:
     if args.check:
         if expected != current:
             raise SystemExit("absolute frontier: generated region is stale")
-        print("absolute frontier: source, ordering and generated region: ok")
+        # Verified against the page and not only against the renderer, so a
+        # hand-edit of index.html that strips a result back to a headline is
+        # caught here rather than shipping.
+        region = current[current.find(BEGIN):current.find(END)]
+        for row in payload["items"]:
+            if row.get("publication_state", "public") != "public":
+                continue
+            for field in ("why", "evidence", "hard_step"):
+                if esc(row[field]) not in region:
+                    raise SystemExit(
+                        f"absolute frontier: #{row['problem']} no longer states its {field}"
+                    )
+        print("absolute frontier: source, ordering, stated results and generated region: ok")
         return 0
     INDEX.write_text(expected, encoding="utf-8")
     public_count = sum(
