@@ -27,6 +27,16 @@ FRONTIER_LABELS = {
     "1041": "ray-separation obstruction",
     "1049": "construction-specific no-go at 3/2",
 }
+PROBLEM_TOPICS = {
+    "68": "Factorial denominator.",
+    "243": "Reciprocal tails.",
+    "249": "Binary totient series.",
+    "251": "Prime-gap dyadic series.",
+    "257": "Infinite exponent supports.",
+    "269": "Three-prime running LCMs.",
+    "1041": "Short lemniscate connections.",
+    "1049": "Lambert series at rational bases.",
+}
 
 
 def require(condition: bool, message: str) -> None:
@@ -91,8 +101,12 @@ def main() -> int:
         require(route is not None, f"missing accessible frontier entry for #{number}")
         require(expected_url in route.group(1), f"#{number} does not use the pinned packet")
         require(
-            FRONTIER_LABELS[number] in route.group(1),
+            FRONTIER_LABELS[number].lower() in route.group(1).lower(),
             f"#{number} visible frontier heading drifted",
+        )
+        require(
+            PROBLEM_TOPICS[number] in route.group(1),
+            f"#{number} visible entry no longer names its mathematical subject",
         )
         require(
             FRONTIER_LABELS[number].lower() in plate.lower(),
