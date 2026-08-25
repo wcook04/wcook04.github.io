@@ -868,14 +868,46 @@
       line-height: 1.42;
       color: var(--faint);
     }
+    /* ── A command is a literal, and an underline through it is a lie ───────
+       This anchor was never given a text-decoration of its own, so it took the
+       user agent's, which draws one continuous rule under every glyph AND
+       every space. Under a proportional face that is merely a link. Under a
+       6.5-pixel monospace face it is a different string: the rule closes the
+       word gaps to the same height as the descenders, and
+
+         python3 scripts/verify_claims.py --claim eb_full_support
+
+       is read off the screen as `--claim eb full support`, with the one real
+       underscore in it indistinguishable from the two spaces beside it. A
+       reader who retypes what they can see gets a command that does not run,
+       and this is the single command on the page whose whole job is to be run
+       by a stranger.
+
+       So it carries no rule at all, which is also what the page already does
+       with its other machine literal: the Lean declaration under a problem
+       sheet is monospace, quiet, and undecorated. Nothing is lost, because the
+       kind was never being carried by the underline. It is gold, it takes the
+       outbound glyph, and the sentence above it ends in a colon.
+
+       Hover answers with a field rather than a rule: a spread-only shadow,
+       which paints like a padded background and, unlike padding, cannot move
+       a single glyph of the command while it is being read or copied. */
+    .frontier-proof a { text-decoration: none; }
     .frontier-proof code {
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: .65rem;
       overflow-wrap: anywhere;
       color: var(--to-repo);
+      border-radius: 2px;
+      transition: color var(--t-interaction) ease-out,
+                  box-shadow var(--t-interaction) ease-out;
     }
     .frontier-proof a:hover code,
-    .frontier-proof a:focus-visible code { color: var(--to-repo-lit); }
+    .frontier-proof a:focus-visible code {
+      color: var(--to-repo-lit);
+      box-shadow: 0 0 0 .3em color-mix(in srgb, var(--to-repo) 12%, transparent);
+    }
+    @media (prefers-reduced-motion: reduce) { .frontier-proof code { transition: none; } }
     .frontier-comparator {
       grid-column: 2;
       margin: .48rem 0 0;
