@@ -155,6 +155,41 @@
       text-rendering: optimizeLegibility;
     }
 
+    /* Selecting text is the one thing a reader does to this page that the page
+       had no answer for: the user agent's own blue is the single object on a
+       plum-and-bone sheet that belongs to no scheme here, and it turns up
+       exactly when somebody is quoting a sentence out of it. The gold is the
+       page's own outbound colour at low alpha, which keeps the ink at full
+       contrast underneath rather than replacing it, so a selected paragraph
+       is still the paragraph.
+
+       Stated on ::selection alone and not on any element, because a
+       highlight is a property of the surface and there is one surface here. */
+    ::selection {
+      background: color-mix(in srgb, var(--to-repo) 30%, transparent);
+      color: var(--bone);
+    }
+
+    /* No `scroll-behavior: smooth`, and this is a finding rather than an
+       omission, because it is the obvious thing to add here and it was added
+       and then taken out again.
+
+       A smooth scroll is an ANIMATION, so it is driven by frames, and frames
+       are throttled when a document is not being presented. Measured: with it
+       on, a fragment navigation to #note-h stalled at scroll offset 10.5 with
+       the target still 2355px below, and stayed there. A jump cannot fail that
+       way; it is one write.
+
+       Which link that breaks is what decides it. The two fragment
+       destinations on this page are the frontier anchor and the SKIP LINK,
+       and a skip link that silently leaves a reader ten pixels from where
+       they started is worse than no easing anywhere, for exactly the reader
+       least able to work around it. Opening a link in a background tab is the
+       ordinary way into that state. So the page keeps the jump.
+
+       If a later pass wants the easing, it has to earn it on the skip link
+       specifically, in a tab that has never been foregrounded. */
+
     /* The ember thread that heads every page on the Plectis sheet. It is one
        device, so its weight and its ramp are both taken from that sheet's
        --thread rather than restated here: two pixels, warm mass left of
@@ -201,6 +236,25 @@
        anything without the other. */
     :root[data-progress] .thread__lit {
       clip-path: inset(0 calc(100% - var(--progress, 0) * 100%) 0 0);
+      /* The read head, softened. The clip is kept exactly as it was, because
+         it is what guarantees the ramp is lit rather than redrawn and the
+         paragraph above is right about why that matters. What it cannot do is
+         end well: a clip edge is a vertical cut, and a vertical cut through
+         two pixels of colour is a bar filling, which is the one thing this
+         device must not look like. The mask takes the last 2.5rem of the lit
+         part down to nothing, so what a reader sees is light reaching a
+         position rather than a bar arriving at one.
+
+         It rides the same custom property, so there is still one number
+         driving everything and still one write per frame. Negative stops
+         early on the page are harmless: below about 4% read the clip has
+         already hidden more than the mask fades. */
+      -webkit-mask-image: linear-gradient(90deg,
+        #000 calc(var(--progress, 0) * 100% - 2.5rem),
+        transparent calc(var(--progress, 0) * 100%));
+      mask-image: linear-gradient(90deg,
+        #000 calc(var(--progress, 0) * 100% - 2.5rem),
+        transparent calc(var(--progress, 0) * 100%));
     }
     /* A reader who asks for stillness gets the thread they had before. */
     @media (prefers-reduced-motion: reduce) {
@@ -310,12 +364,82 @@
        the bright mass as exactly #171020 with zero variance when the plate is
        missing, and the keyframe runs did not do that once.
 
-       So keyframes are safe here. The page still carries none, because nothing
-       it does needs one; the scene changes and the reading progress below are
-       both driven from state the runtime already has, and a transition
-       expresses them exactly. Held by measurement now, not by superstition.
-       If a later pass wants an animation, it may have one; re-run that cold
-       test rather than trusting this paragraph. */
+       So keyframes are safe here, and the page now carries four of them, in
+       the entrance below. Everything else it does is still a transition,
+       because the scene changes and the reading progress are driven from
+       state the runtime already has and a transition expresses that exactly.
+       The entrance animates type and the destination window and leaves the
+       plate alone; the note over the keyframes says what that decision does
+       and does not rest on, including why the cold test cannot be run against
+       this repository's own local server. Re-run it somewhere the picture
+       arrives promptly rather than trusting either paragraph. */
+
+    /* ── The page arrives ───────────────────────────────────────────────────
+       That later pass. It carries no entrance for the PLATE, and the reason is
+       worth writing down because it is not the reason the ban above gave, and
+       because a first reading of the evidence got it wrong in a way the next
+       person will get wrong too.
+
+       The plate appeared not to paint under a 1500ms opacity fade: loaded
+       cold with the reading scrim stripped, the picture was laid out, its
+       source decoded, `complete` true and `naturalWidth` correct, and the
+       artwork simply was not drawn. That is the exact signature the note above
+       describes, so it read as the retired ban coming back on one element.
+
+       It was not. The control kills it: the SAME page at HEAD, carrying no
+       keyframes anywhere, fails identically, and so does a build with every
+       entrance below switched off. The variable was never the animation. It
+       was the server: `python -m http.server` is single-threaded, and behind a
+       288KB document and a warm-up that requests some thirty preview stills,
+       the 2560px AVIF had not arrived. The published page over HTTPS paints
+       the plate on a cold load, checked directly.
+
+       So there is nothing here against animating the plate, and no evidence
+       for it either: this repository cannot run the cold test the note above
+       asks for, because its local server is the bottleneck rather than the
+       renderer, and a test whose failure mode is indistinguishable from its
+       instrument decides nothing. Do not read this paragraph as clearance.
+
+       No loss, and arguably the better reading anyway. The plate is the ground
+       rather than an event: the atmosphere is already there and the argument
+       enters it. What the entrances state is the order the page is meant to be
+       read in, once, at the moment there is nothing else to say. The name,
+       then the byline, then what the thing is, then the five results, then the
+       window that shows them. Ninety milliseconds apart, which is slower than
+       a stagger anyone consciously counts and faster than one that makes a
+       reader wait.
+
+       Two constraints on how they are written, both load-bearing.
+
+       The fill is BACKWARDS, never both. `both` holds the final frame
+       forever, and the final frame here is `transform: none`, which would
+       quietly outrank the stage lifecycle's `translateX(1.4rem) scale(.86)`
+       for the rest of the session: the window would stop filing itself away.
+       Backwards holds only the FIRST frame, during the delay, and hands the
+       element back to the stylesheet the moment it lands.
+
+       And the window's entrance is on .dest__frame rather than on the panel,
+       for the same reason: the panel is the element the stage lifecycle
+       moves, and two rules writing one property is how a window ends up
+       parked in the wrong place. */
+    @keyframes rise-in {
+      from { opacity: 0; transform: translateY(9px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes window-in {
+      from { opacity: 0; transform: translateY(14px) scale(.988); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    h1                 { animation: rise-in 760ms var(--ease-scene)  60ms backwards; }
+    .role              { animation: rise-in 760ms var(--ease-scene) 150ms backwards; }
+    .intro             { animation: rise-in 760ms var(--ease-scene) 240ms backwards; }
+    .absolute-frontier { animation: rise-in 820ms var(--ease-scene) 330ms backwards; }
+
+    /* Stillness means the page is simply already there. */
+    @media (prefers-reduced-motion: reduce) {
+      h1, .role, .intro, .absolute-frontier, .dest__frame { animation: none; }
+    }
 
     /* The floor matches the ceiling of the narrow rule below, because the two
        have to agree across the breakpoint they share. At 3.1rem they did not,
@@ -391,6 +515,7 @@
       grid-template-columns: 1fr;
       border-top: 1px solid var(--hair);
       border-bottom: 1px solid var(--hair);
+      transition: border-color var(--t-response) ease-out;
     }
     .flagship {
       position: relative;
@@ -402,8 +527,61 @@
       padding: .62rem 0;
       border-bottom: 1px solid var(--hair);
       outline: none;
+      transition: border-color var(--t-response) ease-out;
     }
     .flagship:last-child { border-bottom: 0; }
+
+    /* ── The five rows answer ───────────────────────────────────────────────
+       These five are the first thing on the page a reader can point at, they
+       each own the window on the right, and they were the only list here that
+       gave nothing back for it. The route rows light their hairline and lift
+       their kind; the frontier rows light theirs and go gold; these did
+       neither, so the one list a cold reader meets first was the one list that
+       behaved like paper. Same device, same duration, same colour: a rule
+       going gold is how this page says "this row is speaking".
+
+       The focus ring is a separate fault and a worse one. Every .flagship
+       carries tabindex="0", and the declaration above turns its outline off.
+       The page's own focus rule is scoped to `a`, so an article was never
+       covered by it: a keyboard reader tabbing through the five results
+       changed the picture on the right five times with nothing at all
+       indicating which row they were on. It is drawn with the same 2px accent
+       every link here uses, at a slightly wider offset because the ring is
+       going round a row rather than a word.
+
+       :focus-within on the hairline as well, because the two exits inside a
+       row are tab stops of their own and the row should stay lit while a
+       reader is inside it. */
+    .flagship:hover,
+    .flagship:focus-visible,
+    .flagship:focus-within {
+      border-bottom-color: color-mix(in srgb, var(--to-repo) 52%, transparent);
+    }
+    .flagship:hover .flagship__kind,
+    .flagship:focus-visible .flagship__kind,
+    .flagship:focus-within .flagship__kind { color: var(--bone-soft); }
+    .flagship:hover .flagship__number,
+    .flagship:focus-visible .flagship__number,
+    .flagship:focus-within .flagship__number { color: var(--to-repo-lit); }
+    .flagship__number, .flagship__kind {
+      transition: color var(--t-response) ease-out;
+    }
+    .flagship:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 5px;
+      border-radius: 2px;
+    }
+    /* The last row has no rule of its own to light, so it borrows the one the
+       list is standing on. The same sentence the frontier grid says two
+       hundred lines down, for the same reason. */
+    .flagships:has(.flagship:last-child:hover),
+    .flagships:has(.flagship:last-child:focus-visible),
+    .flagships:has(.flagship:last-child:focus-within) {
+      border-bottom-color: color-mix(in srgb, var(--to-repo) 52%, transparent);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .flagships, .flagship, .flagship__number, .flagship__kind { transition: none; }
+    }
     .flagship__line {
       display: flex;
       gap: .45rem;
@@ -1191,19 +1369,54 @@
       border-radius: 8px;
       overflow: hidden;
       background: #150f1d;
-      /* Two shadows doing two jobs. The tight ring is an edge that survives
-         the lit part of the plate, where a hairline at 30% of a warm colour
-         simply disappears into the mass; the long one is what lifts the
-         window off the picture instead of cutting a hole in it. */
-      box-shadow: 0 0 0 1px rgba(8, 4, 13, .5),
-                  0 22px 52px -18px rgba(8, 4, 13, .95);
-      transition: border-color var(--t-response) ease-out;
+      /* Four shadows, and the count is the point. One long blur at .95 is not
+         a shadow, it is a dark shape offset downwards: real occlusion is
+         short, dark and tight at the contact edge and long, weak and wide away
+         from it, and a single layer can only be one of those. So the ring
+         holds an edge that survives the lit part of the plate, where a
+         hairline at 30% of a warm colour disappears into the mass; the contact
+         layer sits under the frame's own foot; the middle carries the lift;
+         and the ambient one is what the pour behind receives. Each is weaker
+         and wider than the last, and none of them is opaque.
+
+         The inset hairline at the top is the other half of the same idea. The
+         frame is a window, and a window has a lit edge where the light
+         reaches it. One pixel of bone at 7% is under the threshold at which
+         anyone would name it and above the one at which the frame stops
+         reading as glass. */
+      box-shadow: 0 0 0 1px rgba(8, 4, 13, .55),
+                  0 1px 2px rgba(8, 4, 13, .34),
+                  0 8px 18px -8px rgba(8, 4, 13, .48),
+                  0 20px 44px -18px rgba(8, 4, 13, .60),
+                  0 46px 96px -44px rgba(8, 4, 13, .68),
+                  inset 0 1px 0 rgba(242, 230, 212, .07);
+      transition: border-color var(--t-response) ease-out,
+                  box-shadow var(--t-response) ease-out,
+                  transform var(--t-response) ease-out;
     }
     .shot[data-to="repo"]    { --to: var(--to-repo); }
     .shot[data-to="video"]   { --to: var(--to-video); }
     .shot[data-to="profile"] { --to: var(--to-profile); }
     .shot:hover, .shot:focus-visible {
       border-color: color-mix(in srgb, var(--to) 58%, transparent);
+    }
+    /* Only the window in the plate lifts. The still under a row on a phone is
+       an illustration and has nothing to lift off; the note over .row-shot
+       already says nothing lights there.
+
+       Two pixels, and the shadow lengthens by the same reasoning it is layered
+       by: something that rises casts further and softer, so the contact layer
+       loses a little and the ambient one gains. A frame that only brightened
+       its border was telling the reader it had been noticed; this tells them
+       it can be taken. */
+    .dest .shot:hover, .dest .shot:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 0 0 1px rgba(8, 4, 13, .55),
+                  0 1px 2px rgba(8, 4, 13, .28),
+                  0 10px 22px -8px rgba(8, 4, 13, .46),
+                  0 26px 56px -20px rgba(8, 4, 13, .62),
+                  0 60px 118px -48px rgba(8, 4, 13, .72),
+                  inset 0 1px 0 rgba(242, 230, 212, .1);
     }
     /* The frame is an anchor, so the shared outbound rule would hang a glyph
        off the foot of the picture. The bar carries that mark instead, where
@@ -1257,6 +1470,7 @@
     .shot[data-to="video"] .shot__img { object-fit: contain; background: #0d0a12; }
     @media (prefers-reduced-motion: reduce) {
       .shot, .shot__img { transition: none; }
+      .dest .shot:hover, .dest .shot:focus-visible { transform: none; }
     }
 
     /* ── The packet map ──────────────────────────────────────────────────────
@@ -1826,6 +2040,34 @@
            filtered sticky picture while omitting it from the first paint. The
            scrim below supplies the reading contrast without risking the art. */
       }
+      /* The frame closes. The plate is a full-bleed crop of a painting and a
+         crop has four cut edges: the mass runs off the bottom right corner and
+         the field runs off the top, both of them at the same brightness they
+         had in the middle, which is what makes a full-bleed picture read as
+         wallpaper rather than as a photograph of something. A vignette is the
+         oldest answer to that and it is the right one here, because the plate
+         already behaves like a camera: it is over-scaled once and pans, and a
+         lens that pans has edges.
+
+         Painted rather than filtered, for the reason stated directly above:
+         this is a pseudo-element inside the sticky box, the same kind of
+         object the scrim beside it is, and it leaves the picture itself
+         untouched. Inside the wrapper's own `overflow: hidden`, so it is cut
+         to the frame and cannot reach the type.
+
+         .30 at the corners and nothing at all across the middle 45%. The stop
+         is set by where the mass is: at 62% the ramp had begun to take the lit
+         flank, which is the part of the file the composition was chosen for
+         and the last part that should be dimmed to make a frame look tidy. */
+      .fold > picture::after {
+        content: "";
+        position: absolute; inset: 0;
+        pointer-events: none;
+        background: radial-gradient(ellipse 78% 74% at 54% 48%,
+          transparent 45%,
+          rgba(12, 8, 20, .10) 70%,
+          rgba(12, 8, 20, .30) 100%);
+      }
       .plate {
         width: 100%; height: 100%;
         /* The glowing flank is visible on the right, while the copy has a
@@ -1965,8 +2207,30 @@
            clip does not make one at all, and either way this is the sticky
            element rather than an ancestor of one, so its own stickiness is
            untouched. x only, so the hint that now hangs below the panel is
-           still free to paint. */
+           still free to paint.
+
+           The margin is the correction to that clip and it is the whole fix
+           for the straight-edged shadow this page shipped with. The clip was
+           reasoned about at the RIGHT edge, where it coincides with the
+           viewport and cuts nothing anyone can see. It also applies on the
+           LEFT, where this lane's own box edge sits well inside the pour that
+           hangs off the panel: measured at 1440, the lane starts at 835.2 and
+           the pour at 807.3, so the clip fell at 91.5% of the pour's ramp,
+           where the plum is still at .138 alpha, and drew that as a vertical
+           wall about 570px tall down the near side of the window. A soft
+           gradient cut by a hard box is a rectangle, which is exactly what it
+           looked like.
+
+           6rem covers the worst case with room. The overhang is widest where
+           the panel's 37vw is about to meet its 48rem cap: 44px at 1280, 66 at
+           1920, 71 at 2076, and from roughly 2400 up the pour is inside the
+           lane and nothing is clipped at all. Nothing about the scrollbar this
+           clip exists to prevent changes: a clip box never propagates
+           scrollable overflow, and the margin moves only where painting stops.
+           Re-checked after: scrollWidth equals clientWidth at 1280 through
+           2560, as before. */
         overflow-x: clip;
+        overflow-clip-margin: 6rem;
       }
       .dest__panel {
         pointer-events: auto;
@@ -2006,6 +2270,16 @@
            z-index -1 and that was previously true only as a side effect of the
            backdrop filter. */
         isolation: isolate;
+      }
+      /* Last in the order the page arrives in, and a little further than the
+         type moves, because it is a larger object further away. The scale is
+         twelve thousandths and exists only so the window resolves rather than
+         slides; anything a reader could measure would be a zoom. See the
+         entrance note near the top of this sheet for why this hangs on the
+         frame and not on the panel. */
+      .dest__frame { animation: window-in 900ms var(--ease-scene) 420ms backwards; }
+      @media (prefers-reduced-motion: reduce) {
+        .dest__frame { animation: none; }
       }
       /* One window, one width. Pointing at a problem used to narrow the panel
          from 33vw to 25vw AND swing it from landscape to portrait, so the
@@ -2080,36 +2354,58 @@
          a little quiet ground to stand on, densest under the frame and gone
          before the edges of its own box.
 
-         closest-side is load-bearing and was missing. A radial-gradient with
-         no size keyword is farthest-CORNER, which puts 100% of the ramp at the
-         corner and therefore only 70.7% of it at the middle of each edge, so
-         a stop that ends at 78% has not finished when the box does, and the
-         remaining ~13% of plum is cut off in a straight line across the plate.
-         That is the seam: predicted at device row 1468 on a 1512x950 at 2x,
-         measured at 1474, gone with this keyword. closest-side puts 100% of
-         the ramp at the edge, so the ramp finishes 22% early on every side. */
+         Two layers, because one was doing two jobs badly. A single ellipse
+         holding .97 at the centre and .88 most of the way out is not ground,
+         it is a disc: it has an outline, and a shape with an outline standing
+         behind a rectangle reads as a second rectangle. The pool below is the
+         part that grounds the frame and is barely wider than it; the
+         atmosphere is the part that carries the frame's shadow out into the
+         plate, and it is faint enough over its outer third that no edge can
+         form there whatever cuts it.
+
+         That second property is the one that matters structurally. The old
+         ramp was still at .138 alpha where this lane's clip fell, so a clip
+         edge became a drawn edge. This one is at .011 there. The clip margin
+         on .dest above stops the cut from happening at all; this stops it
+         mattering if some later box cuts it somewhere else.
+
+         Sizes are stated rather than taken from closest-side, and both stay at
+         or inside 50% of the box, which is what closest-side means at 50% 50%.
+         Anything larger is clipped by the box and puts the seam back by a
+         different route. */
       .dest__panel::before {
         content: "";
         /* The horizontal reach is what the lane can actually give, not a round
            number. At -18% a wider window pushed this box past the right edge of
            the viewport and the whole document gained a horizontal scroll of 28
            to 41px, measured at 1280 through 1920: a decorative gradient nobody
-           can see was making the page slide sideways. The room to the right is
-           the window's own slack plus the lane's padding, and because both are
-           set in vw that is 12.2% of the window at every width below the cap
-           and 26.7% above it. -12% is inside that everywhere.
-
-           The clip on .dest is the guarantee rather than the mechanism: at 12%
-           the ramp is already transparent by the edge, so it removes nothing
-           visible, and it means no future change to this box can put a
-           scrollbar under the page. */
-        position: absolute; inset: -24% -12%;
+           can see was making the page slide sideways. That is what the clip on
+           .dest prevents, and it still prevents it: a clip box never propagates
+           scrollable overflow, at any reach. So the reach here is set by how
+           far the shadow should carry rather than by what fits, and -16%
+           against -34% keeps the pour's own proportions close to the window's
+           instead of stretching a wide ellipse under a wide box. */
+        position: absolute; inset: -34% -16%;
         z-index: -1;
         pointer-events: none;
-        background: radial-gradient(ellipse closest-side at 50% 50%,
-          rgba(18, 14, 28, .97) 0%,
-          rgba(18, 14, 28, .88) 46%,
-          transparent 100%);
+        background:
+          /* The pool. Dense, low, and only a little wider than the frame, so
+             the thing a reader reads the window as standing on is the size of
+             the window. Centred below the middle because a shadow falls. */
+          radial-gradient(ellipse 36% 42% at 50% 55%,
+            rgba(16, 12, 26, .80) 0%,
+            rgba(16, 12, 26, .58) 46%,
+            rgba(16, 12, 26, .21) 78%,
+            transparent 100%),
+          /* The atmosphere. The whole box, and effectively gone by 88% of it,
+             which is the property the note above turns on. */
+          radial-gradient(ellipse 50% 50% at 50% 50%,
+            rgba(18, 14, 28, .74) 0%,
+            rgba(18, 14, 28, .60) 34%,
+            rgba(18, 14, 28, .30) 58%,
+            rgba(18, 14, 28, .10) 76%,
+            rgba(18, 14, 28, .02) 88%,
+            transparent 96%);
       }
       /* ── The stage has a lifecycle ──────────────────────────────────────
          The window belongs to the bands and to nothing else. Held past them,
