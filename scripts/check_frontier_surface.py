@@ -20,6 +20,10 @@ OG_FRONTIER = ROOT / "assets" / "og-frontier.svg"
 SITEMAP = ROOT / "sitemap.xml"
 ROBOTS = ROOT / "robots.txt"
 ABSOLUTE_FRONTIER_SOURCE = ROOT / "data" / "absolute-frontier.json"
+TERM_ANCHOR = re.compile(
+    r'<a class="term(?: is-again)?" data-term="[^"]*" href="[^"]*">(?P<label>.*?)</a>',
+    re.DOTALL,
+)
 SNAPSHOT = json.loads(ABSOLUTE_FRONTIER_SOURCE.read_text(encoding="utf-8"))[
     "public_source_commit"
 ]
@@ -148,7 +152,15 @@ PAPER_PDF_FOR = {
 
 
 def main() -> int:
-    text = INDEX.read_text(encoding="utf-8")
+    markup = INDEX.read_text(encoding="utf-8")
+    # Every prose promise below is a promise about what the page SAYS, so it is
+    # checked against the page with its glossary anchors unwrapped. The term
+    # layer is derived from the vocabulary now rather than typed in, which means
+    # any sentence can gain a link between one build and the next; a check that
+    # reads the raw markup would fail on "Plectis writes mathematics with AI"
+    # for no reason except that "mathematics" became hoverable. The marks
+    # themselves are checked separately, against `markup`.
+    text = TERM_ANCHOR.sub(lambda m: m.group("label"), markup)
     og_frontier = OG_FRONTIER.read_text(encoding="utf-8")
     sitemap = SITEMAP.read_text(encoding="utf-8")
     robots = ROBOTS.read_text(encoding="utf-8")
@@ -188,15 +200,44 @@ def main() -> int:
     )
     # The first screen is where a cold reader meets the vocabulary, and it was
     # the one place the glossary was never applied: zero data-term marks in the
-    # intro and zero in the shortlist above the fold, against a glossary that
-    # defines nine words and raises a card for each. Naming a term and leaving
+    # intro and zero in the shortlist above the fold. Naming a term and leaving
     # a stranger no way to find out what it means is the same omission as
     # naming a paper and not linking it.
-    for term in ("machine-checked", "lean", "proof", "open-problem"):
+    for term in ("machine_checked", "lean", "proof", "open_problem"):
         require(
-            f'data-term="{term}"' in text,
+            f'data-term="{term}"' in markup,
             f"opening prose no longer defines {term} for a cold reader",
         )
+    # The layer is derived, so the thing worth guarding is no longer which words
+    # are marked but whether every mark still names something. The four ids
+    # above were once written "machine-checked" and "open-problem", which are
+    # not glossary rows; they raised a card anyway because the payload beside
+    # them was typed by the same hand with the same two invented keys. A
+    # hand-maintained layer is consistent with itself and with nothing else,
+    # and only a check that reads the source can tell the difference.
+    snapshot_terms = set(
+        json.loads((ROOT / "data" / "glossary-terms.json").read_text(encoding="utf-8"))["terms"]
+    )
+    marked = set(re.findall(r'data-term="([^"]+)"', markup))
+    require(
+        bool(marked), "the root page carries no glossary term marks at all"
+    )
+    unknown = sorted(marked - snapshot_terms)
+    require(
+        not unknown,
+        f"term marks name no glossary row: {unknown}",
+    )
+    payload = re.search(
+        r"/\* BEGIN generated glossary terms \*/(.*?)/\* END generated glossary terms \*/",
+        markup,
+        re.DOTALL,
+    )
+    require(payload is not None, "the generated term payload is missing")
+    uncarded = sorted(t for t in marked if f'"{t}": {{' not in payload.group(1))
+    require(
+        not uncarded,
+        f"terms are marked on the page but raise no card: {uncarded}",
+    )
     require(
         "Plectis writes mathematics with AI and has it" in text,
         "opening lost the Plectis system thesis",

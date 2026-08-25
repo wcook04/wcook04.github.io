@@ -46,7 +46,7 @@ anything, and the sitemap it declared had never been discovered by that route.
 
 | Path | Purpose |
 |---|---|
-| `index.html` | The root page. Self-contained; no build step, no dependencies. |
+| `index.html` | The root page. Served as-is; two generated regions are spliced into it by the scripts below. |
 | `404.html` | Served by GitHub Pages for unmatched paths under the host root. |
 | `robots.txt` | The host-root robots.txt. Declares the Plectis sitemap. |
 | `site.webmanifest` | Root-scoped manifest. |
@@ -54,6 +54,8 @@ anything, and the sitemap it declared had never been discovered by that route.
 | `assets/plate-01*` | Archived artwork retained locally; it is not part of the reading surface. |
 | `assets/previews/` | Screenshots of each public destination, used as stills on the front door. |
 | `assets/og-frontier.svg` / `.png` | The claim-bounded eight-problem social preview and its PNG delivery file. |
+| `data/glossary-terms.json` | The governed public vocabulary, exported from the Plectis substrate: 486 terms with their reader cards, and the 2,354 surface forms that are safe to resolve on a bare word. |
+| `scripts/build_glossary_term_layer.py` | Links every governed term the page actually uses and regenerates the preview payload. Re-runnable: it unwraps its own anchors before it writes. |
 | `scripts/check_frontier_surface.py` | Static release guard for the all-eight programme map and immutable verification links. |
 | `scripts/check_public_routes.py` | Live smoke check for the public Plectis, paper, Lean, verification, Comparator, replay, citation, and updates hand-offs. |
 
@@ -62,8 +64,28 @@ anything, and the sitemap it declared had never been discovered by that route.
 Before publishing a root-site change, run:
 
 ```sh
+python3 scripts/build_glossary_term_layer.py
 python3 scripts/check_frontier_surface.py
 python3 scripts/check_public_routes.py
+```
+
+The term layer is built first because it is derived. It used to be typed in:
+nine words, chosen by hand, with their preview cards retyped beside them,
+against a glossary of 486. A reader who hovered `cofinal`, `lemniscate`,
+`Mersenne`, `radix` or `Erdős` — every one of them defined, every one of them
+on this page — got nothing, and two of the nine hand-typed keys named no
+glossary row at all. They raised a card anyway, because the payload beside them
+carried the same two invented keys. That is what a hand-maintained layer buys:
+it is consistent with itself and with nothing else. The frontier check now
+reads the source instead, and fails if a mark on the page names a term the
+glossary does not define or raises no card.
+
+Refresh `data/glossary-terms.json` from the Plectis substrate when the
+vocabulary changes:
+
+```sh
+./repo-python tools/meta/dissemination/export_public_glossary_snapshot.py \
+    --out ~/src/wcook04.github.io/data/glossary-terms.json
 ```
 
 It checks the local front door, not the mathematics: the masthead and opening
