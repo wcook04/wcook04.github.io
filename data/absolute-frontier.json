@@ -6,7 +6,7 @@
     "posture": "committed snapshot of internal review triage, not external significance or acceptance authority"
   },
   "public_source_commit": "35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77",
-  "thesis": "Five results, stated here. Each gives the question, what was actually proved, what backs it and what is still missing.",
+  "thesis": "Five results, stated here, the strongest in the corpus. Each gives the question, what was actually proved, what backs it and what is still missing.",
   "selection_note": "Every claim above links to the thing that carries it: the paper for the written mathematics, the Lean file for the checked statement. The #1041 result is an ordinary written proof, not checked by Lean and not peer reviewed. This is me choosing what to show you first, not peer review, community acceptance, priority or a claim of canonical status.",
   "tao_pipeline_receipt": {
     "input_stage": "verified and internally adjudicated programme objects",

@@ -160,12 +160,12 @@ def combined_routes(snapshot: str) -> list[str]:
         "sit inside Plectis&rsquo;s 13-paper catalogue</a> with the reasoning "
         "surfaces and the system papers. They are written for someone reading cold.</p>",
         '        <p class="absolute-frontier__acts">'
+        '<a class="btn btn--quiet" data-dest="papers-catalogue" '
+        'href="https://wcook04.github.io/plectis/docs/papers.html">Open the papers catalogue</a>'
         '<a class="btn btn--quiet" data-dest="maths-pages" '
         'href="https://wcook04.github.io/plectis/maths/">Read all eight as pages</a>'
         '<a class="btn btn--quiet" data-to="repo" data-dest="math-frontier" '
         f'href="{blob}/README.md#eight-programme-map">Open the programme map</a>'
-        '<a class="btn btn--quiet" data-dest="papers-catalogue" '
-        'href="https://wcook04.github.io/plectis/docs/papers.html">Open the papers catalogue</a>'
         "</p>",
         '        <details class="route-more">',
         "          <summary>More ways to check it</summary>",

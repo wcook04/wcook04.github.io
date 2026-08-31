@@ -454,6 +454,21 @@
       line-height: .96;
       letter-spacing: -.04em;
     }
+    /* The name is a route. Everything called Plectis on this page lands on
+       the Plectis site eventually, so the wordmark goes there directly: the
+       biggest word on the page was the one thing a reader could not press.
+       No underline, because the name is a masthead and not prose; the answer
+       to the pointer is the page pair's lit value, the same one every
+       on-host link uses. The row's hover also raises the Plectis still in
+       the destination window, through the same data-dest the index rows use,
+       so the title behaves like what it is: the first route. */
+    h1 a {
+      color: inherit;
+      text-decoration: none;
+      transition: color var(--t-interaction) ease-out;
+    }
+    h1 a:hover, h1 a:focus-visible { color: var(--to-page-lit); }
+    @media (prefers-reduced-motion: reduce) { h1 a { transition: none; } }
     .role {
       margin: 1.05rem 0 0;
       display: flex; align-items: center; gap: .8rem;
@@ -2869,7 +2884,7 @@
 
     <div class="col">
       <header>
-        <h1>Plectis</h1>
+        <h1><a href="https://wcook04.github.io/plectis/" data-dest="plectis-site">Plectis</a></h1>
         <p class="role">Will Cook &middot; checkable mathematical research</p>
       </header>
 
@@ -2908,7 +2923,9 @@
       <p class="intro">
         Plectis writes <a class="term" data-term="mathematics" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-mathematics">mathematics</a> with AI and has it <a class="term" data-term="machine_checked" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-machine-checked">machine-checked</a>. The <a class="term" data-term="proof" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-proof">proofs</a> are
         written in <a class="term" data-term="lean" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-lean">Lean</a>, <a class="term" data-term="software" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-software">software</a> that reads every step and <a class="term" data-term="reject" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-reject">rejects</a> the proof if a step
-        does not follow. The work covers eight <a class="term" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">open problems</a> posed by <a class="term" data-term="erdos" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-erdos">Erd&#337;s</a>.
+        does not follow. The work covers eight <a class="term" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">open problems</a> posed by <a class="term" data-term="erdos" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-erdos">Erd&#337;s</a>,
+        picked for depth rather than for tractability: the corpus and the papers are
+        what a year of pushing today's models at them produced.
         All eight remain open, and none of this solves one.
       </p>
 
@@ -2916,7 +2933,7 @@
       <section class="absolute-frontier" aria-labelledby="absolute-frontier-title">
         <p class="absolute-frontier__eyebrow">Start here</p>
         <h2 id="absolute-frontier-title">The <a class="term is-again" data-term="result" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-result">results</a> worth reading first</h2>
-        <p class="absolute-frontier__thesis">Five <a class="term is-again" data-term="result" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-result">results</a>, stated here. Each gives the question, what was actually proved, what backs it and what is still <a class="term" data-term="missing" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-missing">missing</a>.</p>
+        <p class="absolute-frontier__thesis">Five <a class="term is-again" data-term="result" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-result">results</a>, stated here, the strongest in the <a class="term" data-term="corpus" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-corpus">corpus</a>. Each gives the question, what was actually proved, what backs it and what is still <a class="term" data-term="missing" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-missing">missing</a>.</p>
         <p class="frontier-instruction"><span class="frontier-instruction__wide">Hover or tab to a <a class="term" data-term="number" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-number">number</a> for the question, what was <a class="term is-again" data-term="check" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-check">checked</a>, and what is still unproved.</span><span class="frontier-instruction__narrow">Open a number for the question, what was checked, and what is still unproved.</span></p>
         <div class="flagships">
           <article class="flagship" tabindex="0" data-dest="problem-68">
@@ -2991,7 +3008,7 @@
         <p class="absolute-frontier__note">Every <a class="term is-again" data-term="claim" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-claim">claim</a> above links to the thing that carries it: the <a class="term is-again" data-term="paper" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-paper">paper</a> for the written <a class="term is-again" data-term="mathematics" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-mathematics">mathematics</a>, the <a class="term is-again" data-term="lean" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-lean">Lean</a> file for the <a class="term is-again" data-term="check" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-check">checked</a> <a class="term is-again" data-term="statement" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-statement">statement</a>. The #1041 <a class="term is-again" data-term="result" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-result">result</a> is an ordinary written <a class="term is-again" data-term="proof" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-proof">proof</a>, not checked by Lean and not peer reviewed. This is me choosing what to show you first, not peer review, community acceptance, priority or a claim of canonical status.</p>
         <p class="af-route">One <a class="term is-again" data-term="machine_checked" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-machine-checked">machine-checked</a> <a class="term is-again" data-term="statement" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-statement">statement</a> for each problem, and the exact thing that is still unproved: the <a data-to="repo" data-dest="math-frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/README.md#eight-programme-map">Eight programme map</a>.</p>
         <p class="af-route">Eight problem <a class="term is-again" data-term="paper" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-paper">papers</a>, for <a class="paper" data-dest="paper-68" href="https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf" aria-label="Paper, PDF: Erd&#337;s #68, factorial denominator irrationality">#68</a>, <a class="paper" data-dest="paper-243" href="https://wcook04.github.io/plectis/papers/erdos-243-reciprocal-tail-rigidity.pdf" aria-label="Paper, PDF: Erd&#337;s #243, reciprocal tail rigidity">#243</a>, <a class="paper" data-dest="paper-249" href="https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf" aria-label="Paper, PDF: Erd&#337;s #249, the binary totient series">#249</a>, <a class="paper" data-dest="paper-251" href="https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf" aria-label="Paper, PDF: Erd&#337;s #251, the prime-gap dyadic series">#251</a>, <a class="paper" data-dest="paper-257" href="https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf" aria-label="Paper, PDF: Erd&#337;s #257, Mersenne support subseries">#257</a>, <a class="paper" data-dest="paper-269" href="https://wcook04.github.io/plectis/papers/erdos-269-three-prime-running-lcm.pdf" aria-label="Paper, PDF: Erd&#337;s #269, three-prime running LCMs">#269</a>, <a class="paper" data-dest="paper-1041" href="https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf" aria-label="Paper, PDF: Erd&#337;s #1041, the lemniscate Newton flow">#1041</a> and <a class="paper" data-dest="paper-1049" href="https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf" aria-label="Paper, PDF: Erd&#337;s #1049, rational-base Lambert series">#1049</a>, <a data-dest="papers-catalogue" href="https://wcook04.github.io/plectis/docs/papers.html">sit inside Plectis&rsquo;s 13-paper catalogue</a> with the reasoning surfaces and the <a class="term" data-term="system" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-system">system</a> papers. They are written for someone reading cold.</p>
-        <p class="absolute-frontier__acts"><a class="btn btn--quiet" data-dest="maths-pages" href="https://wcook04.github.io/plectis/maths/">Read all eight as pages</a><a class="btn btn--quiet" data-to="repo" data-dest="math-frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/README.md#eight-programme-map">Open the programme map</a><a class="btn btn--quiet" data-dest="papers-catalogue" href="https://wcook04.github.io/plectis/docs/papers.html">Open the papers catalogue</a></p>
+        <p class="absolute-frontier__acts"><a class="btn btn--quiet" data-dest="papers-catalogue" href="https://wcook04.github.io/plectis/docs/papers.html">Open the papers catalogue</a><a class="btn btn--quiet" data-dest="maths-pages" href="https://wcook04.github.io/plectis/maths/">Read all eight as pages</a><a class="btn btn--quiet" data-to="repo" data-dest="math-frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/README.md#eight-programme-map">Open the programme map</a></p>
         <details class="route-more">
           <summary>More ways to check it</summary>
           <p class="exits frontier-exits">
@@ -3009,6 +3026,25 @@
       <nav id="eight-problem-frontier" tabindex="-1" aria-label="Public routes" data-scene-key="opening">
         <h2 class="sr-only">Public routes</h2>
         <ul class="routes">
+          <li data-dest-default="papers-catalogue">
+            <!-- The papers lead the index because they are the finished work:
+                 the frontier band above states the results, and this row is
+                 where a reader goes to actually read them. The kind is plain
+                 English on purpose; see the note over the intro. -->
+            <p class="kind">Read</p>
+            <p class="name"><a href="https://wcook04.github.io/plectis/docs/papers.html" data-dest="papers-catalogue">Papers</a></p>
+            <p class="desc">Eight problem <a class="term is-again" data-term="paper" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-paper">papers</a> and the <a class="term is-again" data-term="system" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-system">system</a> papers behind them, standalone PDFs with their <a class="term" data-term="latex" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-latex">LaTeX</a> beside them. Each <a class="term is-again" data-term="state" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-state">states</a> what was proved, on what <a class="term is-again" data-term="evidence" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-evidence">evidence</a>, and what is still open.</p>
+            <p class="route-act"><a class="btn btn--quiet" href="https://wcook04.github.io/plectis/docs/papers.html" data-dest="papers-catalogue">Open the papers catalogue</a></p>
+            <p class="exits">
+              <a aria-label="The papers catalogue" href="https://wcook04.github.io/plectis/docs/papers.html" data-dest="papers-catalogue">Catalogue</a><span class="sep" aria-hidden="true">&middot;</span><a aria-label="The eight problems as readable pages" href="https://wcook04.github.io/plectis/maths/" data-dest="maths-pages">Maths pages</a><span class="sep" aria-hidden="true">&middot;</span><a aria-label="On the site: the papers" href="https://wcook04.github.io/plectis/#papers" data-dest="papers-on-site">On the site</a>
+            </p>
+            <p class="row-shot">
+              <a class="shot" href="https://wcook04.github.io/plectis/docs/papers.html" data-dest="papers-catalogue">
+                <span class="shot__bar"><span class="shot__host">wcook04.github.io</span><span class="shot__path">/plectis/docs/papers.html</span></span>
+                <span class="shot__stage"><img class="shot__img" src="assets/previews/papers-catalogue-640.jpg" alt="" width="640" height="400" loading="lazy" decoding="async"></span>
+              </a>
+            </p>
+          </li>
           <li data-dest-default="plectis-site">
             <!-- Plectis follows the mathematical frontier and its eight problem
                  papers: it makes those public routes runnable, but it is not
@@ -3130,9 +3166,12 @@
           <a class="cite" href="https://wcook04.github.io/plectis/docs/contact.html#who-built-this">AI was the only tool I used</a>.
         </p>
         <p>
-          I
+          The eight problems were picked because they are deep, and I did not
+          <span data-term-auto="off">expect</span> to solve them. The experiment was to see what happens when you
+          throw as much as you can at problems like these, and to build the
+          infrastructure off the failure modes today's <a class="term" data-term="model" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-model">models</a> actually show. I
           <a class="cite" href="https://wcook04.github.io/plectis/docs/coding-agents.html">designed the system for coding agents to work in</a>,
-          on the <a class="term" data-term="hypothesis" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-hypothesis">assumption</a> that it gets more useful as the <a class="term" data-term="model" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-model">models</a> improve. I
+          on the <a class="term" data-term="hypothesis" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-hypothesis">assumption</a> that it gets more useful as the models improve. I
           have not shown that; it is still an assumption. Most of the
           <a class="term is-again" data-term="mathematics" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-mathematics">mathematics</a> is written in
           <a class="term is-again" data-term="lean" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-lean">Lean</a>,
@@ -3142,6 +3181,18 @@
           open,
           and
           <a class="cite" data-to="repo" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/docs/EXTERNAL_VERIFICATION.md">none of it solves one</a>.
+        </p>
+        <!-- The continuation offer. It sits between the account of the
+             experiment and the asks because it is neither: it is what the
+             publication is for. The credit sentence is a commitment, not a
+             checkable claim, so it carries no link; the licensing that makes
+             the first sentence true is stated in each repository. -->
+        <p>
+          It is <a class="term is-again" data-term="published" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-published">published</a> so that anyone can continue it. The <a class="term is-again" data-term="corpus" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-corpus">corpus</a>, the
+          tooling, and the open step each <a class="term is-again" data-term="paper" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-paper">paper</a> names are all <a class="term is-again" data-term="public" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-public">public</a>: <a class="term is-again" data-term="clone" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-clone">clone</a>
+          them, run your own <a class="term is-again" data-term="model" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-model">models</a> at the problems, or improve the
+          infrastructure itself. A <a class="term" data-term="solution" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-solution">solution</a> found that way is yours, and so is
+          the credit.
         </p>
         <!-- The fact, not the diary. This said the replies so far had been
              out-of-field or no-time, which is true and was the wrong thing to
@@ -3838,6 +3889,13 @@
         "reader_preview": "Convergence means the partial sums of an infinite series approach one fixed finite value as more terms are included.",
         "reader_rule": "Separate the question of whether a series converges from the question of what kind of number its limit is."
       },
+      "corpus": {
+        "preferred_label": "corpus",
+        "reader_card": "In Plectis, corpus means an enumerated body against which a count, proof, or check is made: for example, the published PDFs, Lean declarations, or another manifest-backed collection. Fixing membership makes the claim reproducible; a result over one corpus does not extend to future files or excluded material.",
+        "reader_deep": "Corpus is a measurement boundary, not a claim of representativeness or completeness. Plectis reports both raw declaration counts and deduplicated statement counts because the same fixed corpus can support different legitimate units.",
+        "reader_preview": "A corpus is a fixed body of material treated as one collection, so results can be quoted against a known set rather than an open-ended one.",
+        "reader_rule": "Locate the manifest, revision, or membership rule before reading a corpus-wide count or coverage claim."
+      },
       "declaration": {
         "preferred_label": "declaration",
         "reader_card": "It is the unit the Lean corpus is counted in. Declarations are not equally interesting: one may be a substantial theorem and the next a mechanical step generated in bulk, and a count that does not separate them will mislead. That is why the corpus is reported both as raw declarations and as the far smaller number of distinct statements they reduce to.",
@@ -3935,6 +3993,13 @@
         "reader_deep": "Format choice is an access-control decision in disguise. Anything that requires a viewer restricts who can check it.",
         "reader_preview": "JSON is a plain-text format for structured data, readable by both people and programs without special software.",
         "reader_rule": "A JSON record can be opened directly. If evidence is only available through an interface, ask why."
+      },
+      "latex": {
+        "preferred_label": "LaTeX",
+        "reader_card": "Mathematical papers use LaTeX because it represents equations, references, and document structure precisely in source form. Compilation checks syntax and cross-references, not the truth of the paper.",
+        "reader_deep": "LaTeX separates semantic document commands from final layout, allowing the same source to be rebuilt consistently with a pinned toolchain.",
+        "reader_preview": "LaTeX is a document-preparation system in which authors write structured source text that a typesetting engine turns into formatted documents such as PDFs.",
+        "reader_rule": "Use the LaTeX source to inspect the authored text and the generated PDF to inspect its published rendering."
       },
       "lean": {
         "preferred_label": "Lean",
@@ -4194,6 +4259,13 @@
         "reader_deep": "A software system can be inspected at source, build, test, and runtime layers, and evidence at one layer does not automatically settle the others.",
         "reader_preview": "Software is the collection of code, data, configuration, and executable behavior that directs computing systems to perform tasks.",
         "reader_rule": "State which artifact, version, and runtime behavior a software claim covers."
+      },
+      "solution": {
+        "preferred_label": "solution",
+        "reader_card": "For an equation, a solution is a value that makes it true; for an open problem, a solution is a proof or counterexample that settles the full question. Partial progress can narrow the possibilities without being a solution.",
+        "reader_deep": "A correct solution can use a reformulation or unexpected method, but it must preserve the problem's domain and conclusion and withstand independent checking.",
+        "reader_preview": "A solution is an answer or construction that satisfies every condition of a stated problem.",
+        "reader_rule": "Compare the proposed solution with every requirement in the original problem statement."
       },
       "source": {
         "preferred_label": "source",

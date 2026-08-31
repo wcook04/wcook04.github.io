@@ -169,7 +169,10 @@ def main() -> int:
     selection_authority = absolute_frontier.get("selection_authority", {})
     require(len(selection_authority.get("commit", "")) == 40, "absolute-frontier selection authority is not pinned")
     require("not external significance or acceptance authority" in selection_authority.get("posture", ""), "absolute-frontier selection authority overclaims internal triage")
-    require("<h1>Plectis</h1>" in text, "masthead no longer leads with Plectis")
+    require(
+        '<h1><a href="https://wcook04.github.io/plectis/" data-dest="plectis-site">Plectis</a></h1>' in text,
+        "masthead no longer leads with Plectis, or the wordmark lost its route to the Plectis site",
+    )
     require('<link rel="canonical" href="https://wcook04.github.io/">' in text, "front door lost its canonical public URL")
     require('<meta property="og:url" content="https://wcook04.github.io/">' in text, "social preview lost its canonical public URL")
     require('https://wcook04.github.io/assets/og-frontier.png' in text, "social preview lost the eight-problem share image")
