@@ -119,6 +119,78 @@ def other_row(number: str, topic: str, paper: str) -> str:
     ).format(n=esc(number), t=esc(topic), p=esc(paper))
 
 
+def paper_number_links() -> str:
+    parts = []
+    for number, _topic, paper in (
+        ("68", "factorial denominator irrationality", "erdos-68-factorial-denominator-irrationality.pdf"),
+        ("243", "reciprocal tail rigidity", "erdos-243-reciprocal-tail-rigidity.pdf"),
+        ("249", "the binary totient series", "erdos-249-binary-totient-series.pdf"),
+        ("251", "the prime-gap dyadic series", "erdos-251-prime-gap-dyadic-series.pdf"),
+        ("257", "Mersenne support subseries", "erdos-257-mersenne-support-subseries.pdf"),
+        ("269", "three-prime running LCMs", "erdos-269-three-prime-running-lcm.pdf"),
+        ("1041", "the lemniscate Newton flow", "erdos-1041-lemniscate-newton-flow.pdf"),
+        ("1049", "rational-base Lambert series", "erdos-1049-rational-base-lambert.pdf"),
+    ):
+        parts.append(
+            '<a class="paper" data-dest="paper-{n}" '
+            'href="https://wcook04.github.io/plectis/papers/{p}" '
+            'aria-label="Paper, PDF: Erd&#337;s #{n}, {t}">#{n}</a>'.format(
+                n=number, p=paper, t=_topic
+            )
+        )
+    return ", ".join(parts[:-1]) + " and " + parts[-1]
+
+
+def combined_routes(snapshot: str) -> list[str]:
+    """The checked map, the papers, and the deep-check tail, inside the one
+    mathematics band. These moved here from the separate Check and Read route
+    rows so the page states the programme once; the wording of every promise
+    and boundary is unchanged and stays pinned by check_frontier_surface."""
+    repo = "https://github.com/wcook04/plectis-lean-erdos249-257"
+    blob = f"{repo}/blob/{snapshot}"
+    return [
+        '        <p class="af-route">One machine-checked statement for each problem, '
+        "and the exact thing that is still unproved: the "
+        f'<a data-to="repo" data-dest="math-frontier" href="{blob}/README.md#eight-programme-map">'
+        "Eight programme map</a>.</p>",
+        '        <p class="af-route">Eight problem papers, for '
+        + paper_number_links()
+        + ", <a data-dest=\"papers-catalogue\" "
+        'href="https://wcook04.github.io/plectis/docs/papers.html">'
+        "sit inside Plectis&rsquo;s 13-paper catalogue</a> with the reasoning "
+        "surfaces and the system papers. They are written for someone reading cold.</p>",
+        '        <p class="absolute-frontier__acts">'
+        '<a class="btn btn--quiet" data-dest="maths-pages" '
+        'href="https://wcook04.github.io/plectis/maths/">Read all eight as pages</a>'
+        '<a class="btn btn--quiet" data-to="repo" data-dest="math-frontier" '
+        f'href="{blob}/README.md#eight-programme-map">Open the programme map</a>'
+        '<a class="btn btn--quiet" data-dest="papers-catalogue" '
+        'href="https://wcook04.github.io/plectis/docs/papers.html">Open the papers catalogue</a>'
+        "</p>",
+        '        <details class="route-more">',
+        "          <summary>More ways to check it</summary>",
+        '          <p class="exits frontier-exits">',
+        f'            <a data-to="repo" data-dest="lean-github" aria-label="Open the pinned Lean source" href="{repo}/tree/{snapshot}">Lean source</a><span class="sep" aria-hidden="true">&middot;</span>'
+        f'<a data-to="repo" aria-label="Check one theorem without building Lean" href="{blob}/README.md#read-or-run-it">Check one theorem</a><span class="sep" aria-hidden="true">&middot;</span>'
+        f'<a data-to="repo" aria-label="Read the programme map for all eight open problems" href="{blob}/docs/EXTERNAL_VERIFICATION.md">Read all eight</a><span class="sep" aria-hidden="true">&middot;</span>'
+        f'<a data-to="repo" aria-label="See how selected formal statements are checked" href="{blob}/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix">How checking works</a><span class="sep" aria-hidden="true">&middot;</span>'
+        f'<a data-to="repo" aria-label="Reproduce the public verification checks" href="{blob}/docs/EXTERNAL_VERIFICATION_REPLAY.md">Reproduce the checks</a><span class="sep" aria-hidden="true">&middot;</span>'
+        f'<a data-to="repo" aria-label="Cite the eight-problem Lean corpus" href="{blob}/CITATION.cff">Cite the corpus</a>',
+        "          </p>",
+        '          <p class="frontier-comparator">For selected propositions, a second Lean '
+        "file states the theorem again without its proof. The build checks that the "
+        "original proof has exactly that type and stays within a fixed axiom budget. "
+        "This does not review the papers, citations, meaning, novelty or significance.</p>",
+        '          <p class="frontier-proof"><span>Trace one classical benchmark after '
+        "reading the programme and papers. No Lean build is needed. The route returns "
+        "the statement, exact declaration, Comparator interface, paper and boundary:"
+        "</span>"
+        f'<a data-to="repo" aria-label="Trace the classical full-support benchmark without a Lean build" href="{blob}/README.md#read-or-run-it">'
+        "<code>python3 scripts/verify_claims.py --claim eb_full_support</code></a></p>",
+        "        </details>",
+    ]
+
+
 def render(payload: dict) -> str:
     items = [
         row for row in payload["items"]
@@ -151,13 +223,7 @@ def render(payload: dict) -> str:
             '        <p class="absolute-frontier__note">{}</p>'.format(
                 esc(payload["selection_note"])
             ),
-            # One clear control for the band: the same five results, and the
-            # other three programmes, rendered as readable pages with the
-            # checked statements and their boundaries. The card exits keep
-            # the per-result Paper and Lean routes; this names the room.
-            '        <p class="absolute-frontier__act"><a class="btn btn--quiet" '
-            'data-dest="maths-pages" '
-            'href="https://wcook04.github.io/plectis/maths/">Read all eight as pages</a></p>',
+            *combined_routes(payload["public_source_commit"]),
             "      </section>",
             END,
         ]
