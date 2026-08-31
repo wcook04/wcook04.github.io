@@ -343,6 +343,12 @@ def main() -> int:
             f"floating or mismatched Lean evidence link: {link}",
         )
 
+    # The page carries exactly one list of problem numbers, at the foot of the
+    # shortlist. The five shortlisted problems are reached through their
+    # flagship rows (title, dest route, readable paper in the row's exits);
+    # the other three keep the compact accessible entry with its topic and
+    # portrait-sheet cue. Both forms end at the same sheets and papers.
+    flagship_problems = frozenset({"68", "249", "251", "257", "1041"})
     for index, number in enumerate(PROBLEMS):
         selector = (
             f'.dest__frame[data-view="problem"][data-problem="{number}"] '
@@ -353,19 +359,29 @@ def main() -> int:
             "https://wcook04.github.io/plectis/papers/"
             f"{PROBLEM_PAPERS[number]}"
         )
-        route = re.search(
-            rf'<p role="listitem" data-dest="problem-{number}">(.*?)</p>', text
-        )
-        require(route is not None, f"missing accessible frontier entry for #{number}")
-        require(expected_url in route.group(1), f"#{number} does not open its readable paper")
-        require(
-            "Hover or focus for the question, checked object and open boundary." in route.group(1),
-            f"#{number} compact route no longer points to its portrait sheet",
-        )
-        require(
-            PROBLEM_TOPICS[number] in route.group(1),
-            f"#{number} visible entry no longer names its mathematical subject",
-        )
+        if number in flagship_problems:
+            require(
+                f'data-dest="problem-{number}"' in text,
+                f"#{number} flagship row lost its problem-sheet route",
+            )
+            require(
+                expected_url in text,
+                f"#{number} no longer opens its readable paper",
+            )
+        else:
+            route = re.search(
+                rf'<p role="listitem" data-dest="problem-{number}">(.*?)</p>', text
+            )
+            require(route is not None, f"missing accessible frontier entry for #{number}")
+            require(expected_url in route.group(1), f"#{number} does not open its readable paper")
+            require(
+                "Hover or focus for the question, checked object and open boundary." in route.group(1),
+                f"#{number} compact route no longer points to its portrait sheet",
+            )
+            require(
+                PROBLEM_TOPICS[number] in route.group(1),
+                f"#{number} visible entry no longer names its mathematical subject",
+            )
         require(
             FRONTIER_LABELS[number].lower() in plate.lower(),
             f"#{number} desktop frontier heading drifted",

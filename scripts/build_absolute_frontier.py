@@ -97,6 +97,28 @@ def card(row: dict) -> str:
     )
 
 
+# The three programmes without a shortlisted headline result. They live here,
+# at the foot of the shortlist, so the page carries exactly one list of
+# problem numbers: same row grammar as the shortlist's hover routes, same
+# portrait sheets, same readable-paper links. The Check band beneath names
+# the programme map without repeating the numbers.
+OTHER_PROGRAMMES = (
+    ("243", "Reciprocal tails", "erdos-243-reciprocal-tail-rigidity.pdf"),
+    ("269", "Three-prime running LCMs", "erdos-269-three-prime-running-lcm.pdf"),
+    ("1049", "Lambert series at rational bases", "erdos-1049-rational-base-lambert.pdf"),
+)
+
+
+def other_row(number: str, topic: str, paper: str) -> str:
+    return (
+        '            <p role="listitem" data-dest="problem-{n}">'
+        '<a data-to="repo" data-dest="problem-{n}" aria-label="#{n}: {t}. '
+        'Hover or focus for the question, checked object and open boundary." '
+        'href="https://wcook04.github.io/plectis/papers/{p}">#{n}</a> '
+        '<span class="frontier-topic">{t}</span></p>'
+    ).format(n=esc(number), t=esc(topic), p=esc(paper))
+
+
 def render(payload: dict) -> str:
     items = [
         row for row in payload["items"]
@@ -105,6 +127,7 @@ def render(payload: dict) -> str:
     if not 3 <= len(items) <= 5:
         raise ValueError("absolute frontier must contain three to five items")
     cards = "\n".join(card(row) for row in items)
+    others = "\n".join(other_row(*row) for row in OTHER_PROGRAMMES)
     return "\n".join(
         [
             BEGIN,
@@ -112,8 +135,18 @@ def render(payload: dict) -> str:
             '        <p class="absolute-frontier__eyebrow">Start here</p>',
             '        <h2 id="absolute-frontier-title">The results worth reading first</h2>',
             '        <p class="absolute-frontier__thesis">{}</p>'.format(esc(payload["thesis"])),
+            '        <p class="frontier-instruction"><span class="frontier-instruction__wide">'
+            "Hover or tab to a number for the question, what was checked, and what is still "
+            "unproved.</span><span class=\"frontier-instruction__narrow\">Open a number for "
+            "the question, what was checked, and what is still unproved.</span></p>",
             '        <div class="flagships">',
             cards,
+            "        </div>",
+            '        <p class="frontier-label">The other three programmes</p>',
+            '        <div class="frontier frontier--others" role="list" '
+            'aria-label="The other three programmes: one checked frontier and one open '
+            'boundary each">',
+            others,
             "        </div>",
             '        <p class="absolute-frontier__note">{}</p>'.format(
                 esc(payload["selection_note"])

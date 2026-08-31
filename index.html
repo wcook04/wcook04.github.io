@@ -1173,6 +1173,18 @@
     }
     .route-act { margin: .6rem 0 0; }
     .absolute-frontier__act { margin: .55rem 0 0; }
+    /* The three programmes without a shortlisted headline, at the shortlist's
+       foot: one label, one row of numbers, the same hover routes. */
+    .frontier-label {
+      margin: .8rem 0 .1rem;
+      font-family: var(--font-sans);
+      font-size: .64rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .absolute-frontier .frontier-instruction { margin: .1rem 0 .5rem; }
+    .absolute-frontier .frontier--others { margin-top: 0; }
     /* New grid children in a route row sit in the name column like everything
        else; without this the fixed three-row template overflows them into the
        kind column. The exits rule is belt-and-braces: it held column 2 only by
@@ -2890,6 +2902,7 @@
         <p class="absolute-frontier__eyebrow">Start here</p>
         <h2 id="absolute-frontier-title">The <a class="term is-again" data-term="result" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-result">results</a> worth reading first</h2>
         <p class="absolute-frontier__thesis">Five <a class="term is-again" data-term="result" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-result">results</a>, stated here. Each gives the question, what was actually proved, what backs it and what is still <a class="term" data-term="missing" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-missing">missing</a>.</p>
+        <p class="frontier-instruction"><span class="frontier-instruction__wide">Hover or tab to a <a class="term" data-term="number" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-number">number</a> for the question, what was <a class="term is-again" data-term="check" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-check">checked</a>, and what is still unproved.</span><span class="frontier-instruction__narrow">Open a number for the question, what was checked, and what is still unproved.</span></p>
         <div class="flagships">
           <article class="flagship" tabindex="0" data-dest="problem-68">
             <p class="flagship__line"><span class="flagship__number">#68</span><span class="flagship__kind">Exact endpoint</span></p>
@@ -2954,6 +2967,12 @@
             </div>
           </article>
         </div>
+        <p class="frontier-label">The other three programmes</p>
+        <div class="frontier frontier--others" role="list" aria-label="The other three programmes: one checked frontier and one open boundary each">
+            <p role="listitem" data-dest="problem-243"><a data-to="repo" data-dest="problem-243" aria-label="#243: Reciprocal tails. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-243-reciprocal-tail-rigidity.pdf">#243</a> <span class="frontier-topic">Reciprocal tails</span></p>
+            <p role="listitem" data-dest="problem-269"><a data-to="repo" data-dest="problem-269" aria-label="#269: Three-prime running LCMs. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-269-three-prime-running-lcm.pdf">#269</a> <span class="frontier-topic">Three-prime running LCMs</span></p>
+            <p role="listitem" data-dest="problem-1049"><a data-to="repo" data-dest="problem-1049" aria-label="#1049: Lambert series at rational bases. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf">#1049</a> <span class="frontier-topic">Lambert series at rational bases</span></p>
+        </div>
         <p class="absolute-frontier__note">Every <a class="term is-again" data-term="claim" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-claim">claim</a> above links to the thing that carries it: the <a class="term is-again" data-term="paper" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-paper">paper</a> for the written <a class="term is-again" data-term="mathematics" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-mathematics">mathematics</a>, the <a class="term is-again" data-term="lean" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-lean">Lean</a> file for the <a class="term is-again" data-term="check" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-check">checked</a> <a class="term is-again" data-term="statement" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-statement">statement</a>. The #1041 <a class="term is-again" data-term="result" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-result">result</a> is an ordinary written <a class="term is-again" data-term="proof" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-proof">proof</a>, not checked by Lean and not peer reviewed. This is me choosing what to show you first, not peer review, community acceptance, priority or a claim of canonical status.</p>
         <p class="absolute-frontier__act"><a class="btn btn--quiet" data-dest="maths-pages" href="https://wcook04.github.io/plectis/maths/">Read all eight as pages</a></p>
       </section>
@@ -2974,18 +2993,7 @@
                  floating branch: this is a reading and verification route, not
                  a new release, peer-review, or novelty claim. -->
             <p class="name"><a data-to="repo" data-dest="math-frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/README.md#eight-programme-map">Eight programme map</a></p>
-            <p class="desc">One <a class="term is-again" data-term="machine_checked" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-machine-checked">machine-checked</a> <a class="term is-again" data-term="statement" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-statement">statement</a> for each problem, and the exact thing that is still unproved. Hover a <a class="term" data-term="number" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-number">number</a> to read both.</p>
-            <p class="frontier-instruction"><span class="frontier-instruction__wide">Hover or tab to a <a class="term is-again" data-term="number" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-number">number</a> for the question, what was <a class="term is-again" data-term="check" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-check">checked</a>, and what is still unproved.</span><span class="frontier-instruction__narrow">Open a number for the question, what was checked, and what is still unproved.</span></p>
-            <div class="frontier" role="list" aria-label="One checked frontier and one open boundary for each public Erdős problem">
-              <p role="listitem" data-dest="problem-68"><a data-to="repo" data-dest="problem-68" aria-label="#68: factorial denominator. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf">#68</a> <span class="frontier-topic">Factorial denominator</span></p>
-              <p role="listitem" data-dest="problem-243"><a data-to="repo" data-dest="problem-243" aria-label="#243: reciprocal tails. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-243-reciprocal-tail-rigidity.pdf">#243</a> <span class="frontier-topic">Reciprocal tails</span></p>
-              <p role="listitem" data-dest="problem-249"><a data-to="repo" data-dest="problem-249" aria-label="#249: binary totient series. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf">#249</a> <span class="frontier-topic">Binary totient series</span></p>
-              <p role="listitem" data-dest="problem-251"><a data-to="repo" data-dest="problem-251" aria-label="#251: prime-gap dyadic series. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf">#251</a> <span class="frontier-topic">Prime-gap dyadic series</span></p>
-              <p role="listitem" data-dest="problem-257"><a data-to="repo" data-dest="problem-257" aria-label="#257: infinite exponent supports. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf">#257</a> <span class="frontier-topic">Infinite exponent supports</span></p>
-              <p role="listitem" data-dest="problem-269"><a data-to="repo" data-dest="problem-269" aria-label="#269: three-prime running LCMs. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-269-three-prime-running-lcm.pdf">#269</a> <span class="frontier-topic">Three-prime running LCMs</span></p>
-              <p role="listitem" data-dest="problem-1041"><a data-to="repo" data-dest="problem-1041" aria-label="#1041: short lemniscate connections. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf">#1041</a> <span class="frontier-topic">Short lemniscate connections</span></p>
-              <p role="listitem" data-dest="problem-1049"><a data-to="repo" data-dest="problem-1049" aria-label="#1049: Lambert series at rational bases. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf">#1049</a> <span class="frontier-topic">Lambert series at rational bases</span></p>
-            </div>
+            <p class="desc">One <a class="term is-again" data-term="machine_checked" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-machine-checked">machine-checked</a> <a class="term is-again" data-term="statement" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-statement">statement</a> for each problem, and the exact thing that is still unproved.</p>
             <p class="route-act"><a class="btn btn--quiet" data-to="repo" data-dest="math-frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/README.md#eight-programme-map">Open the programme map</a></p>
             <details class="route-more">
               <summary>More ways to check it</summary>
