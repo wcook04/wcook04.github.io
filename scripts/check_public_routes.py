@@ -61,6 +61,11 @@ PAPER_PDF_ROUTES = tuple(
 ROUTES = (
     ("Plectis public site", "https://wcook04.github.io/plectis/", None),
     (
+        "maths reading room",
+        "https://wcook04.github.io/plectis/maths/",
+        ("Machine-checked mathematics", "All eight problems remain open"),
+    ),
+    (
         "public contact route",
         "https://wcook04.github.io/plectis/#contact",
         'id="contact"',

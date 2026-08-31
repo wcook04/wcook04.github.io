@@ -1157,6 +1157,47 @@
       .btn:hover .btn__ext, .btn:focus-visible .btn__ext { top: 0; left: 0; }
     }
 
+    /* One clear control per band. The packet keeps the page's only filled
+       button; these are its quiet siblings — outline at rest, filling on
+       hover — so every band names its destination without five controls
+       shouting at once. */
+    .btn--quiet {
+      background: transparent;
+      color: var(--bone);
+      border-color: var(--hair-strong);
+      padding: .55rem .95rem;
+      font-size: .8rem;
+    }
+    .btn--quiet:hover, .btn--quiet:focus-visible {
+      background: var(--bone); color: var(--page); border-color: var(--bone);
+    }
+    .route-act { margin: .6rem 0 0; }
+    .absolute-frontier__act { margin: .55rem 0 0; }
+    /* New grid children in a route row sit in the name column like everything
+       else; without this the fixed three-row template overflows them into the
+       kind column. The exits rule is belt-and-braces: it held column 2 only by
+       auto-placement before these controls existed. */
+    .routes li > .route-act,
+    .routes li > .route-more,
+    .routes li > .exits { grid-column: 2; }
+
+    /* The long tail of a band, held behind one line. Everything inside is
+       unchanged and still on the page — a details element needs no script,
+       so with scripting off the fold opens and closes exactly the same. */
+    .route-more { margin: .55rem 0 0; }
+    .route-more > summary {
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: .68rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--faint);
+      transition: color var(--t-interaction) ease-out;
+    }
+    .route-more > summary:hover, .route-more > summary:focus-visible { color: var(--bone); }
+    .route-more[open] > summary { color: var(--bone-soft); margin-bottom: .35rem; }
+    @media (prefers-reduced-motion: reduce) { .route-more > summary { transition: none; } }
+
     /* Under the button, always. Beside it this paragraph is four lines against
        a forty-five pixel control, so three of them hang past its foot: measured
        46px of overhang at 1512 and at 1920, while at 1280 the row is too narrow
@@ -2914,6 +2955,7 @@
           </article>
         </div>
         <p class="absolute-frontier__note">Every <a class="term is-again" data-term="claim" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-claim">claim</a> above links to the thing that carries it: the <a class="term is-again" data-term="paper" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-paper">paper</a> for the written <a class="term is-again" data-term="mathematics" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-mathematics">mathematics</a>, the <a class="term is-again" data-term="lean" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-lean">Lean</a> file for the <a class="term is-again" data-term="check" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-check">checked</a> <a class="term is-again" data-term="statement" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-statement">statement</a>. The #1041 <a class="term is-again" data-term="result" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-result">result</a> is an ordinary written <a class="term is-again" data-term="proof" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-proof">proof</a>, not checked by Lean and not peer reviewed. This is me choosing what to show you first, not peer review, community acceptance, priority or a claim of canonical status.</p>
+        <p class="absolute-frontier__act"><a class="btn btn--quiet" data-dest="maths-pages" href="https://wcook04.github.io/plectis/maths/">Read all eight as pages</a></p>
       </section>
       <!-- END generated absolute frontier -->
 
@@ -2944,11 +2986,15 @@
               <p role="listitem" data-dest="problem-1041"><a data-to="repo" data-dest="problem-1041" aria-label="#1041: short lemniscate connections. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf">#1041</a> <span class="frontier-topic">Short lemniscate connections</span></p>
               <p role="listitem" data-dest="problem-1049"><a data-to="repo" data-dest="problem-1049" aria-label="#1049: Lambert series at rational bases. Hover or focus for the question, checked object and open boundary." href="https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf">#1049</a> <span class="frontier-topic">Lambert series at rational bases</span></p>
             </div>
+            <p class="route-act"><a class="btn btn--quiet" data-to="repo" data-dest="math-frontier" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/README.md#eight-programme-map">Open the programme map</a></p>
+            <details class="route-more">
+              <summary>More ways to check it</summary>
             <p class="exits frontier-exits">
               <a data-to="repo" data-dest="lean-github" aria-label="Open the pinned Lean source" href="https://github.com/wcook04/plectis-lean-erdos249-257/tree/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77">Lean source</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Check one theorem without building Lean" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/README.md#read-or-run-it">Check one theorem</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Read the programme map for all eight open problems" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/docs/EXTERNAL_VERIFICATION.md">Read all eight</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="See how selected formal statements are checked" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix">How checking works</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Reproduce the public verification checks" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/docs/EXTERNAL_VERIFICATION_REPLAY.md">Reproduce the checks</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="repo" aria-label="Cite the eight-problem Lean corpus" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/CITATION.cff">Cite the corpus</a>
             </p>
             <p class="frontier-comparator">For selected <a class="term" data-term="proposition" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-proposition">propositions</a>, a second <a class="term is-again" data-term="lean" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-lean">Lean</a> file <a class="term" data-term="state" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-state">states</a> the <a class="term is-again" data-term="theorem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-theorem">theorem</a> again without its <a class="term is-again" data-term="proof" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-proof">proof</a>. The build <a class="term is-again" data-term="check" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-check">checks</a> that the original proof has exactly that type and stays within a fixed <a class="term" data-term="axiom" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-axiom">axiom</a> budget. This does not review the <a class="term is-again" data-term="paper" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-paper">papers</a>, citations, meaning, novelty or significance.</p>
             <p class="frontier-proof"><span>Trace one classical <a class="term" data-term="benchmark" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-benchmark">benchmark</a> after reading the programme and <a class="term is-again" data-term="paper" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-paper">papers</a>. No <a class="term is-again" data-term="lean" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-lean">Lean</a> build is needed. The route <a class="term" data-term="return" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-return">returns</a> the <a class="term is-again" data-term="statement" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-statement">statement</a>, exact <a class="term" data-term="declaration" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-declaration">declaration</a>, <a class="term" data-term="comparator" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-comparator">Comparator</a> interface, paper and boundary:</span><a data-to="repo" aria-label="Trace the classical full-support benchmark without a Lean build" href="https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/README.md#read-or-run-it"><code>python3 scripts/verify_claims.py --claim eb_full_support</code></a></p>
+            </details>
             <p class="row-shot">
               <a class="shot" data-to="repo" data-dest="lean-github" href="https://github.com/wcook04/plectis-lean-erdos249-257/tree/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77">
                 <span class="shot__bar"><span class="shot__host">github.com</span><span class="shot__path">…/tree/fd25c0b</span></span>
@@ -2960,6 +3006,7 @@
             <p class="kind">Read</p>
             <p class="name"><a href="https://wcook04.github.io/plectis/docs/papers.html" data-dest="papers-catalogue">Papers</a></p>
             <p class="desc">Eight problem <a class="term is-again" data-term="paper" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-paper">papers</a>, for <a class="paper" data-dest="paper-68" href="https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf" aria-label="Paper, PDF: Erd&#337;s #68, factorial denominator irrationality">#68</a>, <a class="paper" data-dest="paper-243" href="https://wcook04.github.io/plectis/papers/erdos-243-reciprocal-tail-rigidity.pdf" aria-label="Paper, PDF: Erd&#337;s #243, reciprocal tail rigidity">#243</a>, <a class="paper" data-dest="paper-249" href="https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf" aria-label="Paper, PDF: Erd&#337;s #249, the binary totient series">#249</a>, <a class="paper" data-dest="paper-251" href="https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf" aria-label="Paper, PDF: Erd&#337;s #251, the prime-gap dyadic series">#251</a>, <a class="paper" data-dest="paper-257" href="https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf" aria-label="Paper, PDF: Erd&#337;s #257, Mersenne support subseries">#257</a>, <a class="paper" data-dest="paper-269" href="https://wcook04.github.io/plectis/papers/erdos-269-three-prime-running-lcm.pdf" aria-label="Paper, PDF: Erd&#337;s #269, three-prime running LCMs">#269</a>, <a class="paper" data-dest="paper-1041" href="https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf" aria-label="Paper, PDF: Erd&#337;s #1041, the lemniscate Newton flow">#1041</a> and <a class="paper" data-dest="paper-1049" href="https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf" aria-label="Paper, PDF: Erd&#337;s #1049, rational-base Lambert series">#1049</a>, sit inside Plectis&rsquo;s 13-paper catalogue alongside <a class="term" data-term="audit" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-audit">audit</a> and <a class="term" data-term="routing" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-routing">routing</a> material. They are written for someone reading cold.</p>
+            <p class="route-act"><a class="btn btn--quiet" href="https://wcook04.github.io/plectis/docs/papers.html" data-dest="papers-catalogue">Open the papers catalogue</a></p>
             <p class="exits">
               <a href="https://wcook04.github.io/plectis/docs/papers.html" data-dest="papers-catalogue">Catalogue</a><span class="sep" aria-hidden="true">&middot;</span><a aria-label="On the site: the papers" href="https://wcook04.github.io/plectis/#papers" data-dest="papers-on-site">On the site</a>
             </p>
@@ -2977,6 +3024,7 @@
             <p class="kind">Run</p>
             <p class="name"><a href="https://wcook04.github.io/plectis/" data-dest="plectis-site">Plectis website</a></p>
             <p class="desc">The <a class="term is-again" data-term="public" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-public">public</a> site for the <a class="term" data-term="private" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-private">private</a> work <a class="term" data-term="system" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-system">system</a>: <a class="term is-again" data-term="component" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-component">components</a> you <a class="term" data-term="clone" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-clone">clone</a> and run <a class="term" data-term="local" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-local">locally</a>. Each <a class="term is-again" data-term="state" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-state">states</a> a <a class="term is-again" data-term="claim" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-claim">claim</a> and writes a result file.</p>
+            <p class="route-act"><a class="btn btn--quiet" href="https://wcook04.github.io/plectis/" data-dest="plectis-site">Open the Plectis site</a></p>
             <p class="exits">
               <!-- The exits are written to read inside their row, which leaves
                    them ambiguous in the flat list a screen reader offers: three
@@ -2998,6 +3046,7 @@
             <p class="kind">Watch</p>
             <p class="name"><a href="https://wcook04.github.io/plectis/#demo-videos" data-dest="videos-on-site">Videos</a></p>
             <p class="desc">Recorded demonstrations of that <a class="term is-again" data-term="system" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-system">system</a>, cut by an editor inside it. No <a class="term is-again" data-term="check" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-check">check</a> is run in them.</p>
+            <p class="route-act"><a class="btn btn--quiet" href="https://wcook04.github.io/plectis/#demo-videos" data-dest="videos-on-site">Open the videos</a></p>
             <p class="exits">
               <a aria-label="On the site: the videos" href="https://wcook04.github.io/plectis/#demo-videos" data-dest="videos-on-site">On the site</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="video" data-dest="video-1min" aria-label="1 minute demonstration on YouTube" href="https://youtu.be/R_--vExxWyk">1&nbsp;min</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="video" data-dest="video-5min" aria-label="5 minute demonstration on YouTube" href="https://youtu.be/VoWByIOIuBE">5&nbsp;min</a><span class="sep" aria-hidden="true">&middot;</span><a data-to="video" data-dest="video-29min" aria-label="29 minute demonstration on YouTube" href="https://youtu.be/jA_xC8gmdSs">29&nbsp;min</a>
             </p>
@@ -3359,6 +3408,8 @@
                             src: "assets/previews/paper-1049-640.jpg", href: "https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf" },
       "lean-github":      { to: "repo",  host: "github.com",        path: "…/tree/fd25c0b",
                             src: "assets/previews/lean-github.jpg",      href: "https://github.com/wcook04/plectis-lean-erdos249-257/tree/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77" },
+      "maths-pages":      { to: "page",  host: "wcook04.github.io", path: "/plectis/maths/",
+                            src: "assets/previews/maths-pages.jpg",      href: "https://wcook04.github.io/plectis/maths/" },
       "papers-catalogue": { to: "page",  host: "wcook04.github.io", path: "/plectis/docs/papers.html",
                             src: "assets/previews/papers-catalogue.jpg", href: "https://wcook04.github.io/plectis/docs/papers.html" },
       "papers-on-site":   { to: "page",  host: "wcook04.github.io", path: "/plectis/#papers",

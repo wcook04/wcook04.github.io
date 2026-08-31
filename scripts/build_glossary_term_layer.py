@@ -53,8 +53,8 @@ TERMS_END = "    /* END generated glossary terms */"
 SKIP_TAGS = frozenset(
     {
         "a", "button", "code", "h1", "kbd", "label", "noscript", "option",
-        "pre", "samp", "script", "select", "style", "svg", "textarea", "th",
-        "title",
+        "pre", "samp", "script", "select", "style", "summary", "svg",
+        "textarea", "th", "title",
     }
 )
 

@@ -118,6 +118,13 @@ def render(payload: dict) -> str:
             '        <p class="absolute-frontier__note">{}</p>'.format(
                 esc(payload["selection_note"])
             ),
+            # One clear control for the band: the same five results, and the
+            # other three programmes, rendered as readable pages with the
+            # checked statements and their boundaries. The card exits keep
+            # the per-result Paper and Lean routes; this names the room.
+            '        <p class="absolute-frontier__act"><a class="btn btn--quiet" '
+            'data-dest="maths-pages" '
+            'href="https://wcook04.github.io/plectis/maths/">Read all eight as pages</a></p>',
             "      </section>",
             END,
         ]
