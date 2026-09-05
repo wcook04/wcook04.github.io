@@ -17,7 +17,7 @@ def main():
     assert all(p['status']=='open' for p in payload['items'])
     region=text[text.index(BEGIN):text.index(END)]
     assert region.count('class="flagship"')==8
-    assert region.index(payload['systems'][0]['href'])<region.index('class="flagship"')
+    assert region.index('maths/papers/'+payload['systems'][0]['paper_id']+'.html')<region.index('class="flagship"')
     assert [p['paper_id'] for p in payload['systems']]==['claim-faithful-publication-systems','open-source-mathematics-strategy']
     for row in payload['items']:
         assert row['paper_href'] in region and row['page_href']+'#frontier' in region

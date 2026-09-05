@@ -58,7 +58,8 @@ def snapshot(site: Path) -> dict:
 
 
 def render(payload: dict) -> str:
-    systems = '\n'.join(f'<p class="af-route"><a href="{e(p["href"])}">{e(p["title"])}</a></p>' for p in payload['systems'])
+    labels = {'claim-faithful-publication-systems':'How this project works', 'open-source-mathematics-strategy':'How to contribute'}
+    systems = '\n'.join(f'<p class="af-route"><a href="{BASE}maths/papers/{e(p["paper_id"])}.html">{labels[p["paper_id"]]}</a> <span>— {e(p["title"])}</span></p>' for p in payload['systems'])
     rows = []
     for p in payload['items']:
         links = f'<a href="{e(p["paper_href"])}" data-dest="paper-{p["problem"]}">Short note</a> · <a href="{e(p["page_href"])}#frontier">Results and remaining work</a>'
@@ -72,15 +73,17 @@ def render(payload: dict) -> str:
     return f'''{BEGIN}
       <section class="absolute-frontier" aria-labelledby="absolute-frontier-title">
         <p class="absolute-frontier__eyebrow">The research and how to join</p>
-        <h2 id="absolute-frontier-title">Build on the work.</h2>
-        <p class="absolute-frontier__thesis">The system paper explains how the research is organised. The open-source paper explains how to contribute mathematics, review, software or compute.</p>
+        <h2 id="absolute-frontier-title">Start with the research.</h2>
+        <p class="absolute-frontier__thesis">Choose a problem to see its question, results and remaining work. You can read everything in your browser.</p>
+        <p><a class="btn" href="{BASE}maths/index.html#problems">Explore the eight problems</a></p>
+        <p class="absolute-frontier__thesis">Contributors receive credit for their work. If you solve a problem, the result and credit are yours and your collaborators’. <a href="{LEAN}/blob/main/docs/research-commons/CREDIT_POLICY.md">How credit works</a></p>
         {systems}
-        <p class="af-route"><a data-to="repo" href="{LEAN}">Lean repository and README</a> · <a href="{LEAN}/blob/main/CONTRIBUTING.md">Contribute</a></p>
-        <details class="route-more"><summary>Eight problems, all open</summary>
+        <details class="route-more"><summary>Source code and contribution instructions</summary><p class="af-route"><a data-to="repo" href="{LEAN}">Lean repository and README</a> · <a href="{LEAN}/blob/main/CONTRIBUTING.md">Contribution instructions</a></p></details>
+        <details class="route-more"><summary>Browse the problem notes here</summary>
         <p class="absolute-frontier__note">In numerical order. Each short note describes one problem; the longer records retain additional working context.</p>
         <div class="flagships">{''.join(rows)}</div></details>
         <p class="absolute-frontier__note">Lean checks formal statements. It does not establish novelty, significance or peer review.</p>
-        <p class="af-route"><a href="{BASE}maths/">Mathematics pages</a> · <a href="{BASE}docs/papers.html">Full paper catalogue</a> · <a href="{BASE}docs/glossary.html">Glossary</a></p>
+        <p class="af-route"><a href="{BASE}docs/papers.html">All papers and PDFs</a> · <a href="{BASE}docs/glossary.html">Glossary</a></p>
       </section>
 {END}'''
 

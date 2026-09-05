@@ -17,6 +17,7 @@ def main():
     args=ap.parse_args()
     data=json.loads((ROOT/'data/absolute-frontier.json').read_text())
     urls={p['href'] for p in data['systems']}
+    urls.update(BASE+'maths/papers/'+p['paper_id']+'.html' for p in data['systems'])
     for p in data['items']:
         urls.update([p['paper_href'],p['page_href']])
         urls.update(r['href'] for r in p['long_records'])

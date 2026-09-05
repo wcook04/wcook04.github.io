@@ -4,8 +4,8 @@
   "policy_source": "tools/meta/dissemination/term_linkability.py",
   "vocabulary_source": "codex/doctrine/system_vocabulary/term_registry.json",
   "glossary_href": "https://wcook04.github.io/plectis/docs/glossary.html",
-  "term_count": 486,
-  "phrase_count": 2354,
+  "term_count": 501,
+  "phrase_count": 2417,
   "terms": {
     "plectis": {
       "anchor": "glossary-plectis",
@@ -519,6 +519,14 @@
       "rule": "Read a checker result together with the rules it implements, the inputs it examined, and its failure behaviour.",
       "deep": "A checker can be fully correct about its own rule set while that rule set remains incomplete for a broader real-world goal."
     },
+    "citation": {
+      "anchor": "glossary-citation",
+      "label": "citation",
+      "preview": "A citation names the exact work, version and author a claim or result comes from.",
+      "card": "The Lean repository's CITATION.cff gives the metadata for its citation anchor release. If Plectis materially helped a result, the request is to cite the release and say so. The credit policy separates citing the project from crediting a person.",
+      "rule": "Cite the pinned release, not the moving branch, so the cited object cannot change under the reference.",
+      "deep": "The problem notes cite Erdős's original statements and the prior work they build on, so each result's context can be checked independently of this site."
+    },
     "claim": {
       "anchor": "glossary-claim",
       "label": "claim",
@@ -566,6 +574,14 @@
       "card": "Closing a task, question, claim, or route requires different evidence. The word should name the condition that changed and any residual work deliberately left outside the closure.",
       "rule": "Treat closure as scoped: verify exactly what is closed and which conditions establish it.",
       "deep": "A closed loop records the result and connects it back to the surface that requested or governs the work."
+    },
+    "closed_route": {
+      "anchor": "glossary-closed-route",
+      "label": "closed route",
+      "preview": "A closed route is an approach that was tried and shown, by proof or exact computation, not to reach its target.",
+      "card": "The long working records list closed routes beside the results. A route is recorded as closed so that the next person does not spend time rediscovering the same dead end, and so that the reason it failed can point to a different approach.",
+      "rule": "Read a closed route as evidence about a method, not about the problem.",
+      "deep": "A route closed under one representation of the problem can reopen under another, so each closed route names the coordinates it was tried in."
     },
     "closeout": {
       "anchor": "glossary-closeout",
@@ -806,6 +822,14 @@
       "card": "In a proof by contradiction, the target is established by assuming its opposite and showing that assumption forces an impossibility. The proof is only as strong as the chain from the assumption to the contradiction.",
       "rule": "Identify the assumption being rejected and the exact impossible statement it produces.",
       "deep": "Irrationality proofs commonly assume a series is rational, extract a finite denominator or repeating pattern, and then show the required arithmetic structure cannot exist."
+    },
+    "contributor_credit": {
+      "anchor": "glossary-contributor-credit",
+      "label": "contributor credit",
+      "preview": "Contributor credit is the recorded acknowledgement of who supplied an idea, a proof, a review, a formalisation, software or compute to the project.",
+      "card": "The credit policy in the Lean repository keeps solvers, collaborators, prior work, tools and infrastructure distinct. If you solve a problem, the result and the credit are yours and your collaborators'. If the project materially helped, the request is that you cite the release and say so. Credit is not automatic paper coauthorship.",
+      "rule": "Expect credit that names your contribution as what it is; do not expect coauthorship by default.",
+      "deep": "Tool use is disclosed separately from credit, so a contribution made with an AI agent is credited to the person who directed and stands behind it."
     },
     "control": {
       "anchor": "glossary-control",
@@ -1199,6 +1223,14 @@
       "rule": "Read “Erdős #n” as a database identifier for a mathematical problem associated with Paul Erdős.",
       "deep": "Erdős worked extensively through collaboration and left a large body of questions that continue to organize research; the site covers only the explicitly listed problems and makes no claim about the rest."
     },
+    "erdos_problem": {
+      "anchor": "glossary-erdos-problem",
+      "label": "Erdős problem",
+      "preview": "An Erdős problem is one of the questions Paul Erdős posed or collected, as indexed in the Erdős Problems database maintained by Thomas Bloom.",
+      "card": "The eight problems on this site are all recorded there as open. The database supplies the numbering and the current reported status; the exact statement comes from Erdős's own papers, which each problem note cites. Several of the eight ask whether one particular infinite sum is an irrational number.",
+      "rule": "Use the number to find the problem; use the problem note for the exact statement, its sources and what has been proved.",
+      "deep": "Open status is the database maintainer's present assessment and may omit relevant literature, so each problem note also records the prior work it knows of."
+    },
     "error": {
       "anchor": "glossary-error",
       "label": "error",
@@ -1230,6 +1262,14 @@
       "card": "Evidence is the backing under a statement, not the statement itself. Its strength depends on what produced it, whether the record is current, and whether its scope actually matches the claim being made.",
       "rule": "Ask which exact claim the evidence supports, how it was produced, and where its coverage stops.",
       "deep": "The same artifact can be strong evidence for one narrow assertion and irrelevant to a broader one; a passing fixture run may establish that a validator handles those fixtures while saying nothing about real-world performance."
+    },
+    "evidence_band": {
+      "anchor": "glossary-evidence-band",
+      "label": "evidence band",
+      "preview": "An evidence band is the label a statement carries in the long working records saying what kind of support it has: Lean (checked by the proof assistant), Cert (an exact finite computation), Math (an ordinary proof in the sources, not formalised), Cited (established in the published literature) or Open (not proved).",
+      "card": "The bands are never blurred: a statement with one band is not described in the language of another. A second tag gives the scale at which a parameter-indexed statement holds: at listed values, below an explicit bound, for arbitrarily large parameters, or for all of them.",
+      "rule": "Read the band before the statement. It tells you what would have to be re-checked and by what means.",
+      "deep": "Sorting by band and scale keeps the unresolved endpoint visible: the open problems each depend on a statement at a scale the checked results have not reached."
     },
     "exact": {
       "anchor": "glossary-exact",
@@ -1487,6 +1527,14 @@
       "rule": "Read the formal statement and hypotheses as carefully as the fact that its proof checker accepted it.",
       "deep": "Trust is concentrated in the definitions, formal statement, axioms, elaborator boundary, and small proof-checking kernel rather than spread across a long human argument."
     },
+    "formalisation": {
+      "anchor": "glossary-formalisation",
+      "label": "formalisation",
+      "preview": "Formalisation is the work of restating a mathematical definition or proof in a proof assistant's language so the software can check every step.",
+      "card": "On this site, formalised means a Lean proof exists and was checked. Formalising a result often exposes a gap or a hidden hypothesis in the informal argument, and a formal statement can differ from the informal one, which is why the papers say what each Lean statement covers.",
+      "rule": "Formalised tells you the stated proposition was checked. Read the proposition to see what was proved.",
+      "deep": "The project treats the Lean statement, its authored meaning and the public claim about it as three separate things; a dense formal proof cannot make the claim stronger than the statement."
+    },
     "fraction": {
       "anchor": "glossary-fraction",
       "label": "fraction",
@@ -1502,6 +1550,14 @@
       "card": "The frontend here is not published. It appears in the recorded videos so a reader can see what the operator sees, while the components and their checks, which are the part that can be verified, are the part released. The split is stated rather than implied.",
       "rule": "Video of a frontend shows that it exists and how it behaves. It is not a check anyone else can run.",
       "deep": "Demonstration and evidence are different currencies. A recording is persuasive and unfalsifiable; a check is dull and repeatable."
+    },
+    "frontier": {
+      "anchor": "glossary-frontier",
+      "label": "frontier",
+      "preview": "A problem's frontier is the exact line between what has been proved about it and the step that remains open.",
+      "card": "Each problem page has a section headed Results and remaining work. That section is the frontier: the strongest checked statements, the routes that closed, and the precise obligation still to be met. The frontier moves when a new result is accepted; it never claims the problem is solved.",
+      "rule": "Read a frontier as a boundary, not a score: it tells you where the proved part ends and what a contribution would have to prove.",
+      "deep": "The Lean repository's frontier relay lets a person hand one problem's frontier to their own coding agent as a bounded task, starting from one exact public revision."
     },
     "full": {
       "anchor": "glossary-full",
@@ -1694,6 +1750,14 @@
       "card": "Most of the problems here ask whether a particular infinite sum is irrational. The question is usually much harder than it sounds: a sum can be computed to any number of digits without that revealing which kind of number it is, because a rational number with an enormous denominator looks exactly like an irrational one for as far as anyone can compute.",
       "rule": "Irrationality is not settled by computing digits. It needs a proof.",
       "deep": "This is why the work is formal rather than numerical. No amount of computation distinguishes the two cases, so the only route is an argument, and the only way to be sure of the argument at this scale is to have it checked."
+    },
+    "issue_report": {
+      "anchor": "glossary-issue-report",
+      "label": "issue",
+      "preview": "An issue is a tracked report on a repository: a failed command, a mistake in a statement, a broken link or a question.",
+      "card": "Both repositories use issue forms so a report lands with the command or page that produced it. Reporting a mistake is a contribution and is credited as one.",
+      "rule": "Report the exact command or page and what you saw; the form asks for both.",
+      "deep": "Issues are public, so a correction made in response is visible with its cause."
     },
     "json_format": {
       "anchor": "glossary-json-format",
@@ -1958,6 +2022,14 @@
       "card": "A page of prose describing a proof corpus can be read by a person and only guessed at by a program. The same content as structured data can be queried: which results depend on this one, which are still conditional, what has already been ruled out. That is the difference between a corpus you must read to use and one you can ask.",
       "rule": "Machine-readable is about form, not truth. Structured data can be structured and wrong.",
       "deep": "Publishing the structure rather than only the prose is what lets someone else's tool check a claim without reimplementing the reading."
+    },
+    "maintainer": {
+      "anchor": "glossary-maintainer",
+      "label": "maintainer",
+      "preview": "The maintainer is the person responsible for a repository: deciding what is merged, released and stated publicly.",
+      "card": "Both public repositories have one maintainer, Will Cook, who reviews returned contributions, records credit and is responsible for the released claims. Contributors do not need the maintainer's tools to do the work; they need the maintainer to accept the return.",
+      "rule": "Direct corrections and returns to the maintainer through the repository's issue forms and pull requests.",
+      "deep": "Because one person maintains both repositories, the site says plainly that no independent party has yet reviewed the whole."
     },
     "manifest": {
       "anchor": "glossary-manifest",
@@ -2271,6 +2343,14 @@
       "rule": "Treat the omission receipt on a row as the row's own statement of its limits: it tells you what is not shown and how to reach the full source, so follow that pointer when you need the complete picture rather than assuming the short row is everything.",
       "deep": "Its function is to stop a compact view from claiming false completeness: the row stays cheap to read, yet the receipt records exactly what was excluded, why that exclusion is acceptable at this level of detail, and which command restores the full source behind it."
     },
+    "open_obligation": {
+      "anchor": "glossary-open-obligation",
+      "label": "open obligation",
+      "preview": "An open obligation is the exact statement that would still have to be proved for a result to reach its target.",
+      "card": "Problem pages list open obligations after the checked results. Each is written so that a proof of it, combined with the results already checked, would settle the named question. The list specifies the remaining work; it does not rank or predict it.",
+      "rule": "Treat an open obligation as a precise target. Proving one is a contribution; restating one is not.",
+      "deep": "Obligations are kept separate from conjectures and from failed approaches, so a reader can tell what is needed from what was guessed and what was tried."
+    },
     "open_problem": {
       "anchor": "glossary-open-problem",
       "label": "open problem",
@@ -2382,6 +2462,14 @@
       "card": "Pages are designed for orientation and reading, not as independent authority. A generated page may accurately project source data, but the page still needs a route back to the file, record, or contract that owns the underlying claim.",
       "rule": "Read a page as a presentation of source material and use its links to inspect the owning record when accuracy matters.",
       "deep": "A page can combine authored prose with generated facts and relationships, so its trust boundary is field-specific rather than uniform across the whole document."
+    },
+    "palomar": {
+      "anchor": "glossary-palomar",
+      "label": "Palomar",
+      "preview": "Palomar is an external registry for machine-checked mathematical results.",
+      "card": "The project prepares result families for Palomar and keeps its own ranking of them in the Lean repository's showcase file. Submission, a passed automated check and public registration are three different states, and the site names which one applies wherever it mentions a record. A Palomar record does not certify the rest of the corpus, establish novelty or replace peer review.",
+      "rule": "Read a Palomar reference as a pointer to a pinned, checked formal statement, then check which state the record has reached.",
+      "deep": "Palomar's automated checks and review have stated limits. The project's own claim records remain the authority for what each result claims, and Comparator remains the check that a stated proposition matches its Lean proof."
     },
     "paper": {
       "anchor": "glossary-paper",
@@ -2759,6 +2847,14 @@
       "rule": "Published means available. It does not mean reviewed, accepted, or endorsed by anyone.",
       "deep": "The gap is why the claim registry records what is proved separately from what is asserted. Open publication removes the gatekeeper and with it the external check, so the burden of stating limits accurately moves onto the author."
     },
+    "pull_request": {
+      "anchor": "glossary-pull-request",
+      "label": "pull request",
+      "preview": "A pull request is a proposed change to a repository, submitted so the maintainer can review it and merge it.",
+      "card": "Contributions to the Lean repository arrive as pull requests or as issues. The contribution guide says what a return should contain and which local checks to run before opening one.",
+      "rule": "Open a pull request when you have a concrete change; open an issue when you have a report or a question.",
+      "deep": "A merged pull request becomes part of the versioned record, so its author is visible in the history as well as in the credit record."
+    },
     "purpose": {
       "anchor": "glossary-purpose",
       "label": "purpose",
@@ -3039,6 +3135,14 @@
       "rule": "Read a research claim together with its question, method, sources, uncertainties, and reproducibility conditions.",
       "deep": "Research can narrow uncertainty without closing a question, and a negative result can still add knowledge by ruling out a route."
     },
+    "research_shift": {
+      "anchor": "glossary-research-shift",
+      "label": "research shift",
+      "preview": "A research shift is a bounded piece of work a person gives their coding agent: start from one exact public revision of the Lean repository, attempt a continuation on one problem, and return a checkable result.",
+      "card": "The Lean repository's frontier relay guide defines the shift: inspect the pinned revision, choose a frontier, work, and prepare a return the maintainer can check locally, with contributor credit attached. It needs no account and no access to the private system that produced the corpus.",
+      "rule": "Judge a shift by the checkable return it produces, not by how long the agent ran.",
+      "deep": "A return can be a theorem, a narrower reduction, a closed route, a source correction or a better next question; each is a contribution if it survives review."
+    },
     "result": {
       "anchor": "glossary-result",
       "label": "result",
@@ -3062,6 +3166,14 @@
       "card": "In programming, a function returns a value or control; in workflows, work returns to an owner or earlier state. The word should identify both destination and carried result.",
       "rule": "When an operation returns something, check whether it returned data, status, control, or a durable artifact.",
       "deep": "A returned value records the operation's immediate output but may not capture side effects that occurred before control came back."
+    },
+    "review": {
+      "anchor": "glossary-review",
+      "label": "review",
+      "preview": "A review is an examination of a result, proof, text or contribution by someone other than its author, ending in a recorded judgement.",
+      "card": "Several kinds appear on this site and are kept apart: the author's own review of agent output before release; machine checks such as Lean and Comparator; Palomar's review of a prepared unit; and independent peer review, which has not yet taken place for this work.",
+      "rule": "Ask who reviewed what, and what the review could see.",
+      "deep": "A review can change where future effort goes without changing the truth status of any statement; the project records the two effects separately."
     },
     "rigidity": {
       "anchor": "glossary-rigidity",
@@ -3374,6 +3486,14 @@
       "card": "Saying that a family spans a space of a given dimension fixes exactly how much independent information the family carries, which is a sharper statement than saying the family is large.",
       "rule": "A span is determined by the collection, so adding a member that was already reachable does not change it.",
       "deep": "The dyadic sections of Euler's totient span a space of dimension exactly two to the e plus one at every level e at least one. Because that holds at every level, the full span is infinite-dimensional."
+    },
+    "sparse_checkout": {
+      "anchor": "glossary-sparse-checkout",
+      "label": "sparse checkout",
+      "preview": "A sparse checkout downloads only the parts of a repository you name, so a large repository can be used without fetching everything.",
+      "card": "The Lean repository offers three: the reader files (papers and guides), a quick proof build, and the full Lean source. The README gives the exact commands, and the reproducibility guide says what each one lets you check.",
+      "rule": "Pick the checkout that matches what you want to do; you can widen it later.",
+      "deep": "A sparse checkout is a snapshot at one revision. It does not update itself and it does not contribute anything by itself."
     },
     "specification": {
       "anchor": "glossary-specification",
@@ -4218,6 +4338,10 @@
       "accountability_layer"
     ],
     [
+      "results and remaining works",
+      "frontier"
+    ],
+    [
       "safe useful self-knowledges",
       "workingness"
     ],
@@ -4316,6 +4440,10 @@
     [
       "portable invariant routing",
       "lattice_transposition"
+    ],
+    [
+      "results and remaining work",
+      "frontier"
     ],
     [
       "safe useful self-knowledge",
@@ -5222,6 +5350,10 @@
       "mathematical_limit"
     ],
     [
+      "long working records",
+      "working_record"
+    ],
+    [
       "mathematical symbols",
       "symbol"
     ],
@@ -5386,6 +5518,10 @@
       "conditional_theorem"
     ],
     [
+      "contributor credits",
+      "contributor_credit"
+    ],
+    [
       "divergent behaviors",
       "divergence"
     ],
@@ -5424,6 +5560,10 @@
     [
       "finite calculations",
       "finite_computation"
+    ],
+    [
+      "finite certificates",
+      "certificate"
     ],
     [
       "finite computations",
@@ -5468,6 +5608,10 @@
     [
       "limit of a sequence",
       "mathematical_limit"
+    ],
+    [
+      "long working record",
+      "working_record"
     ],
     [
       "mathematical limits",
@@ -5638,6 +5782,10 @@
       "hologram"
     ],
     [
+      "contributor credit",
+      "contributor_credit"
+    ],
+    [
       "copied source body",
       "source_body"
     ],
@@ -5698,6 +5846,10 @@
       "finite_computation"
     ],
     [
+      "finite certificate",
+      "certificate"
+    ],
+    [
       "finite computation",
       "finite_computation"
     ],
@@ -5740,6 +5892,10 @@
     [
       "migration receipts",
       "rename_migration_receipt"
+    ],
+    [
+      "open obligationses",
+      "open_obligation"
     ],
     [
       "orientation guides",
@@ -5800,6 +5956,10 @@
     [
       "source authorities",
       "source_authority"
+    ],
+    [
+      "sparse checkoutses",
+      "sparse_checkout"
     ],
     [
       "structural pattern",
@@ -6022,6 +6182,10 @@
       "export"
     ],
     [
+      "failed approaches",
+      "closed_route"
+    ],
+    [
       "formal statements",
       "statement"
     ],
@@ -6120,6 +6284,10 @@
     [
       "orientation guide",
       "orientation"
+    ],
+    [
+      "palomar recordses",
+      "palomar"
     ],
     [
       "passion registers",
@@ -6302,10 +6470,6 @@
       "continuity"
     ],
     [
-      "working recordses",
-      "working_record"
-    ],
-    [
       "above and beyond",
       "above_and_beyond"
     ],
@@ -6452,6 +6616,10 @@
     [
       "euler's totients",
       "totient"
+    ],
+    [
+      "evidence bandses",
+      "evidence_band"
     ],
     [
       "evidence classes",
@@ -6604,6 +6772,10 @@
     [
       "ontology packets",
       "paper_module"
+    ],
+    [
+      "open obligations",
+      "open_obligation"
     ],
     [
       "operator proxies",
@@ -6768,6 +6940,14 @@
     [
       "source substrate",
       "substrate"
+    ],
+    [
+      "sparse checkouts",
+      "sparse_checkout"
+    ],
+    [
+      "sparse-checkouts",
+      "sparse_checkout"
     ],
     [
       "specificationses",
@@ -6986,6 +7166,10 @@
       "bridge"
     ],
     [
+      "failed approach",
+      "closed_route"
+    ],
+    [
       "failure classes",
       "failure_class_propagation"
     ],
@@ -7004,6 +7188,10 @@
     [
       "forecast skills",
       "forecasting"
+    ],
+    [
+      "frontier relays",
+      "research_shift"
     ],
     [
       "if and only ifs",
@@ -7098,12 +7286,20 @@
       "paper_module"
     ],
     [
+      "open obligation",
+      "open_obligation"
+    ],
+    [
       "option surfaces",
       "option_surface"
     ],
     [
       "outside sources",
       "external"
+    ],
+    [
+      "palomar records",
+      "palomar"
     ],
     [
       "peer propagates",
@@ -7130,10 +7326,6 @@
       "prior_art"
     ],
     [
-      "problem noteses",
-      "problem_note"
-    ],
-    [
       "program outputs",
       "output"
     ],
@@ -7156,6 +7348,10 @@
     [
       "public releases",
       "release"
+    ],
+    [
+      "pull requestses",
+      "pull_request"
     ],
     [
       "rational number",
@@ -7206,6 +7402,10 @@
       "research"
     ],
     [
+      "research shifts",
+      "research_shift"
+    ],
+    [
       "runtime systems",
       "runtime"
     ],
@@ -7236,6 +7436,14 @@
     [
       "source material",
       "source"
+    ],
+    [
+      "sparse checkout",
+      "sparse_checkout"
+    ],
+    [
+      "sparse-checkout",
+      "sparse_checkout"
     ],
     [
       "statement nodes",
@@ -7272,6 +7480,10 @@
     [
       "term glossaries",
       "glossary"
+    ],
+    [
+      "the maintainers",
+      "maintainer"
     ],
     [
       "tombstone route",
@@ -7376,10 +7588,6 @@
     [
       "built binaries",
       "compiled_binary"
-    ],
-    [
-      "certificateses",
-      "certificate"
     ],
     [
       "change history",
@@ -7518,8 +7726,16 @@
       "equivalence"
     ],
     [
+      "erdős problems",
+      "erdos_problem"
+    ],
+    [
       "error messages",
       "error"
+    ],
+    [
+      "evidence bands",
+      "evidence_band"
     ],
     [
       "evidence class",
@@ -7566,8 +7782,12 @@
       "formal"
     ],
     [
-      "formalisations",
-      "formal_mathematics"
+      "formalizations",
+      "formalisation"
+    ],
+    [
+      "frontier relay",
+      "research_shift"
     ],
     [
       "glossary terms",
@@ -7652,6 +7872,10 @@
     [
       "outside source",
       "external"
+    ],
+    [
+      "palomar record",
+      "palomar"
     ],
     [
       "peer propagate",
@@ -7740,6 +7964,10 @@
     [
       "research paper",
       "paper"
+    ],
+    [
+      "research shift",
+      "research_shift"
     ],
     [
       "research works",
@@ -7834,6 +8062,10 @@
       "harness"
     ],
     [
+      "the maintainer",
+      "maintainer"
+    ],
+    [
       "transactionals",
       "transaction"
     ],
@@ -7924,6 +8156,10 @@
     [
       "clean results",
       "clean"
+    ],
+    [
+      "closed routes",
+      "closed_route"
     ],
     [
       "coding agents",
@@ -8046,6 +8282,10 @@
       "equivalence"
     ],
     [
+      "erdős problem",
+      "erdos_problem"
+    ],
+    [
       "error message",
       "error"
     ],
@@ -8060,6 +8300,10 @@
     [
       "establishings",
       "establish"
+    ],
+    [
+      "evidence band",
+      "evidence_band"
     ],
     [
       "evidence kind",
@@ -8106,8 +8350,8 @@
       "formal_proof"
     ],
     [
-      "formalisation",
-      "formal_mathematics"
+      "formalization",
+      "formalisation"
     ],
     [
       "glossary term",
@@ -8156,6 +8400,10 @@
     [
       "local systems",
       "local"
+    ],
+    [
+      "maintainerses",
+      "maintainer"
     ],
     [
       "mathematicses",
@@ -8272,6 +8520,10 @@
     [
       "public-facing",
       "public"
+    ],
+    [
+      "pull requests",
+      "pull_request"
     ],
     [
       "quality gates",
@@ -8512,6 +8764,10 @@
     [
       "cli commands",
       "command"
+    ],
+    [
+      "closed route",
+      "closed_route"
     ],
     [
       "code library",
@@ -8926,6 +9182,10 @@
       "published"
     ],
     [
+      "pull request",
+      "pull_request"
+    ],
+    [
       "quality gate",
       "gate"
     ],
@@ -8960,6 +9220,10 @@
     [
       "release gate",
       "gate"
+    ],
+    [
+      "remain opens",
+      "open_problem"
     ],
     [
       "repo kernels",
@@ -9132,6 +9396,10 @@
     [
       "change logs",
       "changelog"
+    ],
+    [
+      "citationses",
+      "citation"
     ],
     [
       "claude peer",
@@ -9386,6 +9654,10 @@
       "irrational"
     ],
     [
+      "issue forms",
+      "issue_report"
+    ],
+    [
       "kernel.pies",
       "kernel"
     ],
@@ -9416,6 +9688,10 @@
     [
       "local files",
       "local"
+    ],
+    [
+      "maintainers",
+      "maintainer"
     ],
     [
       "mandatories",
@@ -9456,6 +9732,10 @@
     [
       "number base",
       "base"
+    ],
+    [
+      "obligations",
+      "open_obligation"
     ],
     [
       "obs studios",
@@ -9606,6 +9886,10 @@
       "reliability"
     ],
     [
+      "remain open",
+      "open_problem"
+    ],
+    [
       "repo kernel",
       "kernel"
     ],
@@ -9644,6 +9928,10 @@
     [
       "shared path",
       "shared_path"
+    ],
+    [
+      "short notes",
+      "problem_note"
     ],
     [
       "site search",
@@ -9784,10 +10072,6 @@
     [
       "binarieses",
       "compiled_binary"
-    ],
-    [
-      "certifieds",
-      "certificate"
     ],
     [
       "change log",
@@ -10082,6 +10366,10 @@
       "irrational"
     ],
     [
+      "issue form",
+      "issue_report"
+    ],
+    [
       "item lists",
       "list"
     ],
@@ -10130,6 +10418,10 @@
       "local"
     ],
     [
+      "maintainer",
+      "maintainer"
+    ],
+    [
       "mechanisms",
       "mechanism"
     ],
@@ -10156,6 +10448,10 @@
     [
       "numerators",
       "numerator"
+    ],
+    [
+      "obligation",
+      "open_obligation"
     ],
     [
       "obs studio",
@@ -10334,6 +10630,10 @@
       "section"
     ],
     [
+      "short note",
+      "problem_note"
+    ],
+    [
       "smoke test",
       "smoke_check"
     ],
@@ -10466,10 +10766,6 @@
       "blocked"
     ],
     [
-      "certified",
-      "certificate"
-    ],
-    [
       "changelog",
       "changelog"
     ],
@@ -10484,6 +10780,10 @@
     [
       "checksums",
       "digest"
+    ],
+    [
+      "citations",
+      "citation"
     ],
     [
       "classeses",
@@ -10610,6 +10910,10 @@
       "equation"
     ],
     [
+      "erdős #ns",
+      "erdos_problem"
+    ],
+    [
       "establish",
       "establish"
     ],
@@ -10704,6 +11008,10 @@
     [
       "frontends",
       "front_end"
+    ],
+    [
+      "frontiers",
+      "frontier"
     ],
     [
       "functions",
@@ -10886,10 +11194,6 @@
       "overview"
     ],
     [
-      "packetses",
-      "packet"
-    ],
-    [
       "periodics",
       "periodic"
     ],
@@ -11004,6 +11308,14 @@
     [
       "returnses",
       "return"
+    ],
+    [
+      "revieweds",
+      "review"
+    ],
+    [
+      "reviewers",
+      "review"
     ],
     [
       "root node",
@@ -11254,6 +11566,10 @@
       "digest"
     ],
     [
+      "citation",
+      "citation"
+    ],
+    [
       "claimeds",
       "claim"
     ],
@@ -11414,6 +11730,10 @@
       "equation"
     ],
     [
+      "erdős #n",
+      "erdos_problem"
+    ],
+    [
       "errorses",
       "error"
     ],
@@ -11478,6 +11798,10 @@
       "front_end"
     ],
     [
+      "frontier",
+      "frontier"
+    ],
+    [
       "function",
       "function"
     ],
@@ -11492,6 +11816,10 @@
     [
       "grounded",
       "grounding"
+    ],
+    [
+      "handoffs",
+      "packet"
     ],
     [
       "hologram",
@@ -11626,6 +11954,10 @@
       "package"
     ],
     [
+      "palomars",
+      "palomar"
+    ],
+    [
       "passions",
       "passion"
     ],
@@ -11732,6 +12064,14 @@
     [
       "returned",
       "return"
+    ],
+    [
+      "reviewed",
+      "review"
+    ],
+    [
+      "reviewer",
+      "review"
     ],
     [
       "rigidity",
@@ -12062,6 +12402,10 @@
       "correctness"
     ],
     [
+      "credits",
+      "contributor_credit"
+    ],
+    [
       "dataset",
       "dataset"
     ],
@@ -12200,6 +12544,10 @@
     [
       "grounds",
       "grounding"
+    ],
+    [
+      "handoff",
+      "packet"
     ],
     [
       "harness",
@@ -12362,6 +12710,10 @@
       "packet"
     ],
     [
+      "palomar",
+      "palomar"
+    ],
+    [
       "passion",
       "passion"
     ],
@@ -12448,6 +12800,10 @@
     [
       "returns",
       "return"
+    ],
+    [
+      "reviews",
+      "review"
     ],
     [
       "rootses",
@@ -12694,6 +13050,10 @@
       "corpus"
     ],
     [
+      "credit",
+      "contributor_credit"
+    ],
+    [
       "deploy",
       "deployment"
     ],
@@ -12780,6 +13140,10 @@
     [
       "inputs",
       "input"
+    ],
+    [
+      "issues",
+      "issue_report"
     ],
     [
       "kernel",
@@ -12924,6 +13288,10 @@
     [
       "return",
       "return"
+    ],
+    [
+      "review",
+      "review"
     ],
     [
       "rigids",
@@ -13138,6 +13506,10 @@
       "input"
     ],
     [
+      "issue",
+      "issue_report"
+    ],
+    [
       "jsons",
       "json_format"
     ],
@@ -13314,5 +13686,5 @@
       "map"
     ]
   ],
-  "source_hash": "sha256:8c949d3c4954dcb0a368dfcea50d0c5738eed306f102b28ab457a253e9c07771"
+  "source_hash": "sha256:664b817e0cfc0cb1de9ea89acec57805f0f24fde15e8c760288dbcd426b75aeb"
 }

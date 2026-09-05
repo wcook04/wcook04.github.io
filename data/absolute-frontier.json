@@ -2,10 +2,10 @@
   "schema": "public_reading_map_v1",
   "generated_by": "scripts/build_absolute_frontier.py",
   "source_hashes": {
-    "plectis-ai-reader-complete.json": "7dee9447c8e8451ca798760790a1a155491529d4242457ab4ce9db4866afab24",
+    "plectis-ai-reader-complete.json": "1640a1796228aef43aa85d25c5e2db1a559a9c29be24595dac16a53fd81c0e2c",
     "lean/problems.json": "669ae15671ac204f882a855679cf6b73c767b57b296239762cb77d6a781ac908"
   },
-  "public_source_commit": "fd53947f32d9146629be163521d3d5c7cb87a1a8",
+  "public_source_commit": "bd5998e0eb0445a9ad56afbec2e00666db6711aa",
   "reading_graph_path": "https://wcook04.github.io/plectis/plectis-ai-reader-complete.json#/scholarly_corpus/reading_graph",
   "systems": [
     {
