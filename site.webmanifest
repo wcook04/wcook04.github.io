@@ -1,7 +1,7 @@
 {
   "name": "Will Cook",
   "short_name": "Will Cook",
-  "description": "Plectis, and a Lean corpus of machine-checked results on Erdős problems.",
+  "description": "Plectis: open-source mathematics, checked proofs and research software.",
   "id": "/",
   "start_url": "/",
   "scope": "/",
