@@ -10,8 +10,8 @@
     "plectis": {
       "anchor": "glossary-plectis",
       "label": "Plectis",
-      "preview": "Plectis is the public name of this project: this site, the runnable components you can inspect, and the open source repository they come from.",
-      "card": "Plectis is what these pages and the public repository call the project. You can run the published components on your own machine and read the records they wrote. This site is a bounded public cut: the runnable components, the papers, and the open source they come from. Older paths, package names, and URLs still say Microcosm; those are this same project under the name it used before.",
+      "preview": "Plectis is an open-source mathematics project, with checked proofs, research papers and software that people and agents can build on.",
+      "card": "The Lean repository holds the mathematics: formal proofs, short notes, longer working records and open questions. A separate software repository holds reusable research components. This site connects both. Older paths, package names, and URLs still say Microcosm; those are this same project under the name it used before.",
       "rule": "Read Plectis as the public project name. If you see Microcosm in a path, package, or old link, treat it as the same project, not a second one.",
       "deep": "The name comes from Latin plectere, to weave. It names the public cut. What the system actually is lives in the source files, standards, and validators; renaming the public identity did not rename every package id or old URL."
     },
@@ -1195,9 +1195,9 @@
       "anchor": "glossary-erdos",
       "label": "Paul Erdős",
       "preview": "Paul Erdős (1913–1996) was a Hungarian mathematician known for posing and solving problems across number theory, combinatorics, and discrete mathematics.",
-      "card": "The six numbered Erdős problems discussed here are questions associated with Erdős and indexed by the independently maintained Erdős Problems database. A label such as “Erdős #249” identifies that database entry; it is not a claim that Erdős assigned the number himself.",
+      "card": "The numbered Erdős problems discussed here are questions associated with Erdős and indexed by the independently maintained Erdős Problems database. A label such as “Erdős #249” identifies that database entry; it is not a claim that Erdős assigned the number himself.",
       "rule": "Read “Erdős #n” as a database identifier for a mathematical problem associated with Paul Erdős.",
-      "deep": "Erdős worked extensively through collaboration and left a large body of questions that continue to organize research; the site covers only the six explicitly listed problems and makes no claim about the rest."
+      "deep": "Erdős worked extensively through collaboration and left a large body of questions that continue to organize research; the site covers only the explicitly listed problems and makes no claim about the rest."
     },
     "error": {
       "anchor": "glossary-error",
@@ -13314,5 +13314,5 @@
       "map"
     ]
   ],
-  "source_hash": "sha256:829aaec148595752e608dca78210ea1df12588e2ede869e3ba488839abec5756"
+  "source_hash": "sha256:8c949d3c4954dcb0a368dfcea50d0c5738eed306f102b28ab457a253e9c07771"
 }

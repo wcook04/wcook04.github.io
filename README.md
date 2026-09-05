@@ -10,13 +10,12 @@ it lists lives one directory down or in its own repository.
 | **Front door** | <https://wcook04.github.io/>: this repository |
 | **Plectis, the site** | <https://wcook04.github.io/plectis/> · [docs](https://wcook04.github.io/plectis/docs/) · [papers](https://wcook04.github.io/plectis/docs/papers.html) |
 | **Plectis, the repository** | <https://github.com/wcook04/plectis> |
-| **Lean corpus: pinned public snapshot** | <https://github.com/wcook04/plectis-lean-erdos249-257/tree/fd25c0b5f11a5d0c1834740991a008da56643808> |
+| **Lean research repository** | <https://github.com/wcook04/plectis-lean-erdos249-257> |
 | **Videos** | [1 min](https://youtu.be/R_--vExxWyk) · [5 min](https://youtu.be/VoWByIOIuBE) · [29 min](https://youtu.be/jA_xC8gmdSs) |
 
 The Plectis site is a separate GitHub Pages deployment: the `gh-pages` branch
 of `wcook04/plectis`, served under a path on this host.
-Nothing here builds it, and nothing in it builds this. The only thing binding
-them is the pair of links described under [The pair](#the-pair) below.
+Nothing here builds it, and nothing in it builds this. The reading-map builder imports the source snapshot from the Plectis site; the return links are described under [The pair](#the-pair).
 
 It exists for two reasons.
 
@@ -59,49 +58,45 @@ anything, and the sitemap it declared had never been discovered by that route.
 | `scripts/check_frontier_surface.py` | Static release guard for the all-eight programme map and immutable verification links. |
 | `scripts/check_public_routes.py` | Live smoke check for the public Plectis, paper, Lean, verification, Comparator, replay, citation, and updates hand-offs. |
 
-## Front-door release check
+## Refresh and check
 
-Before publishing a root-site change, run:
+The Lean repository is the primary research destination. The separate Plectis
+repository publishes reusable software components. The system and open-source
+papers introduce the research; all eight problems have the same presentation
+and appear in numerical order. The full JSON handoff embeds all published short
+notes, long working records and system papers.
+
+Refresh the source snapshot from a validated Plectis site build:
+
+```sh
+python3 scripts/build_absolute_frontier.py --site-root /path/to/ai_workflow/sites/microcosm --refresh-previews
+```
+
+The historical script and data filenames remain stable. The script reads the
+complete handoff and source-owned problem index, records their hashes, and
+rebuilds both the visible reading map and the problem previews. Do not edit
+`data/absolute-frontier.json` or its generated HTML regions by hand. Publication
+order is Plectis first, then this root page, so new paper links exist when the
+front door points at them.
+
+Refresh the glossary from the same site build with the Plectis owner:
+
+```sh
+./repo-python tools/meta/dissemination/export_public_glossary_snapshot.py --out /path/to/wcook04.github.io/data/glossary-terms.json
+```
+
+Then, in this repository:
 
 ```sh
 python3 scripts/build_glossary_term_layer.py
+python3 scripts/build_absolute_frontier.py --check
 python3 scripts/check_frontier_surface.py
 python3 scripts/check_public_routes.py
 ```
 
-The term layer is built first because it is derived. It used to be typed in:
-nine words, chosen by hand, with their preview cards retyped beside them,
-against a glossary of 486. A reader who hovered `cofinal`, `lemniscate`,
-`Mersenne`, `radix` or `Erdős` — every one of them defined, every one of them
-on this page — got nothing, and two of the nine hand-typed keys named no
-glossary row at all. They raised a card anyway, because the payload beside them
-carried the same two invented keys. That is what a hand-maintained layer buys:
-it is consistent with itself and with nothing else. The frontier check now
-reads the source instead, and fails if a mark on the page names a term the
-glossary does not define or raises no card.
-
-Refresh `data/glossary-terms.json` from the Plectis substrate when the
-vocabulary changes:
-
-```sh
-./repo-python tools/meta/dissemination/export_public_glossary_snapshot.py \
-    --out ~/src/wcook04.github.io/data/glossary-terms.json
-```
-
-It checks the local front door, not the mathematics: the masthead and opening
-still name eight open Erdős problems, every problem route remains pinned to the
-same public verification packet and retains its reviewed frontier heading, and
-every portrait sheet retains its question, exact checked declaration, and
-stated open boundary. It also keeps the desktop overview and accessible index
-on the same eight headings, and protects the desktop hover/focus route that
-selects each portrait sheet. The Lean repository remains authority for theorem
-validity and its own release checks.
-
-The live route check follows the external records named by the page, including
-all eight exact section headings in the pinned verification packet, plus the
-Plectis papers, representative no-build claim, Comparator, replay, citation,
-updates, full AI review packet, reader digest, and reviewer-brief routes. It
-intentionally does not treat this local root checkout as deployed.
+The static check verifies equal problem coverage, paper and page destinations,
+source projection parity and glossary identifiers. The live route check verifies
+published destinations. Neither establishes mathematical truth or peer review.
 
 ## Destination kinds
 
@@ -165,15 +160,10 @@ communicate the mathematical first contact before a reader opens the page, so
 composition. `index.html` points Open Graph and Twitter at the 1200 by 630 PNG
 because social crawlers do not reliably render SVG.
 
-The card carries only the programme-level facts that remain safe outside the
-page: eight open Erdős problems, one checked frontier and one stated remaining
-obligation for each, and the explicit statement that all eight remain open. It
-also gives one compact, claim-bounded frontier label for every problem:
-cofinal divisibility, tail-state defect, conditional escape, prime-gap
-summation, strict Mersenne tail, three-prime LCMs, ray separation, and
-rational-base tail. The portfolio remains visible at a glance.
-Do not replace it with a generic Plectis mark, a repository screenshot, raw
-corpus counts, or a claim that a problem has been solved.
+The card names the open-source mathematics project and the eight problem
+subjects. These are topic labels, not a ranking of results or a claim that any
+problem has been solved. The checked results and remaining work live on the
+current problem pages.
 
 After changing the SVG, regenerate and inspect the PNG before changing the
 metadata:

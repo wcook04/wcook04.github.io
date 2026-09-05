@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
-  <title id="title">Eight open Erdős problems: a checkable frontier</title>
-  <desc id="description">One checked frontier and one stated remaining obligation for each of eight open Erdős problems.</desc>
+  <title id="title">Plectis: open-source mathematics</title>
+  <desc id="description">Checked proofs, research papers and software for people and agents to build on. Eight original Erdős problems remain open.</desc>
   <defs>
     <linearGradient id="wash" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#171020"/>
@@ -25,13 +25,13 @@
     <text x="72" y="143" font-size="16" font-weight="700" letter-spacing="3" fill="#d8a44f">EIGHT OPEN ERDŐS PROBLEMS</text>
   </g>
   <g font-family="Georgia, 'Times New Roman', serif" fill="#f5ead8">
-    <text x="72" y="248" font-size="67" letter-spacing="-2">A checkable frontier.</text>
-    <text x="72" y="315" font-size="28" fill="#ded2c5">One checked frontier and one stated</text>
-    <text x="72" y="351" font-size="28" fill="#ded2c5">remaining obligation for each.</text>
+    <text x="72" y="248" font-size="67" letter-spacing="-2">Open mathematics.</text>
+    <text x="72" y="315" font-size="28" fill="#ded2c5">Checked proofs, papers and tools.</text>
+    <text x="72" y="351" font-size="28" fill="#ded2c5">Build on what is already there.</text>
   </g>
   <text x="72" y="430" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="1.2" fill="#d8a44f">ALL EIGHT REMAIN OPEN</text>
   <g transform="translate(670 170)" font-family="Arial, Helvetica, sans-serif">
-    <text x="0" y="0" font-size="15" font-weight="700" letter-spacing="2.5" fill="#c8bcb2">EIGHT CHECKED FRONTIERS</text>
+    <text x="0" y="0" font-size="15" font-weight="700" letter-spacing="2.5" fill="#c8bcb2">EIGHT OPEN PROBLEMS</text>
     <g fill="none" stroke="#9b7750" stroke-opacity=".5" stroke-width="1">
       <path d="M0 28H458"/>
       <path d="M0 116H458"/>
@@ -45,14 +45,14 @@
       <text x="0" y="339">1041</text><text x="234" y="339">1049</text>
     </g>
     <g fill="#c8bcb2" font-size="15" letter-spacing=".4">
-      <text x="55" y="75">cofinal divisibility</text><text x="288" y="75">tail-state defect</text>
-      <text x="55" y="163">conditional escape</text><text x="288" y="163">prime-gap summation</text>
-      <text x="55" y="251">strict Mersenne tail</text><text x="288" y="251">three-prime LCMs</text>
-      <text x="65" y="339">ray separation</text><text x="299" y="339">rational-base tail</text>
+      <text x="55" y="75">factorial series</text><text x="288" y="75">reciprocal tails</text>
+      <text x="55" y="163">binary totient</text><text x="288" y="163">prime-gap series</text>
+      <text x="55" y="251">Mersenne supports</text><text x="288" y="251">three-prime LCMs</text>
+      <text x="65" y="339">lemniscate paths</text><text x="299" y="339">Lambert series</text>
     </g>
   </g>
   <g font-family="Arial, Helvetica, sans-serif" fill="#c8bcb2">
-    <text x="72" y="557" font-size="15" letter-spacing="1.3">PUBLIC LEAN RECORD · PROBLEM PAPERS · REVIEWER REPLAY</text>
+    <text x="72" y="557" font-size="15" letter-spacing="1.3">LEAN RESEARCH · OPEN-SOURCE SOFTWARE · WAYS TO CONTRIBUTE</text>
     <text x="72" y="588" font-size="16" fill="#d8a44f">wcook04.github.io</text>
   </g>
 </svg>

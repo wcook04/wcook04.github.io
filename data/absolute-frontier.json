@@ -1,101 +1,122 @@
 {
-  "schema": "plectis_absolute_frontier_v1",
-  "selection_authority": {
-    "artifact": "state/formal_math/reviewer_theorem_card_coverage_audit.json",
-    "commit": "3cd77b17f9829bf236b5b9cbe373e8bf6512d1dc",
-    "posture": "committed snapshot of internal review triage, not external significance or acceptance authority"
+  "schema": "public_reading_map_v1",
+  "generated_by": "scripts/build_absolute_frontier.py",
+  "source_hashes": {
+    "plectis-ai-reader-complete.json": "7dee9447c8e8451ca798760790a1a155491529d4242457ab4ce9db4866afab24",
+    "lean/problems.json": "669ae15671ac204f882a855679cf6b73c767b57b296239762cb77d6a781ac908"
   },
-  "public_source_commit": "35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77",
-  "thesis": "Five results, stated here, the strongest in the corpus. Each gives the question, what was actually proved, what backs it and what is still missing.",
-  "selection_note": "Every claim above links to the thing that carries it: the paper for the written mathematics, the Lean file for the checked statement. The #1041 result is an ordinary written proof, not checked by Lean and not peer reviewed. This is me choosing what to show you first, not peer review, community acceptance, priority or a claim of canonical status.",
-  "tao_pipeline_receipt": {
-    "input_stage": "verified and internally adjudicated programme objects",
-    "output_stage": "public exposition and review routing",
-    "artifact": "generated absolute-frontier first-contact layer",
-    "human_understanding_delta": "A cold reader gets the mathematics on the page: for each shortlisted result, the question in symbols, what the reduction buys, the evidence class, and the step that is still missing. Nothing is behind a hover and nothing is behind an outbound link. The paper and the Lean declaration are cited as evidence, not used as the destination.",
-    "verification_state": "Each flagship states its evidence class inline and links the artifact that carries it: the problem paper for written mathematics, the commit-pinned Lean file for a checked statement. The #1041 ordinary theorem states its non-Lean and no-independent-review boundary on the card.",
-    "publication_or_review_state": "Internal review triage and public exposition only. No community acceptance, peer review, priority or canonical status is implied.",
-    "canonicalization_state": "Five selected programme objects with status-tagged public projections. Subordinate mechanisms remain in programme papers and registries.",
-    "unresolved_downstream_bottleneck": "Obtain external mathematical scrutiny of the five inspectable objects without confusing publication with acceptance, then replace a flagship only when stronger evidence changes the programme frontier.",
-    "next_stage_owner": "External mathematical reviewers for digestion and the public release owner for source parity"
-  },
+  "public_source_commit": "fd53947f32d9146629be163521d3d5c7cb87a1a8",
+  "reading_graph_path": "https://wcook04.github.io/plectis/plectis-ai-reader-complete.json#/scholarly_corpus/reading_graph",
+  "systems": [
+    {
+      "title": "Problem-Sized Lean Worlds",
+      "href": "https://wcook04.github.io/plectis/papers/claim-faithful-publication-systems-paper.pdf",
+      "paper_id": "claim-faithful-publication-systems"
+    },
+    {
+      "title": "From Spare Compute to Cumulative Mathematics",
+      "href": "https://wcook04.github.io/plectis/papers/open-source-mathematics-strategy.pdf",
+      "paper_id": "open-source-mathematics-strategy"
+    }
+  ],
   "items": [
     {
-      "problem": "68",
-      "kind": "Exact endpoint",
-      "title": "Irrationality becomes one cofinal divisibility question",
-      "why": "The original series problem is reduced without loss to an integer event that can be attacked directly.",
-      "evidence": "Lean checked exact equivalence",
-      "hard_step": "Force failures of m dividing the strict successor beyond every cutoff.",
-      "attribution": "Classical factorial radix context; source specific formal synthesis; no priority claim.",
-      "boundary": "No cofinal producer is known, so Erdős #68 remains open.",
-      "handle": "ErdosProblems.Erdos68.irrational_factorialGapSeries_iff_cofinal_strictFacTopRat_misses",
-      "href": "https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf",
-      "question_html": "Is &sum;<sub>n &ge; 2</sub> 1/(n! &minus; 1) irrational?",
+      "problem": 68,
+      "title": "The factorial-denominator series",
+      "question": "Is the series sum_{n >= 2} 1/(n! - 1) irrational?",
+      "status": "open",
+      "paper_title": "Factorial-Channel Obstructions and Exact Orbit Boundaries",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf",
-      "lean_href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/ErdosProblems/Erdos68/EndpointWeightedPrivateSupport.lean"
+      "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_68.html",
+      "source_pointer": "/scholarly_corpus/papers/0",
+      "long_records": []
     },
     {
-      "problem": "249",
-      "kind": "Canonical reduction",
-      "title": "One universal Mersenne residue gap is the exact frontier",
-      "why": "Several competing attack languages collapse to one forced basepoint modular supply with the full quantifier order visible.",
-      "evidence": "Lean checked exact equivalence",
-      "hard_step": "Produce the strict centered gap for every basepoint and every positive odd denominator shape.",
-      "attribution": "Classical radix tails, Euler periodicity and modular arithmetic; no priority claim for the packaging.",
-      "boundary": "The universal gap supply is unproved, so Erdős #249 remains open.",
-      "handle": "ErdosProblems.Erdos249.fullMersenneCanonicalBasepointResidueGapSupply_iff_irrational",
-      "href": "https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf",
-      "question_html": "Is &sum;<sub>n &ge; 1</sub> &phi;(n)/2<sup>n</sup> irrational?",
+      "problem": 243,
+      "title": "Reciprocal-tail rigidity near the Sylvester recurrence",
+      "question": "Under a rapid-growth hypothesis on an integer sequence, does rationality of its reciprocal sum force the sequence to satisfy the Sylvester recurrence eventually?",
+      "status": "open",
+      "paper_title": "Excluding the Bounded Negative Part",
+      "paper_href": "https://wcook04.github.io/plectis/papers/erdos-243-reciprocal-tail-rigidity.pdf",
+      "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_243.html",
+      "source_pointer": "/scholarly_corpus/papers/1",
+      "long_records": []
+    },
+    {
+      "problem": 249,
+      "title": "The binary totient series",
+      "question": "Is the binary Lambert series sum phi(n)/2^n irrational?",
+      "status": "open",
+      "paper_title": "A Basis for the 2-Kernel of Euler's Totient",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf",
-      "lean_href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/ErdosProblems/Erdos249/CyclotomicAnchoredKill.lean",
-      "paper_caveat": "The paper covers the problem; this particular equivalence is in the Lean source, not in it."
+      "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_249.html",
+      "source_pointer": "/scholarly_corpus/papers/2",
+      "long_records": [
+        {
+          "title": "The Binary Totient Series",
+          "href": "https://wcook04.github.io/plectis/papers/erdos249-totient-reasoning-surface.pdf"
+        }
+      ]
     },
     {
-      "problem": "251",
-      "kind": "Coordinate change",
-      "title": "The prime series is exactly a weighted gap tail",
-      "why": "Summation by parts keeps the endpoint and identifies the actual infinite obstruction, instead of treating prime irregularity as evidence by itself.",
-      "evidence": "Lean checked identity, convergence and rational affine equivalence",
-      "hard_step": "Prove an infinite obstruction for the genuine consecutive prime gap tail.",
-      "attribution": "Exact summation by parts with a direct public antecedent; no new prime gap theorem or novelty claim.",
-      "boundary": "Finite denominator screens and generic gap countermodels do not prove irrationality, so Erdős #251 remains open.",
-      "handle": "ErdosProblems.Erdos251.dyadicPartialSumQ_eq_start_add_differences",
-      "href": "https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf",
-      "question_html": "Is &sum; p<sub>n</sub>/2<sup>n</sup> over the consecutive primes irrational?",
+      "problem": 251,
+      "title": "The prime-gap dyadic series",
+      "question": "Is the dyadic series sum p_n/2^n over consecutive primes irrational? Equivalently, is the corresponding consecutive-prime-gap dyadic series irrational?",
+      "status": "open",
+      "paper_title": "An Integral-Shift Criterion for Dyadic Tail Recurrences",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf",
-      "lean_href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/ErdosProblems/Erdos251/PrimeGapDyadicTail.lean"
+      "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_251.html",
+      "source_pointer": "/scholarly_corpus/papers/4",
+      "long_records": []
     },
     {
-      "problem": "257",
-      "kind": "Canonical normal form",
-      "title": "Rational membership means actual skips forever",
-      "why": "A set existence question becomes a statement about one canonical greedy orbit, with no freedom to choose a convenient support.",
-      "evidence": "Lean checked exact equivalence for every nonnegative rational target",
-      "hard_step": "Produce cofinal actual skips for 1/2, 1/21 or another unresolved target.",
-      "attribution": "Uses the classical Erdős Borwein irrationality theorem inside a source specific greedy synthesis; no priority claim.",
-      "boundary": "Finite traces and arbitrary omitted supports do not supply the canonical cofinal skips, so Erdős #257 remains open.",
-      "handle": "ErdosProblems.Erdos257.rat_mem_mersenneAchievementSet_iff_cofinal_greedy_skips",
-      "href": "https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf",
-      "question_html": "Is &sum;<sub>a &isin; A</sub> 1/(2<sup>a</sup> &minus; 1) irrational for every infinite set A of positive integers?",
+      "problem": 257,
+      "title": "Reciprocal sums over infinite exponent supports",
+      "question": "Is the sum of 1/(2^n-1) over every infinite set of positive exponents irrational?",
+      "status": "open",
+      "paper_title": "Denominator Periods, Rational-Value Constraints and Achievement-Set Geometry",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf",
-      "lean_href": "https://github.com/wcook04/plectis-lean-erdos249-257/blob/35a5aa0da442c738f729bd1a4a3ba5ec30bf4d77/Erdos249257/GreedyAchievementSet.lean"
+      "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_257.html",
+      "source_pointer": "/scholarly_corpus/papers/5",
+      "long_records": [
+        {
+          "title": "Reciprocal Mersenne Subseries",
+          "href": "https://wcook04.github.io/plectis/papers/erdos257-mersenne-reasoning-surface.pdf"
+        }
+      ]
     },
     {
-      "problem": "1041",
-      "kind": "All degree partial theorem",
-      "title": "A constant factor path exists in every degree",
-      "why": "The unrestricted geometry has an absolute all degree bound, while the critical level singularity becomes the precise obstruction to the sharp target.",
-      "evidence": "Authored ordinary universal proof with finite regression; no Lean or independent specialist review",
-      "hard_step": "Review the component coarea calculation and remove the enlargement from K_mu to K_(2mu).",
-      "attribution": "Classical length area, coarea and lemniscate mechanisms; the exact synthesis was not located in bounded search and no priority is claimed.",
-      "boundary": "The constant is 8, the path lies in K_(2mu), and Erdős #1041 remains open.",
-      "handle": "UnconditionalConstantFactorBound.md::unconditional_constant_factor_pair_geodesic",
-      "href": "https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf",
-      "publication_state": "public",
-      "question_html": "For a monic polynomial with every root inside the unit disc, can two roots always be joined by a curve shorter than 2 that stays inside the lemniscate |f| &lt; 1?",
+      "problem": 269,
+      "title": "Three-prime running least common multiples",
+      "question": "For a finite set of at least two primes, is the sum of reciprocals of the running least common multiples of the smooth numbers irrational? This library treats the three-prime case.",
+      "status": "open",
+      "paper_title": "The Three-Prime Running Least Common Multiple",
+      "paper_href": "https://wcook04.github.io/plectis/papers/erdos-269-three-prime-running-lcm.pdf",
+      "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_269.html",
+      "source_pointer": "/scholarly_corpus/papers/7",
+      "long_records": []
+    },
+    {
+      "problem": 1041,
+      "title": "Short connections inside polynomial lemniscates",
+      "question": "For a monic polynomial whose roots lie in the open unit disc, must two roots be joinable by a curve of length less than two inside the open unit lemniscate?",
+      "status": "open",
+      "paper_title": "Critical-Value Separation and Admissible Hubs",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf",
-      "paper_caveat": "No Lean statement: this one is an ordinary written proof."
+      "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_1041.html",
+      "source_pointer": "/scholarly_corpus/papers/8",
+      "long_records": []
+    },
+    {
+      "problem": 1049,
+      "title": "Lambert-type series at rational bases",
+      "question": "For which rational bases is the corresponding series irrational? The smallest resistant explicit base is three halves.",
+      "status": "open",
+      "paper_title": "Sharp Height and Four-Jet Obstructions at Base 3/2",
+      "paper_href": "https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf",
+      "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_1049.html",
+      "source_pointer": "/scholarly_corpus/papers/9",
+      "long_records": []
     }
   ]
 }

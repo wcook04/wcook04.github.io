@@ -1,189 +1,46 @@
 #!/usr/bin/env python3
-"""Smoke-check the public records named by the root exhibition.
-
-This deliberately checks only destinations outside the unpublished root-site
-working tree.  It therefore catches a broken reader hand-off without claiming
-that local root edits have been deployed.
-"""
-
-from __future__ import annotations
-
-from html import unescape
+"""Verify the destinations in the generated reading map, including the full handoff."""
+import argparse
+from concurrent.futures import ThreadPoolExecutor
 import json
+import hashlib
 from pathlib import Path
-import re
-from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-
-ROOT = Path(__file__).resolve().parents[1]
-ABSOLUTE_FRONTIER_SOURCE = ROOT / "data" / "absolute-frontier.json"
-SNAPSHOT = json.loads(ABSOLUTE_FRONTIER_SOURCE.read_text(encoding="utf-8"))[
-    "public_source_commit"
-]
-if not isinstance(SNAPSHOT, str) or re.fullmatch(r"[0-9a-f]{40}", SNAPSHOT) is None:
-    raise ValueError("absolute-frontier public_source_commit must be a full commit")
-PROGRAMME_MARKERS = (
-    "#68: Factorial-denominator series",
-    "#243: Reciprocal-tail rigidity near the Sylvester recurrence",
-    "#249: Binary totient series",
-    "#251: Prime-gap dyadic series",
-    "#257: Reciprocal sums over infinite exponent supports",
-    "#269: Three-prime running least common multiples",
-    "#1041: Short connections inside polynomial lemniscates",
-    "#1049: Lambert-type series at rational bases",
-)
-PAPER_CATALOGUE_MARKERS = (
-    "Erdős #68",
-    "Erdős #243",
-    "Erdős #249",
-    "Erdős #251",
-    "Erdős #257",
-    "Erdős #269",
-    "Erdős #1041",
-    "Erdős #1049",
-)
-PAPER_PDF_LINKS = (
-    "https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf",
-    "https://wcook04.github.io/plectis/papers/erdos-243-reciprocal-tail-rigidity.pdf",
-    "https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf",
-    "https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf",
-    "https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf",
-    "https://wcook04.github.io/plectis/papers/erdos-269-three-prime-running-lcm.pdf",
-    "https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf",
-    "https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf",
-)
-PAPER_PROBLEM_NUMBERS = ("68", "243", "249", "251", "257", "269", "1041", "1049")
-PAPER_PDF_ROUTES = tuple(
-    (f"public paper PDF #{number}", url)
-    for number, url in zip(PAPER_PROBLEM_NUMBERS, PAPER_PDF_LINKS, strict=True)
-)
-ROUTES = (
-    ("Plectis public site", "https://wcook04.github.io/plectis/", None),
-    (
-        "maths reading room",
-        "https://wcook04.github.io/plectis/maths/",
-        ("Machine-checked mathematics", "All eight problems remain open"),
-    ),
-    (
-        "public contact route",
-        "https://wcook04.github.io/plectis/#contact",
-        'id="contact"',
-    ),
-    (
-        "13-paper catalogue",
-        "https://wcook04.github.io/plectis/docs/papers.html",
-        ("The 13 papers",) + PAPER_CATALOGUE_MARKERS + PAPER_PDF_LINKS,
-    ),
-    ("pinned Lean snapshot", f"https://github.com/wcook04/plectis-lean-erdos249-257/tree/{SNAPSHOT}", None),
-    (
-        "representative claim route",
-        f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/README.md#read-or-run-it",
-        (
-            "Four source current objects give the shortest route into the mathematics:",
-            "python3 scripts/verify_claims.py --claim eb_full_support",
-        ),
-    ),
-    ("eight-problem verification packet", f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md", PROGRAMME_MARKERS),
-    (
-        "Comparator appendix",
-        f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix",
-        (
-            "Twenty selected propositions are declared again without proofs.",
-            "A named altered statement must fail.",
-            "It does not assess exposition, citations, intended meaning, novelty, or significance.",
-        ),
-    ),
-    (
-        "reviewer replay",
-        f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/docs/EXTERNAL_VERIFICATION_REPLAY.md",
-        (
-            "Independent replay and immutable release identity",
-            "The bounded replay compares",
-            "one-theorem mismatch fixture",
-        ),
-    ),
-    (
-        "citation record",
-        f"https://github.com/wcook04/plectis-lean-erdos249-257/blob/{SNAPSHOT}/CITATION.cff",
-        "around eight Erdős problems (#68, #243, #249, #251, #257, #269, #1041, #1049)",
-    ),
-    ("updates route", "https://wcook04.github.io/plectis/docs/updates.html", "Follow updates"),
-    (
-        "full AI review packet",
-        "https://wcook04.github.io/plectis/plectis-ai-review-packet.json",
-        ("microcosm_ai_review_packet", "Plectis AI review packet"),
-    ),
-    (
-        "AI reader digest",
-        "https://wcook04.github.io/plectis/plectis-ai-reader-digest.json",
-        ("public_site_json_map_packet", "cold-reader verification budgeting"),
-    ),
-    (
-        "AI reviewer brief",
-        "https://wcook04.github.io/plectis/plectis-reviewer-brief.json",
-        ("plectis_reviewer_decision_brief", "Projection only."),
-    ),
-)
+ROOT=Path(__file__).resolve().parents[1]
+BASE='https://wcook04.github.io/plectis/'
 
 
-def fetch(url: str) -> tuple[int, str]:
-    request = Request(url, headers={"User-Agent": "PlectisPublicRouteCheck/1.0"})
-    with urlopen(request, timeout=20) as response:  # nosec B310: fixed public URLs
-        return response.status, response.read().decode("utf-8", errors="replace")
+def main():
+    ap=argparse.ArgumentParser()
+    ap.add_argument('--site-base',default=BASE,help='Plectis site URL; localhost is useful before deployment')
+    args=ap.parse_args()
+    data=json.loads((ROOT/'data/absolute-frontier.json').read_text())
+    urls={p['href'] for p in data['systems']}
+    for p in data['items']:
+        urls.update([p['paper_href'],p['page_href']])
+        urls.update(r['href'] for r in p['long_records'])
+    urls.update(BASE+p for p in ('docs/papers.html','docs/glossary.html','maths/index.html','plectis-ai-reader-complete.json'))
+    def check(url):
+        actual=url.replace(BASE,args.site_base.rstrip('/')+'/',1)
+        req=Request(actual,headers={'User-Agent':'Plectis-public-route-check/1.0'})
+        with urlopen(req,timeout=30) as response:
+            body=response.read()
+            if response.status!=200: raise ValueError(f'{url}: {response.status}')
+        if url.endswith('.pdf') and not body.startswith(b'%PDF-'): raise ValueError(f'{url}: not a PDF')
+        if url.endswith('plectis-ai-reader-complete.json'):
+            if hashlib.sha256(body).hexdigest() != data['source_hashes']['plectis-ai-reader-complete.json']:
+                raise ValueError('The Plectis handoff changed; refresh the root reading map before publishing')
+            packet=json.loads(body);corpus=packet['scholarly_corpus']
+            assert all(p['source_embedded'] and p['body'] for p in corpus['papers'])
+            for node in corpus['reading_graph']['nodes']:
+                value=packet
+                for key in node['pointer'].split('/')[1:]:
+                    value=value[int(key)] if isinstance(value,list) else value[key]
+            assert {p['paper_id'] for p in corpus['papers']} >= {p['paper_id'] for p in data['systems']}
+        return url
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        checked=list(pool.map(check,sorted(urls)))
+    print(f'{len(checked)} published paper, problem, glossary and handoff destinations verified at {args.site_base}')
 
-
-def head(url: str) -> tuple[int, str]:
-    request = Request(
-        url,
-        headers={"User-Agent": "PlectisPublicRouteCheck/1.0"},
-        method="HEAD",
-    )
-    with urlopen(request, timeout=20) as response:  # nosec B310: fixed public URLs
-        return response.status, response.headers.get_content_type()
-
-
-def visible_text(body: str) -> str:
-    """Give text markers a stable surface across harmless HTML wrappers."""
-    return re.sub(r"\s+", " ", unescape(re.sub(r"<[^>]+>", " ", body)))
-
-
-def main() -> int:
-    failures: list[str] = []
-    for label, url, expected_text in ROUTES:
-        try:
-            code, body = fetch(url)
-        except (HTTPError, URLError, TimeoutError) as error:
-            failures.append(f"{label}: {error}")
-            continue
-        if code != 200:
-            failures.append(f"{label}: HTTP {code}")
-        elif expected_text:
-            markers = (expected_text,) if isinstance(expected_text, str) else expected_text
-            text = visible_text(body)
-            missing = [marker for marker in markers if marker not in text and marker not in body]
-            if missing:
-                failures.append(f"{label}: expected public marker missing: {missing[0]}")
-
-    for label, url in PAPER_PDF_ROUTES:
-        try:
-            code, content_type = head(url)
-        except (HTTPError, URLError, TimeoutError) as error:
-            failures.append(f"{label}: {error}")
-            continue
-        if code != 200:
-            failures.append(f"{label}: HTTP {code}")
-        elif content_type != "application/pdf":
-            failures.append(f"{label}: expected PDF, got {content_type}")
-
-    if failures:
-        raise SystemExit("public routes: FAIL\n" + "\n".join(failures))
-    print(
-        f"public routes: {len(ROUTES)} reader hand-offs and {len(PAPER_PDF_ROUTES)} paper PDFs "
-        f"reachable at pinned snapshot {SNAPSHOT[:7]}: ok"
-    )
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+if __name__=='__main__': main()

@@ -1,276 +1,140 @@
 #!/usr/bin/env python3
-"""Render the governed absolute-frontier shortlist into the root page."""
+"""Refresh the public reading map from the Plectis site's published source snapshot.
 
+The historical filename and region markers remain stable. This is an equal
+problem index, not an independently ranked mathematical frontier.
+"""
 from __future__ import annotations
-
 import argparse
+import hashlib
 import html
 import json
 import re
+import subprocess
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "data" / "absolute-frontier.json"
-INDEX = ROOT / "index.html"
-BEGIN = "      <!-- BEGIN generated absolute frontier -->"
-END = "      <!-- END generated absolute frontier -->"
-
-# The question is the only field allowed to carry markup, because a reader
-# meeting the problem for the first time needs the series itself and not a
-# transliteration of it. Nothing but sub, sup and character entities gets
-# through; the builder refuses anything else rather than trusting the file.
-SAFE_QUESTION = re.compile(r"\A(?:[^<>&]|</?su[bp]>|&[a-zA-Z]+;|&#\d+;)*\Z")
-
-
-def esc(value: str) -> str:
-    return html.escape(value, quote=True)
+SOURCE = ROOT / 'data/absolute-frontier.json'
+INDEX = ROOT / 'index.html'
+BEGIN = '      <!-- BEGIN generated absolute frontier -->'
+END = '      <!-- END generated absolute frontier -->'
+BASE = 'https://wcook04.github.io/plectis/'
+LEAN = 'https://github.com/wcook04/plectis-lean-erdos249-257'
+NUMBERS = [68, 243, 249, 251, 257, 269, 1041, 1049]
+TERM = re.compile(r'<a class="term(?: is-again)?" data-term="[^"]*" href="[^"]*">(.*?)</a>', re.S)
+e = html.escape
 
 
-def question(value: str) -> str:
-    if not SAFE_QUESTION.fullmatch(value):
-        raise ValueError(
-            f"question_html carries markup that is not sub, sup or an entity: {value!r}"
-        )
-    return value
-
-
-# A shortlisted result has to be legible where it is listed. These fields are
-# what a reader needs before deciding whether to open anything, so a card that
-# is missing one is a build failure and not a thinner card: the section used to
-# render a bare title and an outbound link, and the mathematics that was
-# already sitting in this file went unrendered.
-REQUIRED = ("title", "kind", "question_html", "why", "evidence", "hard_step",
-            "attribution", "paper_href")
-
-
-def check_row(row: dict) -> None:
-    for field in REQUIRED:
-        if not str(row.get(field, "")).strip():
-            raise ValueError(f"absolute-frontier #{row.get('problem')} has no {field}")
-
-
-def card(row: dict) -> str:
-    check_row(row)
-    # data-dest still raises the destination window on hover and on focus, but
-    # the card no longer depends on it for its content. Everything a reader
-    # needs in order to judge the result is in the article itself: the
-    # question, what the reduction buys, the evidence class, and the step
-    # nobody has. A hover is an extra. On a phone there is no hover at all.
-    exits = ['<a href="{}">Paper</a>'.format(esc(row["paper_href"]))]
-    if row.get("lean_href"):
-        exits.append('<a href="{}">Lean statement</a>'.format(esc(row["lean_href"])))
-    exit_html = '<span class="sep" aria-hidden="true">&middot;</span>'.join(exits)
-    caveat = row.get("paper_caveat")
-    caveat_html = (
-        '\n              <p class="flagship__caveat">{}</p>'.format(esc(caveat))
-        if caveat
-        else ""
-    )
-    return "\n".join(
-        [
-            '          <article class="flagship" tabindex="0" data-dest="problem-{}">'.format(
-                esc(row["problem"])
-            ),
-            '            <p class="flagship__line"><span class="flagship__number">#{}</span>'
-            '<span class="flagship__kind">{}</span></p>'.format(
-                esc(row["problem"]), esc(row["kind"])
-            ),
-            '            <div class="flagship__body">',
-            "              <h3>{}</h3>".format(esc(row["title"])),
-            '              <p class="flagship__question">'
-            '<span class="flagship__tag">Question</span>{}</p>'.format(
-                question(row["question_html"])
-            ),
-            '              <p class="flagship__why">{}</p>'.format(esc(row["why"])),
-            '              <p class="flagship__fact">'
-            '<span class="flagship__tag">Evidence</span>{}</p>'.format(esc(row["evidence"])),
-            '              <p class="flagship__fact flagship__fact--open">'
-            '<span class="flagship__tag">Still open</span>{}</p>'.format(esc(row["hard_step"])),
-            '              <p class="flagship__attribution">{}</p>'.format(
-                esc(row["attribution"])
-            ),
-            '              <p class="flagship__exits">{}</p>{}'.format(exit_html, caveat_html),
-            "            </div>",
-            "          </article>",
-        ]
-    )
-
-
-# The three programmes without a shortlisted headline result. They live here,
-# at the foot of the shortlist, so the page carries exactly one list of
-# problem numbers: same row grammar as the shortlist's hover routes, same
-# portrait sheets, same readable-paper links. The Check band beneath names
-# the programme map without repeating the numbers.
-OTHER_PROGRAMMES = (
-    ("243", "Reciprocal tails", "erdos-243-reciprocal-tail-rigidity.pdf"),
-    ("269", "Three-prime running LCMs", "erdos-269-three-prime-running-lcm.pdf"),
-    ("1049", "Lambert series at rational bases", "erdos-1049-rational-base-lambert.pdf"),
-)
-
-
-def other_row(number: str, topic: str, paper: str) -> str:
-    return (
-        '            <p role="listitem" data-dest="problem-{n}">'
-        '<a data-to="repo" data-dest="problem-{n}" aria-label="#{n}: {t}. '
-        'Hover or focus for the question, checked object and open boundary." '
-        'href="https://wcook04.github.io/plectis/papers/{p}">#{n}</a> '
-        '<span class="frontier-topic">{t}</span></p>'
-    ).format(n=esc(number), t=esc(topic), p=esc(paper))
-
-
-def paper_number_links() -> str:
-    parts = []
-    for number, _topic, paper in (
-        ("68", "factorial denominator irrationality", "erdos-68-factorial-denominator-irrationality.pdf"),
-        ("243", "reciprocal tail rigidity", "erdos-243-reciprocal-tail-rigidity.pdf"),
-        ("249", "the binary totient series", "erdos-249-binary-totient-series.pdf"),
-        ("251", "the prime-gap dyadic series", "erdos-251-prime-gap-dyadic-series.pdf"),
-        ("257", "Mersenne support subseries", "erdos-257-mersenne-support-subseries.pdf"),
-        ("269", "three-prime running LCMs", "erdos-269-three-prime-running-lcm.pdf"),
-        ("1041", "the lemniscate Newton flow", "erdos-1041-lemniscate-newton-flow.pdf"),
-        ("1049", "rational-base Lambert series", "erdos-1049-rational-base-lambert.pdf"),
-    ):
-        parts.append(
-            '<a class="paper" data-dest="paper-{n}" '
-            'href="https://wcook04.github.io/plectis/papers/{p}" '
-            'aria-label="Paper, PDF: Erd&#337;s #{n}, {t}">#{n}</a>'.format(
-                n=number, p=paper, t=_topic
-            )
-        )
-    return ", ".join(parts[:-1]) + " and " + parts[-1]
-
-
-def combined_routes(snapshot: str) -> list[str]:
-    """The checked map, the papers, and the deep-check tail, inside the one
-    mathematics band. These moved here from the separate Check and Read route
-    rows so the page states the programme once; the wording of every promise
-    and boundary is unchanged and stays pinned by check_frontier_surface."""
-    repo = "https://github.com/wcook04/plectis-lean-erdos249-257"
-    blob = f"{repo}/blob/{snapshot}"
-    return [
-        '        <p class="af-route">One machine-checked statement for each problem, '
-        "and the exact thing that is still unproved: the "
-        f'<a data-to="repo" data-dest="math-frontier" href="{blob}/README.md#eight-programme-map">'
-        "Eight programme map</a>.</p>",
-        '        <p class="af-route">Eight problem papers, for '
-        + paper_number_links()
-        + ", <a data-dest=\"papers-catalogue\" "
-        'href="https://wcook04.github.io/plectis/docs/papers.html">'
-        "sit inside Plectis&rsquo;s 13-paper catalogue</a> with the reasoning "
-        "surfaces and the system papers. They are written for someone reading cold.</p>",
-        '        <p class="absolute-frontier__acts">'
-        '<a class="btn btn--quiet" data-dest="papers-catalogue" '
-        'href="https://wcook04.github.io/plectis/docs/papers.html">Open the papers catalogue</a>'
-        '<a class="btn btn--quiet" data-dest="maths-pages" '
-        'href="https://wcook04.github.io/plectis/maths/">Read all eight as pages</a>'
-        '<a class="btn btn--quiet" data-to="repo" data-dest="math-frontier" '
-        f'href="{blob}/README.md#eight-programme-map">Open the programme map</a>'
-        "</p>",
-        '        <details class="route-more">',
-        "          <summary>More ways to check it</summary>",
-        '          <p class="exits frontier-exits">',
-        f'            <a data-to="repo" data-dest="lean-github" aria-label="Open the pinned Lean source" href="{repo}/tree/{snapshot}">Lean source</a><span class="sep" aria-hidden="true">&middot;</span>'
-        f'<a data-to="repo" aria-label="Check one theorem without building Lean" href="{blob}/README.md#read-or-run-it">Check one theorem</a><span class="sep" aria-hidden="true">&middot;</span>'
-        f'<a data-to="repo" aria-label="Read the programme map for all eight open problems" href="{blob}/docs/EXTERNAL_VERIFICATION.md">Read all eight</a><span class="sep" aria-hidden="true">&middot;</span>'
-        f'<a data-to="repo" aria-label="See how selected formal statements are checked" href="{blob}/docs/EXTERNAL_VERIFICATION.md#comparator-interface-appendix">How checking works</a><span class="sep" aria-hidden="true">&middot;</span>'
-        f'<a data-to="repo" aria-label="Reproduce the public verification checks" href="{blob}/docs/EXTERNAL_VERIFICATION_REPLAY.md">Reproduce the checks</a><span class="sep" aria-hidden="true">&middot;</span>'
-        f'<a data-to="repo" aria-label="Cite the eight-problem Lean corpus" href="{blob}/CITATION.cff">Cite the corpus</a>',
-        "          </p>",
-        '          <p class="frontier-comparator">For selected propositions, a second Lean '
-        "file states the theorem again without its proof. The build checks that the "
-        "original proof has exactly that type and stays within a fixed axiom budget. "
-        "This does not review the papers, citations, meaning, novelty or significance.</p>",
-        '          <p class="frontier-proof"><span>Trace one classical benchmark after '
-        "reading the programme and papers. No Lean build is needed. The route returns "
-        "the statement, exact declaration, Comparator interface, paper and boundary:"
-        "</span>"
-        f'<a data-to="repo" aria-label="Trace the classical full-support benchmark without a Lean build" href="{blob}/README.md#read-or-run-it">'
-        "<code>python3 scripts/verify_claims.py --claim eb_full_support</code></a></p>",
-        "        </details>",
-    ]
+def snapshot(site: Path) -> dict:
+    names = ['plectis-ai-reader-complete.json', 'lean/problems.json']
+    raw = {name: (site/name).read_bytes() for name in names}
+    packet = json.loads(raw[names[0]])
+    source = json.loads(raw[names[1]])
+    corpus = packet['scholarly_corpus']
+    if not all(p.get('source_embedded') for p in corpus['papers']):
+        raise ValueError('the reading packet has missing manuscripts')
+    papers = {p['paper_id']: p for p in corpus['papers']}
+    items = []
+    for problem in sorted(source['problems'], key=lambda p:p['erdos_number']):
+        paper = papers[problem['paper']['paper_id']]
+        n = problem['erdos_number']
+        item = {'problem':n, 'title':problem['short_title'],
+                'question':problem['question'], 'status':problem['status'],
+                'paper_title':paper['title'], 'paper_href':paper['public_pdf_url'],
+                'page_href':BASE+f'maths/problems/erdos_{n}.html',
+                'source_pointer':f"/scholarly_corpus/papers/{corpus['papers'].index(paper)}"}
+        longs = [p for p in corpus['papers'] if p['paper_id'].startswith(f'erdos{n}-') and 'reasoning-surface' in p['paper_id']]
+        item['long_records'] = [{'title':p['title'],'href':p['public_pdf_url']} for p in longs]
+        items.append(item)
+    if [p['problem'] for p in items] != NUMBERS:
+        raise ValueError('source does not contain exactly the eight expected problems')
+    systems = [papers[k] for k in ('claim-faithful-publication-systems','open-source-mathematics-strategy')]
+    return {'schema':'public_reading_map_v1', 'generated_by':'scripts/build_absolute_frontier.py',
+            'source_hashes':{name:hashlib.sha256(data).hexdigest() for name,data in raw.items()},
+            'public_source_commit':next(r['revision'] for r in corpus['repository_maps'] if r['repository']=='plectis-lean-erdos249-257'),
+            'reading_graph_path':BASE+'plectis-ai-reader-complete.json#/scholarly_corpus/reading_graph',
+            'systems':[{'title':p['title'],'href':p['public_pdf_url'],'paper_id':p['paper_id']} for p in systems],
+            'items':items}
 
 
 def render(payload: dict) -> str:
-    items = [
-        row for row in payload["items"]
-        if row.get("publication_state", "public") == "public"
-    ]
-    if not 3 <= len(items) <= 5:
-        raise ValueError("absolute frontier must contain three to five items")
-    cards = "\n".join(card(row) for row in items)
-    others = "\n".join(other_row(*row) for row in OTHER_PROGRAMMES)
-    return "\n".join(
-        [
-            BEGIN,
-            '      <section class="absolute-frontier" aria-labelledby="absolute-frontier-title">',
-            '        <p class="absolute-frontier__eyebrow">Start here</p>',
-            '        <h2 id="absolute-frontier-title">The results worth reading first</h2>',
-            '        <p class="absolute-frontier__thesis">{}</p>'.format(esc(payload["thesis"])),
-            '        <p class="frontier-instruction"><span class="frontier-instruction__wide">'
-            "Hover or tab to a number for the question, what was checked, and what is still "
-            "unproved.</span><span class=\"frontier-instruction__narrow\">Open a number for "
-            "the question, what was checked, and what is still unproved.</span></p>",
-            '        <div class="flagships">',
-            cards,
-            "        </div>",
-            '        <p class="frontier-label">The other three programmes</p>',
-            '        <div class="frontier frontier--others" role="list" '
-            'aria-label="The other three programmes: one checked frontier and one open '
-            'boundary each">',
-            others,
-            "        </div>",
-            '        <p class="absolute-frontier__note">{}</p>'.format(
-                esc(payload["selection_note"])
-            ),
-            *combined_routes(payload["public_source_commit"]),
-            "      </section>",
-            END,
-        ]
-    )
+    systems = '\n'.join(f'<p class="af-route"><a href="{e(p["href"])}">{e(p["title"])}</a></p>' for p in payload['systems'])
+    rows = []
+    for p in payload['items']:
+        links = f'<a href="{e(p["paper_href"])}" data-dest="paper-{p["problem"]}">Short note</a> · <a href="{e(p["page_href"])}#frontier">Results and remaining work</a>'
+        for long in p['long_records']:
+            links += f' · <a href="{e(long["href"])}">Long working record</a>'
+        rows.append(f'''<article class="flagship" tabindex="0" data-dest="problem-{p['problem']}">
+          <p class="flagship__line"><span class="flagship__number">#{p['problem']}</span><span class="flagship__kind">{e(p['status'].capitalize())}</span></p>
+          <div class="flagship__body"><h3><a href="{e(p['page_href'])}">{e(p['title'])}</a></h3>
+          <p class="flagship__question">{e(p['question'])}</p>
+          <p class="flagship__exits">{links}</p></div></article>''')
+    return f'''{BEGIN}
+      <section class="absolute-frontier" aria-labelledby="absolute-frontier-title">
+        <p class="absolute-frontier__eyebrow">The research and how to join</p>
+        <h2 id="absolute-frontier-title">Build on the work.</h2>
+        <p class="absolute-frontier__thesis">The system paper explains how the research is organised. The open-source paper explains how to contribute mathematics, review, software or compute.</p>
+        {systems}
+        <p class="af-route"><a data-to="repo" href="{LEAN}">Lean repository and README</a> · <a href="{LEAN}/blob/main/CONTRIBUTING.md">Contribute</a></p>
+        <details class="route-more"><summary>Eight problems, all open</summary>
+        <p class="absolute-frontier__note">In numerical order. Each short note describes one problem; the longer records retain additional working context.</p>
+        <div class="flagships">{''.join(rows)}</div></details>
+        <p class="absolute-frontier__note">Lean checks formal statements. It does not establish novelty, significance or peer review.</p>
+        <p class="af-route"><a href="{BASE}maths/">Mathematics pages</a> · <a href="{BASE}docs/papers.html">Full paper catalogue</a> · <a href="{BASE}docs/glossary.html">Glossary</a></p>
+      </section>
+{END}'''
 
 
-def replace_region(text: str, region: str) -> str:
-    start = text.find(BEGIN)
-    end = text.find(END)
-    if start < 0 or end < 0 or end < start:
-        raise ValueError("absolute-frontier generated region is missing")
-    end += len(END)
-    return text[:start] + region + text[end:]
+def project(text: str, payload: dict) -> str:
+    a=text.index(BEGIN); b=text.index(END,a)+len(END)
+    text=text[:a]+render(payload)+text[b:]
+    # Portraits and overview are projections of the same eight rows as the list.
+    for p in payload['items']:
+        n=p['problem']
+        pattern=rf'<span class="shot__problem" data-problem="{n}".*?(?=\s*<span class="shot__problem"|\s*</span>\s*</a>\s*<p class="dest__hint")'
+        sheet=f'''<span class="shot__problem" data-problem="{n}" aria-hidden="true">
+          <span class="problem-sheet__topline"><span class="problem-sheet__number">Erdős #{n}</span><span class="problem-sheet__status">{e(p['status'].capitalize())}</span></span>
+          <span class="problem-sheet__title">{e(p['title'])}</span>
+          <span class="problem-sheet__question"><span class="problem-sheet__label">Question</span>{e(p['question'])}</span>
+          <span class="problem-sheet__section"><span class="problem-sheet__label">Short note</span>{e(p['paper_title'])}</span>
+          <span class="problem-sheet__section problem-sheet__section--open"><span class="problem-sheet__label">Research status</span>The original problem remains open. The problem page separates results, evidence and remaining work.</span></span>'''
+        text,count=re.subn(pattern,lambda _:sheet,text,count=1,flags=re.S)
+        if count!=1: raise ValueError(f'missing portrait #{n}')
+        text=re.sub(rf'(<span class="frontier-plate__number">{n}</span><span class="frontier-plate__handle">).*?(</span>)',lambda m:m[1]+e(p['title'])+m[2],text,count=1,flags=re.S)
+    text=re.sub(r'(<span class="frontier-plate__boundary">).*?(</span>)', r'\1Original problem remains open.\2', text, flags=re.S)
+    # The interactive portrait opens the same current page as its row.
+    text=re.sub(r'    /\* This is presentation text for the destination bar.*?    var DEST =', '    var DEST =', text, count=1, flags=re.S)
+    for p in payload['items']:
+        n=p['problem']
+        route=f'"problem-{n}": {{ to: "page", view: "problem", problem: "{n}", host: "wcook04.github.io", path: "/plectis/maths/problems/erdos_{n}.html", href: "{p["page_href"]}" }}'
+        text=re.sub(rf'"problem-{n}":\s*\{{.*?\}}',lambda _:route,text,count=1,flags=re.S)
+    text=re.sub(r'"math-frontier":\s*\{.*?\}', '"math-frontier": { to: "page", view: "frontier", host: "wcook04.github.io", path: "/plectis/maths/", href: "https://wcook04.github.io/plectis/maths/" }', text, count=1, flags=re.S)
+    text=re.sub(r'"lean-github":\s*\{.*?\}', '"lean-github": { to: "repo", host: "github.com", path: "/wcook04/plectis-lean-erdos249-257", src: "assets/previews/lean-github.jpg", href: "'+LEAN+'" }', text, count=1, flags=re.S)
+    return text
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--check", action="store_true")
-    args = parser.parse_args()
-    payload = json.loads(SOURCE.read_text(encoding="utf-8"))
-    current = INDEX.read_text(encoding="utf-8")
-    expected = replace_region(current, render(payload))
+def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--site-root',type=Path,help='refresh from a validated local Plectis site build')
+    parser.add_argument('--check',action='store_true')
+    parser.add_argument('--refresh-previews',action='store_true',help='render current short-note covers with Poppler; requires --site-root')
+    args=parser.parse_args()
+    if args.refresh_previews:
+        if not args.site_root or args.check: parser.error('--refresh-previews needs --site-root and a write run')
+    payload=snapshot(args.site_root) if args.site_root else json.loads(SOURCE.read_text())
+    raw=INDEX.read_text(); expected=project(raw,payload)
     if args.check:
-        if expected != current:
-            raise SystemExit("absolute frontier: generated region is stale")
-        # Verified against the page and not only against the renderer, so a
-        # hand-edit of index.html that strips a result back to a headline is
-        # caught here rather than shipping.
-        region = current[current.find(BEGIN):current.find(END)]
-        for row in payload["items"]:
-            if row.get("publication_state", "public") != "public":
-                continue
-            for field in ("why", "evidence", "hard_step"):
-                if esc(row[field]) not in region:
-                    raise SystemExit(
-                        f"absolute frontier: #{row['problem']} no longer states its {field}"
-                    )
-        print("absolute frontier: source, ordering, stated results and generated region: ok")
-        return 0
-    INDEX.write_text(expected, encoding="utf-8")
-    public_count = sum(
-        row.get("publication_state", "public") == "public"
-        for row in payload["items"]
-    )
-    print(f"absolute frontier: rendered {public_count} public items")
-    return 0
+        if TERM.sub(r'\1',expected)!=TERM.sub(r'\1',raw): raise SystemExit('public reading map or portraits are stale')
+        if args.site_root and payload!=json.loads(SOURCE.read_text()): raise SystemExit('public source snapshot changed; refresh the reading map')
+        print('Public reading map: source, eight equal routes, papers and portraits agree')
+    else:
+        SOURCE.write_text(json.dumps(payload,ensure_ascii=False,indent=2)+'\n')
+        INDEX.write_text(expected)
+        if args.refresh_previews:
+            for item in payload['items']:
+                pdf=args.site_root/'papers'/item['paper_href'].rsplit('/',1)[1]
+                out=ROOT/'assets/previews'/f"paper-{item['problem']}-640"
+                subprocess.run(['pdftoppm','-f','1','-singlefile','-scale-to-x','640','-scale-to-y','-1','-H','411','-jpeg','-jpegopt','quality=80',str(pdf),str(out)],check=True,capture_output=True)
+        print('Refreshed two orientation papers and all eight problem routes')
 
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+if __name__=='__main__': main()
