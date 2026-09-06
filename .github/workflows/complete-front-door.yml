@@ -1,0 +1,155 @@
+name: Complete the personal front door
+on:
+  push:
+    branches: [fix/complete-front-door-20260906]
+    paths: [.github/workflows/complete-front-door.yml]
+permissions:
+  contents: write
+jobs:
+  refine-and-check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: fix/complete-front-door-20260906
+          fetch-depth: 1
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12.9'
+      - name: Apply exact source edits, preserving the artwork and runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re, subprocess
+          expected = {
+              'index.html': 'f6889564e1d69f0ad16b3f3ce285e825408d8be1',
+              'scripts/build_absolute_frontier.py': 'bdcd67a8beb64e453b2862faa526a87108a15f42',
+              'scripts/check_frontier_surface.py': '244db2d7dcce30cd657ea22cafba24d086fb0433',
+              'README.md': '3a828b7c9794756975e0e5e2798e7c6a2dcf7734',
+          }
+          for path, sha in expected.items():
+              actual = subprocess.check_output(['git','hash-object',path], text=True).strip()
+              if actual != sha:
+                  raise SystemExit(f'Source changed before refinement: {path}')
+          def replace_once(text, old, new):
+              if text.count(old) != 1:
+                  raise ValueError(f'Expected one source anchor: {old[:80]}')
+              return text.replace(old, new, 1)
+          builder = Path('scripts/build_absolute_frontier.py')
+          source = builder.read_text()
+          start, end = source.index('def render(payload: dict) -> str:'), source.index('\ndef project(')
+          source = source[:start] + '''def render(payload: dict) -> str:
+              """Keep the personal homepage an introduction and destination index."""
+              if [row['problem'] for row in payload['items']] != NUMBERS:
+                  raise ValueError('the source must retain all eight problems')
+              return f\'''{BEGIN}
+                <section class="absolute-frontier" id="eight-problem-frontier" tabindex="-1" aria-labelledby="absolute-frontier-title" data-scene-key="opening">
+                  <h2 id="absolute-frontier-title">Public work</h2>
+                  <p><a class="btn" href="{BASE}" data-dest="plectis-site">Explore Plectis</a></p>
+                  <p class="absolute-frontier__thesis">The project site introduces the research, software and recorded interface.</p>
+                  <p class="af-route"><a href="{BASE}maths/" data-dest="math-frontier">Mathematics</a> <span>· work on eight Erdős problems, all still open</span></p>
+                  <p class="af-route"><a href="{SOFTWARE}" data-to="repo">Software repository</a> <span>· public research and engineering tools</span></p>
+                  <p class="af-route"><a href="{LEAN}" data-dest="lean-github" data-to="repo">Mathematics repository</a> <span>· formal source and ways to continue the work</span></p>
+                  <p class="af-route"><a href="{BASE}docs/papers.html" data-dest="papers-catalogue">Papers</a> · <a href="{BASE}#demo-videos">Watch the introduction</a></p>
+                </section>
+          {END}\'''
+
+          ''' + source[end:]
+          compile(source, str(builder), 'exec')
+          builder.write_text(source)
+          index = Path('index.html')
+          page = index.read_text()
+          page, n = re.subn(r'<p class="intro">.*?</p>', '<p class="intro">I am building <a href="https://wcook04.github.io/plectis/" data-dest="plectis-site">Plectis</a>, a research system, so that work done with AI can be understood, checked and continued.</p>', page, count=1, flags=re.S)
+          if n != 1: raise ValueError('missing introduction')
+          # The generated section now owns the skip-link destination. Remove
+          # the duplicate navigation, not the destination or keyboard access.
+          page, n = re.subn(r'<nav id="eight-problem-frontier"\b.*?</nav>', '', page, count=1, flags=re.S)
+          if n != 1:
+              page, n = re.subn(r'<nav id="eight-problem-frontier".*?</nav>', '', page, count=1, flags=re.S)
+          if n != 1: raise ValueError('missing duplicate route index')
+          page, n = re.subn(r'<section class="handoff".*?</section>', '''<section class="handoff" aria-labelledby="handoff-h" data-scene-key="handoff" data-dest-default="brief-json">
+                  <h2 class="eyebrow" id="handoff-h">Read with an AI</h2>
+                  <p><a href="https://wcook04.github.io/plectis/plectis-reviewer-brief.json" data-dest="brief-json">Reviewer brief</a> · <a href="https://wcook04.github.io/plectis/plectis-ai-reader-complete.json" data-dest="packet-json">Full paper text and reading routes</a></p>
+                  <p class="handoff__limit">Reading these files does not run the checks.</p>
+                </section>''', page, count=1, flags=re.S)
+          if n != 1: raise ValueError('missing AI reading section')
+          page, n = re.subn(r'<section class="note".*?</section>', '''<section class="note" aria-labelledby="note-h" data-scene-key="note" data-dest-default="profile-linkedin">
+                  <h2 class="eyebrow" id="note-h">About me</h2>
+                  <p>I study economics at Bristol. I built the research system with AI coding agents, direct the work and am responsible for the released claims.</p>
+                  <p><a href="https://wcook04.github.io/plectis/#contact">Contact me</a> about the work, collaboration or funding.</p>
+                </section>''', page, count=1, flags=re.S)
+          if n != 1: raise ValueError('missing personal section')
+          # Remove stale editorial narration within the content column only.
+          a, b = page.index('    <div class="col">'), page.index('    </div>\n  </main>')
+          column = page[a:b]
+          column = re.sub(r'<!--(?! BEGIN generated | END generated ).*?-->', '', column, flags=re.S)
+          page = page[:a] + column + page[b:]
+          index.write_text(page)
+          checker = Path('scripts/check_frontier_surface.py')
+          text = checker.read_text()
+          a = text.index('    assert region.count(\'class="flagship"\')==8')
+          b = text.index("    assert 'https://github.com/wcook04/plectis-erdos'", a)
+          text = text[:a] + '''    # The root page routes to the complete mathematics index. It does not
+              # duplicate eight research introductions and the paper catalogue.
+              assert 'class="flagship"' not in region
+              assert 'https://wcook04.github.io/plectis/maths/' in region
+              assert 'https://wcook04.github.io/plectis/docs/papers.html' in region
+              assert 'https://wcook04.github.io/plectis/#demo-videos' in region
+              assert 'id="eight-problem-frontier" tabindex="-1"' in region
+              assert len(re.findall(r'<a\\s', region)) <= 6
+              assert [p['paper_id'] for p in payload['systems']]==['claim-faithful-publication-systems','open-source-mathematics-strategy']
+              for row in payload['items']:
+                  assert f'data-problem="{row["problem"]}"' in text
+                  assert row['paper_href'] and row['page_href']
+                  assert row['page_href'] in text
+          ''' + text[b:]
+          text = text.replace('Public front door: 8 equal problem routes, 2 lead papers, full handoff and glossary verified', 'Public front door: compact destinations, eight-problem source, keyboard entry and glossary verified')
+          compile(text, str(checker), 'exec')
+          checker.write_text(text)
+          readme = Path('README.md')
+          text = readme.read_text().replace('https://github.com/wcook04/plectis-lean-erdos249-257', 'https://github.com/wcook04/plectis-erdos')
+          text = replace_once(text, 'This page is the index; everything\nit lists lives one directory down or in its own repository.', 'This page introduces Will Cook and provides compact destinations. The Plectis\nsite explains the project; its mathematics pages contain the complete eight-problem\nindex and the paper catalogue. The root page does not repeat those introductions.')
+          text = text.replace('Static release guard for the all-eight programme map and immutable verification links.', 'Static guard for compact destinations, the complete eight-problem source and keyboard access.')
+          text = replace_once(text, 'The Lean repository is the primary research destination. The separate Plectis\nrepository publishes reusable software components. The system and open-source\npapers introduce the research; all eight problems have the same presentation\nand appear in numerical order. The full JSON handoff embeds all published short\nnotes, long working records and system papers.', 'The Plectis site is the primary project introduction. The root page also links\ndirectly to the mathematics index, both repositories, the papers and the films.\nThe source snapshot and decorative previews retain all eight problems equally;\nthe full questions and paper notes live on the mathematics pages. The JSON\nhandoff embeds the published manuscripts and reading routes.')
+          readme.write_text(text)
+          PY
+      - name: Refresh from the public site and run the documented checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from urllib.request import urlopen, Request
+          import os
+          root = Path(os.environ['RUNNER_TEMP']) / 'published-plectis'
+          for name in ('plectis-ai-reader-complete.json', 'lean/problems.json'):
+              path = root / name
+              path.parent.mkdir(parents=True, exist_ok=True)
+              with urlopen(Request('https://wcook04.github.io/plectis/' + name, headers={'User-Agent':'Plectis-front-door-refresh'}), timeout=60) as response:
+                  path.write_bytes(response.read())
+          PY
+          python3 scripts/build_absolute_frontier.py --site-root "$RUNNER_TEMP/published-plectis"
+          python3 scripts/build_absolute_frontier.py --check
+          python3 scripts/check_frontier_surface.py
+          python3 scripts/check_public_routes.py
+          git diff --check
+      - name: Commit only the checked source and generated page to this work branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import subprocess
+          allowed = {'README.md','index.html','scripts/build_absolute_frontier.py','scripts/check_frontier_surface.py','data/absolute-frontier.json'}
+          changed = set(subprocess.check_output(['git','diff','--name-only'], text=True).splitlines())
+          if not changed <= allowed:
+              raise SystemExit('Unexpected generated paths: ' + repr(changed - allowed))
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- README.md index.html scripts/build_absolute_frontier.py scripts/check_frontier_surface.py data/absolute-frontier.json
+          git rm -- .github/workflows/complete-front-door.yml
+          git commit -m 'Complete the personal front door: brief introduction and working destinations'
+          git push origin HEAD:fix/complete-front-door-20260906
