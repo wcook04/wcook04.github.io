@@ -19,7 +19,8 @@ INDEX = ROOT / 'index.html'
 BEGIN = '      <!-- BEGIN generated absolute frontier -->'
 END = '      <!-- END generated absolute frontier -->'
 BASE = 'https://wcook04.github.io/plectis/'
-LEAN = 'https://github.com/wcook04/plectis-lean-erdos249-257'
+LEAN = 'https://github.com/wcook04/plectis-erdos'
+SOFTWARE = 'https://github.com/wcook04/plectis'
 NUMBERS = [68, 243, 249, 251, 257, 269, 1041, 1049]
 TERM = re.compile(r'<a class="term(?: is-again)?" data-term="[^"]*" href="[^"]*">(.*?)</a>', re.S)
 e = html.escape
@@ -58,8 +59,9 @@ def snapshot(site: Path) -> dict:
 
 
 def render(payload: dict) -> str:
-    labels = {'claim-faithful-publication-systems':'How this project works', 'open-source-mathematics-strategy':'How to contribute'}
-    systems = '\n'.join(f'<p class="af-route"><a href="{BASE}maths/papers/{e(p["paper_id"])}.html">{labels[p["paper_id"]]}</a> <span>— {e(p["title"])}</span></p>' for p in payload['systems'])
+    labels = {'open-source-mathematics-strategy':'Why make the work public?', 'claim-faithful-publication-systems':'How is the research organised?'}
+    ordered = sorted(payload['systems'], key=lambda p: list(labels).index(p['paper_id']) if p['paper_id'] in labels else 9)
+    systems = '\n'.join(f'<p class="af-route"><a href="{BASE}maths/papers/{e(p["paper_id"])}.html">{labels.get(p["paper_id"], p["title"])}</a> <span>· {e(p["title"])}</span></p>' for p in ordered)
     rows = []
     for p in payload['items']:
         links = f'<a href="{e(p["paper_href"])}" data-dest="paper-{p["problem"]}">Short note</a> · <a href="{e(p["page_href"])}#frontier">Results and remaining work</a>'
@@ -72,13 +74,14 @@ def render(payload: dict) -> str:
           <p class="flagship__exits">{links}</p></div></article>''')
     return f'''{BEGIN}
       <section class="absolute-frontier" aria-labelledby="absolute-frontier-title">
-        <p class="absolute-frontier__eyebrow">The research and how to join</p>
-        <h2 id="absolute-frontier-title">Start with the research.</h2>
-        <p class="absolute-frontier__thesis">Choose a problem to see its question, results and remaining work. You can read everything in your browser.</p>
-        <p><a class="btn" href="{BASE}maths/index.html#problems">Explore the eight problems</a></p>
+        <p class="absolute-frontier__eyebrow">Where to start</p>
+        <h2 id="absolute-frontier-title">Start with the Plectis site.</h2>
+        <p class="absolute-frontier__thesis">It says why the work exists, what is public, and where each part stops. The eight problems, the software and the recordings are one click from there. You can read everything in your browser.</p>
+        <p><a class="btn" href="{BASE}" data-dest="plectis-site">Open Plectis</a></p>
         <p class="absolute-frontier__thesis">Contributors receive credit for their work. If you solve a problem, the result and credit are yours and your collaborators’. <a href="{LEAN}/blob/main/docs/research-commons/CREDIT_POLICY.md">How credit works</a></p>
+        <p class="af-route"><a href="{BASE}maths/index.html#problems">Explore the eight problems</a> <span>· the question, the checked results and what remains unproved, one page each</span></p>
         {systems}
-        <details class="route-more"><summary>Source code and contribution instructions</summary><p class="af-route"><a data-to="repo" href="{LEAN}">Lean repository and README</a> · <a href="{LEAN}/blob/main/CONTRIBUTING.md">Contribution instructions</a></p></details>
+        <p class="af-route"><a data-to="repo" href="{LEAN}">Mathematics repository</a> · <a href="{SOFTWARE}">Software repository</a> · <a href="{LEAN}/blob/main/CONTRIBUTING.md">Contribution instructions</a></p>
         <details class="route-more"><summary>Browse the problem notes here</summary>
         <p class="absolute-frontier__note">In numerical order. Each short note describes one problem; the longer records retain additional working context.</p>
         <div class="flagships">{''.join(rows)}</div></details>
@@ -112,7 +115,7 @@ def project(text: str, payload: dict) -> str:
         route=f'"problem-{n}": {{ to: "page", view: "problem", problem: "{n}", host: "wcook04.github.io", path: "/plectis/maths/problems/erdos_{n}.html", href: "{p["page_href"]}" }}'
         text=re.sub(rf'"problem-{n}":\s*\{{.*?\}}',lambda _:route,text,count=1,flags=re.S)
     text=re.sub(r'"math-frontier":\s*\{.*?\}', '"math-frontier": { to: "page", view: "frontier", host: "wcook04.github.io", path: "/plectis/maths/", href: "https://wcook04.github.io/plectis/maths/" }', text, count=1, flags=re.S)
-    text=re.sub(r'"lean-github":\s*\{.*?\}', '"lean-github": { to: "repo", host: "github.com", path: "/wcook04/plectis-lean-erdos249-257", src: "assets/previews/lean-github.jpg", href: "'+LEAN+'" }', text, count=1, flags=re.S)
+    text=re.sub(r'"lean-github":\s*\{.*?\}', '"lean-github": { to: "repo", host: "github.com", path: "/wcook04/plectis-erdos", src: "assets/previews/lean-github.jpg", href: "'+LEAN+'" }', text, count=1, flags=re.S)
     return text
 
 

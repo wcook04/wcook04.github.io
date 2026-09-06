@@ -2,7 +2,7 @@
   "schema": "public_reading_map_v1",
   "generated_by": "scripts/build_absolute_frontier.py",
   "source_hashes": {
-    "plectis-ai-reader-complete.json": "1640a1796228aef43aa85d25c5e2db1a559a9c29be24595dac16a53fd81c0e2c",
+    "plectis-ai-reader-complete.json": "ff4d77eaaf26d7073768e0cbf1a8c26d0d888795f33d7400f41f6a1ab8f890cd",
     "lean/problems.json": "669ae15671ac204f882a855679cf6b73c767b57b296239762cb77d6a781ac908"
   },
   "public_source_commit": "bd5998e0eb0445a9ad56afbec2e00666db6711aa",

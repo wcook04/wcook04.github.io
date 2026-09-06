@@ -23,7 +23,7 @@ def main():
         assert row['paper_href'] in region and row['page_href']+'#frontier' in region
         assert f'data-problem="{row["problem"]}"' in text
         for long in row['long_records']: assert long['href'] in region
-    assert 'https://github.com/wcook04/plectis-lean-erdos249-257' in text
+    assert 'https://github.com/wcook04/plectis-erdos' in text  # renamed 2026-09; the old address redirects
     assert 'https://github.com/wcook04/plectis' in text
     assert 'plectis-ai-reader-complete.json' in text
     assert '13-paper' not in text and 'Five results' not in text
