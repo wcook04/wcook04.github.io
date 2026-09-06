@@ -2,15 +2,16 @@
 
 The page served at the root of <https://wcook04.github.io/>.
 
-It is the top of a two-level public presence. This page is the index; everything
-it lists lives one directory down or in its own repository.
+It is the top of a two-level public presence. This page introduces Will Cook and provides compact destinations. The Plectis
+site explains the project; its mathematics pages contain the complete eight-problem
+index and the paper catalogue. The root page does not repeat those introductions.
 
 | | |
 |---|---|
 | **Front door** | <https://wcook04.github.io/>: this repository |
 | **Plectis, the site** | <https://wcook04.github.io/plectis/> · [docs](https://wcook04.github.io/plectis/docs/) · [papers](https://wcook04.github.io/plectis/docs/papers.html) |
 | **Plectis, the repository** | <https://github.com/wcook04/plectis> |
-| **Lean research repository** | <https://github.com/wcook04/plectis-lean-erdos249-257> |
+| **Lean research repository** | <https://github.com/wcook04/plectis-erdos> |
 | **Videos** | [1 min](https://youtu.be/R_--vExxWyk) · [5 min](https://youtu.be/VoWByIOIuBE) · [29 min](https://youtu.be/jA_xC8gmdSs) |
 
 The Plectis site is a separate GitHub Pages deployment: the `gh-pages` branch
@@ -55,16 +56,16 @@ anything, and the sitemap it declared had never been discovered by that route.
 | `assets/og-frontier.svg` / `.png` | The claim-bounded eight-problem social preview and its PNG delivery file. |
 | `data/glossary-terms.json` | The governed public vocabulary, exported from the Plectis substrate: 486 terms with their reader cards, and the 2,354 surface forms that are safe to resolve on a bare word. |
 | `scripts/build_glossary_term_layer.py` | Links every governed term the page actually uses and regenerates the preview payload. Re-runnable: it unwraps its own anchors before it writes. |
-| `scripts/check_frontier_surface.py` | Static release guard for the all-eight programme map and immutable verification links. |
+| `scripts/check_frontier_surface.py` | Static guard for compact destinations, the complete eight-problem source and keyboard access. |
 | `scripts/check_public_routes.py` | Live smoke check for the public Plectis, paper, Lean, verification, Comparator, replay, citation, and updates hand-offs. |
 
 ## Refresh and check
 
-The Lean repository is the primary research destination. The separate Plectis
-repository publishes reusable software components. The system and open-source
-papers introduce the research; all eight problems have the same presentation
-and appear in numerical order. The full JSON handoff embeds all published short
-notes, long working records and system papers.
+The Plectis site is the primary project introduction. The root page also links
+directly to the mathematics index, both repositories, the papers and the films.
+The source snapshot and decorative previews retain all eight problems equally;
+the full questions and paper notes live on the mathematics pages. The JSON
+handoff embeds the published manuscripts and reading routes.
 
 Refresh the source snapshot from a validated Plectis site build:
 

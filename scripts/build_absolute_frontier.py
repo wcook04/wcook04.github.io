@@ -59,34 +59,18 @@ def snapshot(site: Path) -> dict:
 
 
 def render(payload: dict) -> str:
-    labels = {'open-source-mathematics-strategy':'Why make the work public?', 'claim-faithful-publication-systems':'How is the research organised?'}
-    ordered = sorted(payload['systems'], key=lambda p: list(labels).index(p['paper_id']) if p['paper_id'] in labels else 9)
-    systems = '\n'.join(f'<p class="af-route"><a href="{BASE}maths/papers/{e(p["paper_id"])}.html">{labels.get(p["paper_id"], p["title"])}</a> <span>· {e(p["title"])}</span></p>' for p in ordered)
-    rows = []
-    for p in payload['items']:
-        links = f'<a href="{e(p["paper_href"])}" data-dest="paper-{p["problem"]}">Short note</a> · <a href="{e(p["page_href"])}#frontier">Results and remaining work</a>'
-        for long in p['long_records']:
-            links += f' · <a href="{e(long["href"])}">Long working record</a>'
-        rows.append(f'''<article class="flagship" tabindex="0" data-dest="problem-{p['problem']}">
-          <p class="flagship__line"><span class="flagship__number">#{p['problem']}</span><span class="flagship__kind">{e(p['status'].capitalize())}</span></p>
-          <div class="flagship__body"><h3><a href="{e(p['page_href'])}">{e(p['title'])}</a></h3>
-          <p class="flagship__question">{e(p['question'])}</p>
-          <p class="flagship__exits">{links}</p></div></article>''')
+    """Keep the personal homepage an introduction and destination index."""
+    if [row['problem'] for row in payload['items']] != NUMBERS:
+        raise ValueError('the source must retain all eight problems')
     return f'''{BEGIN}
-      <section class="absolute-frontier" aria-labelledby="absolute-frontier-title">
-        <p class="absolute-frontier__eyebrow">Where to start</p>
-        <h2 id="absolute-frontier-title">Start with the Plectis site.</h2>
-        <p class="absolute-frontier__thesis">It says why the work exists, what is public, and where each part stops. The eight problems, the software and the recordings are one click from there. You can read everything in your browser.</p>
-        <p><a class="btn" href="{BASE}" data-dest="plectis-site">Open Plectis</a></p>
-        <p class="absolute-frontier__thesis">Contributors receive credit for their work. If you solve a problem, the result and credit are yours and your collaborators’. <a href="{LEAN}/blob/main/docs/research-commons/CREDIT_POLICY.md">How credit works</a></p>
-        <p class="af-route"><a href="{BASE}maths/index.html#problems">Explore the eight problems</a> <span>· the question, the checked results and what remains unproved, one page each</span></p>
-        {systems}
-        <p class="af-route"><a data-to="repo" href="{LEAN}">Mathematics repository</a> · <a href="{SOFTWARE}">Software repository</a> · <a href="{LEAN}/blob/main/CONTRIBUTING.md">Contribution instructions</a></p>
-        <details class="route-more"><summary>Browse the problem notes here</summary>
-        <p class="absolute-frontier__note">In numerical order. Each short note describes one problem; the longer records retain additional working context.</p>
-        <div class="flagships">{''.join(rows)}</div></details>
-        <p class="absolute-frontier__note">Lean checks formal statements. It does not establish novelty, significance or peer review.</p>
-        <p class="af-route"><a href="{BASE}docs/papers.html">All papers and PDFs</a> · <a href="{BASE}docs/glossary.html">Glossary</a></p>
+      <section class="absolute-frontier" id="eight-problem-frontier" tabindex="-1" aria-labelledby="absolute-frontier-title" data-scene-key="opening">
+        <h2 id="absolute-frontier-title">Public work</h2>
+        <p><a class="btn" href="{BASE}" data-dest="plectis-site">Explore Plectis</a></p>
+        <p class="absolute-frontier__thesis">The project site introduces the research, software and recorded interface.</p>
+        <p class="af-route"><a href="{BASE}maths/" data-dest="math-frontier">Mathematics</a> <span>· work on eight Erdős problems, all still open</span></p>
+        <p class="af-route"><a href="{SOFTWARE}" data-to="repo">Software repository</a> <span>· public research and engineering tools</span></p>
+        <p class="af-route"><a href="{LEAN}" data-dest="lean-github" data-to="repo">Mathematics repository</a> <span>· formal source and ways to continue the work</span></p>
+        <p class="af-route"><a href="{BASE}docs/papers.html" data-dest="papers-catalogue">Papers</a> · <a href="{BASE}#demo-videos">Watch the introduction</a></p>
       </section>
 {END}'''
 

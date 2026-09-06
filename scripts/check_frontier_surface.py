@@ -16,13 +16,19 @@ def main():
     assert [p['problem'] for p in payload['items']]==NUMBERS
     assert all(p['status']=='open' for p in payload['items'])
     region=text[text.index(BEGIN):text.index(END)]
-    assert region.count('class="flagship"')==8
-    assert region.index('maths/papers/'+payload['systems'][0]['paper_id']+'.html')<region.index('class="flagship"')
+    # The root page routes to the complete mathematics index. It does not
+    # duplicate eight research introductions and the paper catalogue.
+    assert 'class="flagship"' not in region
+    assert 'https://wcook04.github.io/plectis/maths/' in region
+    assert 'https://wcook04.github.io/plectis/docs/papers.html' in region
+    assert 'https://wcook04.github.io/plectis/#demo-videos' in region
+    assert 'id="eight-problem-frontier" tabindex="-1"' in region
+    assert len(re.findall(r'<a\s', region)) <= 6
     assert [p['paper_id'] for p in payload['systems']]==['claim-faithful-publication-systems','open-source-mathematics-strategy']
     for row in payload['items']:
-        assert row['paper_href'] in region and row['page_href']+'#frontier' in region
         assert f'data-problem="{row["problem"]}"' in text
-        for long in row['long_records']: assert long['href'] in region
+        assert row['paper_href'] and row['page_href']
+        assert row['page_href'] in text
     assert 'https://github.com/wcook04/plectis-erdos' in text  # renamed 2026-09; the old address redirects
     assert 'https://github.com/wcook04/plectis' in text
     assert 'plectis-ai-reader-complete.json' in text
@@ -33,6 +39,6 @@ def main():
     for term in re.findall(r'data-term="([^"]+)"',markup):
         assert unescape(term) in glossary['terms'], f'undefined glossary term {term}'
     assert 'BEGIN generated glossary terms' in markup
-    print('Public front door: 8 equal problem routes, 2 lead papers, full handoff and glossary verified')
+    print('Public front door: compact destinations, eight-problem source, keyboard entry and glossary verified')
 
 if __name__=='__main__': main()
