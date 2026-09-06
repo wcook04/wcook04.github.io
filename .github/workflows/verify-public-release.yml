@@ -1,0 +1,80 @@
+name: Verify the completed public release
+on:
+  push:
+    branches: [fix/complete-front-door-20260906]
+    paths: [.github/workflows/verify-public-release.yml]
+permissions:
+  contents: read
+jobs:
+  public-release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Compare live publication bytes with immutable public sources
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, time
+          from concurrent.futures import ThreadPoolExecutor
+          from urllib.request import Request, urlopen
+          from urllib.error import HTTPError
+          BASE = 'https://wcook04.github.io/plectis/'
+          API = 'https://api.github.com/repos/'
+          def read(url):
+              with urlopen(Request(url, headers={'User-Agent':'Plectis-publication-closure/1.0'}), timeout=60) as response:
+                  return response.read()
+          def obj(url): return json.loads(read(url))
+          repos = {'software':'wcook04/plectis', 'maths':'wcook04/plectis-erdos', 'home':'wcook04/wcook04.github.io'}
+          pins = {key:obj(API + repo + '/git/ref/heads/main')['object']['sha'] for key,repo in repos.items()}
+          site = obj(API + repos['software'] + '/git/ref/heads/gh-pages')['object']['sha']
+          raw = lambda repo,commit,path: 'https://raw.githubusercontent.com/' + repo + '/' + commit + '/' + path
+          expected = read(raw(repos['home'], pins['home'], 'index.html'))
+          for attempt in range(16):
+              actual = read('https://wcook04.github.io/')
+              if actual == expected: break
+              time.sleep(15)
+          else: raise SystemExit('Live homepage does not match the pinned main index.html')
+          print('PASS deployed homepage equals', pins['home'])
+          published = obj(API + repos['software'] + '/contents/papers?ref=' + site)
+          papers = [row['name'] for row in published if row['type']=='file' and row['name'].endswith('.pdf')]
+          if len(papers) != 14: raise SystemExit('Unexpected hosted paper inventory: ' + str(len(papers)))
+          def check(name):
+              key = 'software' if name == 'plectis-public-system.pdf' else 'maths'
+              owner = repos[key]
+              pdf = read(BASE + 'papers/' + name)
+              if not pdf.startswith(b'%PDF-'): raise ValueError(name + ': not a PDF')
+              native = read(raw(owner, pins[key], name))
+              if pdf != native: raise ValueError(name + ': hosted PDF differs from public main')
+              source = 'paper/' + name[:-4] + '.tex'
+              mirror = 'plectis' if key=='software' else 'plectis-lean-erdos249-257'
+              hosted_source = read(BASE + 'papers/source/' + mirror + '/' + source)
+              if hosted_source != read(raw(owner, pins[key], source)):
+                  raise ValueError(name + ': hosted TeX differs from public main')
+              return {'paper':name,'repository':owner,'commit':pins[key],'pdf_sha256':hashlib.sha256(pdf).hexdigest(),'tex_sha256':hashlib.sha256(hosted_source).hexdigest()}
+          with ThreadPoolExecutor(max_workers=4) as pool:
+              results = list(pool.map(check, sorted(papers)))
+          for row in results: print('PASS PDF + TeX', row['paper'], row['commit'])
+          landing = read(BASE).decode('utf-8')
+          if 'Explore the mathematics' not in landing:
+              raise SystemExit('Live Plectis landing lacks the revised mathematics action')
+          if 'I am building a research system' not in landing:
+              raise SystemExit('Live Plectis landing lacks the purpose statement')
+          print('PASS revised Plectis landing is served')
+          for name in ('plectis-erdos', 'plectis-lean-erdos249-257'):
+              url = 'https://data.palomar-registry.org/repositories/wcook04/' + name + '.json'
+              try:
+                  data = obj(url)
+                  print('PALOMAR_PUBLIC_INDEX', name, json.dumps(data, ensure_ascii=False))
+              except HTTPError as error:
+                  print('PALOMAR_PUBLIC_INDEX_HTTP', name, error.code)
+          # Detect a moving source during this comparison rather than quietly
+          # combining several release revisions in one successful account.
+          for key, repo in repos.items():
+              if obj(API + repo + '/git/ref/heads/main')['object']['sha'] != pins[key]:
+                  raise SystemExit('Source moved during verification: ' + repo)
+          if obj(API + repos['software'] + '/git/ref/heads/gh-pages')['object']['sha'] != site:
+              raise SystemExit('Site generation moved during verification')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write('Verified the deployed personal homepage and revised Plectis landing.\n\nAll 14 hosted PDFs and all 14 hosted TeX sources match the pinned public repository revisions.\n\n')
+              summary.write('```json\n' + json.dumps({'repositories':pins,'site':site,'papers':results}, indent=2) + '\n```\n')
+          PY
