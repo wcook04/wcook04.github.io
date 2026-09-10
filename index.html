@@ -2070,8 +2070,8 @@
     @media (min-width: 1280px) {
       .fold {
         display: grid;
-        grid-template-columns: minmax(22rem, 42rem) minmax(20rem, 1fr);
-        column-gap: clamp(2rem, 4vw, 4.5rem);
+        grid-template-columns: minmax(22rem, 38rem) minmax(28rem, 1fr);
+        column-gap: clamp(1.5rem, 3vw, 3rem);
         padding-inline: clamp(4.5rem, 7vw, 8.5rem);
         align-items: start;
       }
@@ -2090,8 +2090,8 @@
       :root[data-dest-ready] .fold > .dest {
         display: flex;
         flex-direction: column;
-        justify-content: start;
-        align-items: stretch;
+        justify-content: center;
+        align-items: center;
         grid-column: 2;
         grid-row: 1;
         position: sticky;
@@ -2099,7 +2099,7 @@
         height: calc(100svh - var(--thread-h));
         z-index: 2;
         margin-left: 0;
-        padding: clamp(3.5rem, 7vw, 7.5rem) 0 2rem;
+        padding: clamp(2rem, 5svh, 3.5rem) clamp(1.5rem, 3vw, 3rem);
         pointer-events: none;
         overflow-x: clip;
         overflow-clip-margin: 2rem;
@@ -2107,28 +2107,10 @@
       .dest__panel {
         pointer-events: auto;
         position: relative;
-        /* Grows with the field it stands in. At 30rem flat the window read as
-           a thumbnail pinned to a large picture rather than as the thing being
-           shown, and the map below has type in it that has to be read.
-
-           33vw held that reading at the breakpoint and lost it above: the 36rem
-           ceiling is reached at 1745, so from there up the field keeps growing
-           and the window does not. Measured as slack either side of it inside
-           its own lane, which is the honest measure of how small it looks: 60px
-           at 1512, 106 at 1920, 237 at 2560. That is the thumbnail reading
-           coming back at exactly the widths most likely to be reading it.
-
-           The lane is 41vw once its own padding is off, so 37vw is the window
-           taking about nine tenths of it and the plate keeping everything
-           either side. Slack now: 26px at 1280, 30 at 1512, 38 at 1920, 141 at
-           2560. It is still a window in a picture and not a page over one.
-
-           This is also the control on how big the plate of eight is, since
-           everything drawn in it is sized in container units. Widen the window
-           and that type grows with it, which is why the stage below states a
-           ratio rather than a fixed depth. */
-        width: 100%;
-        max-width: 42rem;
+        /* Fill most of the quiet field beside the type, and sit in its middle.
+           The old 42rem cap left a thumbnail on the left of a growing lane. */
+        width: min(64rem, 100%, calc((100svh - 8rem) * 16 / 10));
+        max-width: 64rem;
         /* The ground has gone. It was rgba(18, 13, 28, .76) with a 3px
            backdrop blur, and the window it wrapped is opaque and rounded, so
            the only pixels it ever painted were the strip under the frame where
