@@ -16,17 +16,36 @@
       color-scheme: dark;
       --page: #171020; --ink: #f2e6d4; --muted: #a9998f;
       --accent: #9db3e8; --accent-strong: #c3d0f2;
+      --wash-warm: #e0a23f; --wash-warm-a: 17%;
+      --wash-cool: #4358bb; --wash-cool-a: 13%;
+      --wash-rose: #c4508e; --wash-rose-a: 8%;
+      --wash-ember: #c8552e; --wash-ember-a: 8%;
+      --accent-wash: #2b2a52;
     }
     /* border-box or the padding is added to the viewport height rather than
        taken out of it, and a page with one screen of content on it acquires a
        64px scroll it has no reason to have. */
     body {
       box-sizing: border-box;
+      position: relative;
+      isolation: isolate;
       margin: 0; min-height: 100vh; min-height: 100svh;
       background: var(--page); color: var(--ink);
       font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, ui-serif, serif;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       text-align: center; padding: 2rem; line-height: 1.6;
+    }
+    body::before {
+      content: ""; position: absolute; inset: 0 0 auto 0; height: 760px;
+      pointer-events: none; z-index: -1;
+      background:
+        radial-gradient(120% 103% at 16% -12%, color-mix(in srgb, var(--wash-warm) var(--wash-warm-a), transparent), transparent 68%),
+        radial-gradient(95% 89% at 97% -7%, color-mix(in srgb, var(--wash-cool) var(--wash-cool-a), transparent), transparent 64%),
+        radial-gradient(48% 48% at 70% 12%, color-mix(in srgb, var(--wash-rose) var(--wash-rose-a), transparent), transparent 60%),
+        radial-gradient(55% 41% at 26% 60%, color-mix(in srgb, var(--wash-ember) var(--wash-ember-a), transparent), transparent 58%),
+        radial-gradient(110% 68% at 50% -21%, color-mix(in srgb, var(--accent-wash) 30%, transparent), transparent 74%);
+      -webkit-mask-image: linear-gradient(to bottom, #000 0 60%, transparent 100%);
+              mask-image: linear-gradient(to bottom, #000 0 60%, transparent 100%);
     }
     /* Same ember as the front page and the Plectis sheet: two pixels, and the
        ramp taken from that sheet rather than restated. */

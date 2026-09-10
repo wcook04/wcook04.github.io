@@ -139,12 +139,27 @@
 
       --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, ui-serif, serif;
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, system-ui, sans-serif;
+
+      /* The Plectis thermal field. Same hues and the deepened dark alphas that
+         sheet uses on pages without a live canvas, so this door and that site
+         sit in one weather. Geometry lives on body::before, not here. */
+      --wash-warm: #e0a23f;
+      --wash-warm-a: 17%;
+      --wash-cool: #4358bb;
+      --wash-cool-a: 13%;
+      --wash-rose: #c4508e;
+      --wash-rose-a: 8%;
+      --wash-ember: #c8552e;
+      --wash-ember-a: 8%;
+      --accent-wash: #2b2a52;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
 
     html { background: var(--page); }
     body {
+      position: relative;
+      isolation: isolate;
       margin: 0;
       background: var(--page);
       color: var(--bone);
@@ -153,6 +168,23 @@
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
+    }
+
+    /* Same field as Plectis: four offset colour masses, 760px box, mask fade.
+       Copied from that sheet rather than restated in a new geometry, so a
+       reader who walks from this door onto the site does not cross a climate
+       change. z-index -1 keeps it under type, the thread, and the window. */
+    body::before {
+      content: ""; position: absolute; inset: 0 0 auto 0; height: 760px;
+      pointer-events: none; z-index: -1;
+      background:
+        radial-gradient(120% 103% at 16% -12%, color-mix(in srgb, var(--wash-warm) var(--wash-warm-a), transparent), transparent 68%),
+        radial-gradient(95% 89% at 97% -7%, color-mix(in srgb, var(--wash-cool) var(--wash-cool-a), transparent), transparent 64%),
+        radial-gradient(48% 48% at 70% 12%, color-mix(in srgb, var(--wash-rose) var(--wash-rose-a), transparent), transparent 60%),
+        radial-gradient(55% 41% at 26% 60%, color-mix(in srgb, var(--wash-ember) var(--wash-ember-a), transparent), transparent 58%),
+        radial-gradient(110% 68% at 50% -21%, color-mix(in srgb, var(--accent-wash) 30%, transparent), transparent 74%);
+      -webkit-mask-image: linear-gradient(to bottom, #000 0 60%, transparent 100%);
+              mask-image: linear-gradient(to bottom, #000 0 60%, transparent 100%);
     }
 
     /* Selecting text is the one thing a reader does to this page that the page
@@ -288,13 +320,11 @@
     @media (prefers-reduced-motion: reduce) { .skip-frontier { transition: none; } }
 
     /* Quiet document. The reading column is the front door at every size.
-       Destination stills sit beside it only on a wide viewport with scripting. */
+       Destination stills sit beside it only on a wide viewport with scripting.
+       Ground is the Plectis field on body, so this layer stays transparent. */
     .fold {
       position: relative;
-      background:
-        radial-gradient(ellipse 52% 82% at 78% 38%, rgba(88, 75, 125, .18), transparent 72%),
-        radial-gradient(ellipse 48% 72% at 17% 88%, rgba(91, 48, 77, .12), transparent 72%),
-        linear-gradient(135deg, #15101e 0%, #181420 48%, #121019 100%);
+      background: none;
     }
 
     .col {
