@@ -66,8 +66,8 @@
   </script>
 
   <style>
-    /* A visual field for the public research system. The mathematics remains
-       readable; the plate supplies the atmosphere it is being read inside. */
+    /* Quiet ground for the public research system. Type and destinations
+       carry the page; archived artwork is not loaded on the reading surface. */
     :root {
       /* Nocturnal in both schemes, so say so: this makes the user agent paint
          its own furniture: scrollbars, overscroll and the canvas behind the
@@ -127,7 +127,7 @@
 
            interaction  a word answering the pointer or the keyboard
            response     a rule or a label acknowledging where you are
-           scene        the plate reframing, which is a camera and not a control
+           scene        the destination window settling, not a decorative camera
 
          The first is the value already on every link here, kept. */
       --t-interaction: 140ms;
@@ -219,9 +219,9 @@
       height: var(--thread-h);
       background: var(--thread-ramp);
       opacity: .85;
-      /* Sticky rather than fixed, for the same reason the plate is: a sticky
-         box is in normal flow and paints like any other element. It also stays
-         2px tall in flow, so nothing below it moves when it pins. */
+      /* Sticky rather than fixed: a sticky box is in normal flow and paints
+         like any other element. It also stays 2px tall in flow, so nothing
+         below it moves when it pins. */
       position: sticky; top: 0;
       z-index: 3;
     }
@@ -287,13 +287,8 @@
     .skip-frontier:focus { transform: translateY(0); }
     @media (prefers-reduced-motion: reduce) { .skip-frontier { transition: none; } }
 
-    /* The clip belongs to the poster state, where the plate is a full-width
-       block that would otherwise push a scrollbar. It must NOT apply to the
-       side-by-side state: an ancestor with `overflow: hidden` becomes the
-       scroll container a sticky descendant sticks to, and that container never
-       scrolls, so the plate silently rides away with the page instead of
-       holding. Measured before scoping it: at scrollY 700 the plate's top read
-       -698, which is the scroll, exactly. */
+    /* Quiet document. The reading column is the front door at every size.
+       Destination stills sit beside it only on a wide viewport with scripting. */
     .fold {
       position: relative;
       background:
@@ -301,45 +296,12 @@
         radial-gradient(ellipse 48% 72% at 17% 88%, rgba(91, 48, 77, .12), transparent 72%),
         linear-gradient(135deg, #15101e 0%, #181420 48%, #121019 100%);
     }
-    @media (max-width: 1279.98px) {
-      .fold { overflow: hidden; }
-      /* The plate is part of the front door at every size. */
-      main.fold > picture { display: block; opacity: .7; }
-      main.fold > .col {
-        margin-top: 0;
-        padding-top: clamp(2.4rem, 8svh, 4.2rem);
-      }
-    }
-
-    /* One mass, one boundary, one residue field.
-
-       Poster is the default: the plate is the upper field, cropped to the
-       membrane and the flank, dissolving into the plum; the type follows
-       below on quiet ground. Nothing sits over the bright body. Side-by-side
-       is the exception, not the base, because it is only honest where the
-       column stays clear of the mass (see the min-width rule at the end). */
-    .plate {
-      display: block;
-      width: 100%;
-      height: clamp(15rem, 52svh, 35rem);
-      object-fit: cover;
-      /* The mass occupies 50% to 84% of the plate's width. In the poster state a
-         phone sees only the middle 56% of the picture, so a crop centred at
-         52%, which is what 55% resolves to once cover has scaled the file,
-         put the body just off the right edge and opened the page with four
-         hundred pixels of near-black. Centring the window at 62% instead lands
-         the membrane and the lit flank inside it at every phone width. */
-      object-position: 76% 42%;
-      -webkit-mask-image: linear-gradient(180deg, #000 74%, transparent 100%);
-      mask-image: linear-gradient(180deg, #000 74%, transparent 100%);
-    }
 
     .col {
       position: relative; z-index: 1;
       display: flex; flex-direction: column;
       max-width: 48rem;
-      margin-top: -2.2rem;
-      padding: 0 clamp(1.4rem, 4.5vw, 4.5rem) clamp(2.4rem, 6svh, 4.2rem);
+      padding: clamp(2.4rem, 8svh, 4.2rem) clamp(1.4rem, 4.5vw, 4.5rem) clamp(2.4rem, 6svh, 4.2rem);
     }
 
     /* Transitions only. There are no @keyframes on this page, but the reason
@@ -2096,256 +2058,51 @@
 
     .dest { display: none; }
 
-    /* Poster state: the plate becomes the upper field, cropped to the membrane
-       and the glowing flank, dissolving into the page; the type follows below
-       on plum ground. No text sits over the bright body. */
     @media (max-width: 760px) {
       h1 { font-size: clamp(2.7rem, 11.5vw, 3.4rem); }
       .col { max-width: none; }
     }
 
-    /* Side-by-side, and the plate holds its frame while the type goes past it.
-
-       The type sits in a 34rem column on the plate's calm left flank, the mass
-       stays in the right of the frame, and the picture stays put for the whole
-       length of the page instead of scrolling away after one screen and
-       leaving a bare flank behind it.
-
-       It is STICKY, and that detail is the whole thing. `position: fixed` is
-       the obvious way to hold a picture still and it does not paint at all on
-       first load in this engine: the image lays out, reports correct position,
-       size, opacity and a decoded source, and is simply never drawn until some
-       repaint: a hover, a resize, one stray style write, reveals it. It
-       cannot be caught by measurement, and going to inspect it is itself
-       enough to fix it, so it ships broken and looks fine to whoever checks.
-       `background-attachment: fixed` paints but repaints the whole viewport on
-       every scroll frame against a 2560px source and hung the renderer. Sticky
-       has neither problem, because a sticky box is in normal flow: it is laid
-       out and painted like any other element and merely offset as you scroll.
-
-       Both children share one grid cell so the plate is full bleed behind the
-       column rather than boxed beside it, which is what keeps the composition
-       the file was selected for. The scrim is the ::after, a grid item in the
-       same cell, sticky on the same terms. */
+    /* Wide: reading column on the left, destination window on the right.
+       Hidden until the runtime marks the page ready, so with scripting off
+       this layout is the type column and quiet ground. The row stills remain
+       a phone device and would only duplicate this window. */
     @media (min-width: 1280px) {
-      .fold { display: grid; grid-template-columns: minmax(0, 1fr); }
-      .fold > picture, .fold::after, .fold > .col, .fold > .dest { grid-area: 1 / 1; }
-
-      .fold > picture {
-        /* Offset by the thread, which now holds at the top rather than
-           scrolling away. top + height = thread-h + (100svh - thread-h) is
-           100svh exactly, so the plate meets the foot of the viewport instead
-           of stopping two pixels short of it. Measured before this: at any
-           scroll past 2px the plate's bottom read 998 in a 1000px viewport,
-           and those two pixels of bare plum sat under the picture all the way
-           down the page. */
-        position: sticky; top: var(--thread-h);
-        height: calc(100svh - var(--thread-h));
-        align-self: start;
-        z-index: 0;
-        /* The frame the plate is reframed inside. overflow on an ANCESTOR of a
-           sticky box is the bug documented above; it makes that ancestor the
-           scroll container and the sticky box rides away. This is overflow on
-           the sticky box ITSELF, which clips its own children and leaves its
-           own stickiness alone. Verified at 1600, 1440, 1280: the plate's top
-           still reads 2 at rest and 2 while scrolled. */
-        overflow: hidden;
-        opacity: .92;
-        /* Keep the sticky wrapper unfiltered. Chrome can lay out and decode a
-           filtered sticky picture while omitting it from the first paint. The
-           scrim below supplies the reading contrast without risking the art. */
-      }
-      /* The frame closes. The plate is a full-bleed crop of a painting and a
-         crop has four cut edges: the mass runs off the bottom right corner and
-         the field runs off the top, both of them at the same brightness they
-         had in the middle, which is what makes a full-bleed picture read as
-         wallpaper rather than as a photograph of something. A vignette is the
-         oldest answer to that and it is the right one here, because the plate
-         already behaves like a camera: it is over-scaled once and pans, and a
-         lens that pans has edges.
-
-         Painted rather than filtered, for the reason stated directly above:
-         this is a pseudo-element inside the sticky box, the same kind of
-         object the scrim beside it is, and it leaves the picture itself
-         untouched. Inside the wrapper's own `overflow: hidden`, so it is cut
-         to the frame and cannot reach the type.
-
-         .30 at the corners and nothing at all across the middle 45%. The stop
-         is set by where the mass is: at 62% the ramp had begun to take the lit
-         flank, which is the part of the file the composition was chosen for
-         and the last part that should be dimmed to make a frame look tidy. */
-      .fold > picture::after {
-        content: "";
-        position: absolute; inset: 0;
-        pointer-events: none;
-        background: radial-gradient(ellipse 78% 74% at 54% 48%,
-          transparent 45%,
-          rgba(12, 8, 20, .10) 70%,
-          rgba(12, 8, 20, .30) 100%);
-      }
-      .plate {
-        width: 100%; height: 100%;
-        /* The glowing flank is visible on the right, while the copy has a
-           dark field to inhabit on the left. */
-        object-position: 64% 50%;
-        -webkit-mask-image: none; mask-image: none;
-
-        /* THE CAMERA.
-
-           The column moves and the plate does not, which after the first
-           screen leaves a reader scrolling text across wallpaper: by the time
-           the page is talking about who wrote it, the picture is still saying
-           exactly what it said over the route index. Measured before changing
-           it; the composited ground behind the prose was the same pixel,
-           (46,32,40), at every scroll depth on the page.
-
-           So the plate is over-scaled ONCE, and then pans as you scroll. The
-           scale is a constant. That is the whole design and the part that is
-           easy to get wrong: an earlier version ran the scale itself from the
-           scroll position, growing the picture from 1.02 to 1.26 on the way
-           down, and a zoom that changes continuously under a reader is a dolly
-           the frame is rescaling around them the entire time they are trying
-           to read, and it is genuinely unpleasant. Scale is set once and never
-           touched again. Only the vertical offset moves.
-
-           The pan is symmetric about the resting frame: the picture sits 7%
-           low at the top of the page and 7% high at the foot, so what the plate
-           does over the whole page is travel about a seventh of its own height,
-           in the same direction as the text and far slower. Neutral in the
-           middle, which is why the resting declaration below carries no offset
-           at all. Nothing moves horizontally: the membrane, the flank and the
-           mass keep the exact left-to-right relationship the file was chosen
-           for, at every scroll position.
-
-           The transform is written by the runtime below, one inline write on
-           this element per frame. What is here is the resting frame: the state
-           with no scripting and the state a reader who asks for stillness
-           gets, which is why it is a plain declaration and not a keyframe.
-
-           Transform only, so none of it touches layout; no filter, no blur, no
-           object-position, nothing that would repaint a full-bleed picture on a
-           scroll frame.
-
-           1.18 is chosen by what the pan costs, not by taste. Cover crops this
-           file to the box with about a pixel to spare, so every percent of
-           travel has to be bought with scale first: at a 52% vertical origin,
-           1.18 buys 9.4% of margin above and 8.6% below, against a 7% swing
-           either way. It also happens to be free: 1.18 of a 1600px box is
-           1888px drawn from the 1920 rung, so the plate is very slightly
-           downscaled rather than stretched. The check that no bare ground ever
-           shows is done on PIXELS, not arithmetic: a script repaints the ground
-           magenta, strips the column, and reads the four edges of the picture
-           across a spread of viewports and the whole pan. Two attempts to
-           prove it by algebra disagreed with each other; the pixels do not care
-           which was right. Change these numbers and re-run that check. */
-        transform-origin: 49% 52%;
-        transform: scale(1.08);
-      }
-
-      /* The ground the column stands on: a short pour of the page's own plum
-         from the left edge, gone before it reaches the mass. It travels with
-         the plate, so the type keeps its footing the whole way down. */
-      .fold::after {
-        display: block;
-        content: "";
-        position: sticky; top: var(--thread-h);
-        align-self: start;
-        height: calc(100svh - var(--thread-h));
-        width: 100%;
-        justify-self: start;
-        background: linear-gradient(90deg,
-          rgba(18, 13, 28, .96) 0%,
-          rgba(18, 13, 28, .84) 31%,
-          rgba(18, 13, 28, .57) 51%,
-          rgba(18, 13, 28, .19) 74%,
-          rgba(18, 13, 28, .04) 100%);
-        pointer-events: none;
-        z-index: 0;
+      .fold {
+        display: grid;
+        grid-template-columns: minmax(22rem, 42rem) minmax(20rem, 1fr);
+        column-gap: clamp(2rem, 4vw, 4.5rem);
+        padding-inline: clamp(4.5rem, 7vw, 8.5rem);
+        align-items: start;
       }
 
       .col {
+        grid-column: 1;
+        grid-row: 1;
         position: relative; z-index: 1;
         min-height: calc(100svh - var(--thread-h));
-        max-width: min(74rem, 62vw);
+        max-width: none;
         margin-top: 0;
-        padding: clamp(3.5rem, 7vw, 7.5rem) clamp(4.5rem, 7vw, 8.5rem) 4.5rem;
+        padding: clamp(3.5rem, 7vw, 7.5rem) 0 4.5rem;
       }
 
-      /* The window sits in the plate's frame, right of the type, and it is a
-         SMALL object in a large picture on purpose. The plate is the page's
-         own artwork; a screenshot pasted over it at full bleed does not
-         complement it, it deletes it, which is exactly what the first
-         version of this did, leaving the plate as a two-pixel border around
-         somebody else's website. So the window takes about a third of the
-         field, holds the centre of it, and floats on a short pour of the
-         page's own plum that separates it from whatever the plate is doing
-         behind it. The mass either side of it stays visible.
-
-         Hidden until the runtime marks the page ready, so with scripting off
-         this layout is the plate alone. The row stills are a phone device and
-         would only duplicate this one. */
       .row-shot { display: none; }
       :root[data-dest-ready] .fold > .dest {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        justify-content: start;
+        align-items: stretch;
+        grid-column: 2;
+        grid-row: 1;
         position: sticky;
         top: var(--thread-h);
         height: calc(100svh - var(--thread-h));
-        /* Above the column, which now overlaps this lane. The column box runs
-           to 62vw while its type stops at 55vw, so the 7vw of right padding is
-           empty column sitting over the near edge of the window. Both boxes
-           share one grid cell and the column is later in the document, so at
-           equal z-index the column won the hit test and the left edge of the
-           window could not be hovered or clicked. The lane carries
-           pointer-events: none and only the panel takes them back, so nothing
-           in the column loses a target by this. */
         z-index: 2;
-        /* The lane, and it has to be stated against what the column actually
-           uses rather than against the column's box. At 62vw the lane was 38vw
-           wide, 33vw of it inside its own padding, and a window asking for 37vw
-           was silently cut to 33 by max-width: 100%: measured 499px at 1512,
-           which is exactly the width it had before it was widened at all. The
-           window looked no bigger because it was not bigger.
-
-           The type stops at 55vw at every width from 1280 up, so the lane can
-           start at 58vw and still clear it, and the padding can come down to
-           1.5vw because the window's own slack is the air here, not the lane's.
-           That gives 39vw of usable lane against a 37vw window: 559px at 1512
-           and 710 at 1920, against 499 and 576 before. */
-        margin-left: 58vw;
-        padding: clamp(1.6rem, 4svh, 2.6rem) 1.5vw;
+        margin-left: 0;
+        padding: clamp(3.5rem, 7vw, 7.5rem) 0 2rem;
         pointer-events: none;
-        /* clip, not hidden, and on the sticky box itself. Same distinction the
-           plate above turns on: hidden would make this a scroll container,
-           clip does not make one at all, and either way this is the sticky
-           element rather than an ancestor of one, so its own stickiness is
-           untouched. x only, so the hint that now hangs below the panel is
-           still free to paint.
-
-           The margin is the correction to that clip and it is the whole fix
-           for the straight-edged shadow this page shipped with. The clip was
-           reasoned about at the RIGHT edge, where it coincides with the
-           viewport and cuts nothing anyone can see. It also applies on the
-           LEFT, where this lane's own box edge sits well inside the pour that
-           hangs off the panel: measured at 1440, the lane starts at 835.2 and
-           the pour at 807.3, so the clip fell at 91.5% of the pour's ramp,
-           where the plum is still at .138 alpha, and drew that as a vertical
-           wall about 570px tall down the near side of the window. A soft
-           gradient cut by a hard box is a rectangle, which is exactly what it
-           looked like.
-
-           6rem covers the worst case with room. The overhang is widest where
-           the panel's 37vw is about to meet its 48rem cap: 44px at 1280, 66 at
-           1920, 71 at 2076, and from roughly 2400 up the pour is inside the
-           lane and nothing is clipped at all. Nothing about the scrollbar this
-           clip exists to prevent changes: a clip box never propagates
-           scrollable overflow, and the margin moves only where painting stops.
-           Re-checked after: scrollWidth equals clientWidth at 1280 through
-           2560, as before. */
         overflow-x: clip;
-        overflow-clip-margin: 6rem;
+        overflow-clip-margin: 2rem;
       }
       .dest__panel {
         pointer-events: auto;
@@ -2370,8 +2127,8 @@
            everything drawn in it is sized in container units. Widen the window
            and that type grows with it, which is why the stage below states a
            ratio rather than a fixed depth. */
-        width: clamp(26rem, 37vw, 48rem);
-        max-width: 100%;
+        width: 100%;
+        max-width: 42rem;
         /* The ground has gone. It was rgba(18, 13, 28, .76) with a 3px
            backdrop blur, and the window it wrapped is opaque and rounded, so
            the only pixels it ever painted were the strip under the frame where
@@ -2671,46 +2428,20 @@
   <div class="thread" aria-hidden="true"><span class="thread__lit"></span></div>
 
   <main class="fold">
-    <!-- assets/plate-01.jpg: Wet Proof, plate 01. One warm mass cropped by the
-         right edge, one petrol membrane wrapping its flank, residue whose
-         density decays away from the body, on the Plectis plum ground. Made in
-         the art lab (assets/plate-01.lab.py: pigment channels with different
-         mobilities advected through a curl field inside a resist silhouette;
-         deposits at the boundary; contamination where channels overlap), then
-         selected: seed 5 at 2560x1600. Regenerate from the lab rather than
-         editing pixels.
-
-         The plate was also the whole payload: 247 KB against 18 KB of page,
-         1.9s of a 2.6s paint on a throttled phone. The files below are plain
-         downscales of it, same crop and same 16:10, so a phone fetches a
-         phone-sized plate and a retina desktop still gets the full one.
-         README.md has the commands. AVIF leads because smooth pigment is the
-         case it encodes best: 123 KB at 2560 against the JPEG's 247, with no
-         difference visible at 1:1, and the JPEG srcset carries anything that
-         cannot read it, never serving more than the file it replaces. sizes is
-         100vw in both layouts, the plate being full-width below 1280px and
-         full-bleed above it; cover then magnifies the chosen file by about
-         1.8x in the poster state, which lands a 3x phone nearer 2x. -->
-    <picture>
-      <source type="image/avif" sizes="100vw"
-              srcset="assets/plate-01-960.avif 960w,
-                      assets/plate-01-1280.avif 1280w,
-                      assets/plate-01-1920.avif 1920w,
-                      assets/plate-01-2560.avif 2560w">
-      <img class="plate" src="assets/plate-01.jpg" alt="" width="2560" height="1600"
-           sizes="100vw"
-           srcset="assets/plate-01-960.jpg 960w,
-                   assets/plate-01-1280.jpg 1280w,
-                   assets/plate-01.jpg 2560w"
-           decoding="async" aria-hidden="true">
-    </picture>
+    <!-- Wet Proof plate 01 is archived. Files remain under assets/plate-01*;
+         this template is never instantiated, so the image is not fetched.
+         README.md records how it was made. Do not restore it to the reading
+         surface without a fresh visual review. -->
+    <template id="archived-plate-01">
+      <img class="plate" src="assets/plate-01.jpg" alt="" width="2560" height="1600">
+    </template>
 
     <!-- One window, showing the page a route actually lands on and the URL it
          lands at. There is no picker: the index IS the picker, and the strip
          of thumbnails that used to sit under this frame only restated four
          rows the reader was already looking at.
 
-         Hidden until a wide viewport and scripting; the plate remains the
+         Hidden until a wide viewport and scripting; quiet ground remains the
          picture with either missing. That is also why the first still is
          fetched by the script below rather than carried in the markup; a
          phone would otherwise pay a hundred kilobytes for a picture it is
@@ -2907,15 +2638,14 @@
     </div>
   </main>
 
-  <!-- Where you are in the page, told twice: once to the plate, which reframes
-       between the three reading bands, and once to the thread, which lights the
+  <!-- Where you are in the page, told to the thread, which lights the
        part you have passed.
 
        Everything here is an enhancement over a page that is already finished.
-       With scripting off, no attribute is ever set, the plate holds its opening
-       frame, the thread is one ramp at .85, and the sections keep their rules:
-       which is exactly the page as it was before any of this existed. Nothing
-       is hidden waiting to be revealed, so nothing can fail to be revealed.
+       With scripting off, no attribute is ever set, the thread is one ramp at
+       .85, and the sections keep their rules: which is exactly the page as it
+       was before any of this existed. Nothing is hidden waiting to be
+       revealed, so nothing can fail to be revealed.
 
        It reads a reduced-motion preference first and then does nothing at all,
        rather than installing listeners it would only ignore. -->
@@ -2997,29 +2727,6 @@
     var thread = document.querySelector(".thread");
     if (!thread) return;
 
-    // The plate takes the same number. It is driven from here rather than from
-    // CSS state because a camera that steps between three fixed frames is not
-    // a camera: at this page's length the steps are a few hundred pixels of
-    // scroll apart, so either they are small enough to read as a flicker or
-    // big enough to read as a lurch. Off a continuous reading position it is
-    // neither: it tracks, and it is still whenever the reader is.
-    //
-    // Only above the breakpoint. Below it the plate is a fixed block at the
-    // head of the page and there is nothing to move it against.
-    var plate = document.querySelector("img.plate");
-    var wide = window.matchMedia("(min-width: 1280px)");
-    // The base zoom is a constant and is NOT animated. Only PAN travels with
-    // the scroll: +7% of the plate's height at the top of the page, -7% at the
-    // foot, linear between, which is the same direction the text moves and
-    // about a fifteenth of its speed. Nothing moves horizontally.
-    //
-    // Keep scale out of this. Driving it from the scroll position rescales the
-    // frame around the reader for the entire length of the page, which is a
-    // dolly zoom and is nauseating to read against, however small the numbers
-    // look written down.
-    var BASE_SCALE = 1.18;
-    var PAN = 7;
-
     var span = 1, queued = false;
     var measure = function () {
       span = Math.max(1, root.scrollHeight - window.innerHeight);
@@ -3029,11 +2736,6 @@
       var p = window.scrollY / span;
       p = p < 0 ? 0 : p > 1 ? 1 : p;
       thread.style.setProperty("--progress", p.toFixed(4));
-      if (!plate) return;
-      if (!wide.matches) { plate.style.transform = ""; return; }
-      plate.style.transform =
-        "translate3d(0," + (PAN - 2 * PAN * p).toFixed(3) + "%,0) scale(" +
-        BASE_SCALE + ")";
     };
     var onScroll = function () {
       if (queued) return;
@@ -3045,16 +2747,13 @@
     write();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", function () { measure(); write(); }, { passive: true });
-    // Crossing the breakpoint hands the plate back to the stylesheet's resting
-    // frame, so the poster state never inherits a camera position.
-    if (wide.addEventListener) wide.addEventListener("change", write);
   })();
   </script>
 
-  <!-- Destination stills. Hover or focus a route and the window in the plate
-       becomes the page that route lands on, with its URL over it. The files
-       are captures of the live URLs, not drawings. With scripting off the
-       plate stays; on a phone the still sits under the row instead. -->
+  <!-- Destination stills. Hover or focus a route and the window beside the
+       column becomes the page that route lands on, with its URL over it. The
+       files are captures of the live URLs, not drawings. With scripting off
+       the window stays hidden; on a phone the still sits under the row instead. -->
   <script>
   (function () {
     "use strict";

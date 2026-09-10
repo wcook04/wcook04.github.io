@@ -196,7 +196,9 @@ pass.
 
 ## Archived plate
 
-`assets/plate-01.jpg` is former artwork: Wet Proof, plate 01, seed 5 at
+The live front door is type on quiet plum ground. Destination stills sit
+beside the reading column on a wide viewport; they are captures of public
+pages, not decoration. `assets/plate-01.jpg` is former artwork: Wet Proof, plate 01, seed 5 at
 2560x1600, made by `assets/plate-01.lab.py`. It is retained for provenance in
 an inert HTML template, not shown or loaded by the root front door. The
 programme index and portrait problem sheets now carry the visual hierarchy.
