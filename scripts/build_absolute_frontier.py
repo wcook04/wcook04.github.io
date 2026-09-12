@@ -90,6 +90,14 @@ def render(payload: dict) -> str:
 {END}'''
 
 
+def replace_required(text: str, pattern: str, replacement, label: str, *, expected: int = 1, flags: int = 0) -> str:
+    """Replace a required projection surface and reject missing or duplicate owners."""
+    text, count = re.subn(pattern, replacement, text, flags=flags)
+    if count != expected:
+        raise ValueError(f'expected {expected} {label}, found {count}')
+    return text
+
+
 def project(text: str, payload: dict) -> str:
     a=text.index(BEGIN); b=text.index(END,a)+len(END)
     text=text[:a]+render(payload)+text[b:]
@@ -103,18 +111,17 @@ def project(text: str, payload: dict) -> str:
           <span class="problem-sheet__question"><span class="problem-sheet__label">Question</span>{e(p['question'])}</span>
           <span class="problem-sheet__section"><span class="problem-sheet__label">Short note</span>{e(p['paper_title'])}</span>
           <span class="problem-sheet__section problem-sheet__section--open"><span class="problem-sheet__label">Research status</span>The original problem remains open. The problem page separates results, evidence and remaining work.</span></span>'''
-        text,count=re.subn(pattern,lambda _:sheet,text,count=1,flags=re.S)
-        if count!=1: raise ValueError(f'missing portrait #{n}')
-        text=re.sub(rf'(<span class="frontier-plate__number">{n}</span><span class="frontier-plate__handle">).*?(</span>)',lambda m:m[1]+e(p['title'])+m[2],text,count=1,flags=re.S)
-    text=re.sub(r'(<span class="frontier-plate__boundary">).*?(</span>)', r'\1Original problem remains open.\2', text, flags=re.S)
+        text=replace_required(text,pattern,lambda _:sheet,f'portrait #{n}',flags=re.S)
+        text=replace_required(text,rf'(<span class="frontier-plate__number">{n}</span><span class="frontier-plate__handle">).*?(</span>)',lambda m:m[1]+e(p['title'])+m[2],f'frontier plate #{n}',flags=re.S)
+    text=replace_required(text,r'(<span class="frontier-plate__boundary">).*?(</span>)',r'\1Original problem remains open.\2','frontier plate boundaries',expected=len(NUMBERS),flags=re.S)
     # The interactive portrait opens the same current page as its row.
     text=re.sub(r'    /\* This is presentation text for the destination bar.*?    var DEST =', '    var DEST =', text, count=1, flags=re.S)
     for p in payload['items']:
         n=p['problem']
         route=f'"problem-{n}": {{ to: "page", view: "problem", problem: "{n}", host: "wcook04.github.io", path: "/plectis/maths/problems/erdos_{n}.html", href: "{p["page_href"]}" }}'
-        text=re.sub(rf'"problem-{n}":\s*\{{.*?\}}',lambda _:route,text,count=1,flags=re.S)
-    text=re.sub(r'"math-frontier":\s*\{.*?\}', '"math-frontier": { to: "page", view: "frontier", host: "wcook04.github.io", path: "/plectis/maths/", href: "https://wcook04.github.io/plectis/maths/" }', text, count=1, flags=re.S)
-    text=re.sub(r'"lean-github":\s*\{.*?\}', '"lean-github": { to: "repo", host: "github.com", path: "/wcook04/plectis-erdos", src: "assets/previews/lean-github.jpg", href: "'+LEAN+'" }', text, count=1, flags=re.S)
+        text=replace_required(text,rf'"problem-{n}":\s*\{{.*?\}}',lambda _:route,f'problem-{n} destination',flags=re.S)
+    text=replace_required(text,r'"math-frontier":\s*\{.*?\}', '"math-frontier": { to: "page", view: "frontier", host: "wcook04.github.io", path: "/plectis/maths/", href: "https://wcook04.github.io/plectis/maths/" }','math-frontier destination',flags=re.S)
+    text=replace_required(text,r'"lean-github":\s*\{.*?\}', '"lean-github": { to: "repo", host: "github.com", path: "/wcook04/plectis-erdos", src: "assets/previews/lean-github.jpg", href: "'+LEAN+'" }','lean-github destination',flags=re.S)
     return text
 
 

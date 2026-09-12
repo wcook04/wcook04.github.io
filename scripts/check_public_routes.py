@@ -23,7 +23,22 @@ class PageLinks(HTMLParser):
     def handle_starttag(self, tag, attrs):
         href = dict(attrs).get('href', '')
         if tag == 'a' and href.startswith(BASE):
-            self.urls.add(urldefrag(href).url)
+            self.urls.add(href)
+
+
+class PageDocument(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.tags = set()
+        self.anchors = set()
+
+    def handle_starttag(self, tag, attrs):
+        self.tags.add(tag)
+        attributes = dict(attrs)
+        if attributes.get('id'):
+            self.anchors.add(attributes['id'])
+        if tag == 'a' and attributes.get('name'):
+            self.anchors.add(attributes['name'])
 
 
 def destinations(data: dict, markup: str) -> list[str]:
@@ -39,15 +54,49 @@ def destinations(data: dict, markup: str) -> list[str]:
     links = PageLinks()
     links.feed(markup)
     urls.update(links.urls)
-    return sorted({urldefrag(url).url for url in urls})
+    return sorted(urls)
 
 
-def validate_body(url: str, body: bytes, data: dict) -> None:
+def group_destinations(urls: list[str]) -> dict[str, set[str]]:
+    """Fetch each document once while retaining every required anchor."""
+    documents: dict[str, set[str]] = {}
+    for url in urls:
+        document, fragment = urldefrag(url)
+        documents.setdefault(document, set())
+        if fragment:
+            documents[document].add(fragment)
+    return documents
+
+
+def validate_body(url: str, body: bytes, data: dict, *, fragments: set[str] | None = None) -> None:
     path = urlsplit(url).path
+    if path.endswith(('.html', '.htm', '/')):
+        page = PageDocument()
+        page.feed(body.decode('utf-8'))
+        if not {'html', 'body'} <= page.tags:
+            raise ValueError('not a complete HTML document')
+        required = set(fragments or ()) | {urlsplit(url).fragment}
+        # Browser text-fragment directives are not element IDs. An ID before
+        # the directive still needs to exist in the document.
+        required = {unquote(fragment.split(':~:', 1)[0]) for fragment in required}
+        missing = sorted(required - page.anchors - {''})
+        if missing:
+            raise ValueError('missing HTML anchors: ' + ', '.join(missing))
     if path.endswith('.pdf') and not body.startswith(b'%PDF-'):
         raise ValueError('not a PDF')
     if path.endswith('.json'):
         packet = json.loads(body)
+        if not isinstance(packet, dict):
+            raise ValueError('not a JSON object')
+        if path.endswith('/plectis-reviewer-brief.json'):
+            if (packet.get('schema') != 'plectis_reviewer_source_hologram_v3'
+                    or packet.get('artifact_kind') != 'plectis_reviewer_decision_brief'):
+                raise ValueError('not a Plectis reviewer brief')
+            sections = packet.get('read_in_this_order')
+            if not isinstance(sections, list) or not sections:
+                raise ValueError('reviewer brief has no reading order')
+            if any(not isinstance(section, str) or not packet.get(section) for section in sections):
+                raise ValueError('reviewer brief has missing or empty reading sections')
         if path.endswith('/plectis-ai-reader-complete.json'):
             if hashlib.sha256(body).hexdigest() != data['source_hashes']['plectis-ai-reader-complete.json']:
                 raise ValueError('the Plectis handoff changed; refresh the root reading map before publishing')
@@ -93,20 +142,21 @@ def main():
     location.add_argument('--site-root', type=Path, help='validate a local published site checkout without network requests')
     args = parser.parse_args()
     data = json.loads((ROOT / 'data/absolute-frontier.json').read_text())
-    urls = destinations(data, (ROOT / 'index.html').read_text())
+    documents = group_destinations(destinations(data, (ROOT / 'index.html').read_text()))
 
     def check(url):
         try:
-            validate_body(url, read_destination(url, args.site_base, args.site_root), data)
+            validate_body(url, read_destination(url, args.site_base, args.site_root), data,
+                          fragments=documents[url])
         except (OSError, ValueError, KeyError, IndexError, TypeError) as error:
             return f'{url}: {error}'
         return None
 
     with ThreadPoolExecutor(max_workers=4) as pool:
-        failures = [error for error in pool.map(check, urls) if error]
+        failures = [error for error in pool.map(check, documents) if error]
     if failures:
-        raise SystemExit(f'{len(failures)} of {len(urls)} public destinations failed:\n' + '\n'.join(failures))
-    print(f'{len(urls)} published destinations and the reading-map snapshot verified at {args.site_root or args.site_base}')
+        raise SystemExit(f'{len(failures)} of {len(documents)} public destinations failed:\n' + '\n'.join(failures))
+    print(f'{len(documents)} published destinations, their anchors and the reading-map snapshot verified at {args.site_root or args.site_base}')
 
 
 if __name__ == '__main__':

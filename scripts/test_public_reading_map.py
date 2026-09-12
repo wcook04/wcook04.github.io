@@ -7,7 +7,7 @@ import tempfile
 import unittest
 
 from build_absolute_frontier import corpus_revision
-from check_public_routes import BASE, destinations, read_destination, validate_body
+from check_public_routes import BASE, destinations, group_destinations, read_destination, validate_body
 
 
 class PublicReadingMapTests(unittest.TestCase):
@@ -32,12 +32,38 @@ class PublicReadingMapTests(unittest.TestCase):
             with self.subTest(maps=maps), self.assertRaises(ValueError):
                 corpus_revision({'repository_maps': maps})
 
-    def test_front_page_links_are_included_and_fragments_deduplicated(self):
+    def test_front_page_links_retain_fragments_and_fetch_documents_once(self):
         urls = destinations({'systems': [], 'items': []},
                             f'<a href="{BASE}docs/contact.html#email">Contact</a>'
                             f'<a href="{BASE}docs/contact.html#funding">Funding</a>')
-        self.assertEqual(urls.count(BASE + 'docs/contact.html'), 1)
+        grouped = group_destinations(urls)
+        self.assertEqual(grouped[BASE + 'docs/contact.html'], {'email', 'funding'})
         self.assertIn(BASE + 'plectis-reviewer-brief.json', urls)
+
+    def test_empty_and_non_html_documents_are_rejected(self):
+        for body in (b'', b' ', b'not found', b'{}', b'<html><head></head></html>'):
+            with self.subTest(body=body), self.assertRaisesRegex(ValueError, 'HTML document'):
+                validate_body(BASE + 'docs/papers.html', body, {})
+
+    def test_html_fragments_require_ids_or_legacy_named_anchors(self):
+        body = b'<html><body><h1 id="a b">Heading</h1><a name="legacy"></a></body></html>'
+        validate_body(BASE + '#a%20b', body, {}, fragments={'legacy'})
+        validate_body(BASE + '#:~:text=Heading', body, {})
+        with self.assertRaisesRegex(ValueError, 'missing HTML anchors: absent'):
+            validate_body(BASE, body, {}, fragments={'legacy', 'absent'})
+
+    def test_reviewer_brief_requires_real_reading_sections(self):
+        packet = {'schema': 'plectis_reviewer_source_hologram_v3',
+                  'artifact_kind': 'plectis_reviewer_decision_brief',
+                  'read_in_this_order': ['execution_boundary'],
+                  'execution_boundary': {'meaning': 'Reading does not run checks'}}
+        url = BASE + 'plectis-reviewer-brief.json'
+        validate_body(url, json.dumps(packet).encode(), {})
+        for invalid in ({}, [], {**packet, 'read_in_this_order': []},
+                        {**packet, 'execution_boundary': {}},
+                        {**packet, 'read_in_this_order': ['missing']}):
+            with self.subTest(packet=invalid), self.assertRaises(ValueError):
+                validate_body(url, json.dumps(invalid).encode(), {})
 
     def test_offline_directory_routes_and_missing_files(self):
         with tempfile.TemporaryDirectory() as tmp:
