@@ -32,6 +32,7 @@ Usage::
 from __future__ import annotations
 
 import argparse
+import functools
 import html
 import json
 import re
@@ -64,18 +65,6 @@ VOID_TAGS = frozenset(
     {
         "area", "base", "br", "col", "embed", "hr", "img", "input", "link",
         "meta", "param", "source", "track", "wbr",
-    }
-)
-
-# Crossing one of these starts a new link budget, because it starts a new thing
-# to read.
-BLOCK_TAGS = frozenset(
-    {
-        "address", "article", "aside", "blockquote", "body", "caption", "dd",
-        "details", "div", "dl", "dt", "figcaption", "figure", "footer", "form",
-        "h1", "h2", "h3", "h4", "h5", "h6", "header", "li", "main", "nav", "ol",
-        "p", "section", "summary", "table", "tbody", "td", "tfoot", "thead",
-        "tr", "ul",
     }
 )
 
@@ -116,12 +105,6 @@ CHROME_CLASSES = frozenset(
     }
 )
 
-# How many distinct terms one block may link before the pass stops. The cap
-# exists to keep a paragraph from becoming a texture; it is not a claim that the
-# rest of its vocabulary is undefined, since a word skipped here is still on the
-# glossary page.
-BLOCK_BUDGET = 8
-
 TAG_OR_COMMENT = re.compile(r"<!--.*?-->|<[^>]*>", re.DOTALL)
 TAG_NAME = re.compile(r"^<\s*(/?)\s*([a-zA-Z][-a-zA-Z0-9]*)")
 CLASS_ATTR = re.compile(r'\bclass=(?P<q>["\'])(?P<value>.*?)(?P=q)', re.DOTALL)
@@ -140,20 +123,11 @@ def phrase_re(phrase: str) -> re.Pattern[str]:
     return re.compile(r"\b" + re.escape(phrase) + r"\b", re.IGNORECASE)
 
 
-class Budget:
-    """One block's remaining allowance, one link per concept."""
+@functools.lru_cache(maxsize=None)
+def governed_phrase_re(pattern: str) -> re.Pattern[str]:
+    """Compile an exporter-owned phrase pattern once, without rewriting it."""
+    return re.compile(pattern, re.IGNORECASE)
 
-    def __init__(self) -> None:
-        self.spent: set[str] = set()
-
-    def reset(self) -> None:
-        self.spent = set()
-
-    def blocks(self, term_id: str) -> bool:
-        return term_id in self.spent or len(self.spent) >= BLOCK_BUDGET
-
-    def spend(self, term_id: str) -> None:
-        self.spent.add(term_id)
 
 
 def decoded_view(text: str) -> tuple[str, list[tuple[int, int]] | None]:
@@ -188,7 +162,11 @@ def decoded_view(text: str) -> tuple[str, list[tuple[int, int]] | None]:
     return "".join(out), spans
 
 
-def iter_matches(text: str, phrases: list[tuple[str, str]]):
+def iter_matches(
+    text: str,
+    phrases: list[tuple[str, str]],
+    phrase_patterns: dict[str, str] | None = None,
+):
     """Longest-first, word-boundary, non-overlapping matches, in reading order.
 
     ``phrases`` arrives sorted longest-first from the snapshot, so a character
@@ -198,10 +176,13 @@ def iter_matches(text: str, phrases: list[tuple[str, str]]):
     lowered = text.lower()
     taken = bytearray(len(text))
     found: list[tuple[int, int, str, str]] = []
+    patterns = phrase_patterns or {}
     for phrase, term_id in phrases:
-        if phrase not in lowered:
+        pattern = patterns.get(phrase)
+        if pattern is None and phrase not in lowered:
             continue
-        for match in phrase_re(phrase).finditer(text):
+        matcher = governed_phrase_re(pattern) if pattern is not None else phrase_re(phrase)
+        for match in matcher.finditer(text):
             start, end = match.span()
             if any(taken[start:end]):
                 continue
@@ -215,16 +196,14 @@ def link_run(
     text: str,
     phrases: list[tuple[str, str]],
     anchors: dict[str, str],
-    budget: Budget,
     seen: set[str],
+    phrase_patterns: dict[str, str] | None = None,
 ) -> str:
     """Splice anchors over the governed phrases in one run of page text."""
     match_text, spans = decoded_view(text)
     pieces: list[str] = []
     pos = 0
-    for start, end, term_id, matched in iter_matches(match_text, phrases):
-        if budget.blocks(term_id):
-            continue
+    for start, end, term_id, matched in iter_matches(match_text, phrases, phrase_patterns):
         source_start, source_end, label = start, end, matched
         if spans is not None:
             # Never wrap part of a multi-codepoint reference: the phrase has to
@@ -247,7 +226,6 @@ def link_run(
             f'href="{html.escape(anchors[term_id], quote=True)}">{label}</a>'
         )
         pos = source_end
-        budget.spend(term_id)
     if not pieces:
         return text
     pieces.append(text[pos:])
@@ -266,7 +244,12 @@ def is_chrome(tag: str) -> bool:
     return any(token in CHROME_CLASSES for token in match.group("value").split())
 
 
-def link_terms(page: str, phrases: list[tuple[str, str]], anchors: dict[str, str]) -> str:
+def link_terms(
+    page: str,
+    phrases: list[tuple[str, str]],
+    anchors: dict[str, str],
+    phrase_patterns: dict[str, str] | None = None,
+) -> str:
     """Walk the finished page and link governed terms in its prose only."""
     page = TERM_ANCHOR.sub(lambda m: m.group("label"), page)
     body = page.find("<body")
@@ -275,7 +258,6 @@ def link_terms(page: str, phrases: list[tuple[str, str]], anchors: dict[str, str
 
     out: list[str] = [page[:body]]
     depth: dict[str, int] = {}
-    budget = Budget()
     seen: set[str] = set()
     pos = body
     for tag_match in TAG_OR_COMMENT.finditer(page, body):
@@ -284,14 +266,12 @@ def link_terms(page: str, phrases: list[tuple[str, str]], anchors: dict[str, str
             out.append(
                 run
                 if any(depth.values())
-                else link_run(run, phrases, anchors, budget, seen)
+                else link_run(run, phrases, anchors, seen, phrase_patterns)
             )
         tag = tag_match.group(0)
         name_match = TAG_NAME.match(tag)
         if name_match and not tag.startswith("<!--"):
             closing, name = name_match.group(1), name_match.group(2).lower()
-            if name in BLOCK_TAGS:
-                budget.reset()
             if name in VOID_TAGS or tag.endswith("/>"):
                 pass  # no close tag will arrive; touching a counter strands it
             elif name in SKIP_TAGS:
@@ -316,7 +296,11 @@ def link_terms(page: str, phrases: list[tuple[str, str]], anchors: dict[str, str
         out.append(tag)
         pos = tag_match.end()
     tail = page[pos:]
-    out.append(tail if any(depth.values()) else link_run(tail, phrases, anchors, budget, seen))
+    out.append(
+        tail
+        if any(depth.values())
+        else link_run(tail, phrases, anchors, seen, phrase_patterns)
+    )
     return "".join(out)
 
 
@@ -343,11 +327,12 @@ def render_terms_block(snapshot: dict, used: list[str]) -> str:
 
 def build(page: str, snapshot: dict) -> str:
     phrases = [(phrase, term_id) for phrase, term_id in snapshot["phrases"]]
+    phrase_patterns = snapshot.get("phrase_patterns", {})
     glossary = snapshot["glossary_href"]
     anchors = {
         term_id: f"{glossary}#{row['anchor']}" for term_id, row in snapshot["terms"].items()
     }
-    linked = link_terms(page, phrases, anchors)
+    linked = link_terms(page, phrases, anchors, phrase_patterns)
 
     used = sorted(set(re.findall(r'<a class="term(?: is-again)?" data-term="([^"]+)"', linked)))
     missing = [term_id for term_id in used if term_id not in snapshot["terms"]]
