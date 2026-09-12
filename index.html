@@ -1362,6 +1362,7 @@
        (WCAG 1.4.13). Width is explicit rather than only capped: a
        fixed-position box with max-width alone shrinks to its longest word and
        becomes a tall sliver. */
+    @keyframes mc-tip-in { from { opacity: 0; } }
     .term-tip {
       position: fixed; z-index: 50;
       width: 22rem; max-width: calc(100vw - 1rem);
@@ -1373,7 +1374,8 @@
       box-shadow: 0 8px 28px rgba(0, 0, 0, .45);
       font-family: var(--font-sans);
       font-size: 0.86rem; line-height: 1.42;
-      transition: opacity 140ms ease-out;
+      animation: mc-tip-in 60ms ease-out;
+      transition: opacity 90ms ease-out;
     }
     .term-tip[hidden] { display: none; }
     .term-tip.is-leaving { opacity: 0; }
@@ -1413,7 +1415,7 @@
     .term-tip__back:hover { color: var(--bone); }
     .term-tip__rule[hidden], .term-tip__deep[hidden],
     .term-tip__full[hidden], .term-tip__back[hidden] { display: none; }
-    @media (prefers-reduced-motion: reduce) { .term-tip { transition: none; } }
+    @media (prefers-reduced-motion: reduce) { .term-tip { animation: none; transition: none; } }
 
     .colophon {
       margin: 1.7rem 0 0;
@@ -2612,18 +2614,18 @@
       <section class="absolute-frontier" id="eight-problem-frontier" tabindex="-1" aria-labelledby="absolute-frontier-title" data-scene-key="opening">
         <h2 id="absolute-frontier-title">Public work</h2>
         <p><a class="btn" href="https://wcook04.github.io/plectis/" data-dest="plectis-site">Explore Plectis</a></p>
-        <p class="absolute-frontier__thesis">The project site introduces the research, <a class="term" data-term="software" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-software">software</a> and recorded interface.</p>
+        <p class="absolute-frontier__thesis">The project site introduces the research, <a class="term" data-term="software" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-software">software</a> and recorded <a class="term" data-term="interface" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-interface">interface</a>.</p>
         <p class="af-route"><a href="https://wcook04.github.io/plectis/maths/" data-dest="math-frontier">Mathematics</a> <span>· work on eight <a class="term" data-term="erdos_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-erdos-problem">Erdős problems</a>, all still open</span></p>
         <p class="frontier-instruction"><span class="frontier-instruction__wide">Hover or focus a problem to preview it; activate the link to open its page.</span><span class="frontier-instruction__narrow">Open a problem page:</span></p>
         <div class="frontier" aria-label="Eight Erdős problem pages">
-          <p data-dest="problem-68"><a href="https://wcook04.github.io/plectis/maths/problems/erdos_68.html" data-dest="problem-68">Erdős #68</a> <span class="frontier-topic">The factorial-denominator series</span> · original problem <a class="term" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">remains open</a></p>
-          <p data-dest="problem-243"><a href="https://wcook04.github.io/plectis/maths/problems/erdos_243.html" data-dest="problem-243">Erdős #243</a> <span class="frontier-topic">Reciprocal-tail rigidity near the Sylvester recurrence</span> · original problem <a class="term is-again" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">remains open</a></p>
-          <p data-dest="problem-249"><a href="https://wcook04.github.io/plectis/maths/problems/erdos_249.html" data-dest="problem-249">Erdős #249</a> <span class="frontier-topic">The binary totient series</span> · original problem <a class="term is-again" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">remains open</a></p>
-          <p data-dest="problem-251"><a href="https://wcook04.github.io/plectis/maths/problems/erdos_251.html" data-dest="problem-251">Erdős #251</a> <span class="frontier-topic">The prime-gap dyadic series</span> · original problem <a class="term is-again" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">remains open</a></p>
-          <p data-dest="problem-257"><a href="https://wcook04.github.io/plectis/maths/problems/erdos_257.html" data-dest="problem-257">Erdős #257</a> <span class="frontier-topic">Reciprocal sums over infinite exponent supports</span> · original problem <a class="term is-again" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">remains open</a></p>
-          <p data-dest="problem-269"><a href="https://wcook04.github.io/plectis/maths/problems/erdos_269.html" data-dest="problem-269">Erdős #269</a> <span class="frontier-topic">Three-prime running least common multiples</span> · original problem <a class="term is-again" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">remains open</a></p>
-          <p data-dest="problem-1041"><a href="https://wcook04.github.io/plectis/maths/problems/erdos_1041.html" data-dest="problem-1041">Erdős #1041</a> <span class="frontier-topic">Short connections inside polynomial lemniscates</span> · original problem <a class="term is-again" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">remains open</a></p>
-          <p data-dest="problem-1049"><a href="https://wcook04.github.io/plectis/maths/problems/erdos_1049.html" data-dest="problem-1049">Erdős #1049</a> <span class="frontier-topic">Lambert-type series at rational bases</span> · original problem <a class="term is-again" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">remains open</a></p>
+          <p data-dest="problem-68"><a href="https://wcook04.github.io/plectis/maths/problems/erdos_68.html" data-dest="problem-68">Erdős #68</a> <span class="frontier-topic">The <a class="term" data-term="factorial" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-factorial">factorial</a>-<a class="term" data-term="denominator" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-denominator">denominator</a> <a class="term" data-term="series" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-series">series</a></span> · original problem <a class="term" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">remains open</a></p>
+          <p data-dest="problem-243"><a href="https://wcook04.github.io/plectis/maths/problems/erdos_243.html" data-dest="problem-243">Erdős #243</a> <span class="frontier-topic"><a class="term" data-term="reciprocal" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-reciprocal">Reciprocal</a>-tail <a class="term" data-term="rigidity" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-rigidity">rigidity</a> near the <a class="term" data-term="sylvester_sequence" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-sylvester-sequence">Sylvester recurrence</a></span> · original problem <a class="term is-again" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">remains open</a></p>
+          <p data-dest="problem-249"><a href="https://wcook04.github.io/plectis/maths/problems/erdos_249.html" data-dest="problem-249">Erdős #249</a> <span class="frontier-topic">The binary <a class="term" data-term="totient" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-totient">totient</a> <a class="term is-again" data-term="series" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-series">series</a></span> · original problem <a class="term is-again" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">remains open</a></p>
+          <p data-dest="problem-251"><a href="https://wcook04.github.io/plectis/maths/problems/erdos_251.html" data-dest="problem-251">Erdős #251</a> <span class="frontier-topic">The <a class="term" data-term="prime" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-prime">prime</a>-gap <a class="term" data-term="dyadic" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-dyadic">dyadic</a> <a class="term is-again" data-term="series" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-series">series</a></span> · original problem <a class="term is-again" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">remains open</a></p>
+          <p data-dest="problem-257"><a href="https://wcook04.github.io/plectis/maths/problems/erdos_257.html" data-dest="problem-257">Erdős #257</a> <span class="frontier-topic"><a class="term" data-term="reciprocal_series" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-reciprocal-series">Reciprocal sums</a> over <a class="term" data-term="infinite" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-infinite">infinite</a> <a class="term" data-term="support" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-support">exponent supports</a></span> · original problem <a class="term is-again" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">remains open</a></p>
+          <p data-dest="problem-269"><a href="https://wcook04.github.io/plectis/maths/problems/erdos_269.html" data-dest="problem-269">Erdős #269</a> <span class="frontier-topic">Three-<a class="term is-again" data-term="prime" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-prime">prime</a> <a class="term" data-term="running_lcm" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-running-lcm">running least common multiples</a></span> · original problem <a class="term is-again" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">remains open</a></p>
+          <p data-dest="problem-1041"><a href="https://wcook04.github.io/plectis/maths/problems/erdos_1041.html" data-dest="problem-1041">Erdős #1041</a> <span class="frontier-topic">Short connections inside <a class="term" data-term="lemniscate" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-lemniscate">polynomial lemniscates</a></span> · original problem <a class="term is-again" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">remains open</a></p>
+          <p data-dest="problem-1049"><a href="https://wcook04.github.io/plectis/maths/problems/erdos_1049.html" data-dest="problem-1049">Erdős #1049</a> <span class="frontier-topic"><a class="term" data-term="lambert_series" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-lambert-series">Lambert-type series</a> at <a class="term" data-term="base" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-base">rational bases</a></span> · original problem <a class="term is-again" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">remains open</a></p>
         </div>
         <p class="af-route"><a href="https://github.com/wcook04/plectis" data-to="repo">Software repository</a> <span>· public research and engineering tools</span></p>
         <p class="af-route"><a href="https://github.com/wcook04/plectis-erdos" data-dest="lean-github" data-to="repo">Mathematics repository</a> <span>· <a class="term" data-term="formalisation" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-formalisation">formal source</a> and ways to continue the work</span></p>
@@ -3178,6 +3180,13 @@
     /* BEGIN generated glossary terms */
     var TERMS =
     {
+      "base": {
+        "preferred_label": "base",
+        "reader_card": "In an integer base b greater than one, the allowed digits are 0 through b−1. Places after the radix point have weights 1/b, 1/b², and so on. The papers also use b as the base in expressions such as bⁿ.",
+        "reader_deep": "Changing the base changes an expansion's digits and repetition pattern while leaving the represented number itself unchanged.",
+        "reader_preview": "A numeral base is the number whose powers determine place values; decimal uses ten and binary uses two.",
+        "reader_rule": "Read the stated restrictions on b before applying an argument about digits or divisibility."
+      },
       "check": {
         "preferred_label": "check",
         "reader_card": "On this site, a check usually has a runnable command, specified inputs, and a recorded result. It may test a behaviour, validate a file, compare copies, or verify a proof.",
@@ -3206,6 +3215,20 @@
         "reader_preview": "Collaboration is people working together on a shared task or result.",
         "reader_rule": "Attribution should identify the people responsible for the work and describe tool assistance accurately."
       },
+      "denominator": {
+        "preferred_label": "denominator",
+        "reader_card": "In 3/4, the denominator is 4. For a positive fraction interpreted as equal-sized parts, it specifies that the whole has been divided into four parts.",
+        "reader_deep": "Number-theory arguments often require the denominator in lowest terms. For example, whether a fraction terminates in a chosen numeral base depends on the prime factors of that reduced denominator.",
+        "reader_preview": "The denominator is the divisor in a fraction: the b in a/b, where b is nonzero.",
+        "reader_rule": "Cancelling a common factor changes the written denominator without changing the fraction's value."
+      },
+      "dyadic": {
+        "preferred_label": "dyadic",
+        "reader_card": "A dyadic rational has the form m/2ⁿ for integers m and nonnegative n. Examples include 1/2, 3/8, and 5; each has a terminating binary expansion.",
+        "reader_deep": "Dyadic scales are useful when repeatedly halving a range or relating binary digits to arithmetic. They provide a common structure for estimates, subdivisions, and expansions in base two.",
+        "reader_preview": "Dyadic means related to powers of two, often fractions or intervals built from them.",
+        "reader_rule": "The exact object follows the noun: a dyadic interval or partition is not itself a number."
+      },
       "entry": {
         "preferred_label": "entry",
         "reader_card": "A command described as an entry route helps a reader choose the next relevant action. A glossary or catalog entry instead refers to one stored item with its own identity and detail.",
@@ -3220,12 +3243,47 @@
         "reader_preview": "An Erdős problem is a mathematical question associated with Paul Erdős; this site uses the numbering of the Erdős Problems database.",
         "reader_rule": "Compare a paper's exact statement with the original question before interpreting a result as a solution."
       },
+      "factorial": {
+        "preferred_label": "factorial",
+        "reader_card": "For example, 4! = 24. Factorials count arrangements of n distinct objects and also provide rapidly growing, highly divisible denominators in number-theory problems.",
+        "reader_deep": "Expressions such as n! − 1 and (n − 1)! have very different values and divisibility properties. The paper's parentheses and order of operations are therefore part of the statement being studied.",
+        "reader_preview": "The factorial of a nonnegative integer n is the product of the integers from 1 through n, with the value at zero defined as 1.",
+        "reader_rule": "The exclamation mark here is mathematical notation, not punctuation indicating emphasis."
+      },
       "formalisation": {
         "preferred_label": "formalisation",
-        "reader_card": "The work includes choosing representations, making implicit assumptions explicit, and filling in steps required by the proof assistant. The resulting objects can then be checked by the formal system.",
-        "reader_deep": "Sometimes the process exposes a missing hypothesis or an ambiguous argument. It can also prove useful supporting results, which should be distinguished from the main theorem when describing what the project contributes.",
-        "reader_preview": "Formalisation translates mathematical definitions, statements, and arguments into a precise formal language.",
-        "reader_rule": "A faithful formalisation must preserve the meaning and scope of the original mathematics."
+        "reader_card": "In this project, mathematical formalisation usually uses Lean. The work chooses representations and makes assumptions explicit. A theorem statement can be formalised before its proof is complete; a completed formal proof additionally supplies a proof term accepted by the checker.",
+        "reader_deep": "Formalisation can expose a missing hypothesis or an ambiguous argument. Software specifications can also be formalised without a completed proof that a program satisfies them. Each contribution should be described at the stage actually reached.",
+        "reader_preview": "Formalisation expresses definitions, statements, or arguments in a language with explicit rules for their meaning and use.",
+        "reader_rule": "Formalising a statement, proving it, and showing that it faithfully expresses the intended mathematics are distinct tasks."
+      },
+      "infinite": {
+        "preferred_label": "infinite",
+        "reader_card": "Infinite sequences and series specify a term for every index in an unending index set. Statements about them are expressed through definitions, quantifiers, and limits rather than by carrying out infinitely many steps.",
+        "reader_deep": "For example, there are infinitely many even integers, but arbitrarily large odd integers remain. This distinction matters when interpreting the scope of a theorem.",
+        "reader_preview": "An infinite set has more elements than any finite set; no finite count exhausts it.",
+        "reader_rule": "“Infinitely many” is weaker than “all” and can also be weaker than “all sufficiently large”."
+      },
+      "interface": {
+        "preferred_label": "interface",
+        "reader_card": "A user interface exposes controls and feedback to people, while a programming interface exposes operations, inputs, outputs, and errors to software. Both establish what can cross a boundary without revealing every implementation detail.",
+        "reader_deep": "An interface gives one party a usable way to interact with another while hiding details that need not be shared. Screens, forms, command lines, functions, file formats, and network APIs are all interfaces, but they serve different participants and carry different contracts. A stable interface specifies valid operations, data shapes, responses, and errors closely enough for independent use. It does not guarantee that the underlying implementation is simple or unchanged. A physical boundary may also be called an interface, so context must establish whether the interaction involves people, software, or material systems.",
+        "reader_preview": "An interface is a defined boundary through which a person, program, or component interacts with another system.",
+        "reader_rule": "An interface is determined by its participants, available operations, accepted inputs, returned outputs, and failure behaviour; its implementation may change while that contract remains stable."
+      },
+      "lambert_series": {
+        "preferred_label": "Lambert series",
+        "reader_card": "At x = 1/b, its terms become aₙ/(bⁿ − 1). Expanding the denominators as geometric series connects the coefficients to sums over divisors, under conditions that justify rearranging the terms.",
+        "reader_deep": "That distinction matters here: the totient power series and the sums with denominators bⁿ − 1 are related number-theory objects, but their definitions and convergence arguments must be read separately.",
+        "reader_preview": "A Lambert series has the form ∑ aₙxⁿ/(1 − xⁿ), usually summed over positive integers n where it converges.",
+        "reader_rule": "A power series ∑ aₙxⁿ is a different expression and is not automatically a Lambert series."
+      },
+      "lemniscate": {
+        "preferred_label": "lemniscate",
+        "reader_card": "The term is also used, with qualification, for a sublevel region such as |p(z)| < c or |p(z)| ≤ c. These regions can have several components surrounding the polynomial's roots.",
+        "reader_deep": "In the Erdős #1041 material, paths inside the open unit region |p(z)| < 1 are central. Being on its boundary is different from being inside it.",
+        "reader_preview": "A polynomial lemniscate is a set defined by the size of a complex polynomial, commonly the curve |p(z)| = c.",
+        "reader_rule": "Check whether the paper means the level curve, the open region, or the filled closed region."
       },
       "open_problem": {
         "preferred_label": "open problem",
@@ -3234,12 +3292,75 @@
         "reader_preview": "An open problem is a mathematical question for which no accepted resolution is known in the relevant literature.",
         "reader_rule": "Open status is a fact about current knowledge and should be checked against up-to-date sources."
       },
+      "prime": {
+        "preferred_label": "prime",
+        "reader_card": "The primes begin 2, 3, 5, 7, 11. The number 1 is not prime. Every integer greater than 1 factors uniquely into primes, apart from the order of the factors.",
+        "reader_deep": "The papers use prime factors to analyse denominators, periods, and reciprocal sums. Claims about consecutive primes also depend on excluding any other prime between the two named values.",
+        "reader_preview": "A prime number is an integer greater than 1 whose only positive divisors are 1 and itself.",
+        "reader_rule": "Being prime is different from being coprime to another number."
+      },
+      "reciprocal": {
+        "preferred_label": "reciprocal",
+        "reader_card": "Multiplying a number by its reciprocal gives 1. For example, the reciprocal of 4 is 1/4, and the reciprocal of 2/3 is 3/2.",
+        "reader_deep": "The papers study sums of reciprocals of structured integer sequences. The denominator's growth and arithmetic properties both matter: shrinking terms alone do not prove that a reciprocal series converges or determine whether its sum is rational.",
+        "reader_preview": "The reciprocal of a nonzero number x is 1/x.",
+        "reader_rule": "Zero has no reciprocal in the real or rational numbers."
+      },
+      "reciprocal_series": {
+        "preferred_label": "reciprocal series",
+        "reader_card": "For example, ∑ 1/2ⁿ starting at n = 1 sums to 1, while ∑ 1/n diverges. The way the denominators grow influences convergence, but a precise comparison or other argument is needed.",
+        "reader_deep": "The papers study denominators built from factorials, primes, or powers minus one. Their divisibility structure can constrain cancellation and rationality even when convergence follows from a simple size estimate.",
+        "reader_preview": "A reciprocal series is a sum whose terms have the form 1/aₙ for specified nonzero numbers aₙ.",
+        "reader_rule": "Convergence does not determine whether the sum is rational or irrational."
+      },
+      "rigidity": {
+        "preferred_label": "rigidity",
+        "reader_card": "The conclusion may force one exact form, a small family, or a structure preserved under allowed transformations. The hypotheses explain which apparent alternatives have been excluded.",
+        "reader_deep": "For example, a geometric result may determine a shape only up to rotation or scaling. Reading that qualification is essential before interpreting a classification as saying that there is exactly one possible instance.",
+        "reader_preview": "A rigidity result shows that stated conditions leave an object unusually little freedom, often determining it up to a specified equivalence.",
+        "reader_rule": "Rigidity does not always mean literal uniqueness of one object."
+      },
+      "running_lcm": {
+        "preferred_label": "running least common multiple",
+        "reader_card": "For 2, 3, 4, the running values are 2, 6, 12. Each new value is the least common multiple of the previous running value and the next term.",
+        "reader_deep": "The Erdős #269 work studies reciprocal sums involving these cumulative values. Their behaviour depends on the specified input sequence, not merely on how many terms have been included.",
+        "reader_preview": "A running least common multiple takes the least common multiple of all terms up to the current position in a positive-integer sequence.",
+        "reader_rule": "It changes only when the next term supplies a prime factor at a higher exponent than was previously required."
+      },
+      "series": {
+        "preferred_label": "series",
+        "reader_card": "The expression ∑ aₙ is understood through its finite partial sums. When those partial sums approach a finite limit, the series converges and that limit is its sum.",
+        "reader_deep": "The papers specify their summation indices and convergence conditions. Omitting the initial index or changing the order can matter, especially when terms are undefined or convergence is not absolute.",
+        "reader_preview": "A mathematical series is a sum of terms from a sequence, often extending over infinitely many indices.",
+        "reader_rule": "A time series is a different use: a sequence of observations indexed by time, not necessarily added together."
+      },
       "software": {
         "preferred_label": "software",
         "reader_card": "On this site, the software section presents Plectis's reusable research components and the machinery supporting its workflow. It is distinguished from the mathematical reading routes, although formal proofs also use software tools.",
         "reader_deep": "A repository can make implementation available without demonstrating every advertised use. The source, runnable example, and recorded check together help a reader assess the particular behaviour being claimed.",
         "reader_preview": "Software consists of programs and related data used by computers to perform tasks.",
         "reader_rule": "Each published component needs its own description, dependencies, and evidence."
+      },
+      "support": {
+        "preferred_label": "support",
+        "reader_card": "For a selected reciprocal sum, the papers also call the set of included indices its support. When terms are represented by zero-or-one selection coefficients, these two mathematical uses agree.",
+        "reader_deep": "In analysis, the support of a function often means the closure of its nonzero set. That convention matters in topological settings and should not be silently substituted for an index set.",
+        "reader_preview": "Support can mean evidence for a claim or, in mathematics, the positions where a function or sequence is nonzero.",
+        "reader_rule": "The surrounding definition determines whether support refers to evidence, nonzero values, or selected indices."
+      },
+      "sylvester_sequence": {
+        "preferred_label": "Sylvester's sequence",
+        "reader_card": "It begins 2, 3, 7, 43, 1807. With a₀ = 2, the same rule can be written aₙ₊₁ = aₙ(aₙ − 1) + 1, so each next term can be calculated directly from the previous one.",
+        "reader_deep": "Its terms are pairwise coprime and grow rapidly. Reciprocal identities associated with the sequence make it useful in questions about unit fractions and the values of structured infinite sums.",
+        "reader_preview": "Sylvester's sequence starts with 2, and each later term is one plus the product of all preceding terms.",
+        "reader_rule": "The starting value and indexing convention should be checked when comparing formulas."
+      },
+      "totient": {
+        "preferred_label": "totient",
+        "reader_card": "For example, φ(6) = 2 because only 1 and 5 are coprime to 6 in that range. The definition gives φ(1) = 1; for n greater than 1, the qualifying integers are all strictly smaller than n.",
+        "reader_deep": "The papers use the totient in arithmetic series. Its values encode how prime factors restrict coprimality, linking multiplicative structure with questions about sums and digit expansions.",
+        "reader_preview": "Euler's totient φ(n) counts the integers from 1 through n that are coprime to the positive integer n.",
+        "reader_rule": "The input must be a positive integer in this definition."
       }
     };
     /* END generated glossary terms */
@@ -3341,7 +3462,9 @@
       tipLabel.textContent = data.preferred_label || "";
       if (tier === 1) {
         tip.classList.add("is-expanded");
-        tipText.textContent = data.reader_card || data.reader_preview || "";
+        var lead = data.reader_preview || "";
+        var card = data.reader_card || lead;
+        tipText.textContent = lead && card.indexOf(lead) === -1 ? lead + " " + card : card;
         if (data.reader_rule && data.reader_rule !== data.reader_card) {
           tipRule.textContent = data.reader_rule; tipRule.hidden = false;
         } else { tipRule.textContent = ""; tipRule.hidden = true; }
@@ -3369,9 +3492,11 @@
       if (tipHideTimer) { clearTimeout(tipHideTimer); tipHideTimer = 0; }
       if (tipFadeTimer) { clearTimeout(tipFadeTimer); tipFadeTimer = 0; }
       tip.classList.remove("is-leaving");
+      previewIntent = intent || null;
+      if (tipFor === anchor && !tip.hidden) return;
+      if (tipFor && tipFor !== anchor) tipFor.removeAttribute("aria-describedby");
       if (tipFor !== anchor) tier = 0; // a different term always starts collapsed
       tipFor = anchor;
-      previewIntent = intent || null;
       anchor.setAttribute("aria-describedby", tip.id);
       renderTier(data, anchor);
       placeFloater(tip, anchor);
@@ -3383,6 +3508,7 @@
       if (tipFadeTimer) { clearTimeout(tipFadeTimer); tipFadeTimer = 0; }
       tip.classList.remove("is-leaving");
       tier = 1;
+      if (tipFor && tipFor !== anchor) tipFor.removeAttribute("aria-describedby");
       tipFor = anchor;
       previewIntent = "click";
       anchor.setAttribute("aria-describedby", tip.id);
