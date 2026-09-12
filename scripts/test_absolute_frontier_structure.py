@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Structural regression tests for required front-door projection owners."""
 import json
+import re
 import unittest
 
-from build_absolute_frontier import INDEX, SOURCE, project
+from build_absolute_frontier import INDEX, NUMBERS, SOURCE, project, render
 
 
 class AbsoluteFrontierStructureTests(unittest.TestCase):
@@ -30,6 +31,26 @@ class AbsoluteFrontierStructureTests(unittest.TestCase):
         broken = self.markup.replace('<span class="frontier-plate__boundary">', '<span class="frontier-plate__boundary-missing">', 1)
         with self.assertRaisesRegex(ValueError, 'expected 8 frontier plate boundaries, found 7'):
             project(broken, self.payload)
+
+    def test_generated_reading_section_links_every_problem_preview(self):
+        rendered = render(self.payload)
+        links = re.findall(
+            r'<a href="([^"]+)" data-dest="problem-(\d+)">Erdős #(\d+)</a>',
+            rendered,
+        )
+        self.assertEqual(len(links), len(NUMBERS))
+        self.assertEqual([int(dest) for _, dest, _ in links], NUMBERS)
+        self.assertTrue(all(dest == label for _, dest, label in links))
+        expected_hrefs = {str(row['problem']): row['page_href'] for row in self.payload['items']}
+        self.assertTrue(all(href == expected_hrefs[dest] for href, dest, _ in links))
+
+    def test_problem_controls_are_outside_the_decorative_preview(self):
+        rendered = render(self.payload)
+        self.assertNotIn('dest__frame', rendered)
+        self.assertEqual(rendered.count('class="frontier"'), 1)
+        for number in NUMBERS:
+            self.assertEqual(rendered.count(f'<p data-dest="problem-{number}">'), 1)
+            self.assertEqual(rendered.count(f'<a href="https://wcook04.github.io/plectis/maths/problems/erdos_{number}.html" data-dest="problem-{number}">'), 1)
 
 
 if __name__ == '__main__':

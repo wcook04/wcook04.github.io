@@ -77,12 +77,20 @@ def render(payload: dict) -> str:
     """Keep the personal homepage an introduction and destination index."""
     if [row['problem'] for row in payload['items']] != NUMBERS:
         raise ValueError('the source must retain all eight problems')
+    problem_routes = '\n'.join(
+        f'''          <p data-dest="problem-{row['problem']}"><a href="{e(row['page_href'], quote=True)}" data-dest="problem-{row['problem']}">Erdős #{row['problem']}</a> <span class="frontier-topic">{e(row['title'])}</span> · original problem remains open</p>'''
+        for row in payload['items']
+    )
     return f'''{BEGIN}
       <section class="absolute-frontier" id="eight-problem-frontier" tabindex="-1" aria-labelledby="absolute-frontier-title" data-scene-key="opening">
         <h2 id="absolute-frontier-title">Public work</h2>
         <p><a class="btn" href="{BASE}" data-dest="plectis-site">Explore Plectis</a></p>
         <p class="absolute-frontier__thesis">The project site introduces the research, software and recorded interface.</p>
         <p class="af-route"><a href="{BASE}maths/" data-dest="math-frontier">Mathematics</a> <span>· work on eight Erdős problems, all still open</span></p>
+        <p class="frontier-instruction"><span class="frontier-instruction__wide">Hover or focus a problem to preview it; activate the link to open its page.</span><span class="frontier-instruction__narrow">Open a problem page:</span></p>
+        <div class="frontier" aria-label="Eight Erdős problem pages">
+{problem_routes}
+        </div>
         <p class="af-route"><a href="{SOFTWARE}" data-to="repo">Software repository</a> <span>· public research and engineering tools</span></p>
         <p class="af-route"><a href="{LEAN}" data-dest="lean-github" data-to="repo">Mathematics repository</a> <span>· formal source and ways to continue the work</span></p>
         <p class="af-route"><a href="{BASE}docs/papers.html" data-dest="papers-catalogue">Papers</a> · <a href="{BASE}#demo-videos">Watch the introduction</a></p>

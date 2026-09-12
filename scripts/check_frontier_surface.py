@@ -16,14 +16,16 @@ def main():
     assert [p['problem'] for p in payload['items']]==NUMBERS
     assert all(p['status']=='open' for p in payload['items'])
     region=text[text.index(BEGIN):text.index(END)]
-    # The root page routes to the complete mathematics index. It does not
-    # duplicate eight research introductions and the paper catalogue.
+    # The root page keeps each problem to one compact, source-backed route. It
+    # does not duplicate the research introductions or paper catalogue.
     assert 'class="flagship"' not in region
     assert 'https://wcook04.github.io/plectis/maths/' in region
     assert 'https://wcook04.github.io/plectis/docs/papers.html' in region
     assert 'https://wcook04.github.io/plectis/#demo-videos' in region
     assert 'id="eight-problem-frontier" tabindex="-1"' in region
-    assert len(re.findall(r'<a\s', region)) <= 6
+    problem_routes = re.findall(r'<a href="[^"]+" data-dest="problem-(\d+)">', region)
+    assert [int(number) for number in problem_routes] == NUMBERS
+    assert len(re.findall(r'<a\s', region)) == len(NUMBERS) + 6
     assert [p['paper_id'] for p in payload['systems']]==['claim-faithful-publication-systems','open-source-mathematics-strategy']
     for row in payload['items']:
         assert f'data-problem="{row["problem"]}"' in text
