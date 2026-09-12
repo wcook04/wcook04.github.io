@@ -3608,7 +3608,8 @@
       if (tip.hidden || tier !== 0 || previewIntent !== "pointer" || !tipFor) return;
       var hit = pointerX !== null && document.elementFromPoint
         ? document.elementFromPoint(pointerX, pointerY) : null;
-      if (!hit || (!tipFor.contains(hit) && !tip.contains(hit))) hideTip(true);
+      var hoverTarget = termDescriptionTarget(tipFor);
+      if (!hit || (!hoverTarget.contains(hit) && !tip.contains(hit))) hideTip(true);
     }, { passive: true });
 
     // Delegated, as on the sheet: four document listeners rather than four on
@@ -3618,13 +3619,13 @@
       if (suppressPointerPreview) return;
       var anchor = termAnchorFrom(ev.target);
       if (!anchor) return;
-      if (ev.relatedTarget && anchor.contains(ev.relatedTarget)) return;
+      if (ev.relatedTarget && termDescriptionTarget(anchor).contains(ev.relatedTarget)) return;
       showTip(anchor, "pointer");
     }, true);
     document.addEventListener("mouseout", function (ev) {
       var anchor = termAnchorFrom(ev.target);
       if (!anchor) return;
-      if (ev.relatedTarget && anchor.contains(ev.relatedTarget)) return;
+      if (ev.relatedTarget && termDescriptionTarget(anchor).contains(ev.relatedTarget)) return;
       scheduleHideTip();
     }, true);
     document.addEventListener("focusin", function (ev) {

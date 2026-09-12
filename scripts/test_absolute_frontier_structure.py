@@ -4,7 +4,7 @@ import json
 import re
 import unittest
 
-from build_absolute_frontier import INDEX, NUMBERS, SOURCE, project, render
+from build_absolute_frontier import INDEX, NUMBERS, SOURCE, project, render, without_term_markup
 from build_glossary_term_layer import link_terms
 
 
@@ -44,6 +44,14 @@ class AbsoluteFrontierStructureTests(unittest.TestCase):
         self.assertTrue(all(dest == label for _, dest, label in links))
         expected_hrefs = {str(row['problem']): row['page_href'] for row in self.payload['items']}
         self.assertTrue(all(href == expected_hrefs[dest] for href, dest, _ in links))
+
+    def test_projection_comparison_ignores_both_term_link_forms(self):
+        decorated = (
+            '<a class="term" data-term="proof" href="glossary.html#glossary-proof">proof</a> '
+            '<a href="/maths"><span data-term-preview-only data-term="mathematics">'
+            'Mathematics</span></a>'
+        )
+        self.assertEqual(without_term_markup(decorated), 'proof <a href="/maths">Mathematics</a>')
 
     def test_problem_controls_are_outside_the_decorative_preview(self):
         rendered = render(self.payload)

@@ -24,7 +24,13 @@ SOFTWARE = 'https://github.com/wcook04/plectis'
 NUMBERS = [68, 243, 249, 251, 257, 269, 1041, 1049]
 CORPUS_REPOSITORIES = ('plectis-erdos', 'plectis-lean-erdos249-257')
 TERM = re.compile(r'<a class="term(?: is-again)?" data-term="[^"]*" href="[^"]*">(.*?)</a>', re.S)
+PASSIVE_TERM = re.compile(r'<span data-term-preview-only data-term="[^"]*">(.*?)</span>', re.S)
 e = html.escape
+
+
+def without_term_markup(markup: str) -> str:
+    """Remove glossary decoration before comparing an owned projection."""
+    return PASSIVE_TERM.sub(r'\1', TERM.sub(r'\1', markup))
 
 
 def corpus_revision(corpus: dict) -> str:
@@ -144,7 +150,7 @@ def main():
     payload=snapshot(args.site_root) if args.site_root else json.loads(SOURCE.read_text())
     raw=INDEX.read_text(); expected=project(raw,payload)
     if args.check:
-        if TERM.sub(r'\1',expected)!=TERM.sub(r'\1',raw): raise SystemExit('public reading map or portraits are stale')
+        if without_term_markup(expected)!=without_term_markup(raw): raise SystemExit('public reading map or portraits are stale')
         if args.site_root and payload!=json.loads(SOURCE.read_text()): raise SystemExit('public source snapshot changed; refresh the reading map')
         print('Public reading map: source, eight equal routes, papers and portraits agree')
     else:

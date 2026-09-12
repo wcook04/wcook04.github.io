@@ -4,14 +4,14 @@ import json
 import re
 from html import unescape
 from pathlib import Path
-from build_absolute_frontier import SOURCE, INDEX, BEGIN, END, NUMBERS, TERM, project
+from build_absolute_frontier import SOURCE, INDEX, BEGIN, END, NUMBERS, project, without_term_markup
 
 
 def main():
     payload=json.loads(SOURCE.read_text())
     markup=INDEX.read_text()
-    text=TERM.sub(r'\1',markup)
-    if TERM.sub(r'\1',project(markup,payload))!=text:
+    text=without_term_markup(markup)
+    if without_term_markup(project(markup,payload))!=text:
         raise SystemExit('generated reading map or problem portraits have drifted')
     assert [p['problem'] for p in payload['items']]==NUMBERS
     assert all(p['status']=='open' for p in payload['items'])

@@ -164,3 +164,14 @@ def test_passive_runtime_branch_never_cancels_native_activation():
     assert 'return; // surrounding link/summary keeps every native activation' in branch
     assert 'passiveTerm(anchor) ? "" : "Click to expand here and stay on this page"' in runtime
     assert 'termDescriptionTarget(anchor).setAttribute("aria-describedby", tip.id)' in runtime
+
+
+def test_passive_runtime_uses_native_control_as_pointer_boundary():
+    runtime = (Path(__file__).parents[1] / "index.html").read_text()
+    assert runtime.count(
+        'termDescriptionTarget(anchor).contains(ev.relatedTarget)'
+    ) == 2
+    assert 'var hoverTarget = termDescriptionTarget(tipFor);' in runtime
+    assert '!hoverTarget.contains(hit)' in runtime
+    assert 'anchor.contains(ev.relatedTarget)' not in runtime
+    assert 'tipFor.contains(hit)' not in runtime
