@@ -2,10 +2,10 @@
   "schema": "public_reading_map_v1",
   "generated_by": "scripts/build_absolute_frontier.py",
   "source_hashes": {
-    "plectis-ai-reader-complete.json": "27ae2373f347804216d136e55d63dc9fa434b55e1b7fc9699163cfbcef9590ea",
-    "lean/problems.json": "669ae15671ac204f882a855679cf6b73c767b57b296239762cb77d6a781ac908"
+    "plectis-ai-reader-complete.json": "a3d80e17389239873e1b1f4af2595740c3528875c31117c994a533310c940fa7",
+    "lean/problems.json": "229edb81876b106f3dbe7eed462cc4affda18e02a814efaddc2c24b76c463777"
   },
-  "public_source_commit": "7b40a5424ca7aa9a05758366c42fcda413325a7f",
+  "public_source_commit": "6a8e8c4d4652176ab5f6ba36d0d517f0334effe3",
   "reading_graph_path": "https://wcook04.github.io/plectis/plectis-ai-reader-complete.json#/scholarly_corpus/reading_graph",
   "systems": [
     {
@@ -25,11 +25,16 @@
       "title": "The factorial-denominator series",
       "question": "Is the series sum_{n >= 2} 1/(n! - 1) irrational?",
       "status": "open",
-      "paper_title": "Factorial-Channel Obstructions and Exact Orbit Boundaries",
+      "paper_title": "Two Incomparable Denominator Exclusions for $\\sum_{n\\ge2}(n!-1)^{-1}$",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_68.html",
       "source_pointer": "/scholarly_corpus/papers/0",
-      "long_records": []
+      "long_records": [
+        {
+          "title": "The Factorial-Denominator Series: Complete Reasoning Record",
+          "href": "https://wcook04.github.io/plectis/papers/erdos68-factorial-reasoning-surface.pdf"
+        }
+      ]
     },
     {
       "problem": 243,
@@ -39,8 +44,13 @@
       "paper_title": "Excluding the Bounded Negative Part",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-243-reciprocal-tail-rigidity.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_243.html",
-      "source_pointer": "/scholarly_corpus/papers/1",
-      "long_records": []
+      "source_pointer": "/scholarly_corpus/papers/2",
+      "long_records": [
+        {
+          "title": "Reciprocal-Tail Rigidity: Complete Reasoning Record",
+          "href": "https://wcook04.github.io/plectis/papers/erdos243-reciprocal-tail-reasoning-surface.pdf"
+        }
+      ]
     },
     {
       "problem": 249,
@@ -50,7 +60,7 @@
       "paper_title": "A Basis for the 2-Kernel of Euler's Totient",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_249.html",
-      "source_pointer": "/scholarly_corpus/papers/2",
+      "source_pointer": "/scholarly_corpus/papers/4",
       "long_records": [
         {
           "title": "The Binary Totient Series",
@@ -63,21 +73,26 @@
       "title": "The prime-gap dyadic series",
       "question": "Is the dyadic series sum p_n/2^n over consecutive primes irrational? Equivalently, is the corresponding consecutive-prime-gap dyadic series irrational?",
       "status": "open",
-      "paper_title": "An Integral-Shift Criterion for Dyadic Tail Recurrences",
+      "paper_title": "A Countermodel for Growth-and-Parity Arguments on the Prime-Gap Dyadic Series",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_251.html",
-      "source_pointer": "/scholarly_corpus/papers/4",
-      "long_records": []
+      "source_pointer": "/scholarly_corpus/papers/6",
+      "long_records": [
+        {
+          "title": "Prime Gaps and Dyadic Tails: Complete Reasoning Record",
+          "href": "https://wcook04.github.io/plectis/papers/erdos251-prime-gap-reasoning-surface.pdf"
+        }
+      ]
     },
     {
       "problem": 257,
       "title": "Reciprocal sums over infinite exponent supports",
       "question": "Is the sum of 1/(2^n-1) over every infinite set of positive exponents irrational?",
       "status": "open",
-      "paper_title": "Denominator Periods, Rational-Value Constraints and Achievement-Set Geometry",
+      "paper_title": "Reciprocal-Summable Support Irrationality at Every Integer Base",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_257.html",
-      "source_pointer": "/scholarly_corpus/papers/5",
+      "source_pointer": "/scholarly_corpus/papers/8",
       "long_records": [
         {
           "title": "Reciprocal Mersenne Subseries",
@@ -90,33 +105,48 @@
       "title": "Three-prime running least common multiples",
       "question": "For a finite set of at least two primes, is the sum of reciprocals of the running least common multiples of the smooth numbers irrational? This library treats the three-prime case.",
       "status": "open",
-      "paper_title": "The Three-Prime Running Least Common Multiple",
+      "paper_title": "No Finite Separable Representation at Three Prime Generators",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-269-three-prime-running-lcm.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_269.html",
-      "source_pointer": "/scholarly_corpus/papers/7",
-      "long_records": []
+      "source_pointer": "/scholarly_corpus/papers/11",
+      "long_records": [
+        {
+          "title": "The Three-Prime Running LCM: Complete Reasoning Record",
+          "href": "https://wcook04.github.io/plectis/papers/erdos269-running-lcm-reasoning-surface.pdf"
+        }
+      ]
     },
     {
       "problem": 1041,
       "title": "Short connections inside polynomial lemniscates",
       "question": "For a monic polynomial whose roots lie in the open unit disc, must two roots be joinable by a curve of length less than two inside the open unit lemniscate?",
       "status": "open",
-      "paper_title": "Critical-Value Separation and Admissible Hubs",
+      "paper_title": "Sharp Solved Families and Constant-Factor Paths in Polynomial Lemniscates",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_1041.html",
-      "source_pointer": "/scholarly_corpus/papers/8",
-      "long_records": []
+      "source_pointer": "/scholarly_corpus/papers/12",
+      "long_records": [
+        {
+          "title": "Lemniscates and Newton Flow: Complete Reasoning Record",
+          "href": "https://wcook04.github.io/plectis/papers/erdos1041-lemniscate-reasoning-surface.pdf"
+        }
+      ]
     },
     {
       "problem": 1049,
       "title": "Lambert-type series at rational bases",
       "question": "For which rational bases is the corresponding series irrational? The smallest resistant explicit base is three halves.",
       "status": "open",
-      "paper_title": "Sharp Height and Four-Jet Obstructions at Base 3/2",
+      "paper_title": "Irrationality of F(31/4) and the Exact Normalized Hankel Order",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_1049.html",
-      "source_pointer": "/scholarly_corpus/papers/9",
-      "long_records": []
+      "source_pointer": "/scholarly_corpus/papers/14",
+      "long_records": [
+        {
+          "title": "Rational-Base Lambert Series: Complete Reasoning Record",
+          "href": "https://wcook04.github.io/plectis/papers/erdos1049-rational-base-lambert-reasoning-surface.pdf"
+        }
+      ]
     }
   ]
 }

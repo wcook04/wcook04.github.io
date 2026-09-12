@@ -22,8 +22,23 @@ BASE = 'https://wcook04.github.io/plectis/'
 LEAN = 'https://github.com/wcook04/plectis-erdos'
 SOFTWARE = 'https://github.com/wcook04/plectis'
 NUMBERS = [68, 243, 249, 251, 257, 269, 1041, 1049]
+CORPUS_REPOSITORIES = ('plectis-erdos', 'plectis-lean-erdos249-257')
 TERM = re.compile(r'<a class="term(?: is-again)?" data-term="[^"]*" href="[^"]*">(.*?)</a>', re.S)
 e = html.escape
+
+
+def corpus_revision(corpus: dict) -> str:
+    """Read the current corpus identity while accepting older public packets."""
+    for name in CORPUS_REPOSITORIES:
+        rows = [row for row in corpus['repository_maps'] if row['repository'] == name]
+        if len(rows) > 1:
+            raise ValueError(f'duplicate repository map for {name}')
+        if rows:
+            revision = rows[0].get('revision')
+            if not isinstance(revision, str) or not revision.strip():
+                raise ValueError(f'missing source revision for {name}')
+            return revision
+    raise ValueError('the reading packet has no Plectis mathematics repository map')
 
 
 def snapshot(site: Path) -> dict:
@@ -32,7 +47,7 @@ def snapshot(site: Path) -> dict:
     packet = json.loads(raw[names[0]])
     source = json.loads(raw[names[1]])
     corpus = packet['scholarly_corpus']
-    if not all(p.get('source_embedded') for p in corpus['papers']):
+    if not corpus['papers'] or not all(p.get('source_embedded') and p.get('body') for p in corpus['papers']):
         raise ValueError('the reading packet has missing manuscripts')
     papers = {p['paper_id']: p for p in corpus['papers']}
     items = []
@@ -52,7 +67,7 @@ def snapshot(site: Path) -> dict:
     systems = [papers[k] for k in ('claim-faithful-publication-systems','open-source-mathematics-strategy')]
     return {'schema':'public_reading_map_v1', 'generated_by':'scripts/build_absolute_frontier.py',
             'source_hashes':{name:hashlib.sha256(data).hexdigest() for name,data in raw.items()},
-            'public_source_commit':next(r['revision'] for r in corpus['repository_maps'] if r['repository']=='plectis-lean-erdos249-257'),
+            'public_source_commit':corpus_revision(corpus),
             'reading_graph_path':BASE+'plectis-ai-reader-complete.json#/scholarly_corpus/reading_graph',
             'systems':[{'title':p['title'],'href':p['public_pdf_url'],'paper_id':p['paper_id']} for p in systems],
             'items':items}
