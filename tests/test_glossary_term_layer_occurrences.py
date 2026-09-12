@@ -64,8 +64,8 @@ def test_protected_markup_and_opt_out_remain_unlinked():
       <button>signal</button> <span class="tag">signal</span>
       <span data-term-auto="off"><em>signal</em></span> signal</p>'''
     result = layer.build(page(body), snapshot([("signal", "signal")]))
-    assert result.count('data-term="signal"') == 2
-    assert '<a href="/elsewhere">signal</a>' in result
+    assert result.count('data-term="signal"') == 3
+    assert '<a href="/elsewhere"><span data-term-preview-only data-term="signal">signal</span></a>' in result
     assert '<code>signal</code>' in result
     assert '<button>signal</button>' in result
     assert '<span class="tag">signal</span>' in result
@@ -124,3 +124,43 @@ def test_governed_pattern_is_compiled_once_and_literal_legacy_path_is_unchanged(
     assert once.count('data-term="formal_verification"') == 2
     assert once.count('data-term="signal"') == 2
     assert layer.governed_phrase_re.cache_info().misses == 1
+
+
+def test_native_links_and_summaries_receive_passive_previews_without_nested_controls():
+    snap = snapshot([("mathematics", "mathematics"), ("reviewer brief", "reviewer_brief")])
+    source = page(
+        '<a href="/maths">Mathematics</a>'
+        '<details><summary>Reviewer brief</summary><p>Contents.</p></details>'
+    )
+    result = layer.build(source, snap)
+    assert (
+        '<a href="/maths"><span data-term-preview-only data-term="mathematics">'
+        'Mathematics</span></a>' in result
+    )
+    assert (
+        '<summary><span data-term-preview-only data-term="reviewer_brief">'
+        'Reviewer brief</span></summary>' in result
+    )
+    assert '<a href="/maths"><a ' not in result
+    assert 'tabindex=' not in result
+    assert layer.build(result, snap) == result
+
+
+def test_passive_preview_keeps_literal_children_and_opt_outs_protected():
+    snap = snapshot([("mathematics", "mathematics")])
+    result = layer.build(page(
+        '<a href="/maths"><code>mathematics</code></a>'
+        '<a href="/off" data-term-auto="off">mathematics</a>'
+        '<summary><span class="tag">mathematics</span></summary>'
+    ), snap)
+    assert 'data-term-preview-only' not in result
+
+
+def test_passive_runtime_branch_never_cancels_native_activation():
+    runtime = (Path(__file__).parents[1] / "index.html").read_text()
+    assert 'a.term, [data-term-preview-only][data-term]' in runtime
+    branch = runtime.split('if (passiveTerm(onTerm)) {', 1)[1].split('}', 1)[0]
+    assert 'ev.preventDefault()' not in branch
+    assert 'return; // surrounding link/summary keeps every native activation' in branch
+    assert 'passiveTerm(anchor) ? "" : "Click to expand here and stay on this page"' in runtime
+    assert 'termDescriptionTarget(anchor).setAttribute("aria-describedby", tip.id)' in runtime

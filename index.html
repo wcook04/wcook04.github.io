@@ -3365,7 +3365,7 @@
     };
     /* END generated glossary terms */
 
-    if (!document.querySelector("a.term")) return;
+    if (!document.querySelector("a.term, [data-term-preview-only][data-term]")) return;
 
     function el(tag, cls, text) {
       var n = document.createElement(tag);
@@ -3375,8 +3375,15 @@
     }
     function termAnchorFrom(target) {
       if (!target || !target.closest) return null;
-      var a = target.closest("a.term");
+      var a = target.closest("a.term, [data-term-preview-only][data-term]");
+      if (!a && target.querySelector) a = target.querySelector("[data-term-preview-only][data-term]");
       return a && TERMS[a.getAttribute("data-term")] ? a : null;
+    }
+    function passiveTerm(anchor) {
+      return anchor && anchor.hasAttribute("data-term-preview-only");
+    }
+    function termDescriptionTarget(anchor) {
+      return passiveTerm(anchor) ? anchor.closest("a[href], summary") : anchor;
     }
 
     // Grade the page: the first mention of a term keeps the dotted rule, later
@@ -3472,7 +3479,8 @@
             data.reader_deep !== data.reader_rule) {
           tipDeep.textContent = data.reader_deep; tipDeep.hidden = false;
         } else { tipDeep.textContent = ""; tipDeep.hidden = true; }
-        tipFull.href = anchor.getAttribute("href");
+        var nativeLink = passiveTerm(anchor) ? anchor.closest("a[href]") : anchor;
+        tipFull.href = nativeLink ? nativeLink.getAttribute("href") : "";
         tipFull.hidden = false;
         tipBack.hidden = false;
         tipCue.textContent = "Click the term again, or use the link, to open the complete glossary entry";
@@ -3483,7 +3491,7 @@
         tipDeep.textContent = ""; tipDeep.hidden = true;
         tipFull.hidden = true;
         tipBack.hidden = true;
-        tipCue.textContent = "Click to expand here and stay on this page";
+        tipCue.textContent = passiveTerm(anchor) ? "" : "Click to expand here and stay on this page";
       }
     }
     function showTip(anchor, intent) {
@@ -3494,10 +3502,10 @@
       tip.classList.remove("is-leaving");
       previewIntent = intent || null;
       if (tipFor === anchor && !tip.hidden) return;
-      if (tipFor && tipFor !== anchor) tipFor.removeAttribute("aria-describedby");
+      if (tipFor && tipFor !== anchor) termDescriptionTarget(tipFor).removeAttribute("aria-describedby");
       if (tipFor !== anchor) tier = 0; // a different term always starts collapsed
       tipFor = anchor;
-      anchor.setAttribute("aria-describedby", tip.id);
+      termDescriptionTarget(anchor).setAttribute("aria-describedby", tip.id);
       renderTier(data, anchor);
       placeFloater(tip, anchor);
     }
@@ -3508,10 +3516,10 @@
       if (tipFadeTimer) { clearTimeout(tipFadeTimer); tipFadeTimer = 0; }
       tip.classList.remove("is-leaving");
       tier = 1;
-      if (tipFor && tipFor !== anchor) tipFor.removeAttribute("aria-describedby");
+      if (tipFor && tipFor !== anchor) termDescriptionTarget(tipFor).removeAttribute("aria-describedby");
       tipFor = anchor;
       previewIntent = "click";
-      anchor.setAttribute("aria-describedby", tip.id);
+      termDescriptionTarget(anchor).setAttribute("aria-describedby", tip.id);
       renderTier(data, anchor);
       placeFloater(tip, anchor); // reposition: the card grew
       return true;
@@ -3519,7 +3527,7 @@
     function hideTip(immediate) {
       tier = 0;
       previewIntent = null;
-      if (tipFor) { tipFor.removeAttribute("aria-describedby"); tipFor = null; }
+      if (tipFor) { termDescriptionTarget(tipFor).removeAttribute("aria-describedby"); tipFor = null; }
       if (tip.hidden) return;
       if (immediate) {
         if (tipFadeTimer) { clearTimeout(tipFadeTimer); tipFadeTimer = 0; }
@@ -3549,7 +3557,7 @@
     });
     tip.addEventListener("mouseleave", scheduleHideTip);
     tipBack.addEventListener("click", function () {
-      var anchor = tipFor;
+      var anchor = termDescriptionTarget(tipFor);
       suppressFocusPreview = true;
       suppressPointerPreview = true;
       document.addEventListener("mousemove", function () {
@@ -3578,6 +3586,10 @@
       if (tip.contains(ev.target)) return;
       var onTerm = termAnchorFrom(ev.target);
       if (onTerm) {
+        if (passiveTerm(onTerm)) {
+          if (!tip.hidden) hideTip(true);
+          return; // surrounding link/summary keeps every native activation
+        }
         if (ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
         if (tipFor === onTerm && tier === 1 && !tip.hidden) {
           hideTip(true);

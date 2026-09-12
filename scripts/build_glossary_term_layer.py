@@ -117,6 +117,14 @@ TERM_ANCHOR = re.compile(
     r'<a class="term(?: is-again)?" data-term="[^"]*" href="[^"]*">(?P<label>.*?)</a>',
     re.DOTALL,
 )
+PASSIVE_TERM_SPAN = re.compile(
+    r'<span data-term-preview-only data-term="[^"]*">(?P<label>.*?)</span>',
+    re.DOTALL,
+)
+PREVIEW_CONTROL = re.compile(
+    r'<(?P<tag>a|summary)\b(?P<attrs>[^>]*)>(?P<inner>.*?)</(?P=tag)>',
+    re.DOTALL | re.IGNORECASE,
+)
 
 
 def phrase_re(phrase: str) -> re.Pattern[str]:
@@ -232,6 +240,72 @@ def link_run(
     return "".join(pieces)
 
 
+def link_passive_run(
+    text: str,
+    phrases: list[tuple[str, str]],
+    phrase_patterns: dict[str, str] | None = None,
+) -> str:
+    """Wrap governed text without creating a nested interactive control."""
+    match_text, spans = decoded_view(text)
+    pieces: list[str] = []
+    pos = 0
+    for start, end, term_id, matched in iter_matches(match_text, phrases, phrase_patterns):
+        source_start, source_end, label = start, end, matched
+        if spans is not None:
+            if start > 0 and spans[start - 1] == spans[start]:
+                continue
+            if end < len(spans) and spans[end - 1] == spans[end]:
+                continue
+            source_start, source_end = spans[start][0], spans[end - 1][1]
+            label = text[source_start:source_end]
+        pieces.append(text[pos:source_start])
+        pieces.append(
+            '<span data-term-preview-only '
+            f'data-term="{html.escape(term_id, quote=True)}">{label}</span>'
+        )
+        pos = source_end
+    if not pieces:
+        return text
+    pieces.append(text[pos:])
+    return "".join(pieces)
+
+
+def link_passive_controls(
+    page: str,
+    phrases: list[tuple[str, str]],
+    phrase_patterns: dict[str, str] | None = None,
+) -> str:
+    """Add passive term-preview descendants to native links and summaries."""
+    page = PASSIVE_TERM_SPAN.sub(lambda match: match.group("label"), page)
+
+    def decorate(match: re.Match[str]) -> str:
+        tag, attrs, inner = match.group("tag"), match.group("attrs"), match.group("inner")
+        opening = f"<{tag}{attrs}>"
+        if tag.lower() == "a" and re.search(r'\bclass="[^"]*\bterm\b', opening):
+            return match.group(0)
+        if OPT_OUT.search(opening) or is_chrome(opening):
+            return match.group(0)
+        out: list[str] = []
+        depth = 0
+        pos = 0
+        for token in TAG_OR_COMMENT.finditer(inner):
+            run = inner[pos:token.start()]
+            out.append(run if depth else link_passive_run(run, phrases, phrase_patterns))
+            raw = token.group(0)
+            name_match = TAG_NAME.match(raw)
+            if name_match and not raw.startswith("<!--"):
+                closing, name = name_match.group(1), name_match.group(2).lower()
+                if name in SKIP_TAGS or OPT_OUT.search(raw) or is_chrome(raw):
+                    depth = max(0, depth - 1) if closing else depth + 1
+            out.append(raw)
+            pos = token.end()
+        tail = inner[pos:]
+        out.append(tail if depth else link_passive_run(tail, phrases, phrase_patterns))
+        return opening + "".join(out) + f"</{tag}>"
+
+    return PREVIEW_CONTROL.sub(decorate, page)
+
+
 def is_chrome(tag: str) -> bool:
     """True when an opening tag carries a label class.
 
@@ -252,6 +326,7 @@ def link_terms(
 ) -> str:
     """Walk the finished page and link governed terms in its prose only."""
     page = TERM_ANCHOR.sub(lambda m: m.group("label"), page)
+    page = link_passive_controls(page, phrases, phrase_patterns)
     body = page.find("<body")
     if body == -1:
         raise ValueError("index.html has no <body>")
@@ -334,7 +409,7 @@ def build(page: str, snapshot: dict) -> str:
     }
     linked = link_terms(page, phrases, anchors, phrase_patterns)
 
-    used = sorted(set(re.findall(r'<a class="term(?: is-again)?" data-term="([^"]+)"', linked)))
+    used = sorted(set(re.findall(r'\bdata-term="([^"]+)"', linked)))
     missing = [term_id for term_id in used if term_id not in snapshot["terms"]]
     if missing:
         raise ValueError(f"linked terms absent from the snapshot: {missing}")
