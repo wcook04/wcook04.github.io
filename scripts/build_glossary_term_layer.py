@@ -96,12 +96,6 @@ CHROME_CLASSES = frozenset(
         "flagship__tag",
         "frontier-plate__handle",
         "frontier-plate__number",
-        # The eight programme names beside their numbers. A row label is a
-        # name for the thing the row opens, so a link inside it retypes the
-        # name and offers a second click that leaves the map. Every one of
-        # these words is defined again in the prose below, where a reader has
-        # a sentence to hang the definition on.
-        "frontier-topic",
         "kind",
         "map__k",
         "name",

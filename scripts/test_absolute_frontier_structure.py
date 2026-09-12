@@ -5,6 +5,7 @@ import re
 import unittest
 
 from build_absolute_frontier import INDEX, NUMBERS, SOURCE, project, render
+from build_glossary_term_layer import link_terms
 
 
 class AbsoluteFrontierStructureTests(unittest.TestCase):
@@ -51,6 +52,17 @@ class AbsoluteFrontierStructureTests(unittest.TestCase):
         for number in NUMBERS:
             self.assertEqual(rendered.count(f'<p data-dest="problem-{number}">'), 1)
             self.assertEqual(rendered.count(f'<a href="https://wcook04.github.io/plectis/maths/problems/erdos_{number}.html" data-dest="problem-{number}">'), 1)
+
+    def test_mathematical_description_has_help_beside_its_unchanged_problem_link(self):
+        problem = '<a href="maths/problems/erdos_1041.html" data-dest="problem-1041">Erdős #1041</a>'
+        markup = ('<body><p>' + problem + ' <span class="frontier-topic">A lemniscate</span></p>'
+                  '<span class="frontier-plate__handle">A lemniscate</span></body>')
+        linked = link_terms(markup, [('lemniscate', 'lemniscate')],
+                            {'lemniscate': 'glossary.html#glossary-lemniscate'})
+        self.assertIn(problem, linked)
+        self.assertIn('<span class="frontier-topic">A <a class="term" data-term="lemniscate"', linked)
+        self.assertEqual(linked.count('data-term="lemniscate"'), 1)
+        self.assertIn('<span class="frontier-plate__handle">A lemniscate</span>', linked)
 
 
 if __name__ == '__main__':
