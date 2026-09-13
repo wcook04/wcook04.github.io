@@ -89,7 +89,7 @@
       "title": "Reciprocal sums over infinite exponent supports",
       "question": "Is the sum of 1/(2^n-1) over every infinite set of positive exponents irrational?",
       "status": "open",
-      "paper_title": "Reciprocal-Summable Support Irrationality at Every Integer Base",
+      "paper_title": "Weighted Support Criteria for Reciprocal Mersenne Subseries",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_257.html",
       "source_pointer": "/scholarly_corpus/papers/8",
