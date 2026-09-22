@@ -45,6 +45,13 @@ class AbsoluteFrontierStructureTests(unittest.TestCase):
         expected_hrefs = {str(row['problem']): row['page_href'] for row in self.payload['items']}
         self.assertTrue(all(href == expected_hrefs[dest] for href, dest, _ in links))
 
+    def test_1041_boundary_is_qualified_across_generated_surfaces(self):
+        projected = project(self.markup, self.payload)
+        self.assertIn('1041\'s checked total-variation form is refuted', projected)
+        self.assertIn('Checked total-variation form refuted; historical curve-length correspondence unreviewed.', projected)
+        self.assertIn('<span class="problem-sheet__number">Erdős #1041</span><span class="problem-sheet__status">Qualified</span>', projected)
+        self.assertEqual(projected.count('Original problem remains open.'), len(NUMBERS) - 1)
+
     def test_projection_comparison_ignores_both_term_link_forms(self):
         decorated = (
             '<a class="term" data-term="proof" href="glossary.html#glossary-proof">proof</a> '

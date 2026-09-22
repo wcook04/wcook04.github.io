@@ -189,8 +189,9 @@ that could check it.
 
 Those labels preserve the cross-site return route: `Will Cook` is this page's
 `<h1>`, and *public work* describes the front door in the Plectis colophon. They
-must not be used as a paraphrase of the programme line, which is now **Eight
-open Erdős problems**. If you change either return label, change the Plectis
+must not be used as a paraphrase of the programme line, which names **eight
+Erdős research programmes** and qualifies the checked #1041 total-variation
+counterexample. If you change either return label, change the Plectis
 header, its colophon, and `PARENT_SITE_LABEL` in that site's builder in the same
 pass.
 

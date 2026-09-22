@@ -79,12 +79,20 @@ def snapshot(site: Path) -> dict:
             'items':items}
 
 
+def problem_boundary(row: dict) -> str:
+    # The compact source snapshot predates the qualified #1041 claim. Keep the
+    # historic question open while naming the checked total-variation boundary.
+    if row['problem'] == 1041:
+        return 'checked total-variation form refuted; historical curve-length correspondence unreviewed'
+    return 'original problem remains open'
+
+
 def render(payload: dict) -> str:
     """Keep the personal homepage an introduction and destination index."""
     if [row['problem'] for row in payload['items']] != NUMBERS:
         raise ValueError('the source must retain all eight problems')
     problem_routes = '\n'.join(
-        f'''          <p data-dest="problem-{row['problem']}"><a href="{e(row['page_href'], quote=True)}" data-dest="problem-{row['problem']}">Erdős #{row['problem']}</a> <span class="frontier-topic">{e(row['title'])}</span> · original problem remains open</p>'''
+        f'''          <p data-dest="problem-{row['problem']}"><a href="{e(row['page_href'], quote=True)}" data-dest="problem-{row['problem']}">Erdős #{row['problem']}</a> <span class="frontier-topic">{e(row['title'])}</span> · {e(problem_boundary(row))}</p>'''
         for row in payload['items']
     )
     return f'''{BEGIN}
@@ -92,7 +100,7 @@ def render(payload: dict) -> str:
         <h2 id="absolute-frontier-title">Public work</h2>
         <p><a class="btn" href="{BASE}" data-dest="plectis-site">Explore Plectis</a></p>
         <p class="absolute-frontier__thesis">The project site introduces the research, software and recorded interface.</p>
-        <p class="af-route"><a href="{BASE}maths/" data-dest="math-frontier">Mathematics</a> <span>· work on eight Erdős problems, all still open</span></p>
+        <p class="af-route"><a href="{BASE}maths/" data-dest="math-frontier">Mathematics</a> <span>· eight programmes; #1041's checked total-variation form is refuted</span></p>
         <p class="frontier-instruction"><span class="frontier-instruction__wide">Hover or focus a problem to preview it; activate the link to open its page.</span><span class="frontier-instruction__narrow">Open a problem page:</span></p>
         <div class="frontier" aria-label="Eight Erdős problem pages">
 {problem_routes}
@@ -116,18 +124,29 @@ def project(text: str, payload: dict) -> str:
     a=text.index(BEGIN); b=text.index(END,a)+len(END)
     text=text[:a]+render(payload)+text[b:]
     # Portraits and overview are projections of the same eight rows as the list.
+    boundary_count=len(re.findall(r'<span class="frontier-plate__boundary">', text))
+    if boundary_count != len(NUMBERS):
+        raise ValueError(f'expected {len(NUMBERS)} frontier plate boundaries, found {boundary_count}')
     for p in payload['items']:
         n=p['problem']
         pattern=rf'<span class="shot__problem" data-problem="{n}".*?(?=\s*<span class="shot__problem"|\s*</span>\s*</a>\s*<p class="dest__hint")'
+        boundary=problem_boundary(p)
+        portrait_boundary=boundary.capitalize() if n == 1041 else 'The original problem remains open'
+        portrait_status='Qualified' if n == 1041 else p['status'].capitalize()
         sheet=f'''<span class="shot__problem" data-problem="{n}" aria-hidden="true">
-          <span class="problem-sheet__topline"><span class="problem-sheet__number">Erdős #{n}</span><span class="problem-sheet__status">{e(p['status'].capitalize())}</span></span>
+          <span class="problem-sheet__topline"><span class="problem-sheet__number">Erdős #{n}</span><span class="problem-sheet__status">{e(portrait_status)}</span></span>
           <span class="problem-sheet__title">{e(p['title'])}</span>
           <span class="problem-sheet__question"><span class="problem-sheet__label">Question</span>{e(p['question'])}</span>
           <span class="problem-sheet__section"><span class="problem-sheet__label">Short note</span>{e(p['paper_title'])}</span>
-          <span class="problem-sheet__section problem-sheet__section--open"><span class="problem-sheet__label">Research status</span>The original problem remains open. The problem page separates results, evidence and remaining work.</span></span>'''
+          <span class="problem-sheet__section problem-sheet__section--open"><span class="problem-sheet__label">Research status</span>{e(portrait_boundary)}. The problem page separates results, evidence and remaining work.</span></span>'''
         text=replace_required(text,pattern,lambda _:sheet,f'portrait #{n}',flags=re.S)
         text=replace_required(text,rf'(<span class="frontier-plate__number">{n}</span><span class="frontier-plate__handle">).*?(</span>)',lambda m:m[1]+e(p['title'])+m[2],f'frontier plate #{n}',flags=re.S)
-    text=replace_required(text,r'(<span class="frontier-plate__boundary">).*?(</span>)',r'\1Original problem remains open.\2','frontier plate boundaries',expected=len(NUMBERS),flags=re.S)
+        text=replace_required(
+            text,
+            rf'(<span class="frontier-plate__number">{n}</span><span class="frontier-plate__handle">[^<]*</span><span class="frontier-plate__boundary">).*?(</span>)',
+            lambda m: m[1]+e(boundary.capitalize())+'.'+m[2],
+            f'frontier plate #{n} boundary', flags=re.S,
+        )
     # The interactive portrait opens the same current page as its row.
     text=re.sub(r'    /\* This is presentation text for the destination bar.*?    var DEST =', '    var DEST =', text, count=1, flags=re.S)
     for p in payload['items']:

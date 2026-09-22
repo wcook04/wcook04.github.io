@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
   <title id="title">Plectis: open-source mathematics</title>
-  <desc id="description">Checked proofs, research papers and software for people and agents to build on. Eight original Erdős problems remain open.</desc>
+  <desc id="description">Checked statements, research papers and software across eight Erdős programmes. A total-variation formulation of #1041 is refuted; its historical correspondence awaits review.</desc>
   <defs>
     <linearGradient id="wash" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#171020"/>
@@ -22,16 +22,16 @@
   </g>
   <g font-family="Arial, Helvetica, sans-serif" fill="#c8bcb2">
     <text x="72" y="96" font-size="15" font-weight="700" letter-spacing="4">FORMAL MATHEMATICS</text>
-    <text x="72" y="143" font-size="16" font-weight="700" letter-spacing="3" fill="#d8a44f">EIGHT OPEN ERDŐS PROBLEMS</text>
+    <text x="72" y="143" font-size="16" font-weight="700" letter-spacing="3" fill="#d8a44f">EIGHT ERDŐS PROGRAMMES</text>
   </g>
   <g font-family="Georgia, 'Times New Roman', serif" fill="#f5ead8">
     <text x="72" y="248" font-size="67" letter-spacing="-2">Open mathematics.</text>
     <text x="72" y="315" font-size="28" fill="#ded2c5">Checked proofs, papers and tools.</text>
     <text x="72" y="351" font-size="28" fill="#ded2c5">Build on what is already there.</text>
   </g>
-  <text x="72" y="430" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="1.2" fill="#d8a44f">ALL EIGHT REMAIN OPEN</text>
+  <text x="72" y="430" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="1.2" fill="#d8a44f">#1041 TOTAL-VARIATION FORM REFUTED</text>
   <g transform="translate(670 170)" font-family="Arial, Helvetica, sans-serif">
-    <text x="0" y="0" font-size="15" font-weight="700" letter-spacing="2.5" fill="#c8bcb2">EIGHT OPEN PROBLEMS</text>
+    <text x="0" y="0" font-size="15" font-weight="700" letter-spacing="2.5" fill="#c8bcb2">EIGHT PROGRAMMES</text>
     <g fill="none" stroke="#9b7750" stroke-opacity=".5" stroke-width="1">
       <path d="M0 28H458"/>
       <path d="M0 116H458"/>
