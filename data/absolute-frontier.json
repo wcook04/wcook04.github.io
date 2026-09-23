@@ -2,10 +2,10 @@
   "schema": "public_reading_map_v1",
   "generated_by": "scripts/build_absolute_frontier.py",
   "source_hashes": {
-    "plectis-ai-reader-complete.json": "8258e86c72abef1d8ada15ebb3c5ece6bd26c0318252582b1ecbc943cc16a4ea",
-    "lean/problems.json": "070f63407c29b0de529ccf8cb11582db5ece28a72ecbf48ac0ac5d704ebc4c41"
+    "plectis-ai-reader-complete.json": "00293d92a083f859238e384637541212fbe10c988cac08f42cd2fe7de689ebc8",
+    "lean/problems.json": "5c27ccfa55071a847c83a1feb245601dbac8f52a2fe21a95010352a8492e8dc2"
   },
-  "public_source_commit": "6aa23a03b03d92fdf223fed1a17fb107951f50c3",
+  "public_source_commit": "a08529a329578d172a9a2e602bacba4a8cc760cd",
   "reading_graph_path": "https://wcook04.github.io/plectis/plectis-ai-reader-complete.json#/scholarly_corpus/reading_graph",
   "systems": [
     {
@@ -31,7 +31,7 @@
       "source_pointer": "/scholarly_corpus/papers/0",
       "long_records": [
         {
-          "title": "The Factorial-Denominator Series: Complete Reasoning Record",
+          "title": "Denominators and Rationality Criteria for $\\sum_{n\\ge2}(n!-1)^{-1}$",
           "href": "https://wcook04.github.io/plectis/papers/erdos68-factorial-reasoning-surface.pdf"
         }
       ]
@@ -41,13 +41,13 @@
       "title": "Reciprocal-tail rigidity near the Sylvester recurrence",
       "question": "Under a rapid-growth hypothesis on an integer sequence, does rationality of its reciprocal sum force the sequence to satisfy the Sylvester recurrence eventually?",
       "status": "open",
-      "paper_title": "Excluding the Bounded Negative Part",
+      "paper_title": "Bounded Increments and Rational Reciprocal Sums",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-243-reciprocal-tail-rigidity.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_243.html",
       "source_pointer": "/scholarly_corpus/papers/2",
       "long_records": [
         {
-          "title": "Reciprocal-Tail Rigidity: Complete Reasoning Record",
+          "title": "Reciprocal-Tail Rigidity: Theorems, Proofs and Questions",
           "href": "https://wcook04.github.io/plectis/papers/erdos243-reciprocal-tail-reasoning-surface.pdf"
         }
       ]
@@ -57,7 +57,7 @@
       "title": "The binary totient series",
       "question": "Is the binary Lambert series sum phi(n)/2^n irrational?",
       "status": "open",
-      "paper_title": "A Basis for the 2-Kernel of Euler's Totient",
+      "paper_title": "Bases and Integral Relations for the $k$-Kernel of Euler's Totient",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_249.html",
       "source_pointer": "/scholarly_corpus/papers/4",
@@ -71,15 +71,15 @@
     {
       "problem": 251,
       "title": "The prime-gap dyadic series",
-      "question": "Is the dyadic series sum p_n/2^n over consecutive primes irrational? Equivalently, is the corresponding consecutive-prime-gap dyadic series irrational?",
+      "question": "Is the dyadic series of consecutive primes irrational? Equivalently, is the corresponding consecutive-prime-gap dyadic series irrational?",
       "status": "open",
-      "paper_title": "A Countermodel for Growth-and-Parity Arguments on the Prime-Gap Dyadic Series",
+      "paper_title": "Sparse Congruence-Preserving Perturbations of Dyadic Series",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-251-prime-gap-dyadic-series.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_251.html",
       "source_pointer": "/scholarly_corpus/papers/6",
       "long_records": [
         {
-          "title": "Prime Gaps and Dyadic Tails: Complete Reasoning Record",
+          "title": "Prime-Gap Dyadic Series: Perturbations, Exact Criteria and Certificates",
           "href": "https://wcook04.github.io/plectis/papers/erdos251-prime-gap-reasoning-surface.pdf"
         }
       ]
@@ -111,7 +111,7 @@
       "source_pointer": "/scholarly_corpus/papers/11",
       "long_records": [
         {
-          "title": "The Three-Prime Running LCM: Complete Reasoning Record",
+          "title": "The Three-Prime Running LCM: Kernel Rank and Tail Arithmetic",
           "href": "https://wcook04.github.io/plectis/papers/erdos269-running-lcm-reasoning-surface.pdf"
         }
       ]
@@ -119,15 +119,15 @@
     {
       "problem": 1041,
       "title": "Short connections inside polynomial lemniscates",
-      "question": "For a monic polynomial whose roots lie in the open unit disc, must two roots be joinable by a curve of length less than two inside the open unit lemniscate?",
+      "question": "For a monic polynomial whose roots lie in the open unit disc, must two roots be joinable by a curve of length less than two inside the open unit lemniscate? The registry has not adjudicated whether the checked total-variation formulation exactly matches this historical curve-length question.",
       "status": "open",
-      "paper_title": "Sharp Solved Families and Constant-Factor Paths in Polynomial Lemniscates",
+      "paper_title": "Paths in Polynomial Lemniscates: Trinomials and Critical-Value Bounds",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_1041.html",
       "source_pointer": "/scholarly_corpus/papers/12",
       "long_records": [
         {
-          "title": "Lemniscates and Newton Flow: Complete Reasoning Record",
+          "title": "Paths in Polynomial Lemniscates: Proofs and Examples",
           "href": "https://wcook04.github.io/plectis/papers/erdos1041-lemniscate-reasoning-surface.pdf"
         }
       ]
@@ -135,15 +135,15 @@
     {
       "problem": 1049,
       "title": "Lambert-type series at rational bases",
-      "question": "For which rational bases is the corresponding series irrational? The smallest resistant explicit base is three halves.",
+      "question": "For which rational bases is the corresponding series irrational? The first resistant explicit base is three halves.",
       "status": "open",
-      "paper_title": "Irrationality of F(31/4) and the Exact Normalized Hankel Order",
+      "paper_title": "Zudilin's Forms at Rational Bases and the Exact Normalised Hankel Order",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_1049.html",
       "source_pointer": "/scholarly_corpus/papers/14",
       "long_records": [
         {
-          "title": "Rational-Base Lambert Series: Complete Reasoning Record",
+          "title": "Zudilin's Forms at Rational Bases: Proofs and Research Record",
           "href": "https://wcook04.github.io/plectis/papers/erdos1049-rational-base-lambert-reasoning-surface.pdf"
         }
       ]
