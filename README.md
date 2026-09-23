@@ -161,10 +161,12 @@ communicate the mathematical first contact before a reader opens the page, so
 composition. `index.html` points Open Graph and Twitter at the 1200 by 630 PNG
 because social crawlers do not reliably render SVG.
 
-The card names the open-source mathematics project and the eight problem
-subjects. These are topic labels, not a ranking of results or a claim that any
-problem has been solved. The checked results and remaining work live on the
-current problem pages.
+The card leads with the Lean-checked #257 theorem: finite-prime weighted mass
+at base two on a positive host gives irrational sums for every infinite subset
+at every integer base. It states that the arbitrary-support problem remains
+open, and names the eight problem subjects. The programme labels do not claim
+that those problems have been solved; the exact statements and remaining work
+live on the current problem pages.
 
 After changing the SVG, regenerate and inspect the PNG before changing the
 metadata:
@@ -190,8 +192,8 @@ that could check it.
 Those labels preserve the cross-site return route: `Will Cook` is this page's
 `<h1>`, and *public work* describes the front door in the Plectis colophon. They
 must not be used as a paraphrase of the programme line, which names **eight
-Erdős research programmes** and qualifies the checked #1041 total-variation
-counterexample. If you change either return label, change the Plectis
+Erdős research programmes**. The mathematical first contact leads with the
+qualified #257 theorem. If you change either return label, change the Plectis
 header, its colophon, and `PARENT_SITE_LABEL` in that site's builder in the same
 pass.
 

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
-  <title id="title">Plectis: open-source mathematics</title>
-  <desc id="description">Checked statements, research papers and software across eight Erdős programmes. A total-variation formulation of #1041 is refuted; its historical correspondence awaits review.</desc>
+  <title id="title">Plectis: Lean-checked Erdős #257 result</title>
+  <desc id="description">A positive host with finite-prime weighted mass at base two has irrational reciprocal sums for every infinite subset at every integer base. The unrestricted-support question remains open. Eight Erdős research programmes.</desc>
   <defs>
     <linearGradient id="wash" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#171020"/>
@@ -25,11 +25,13 @@
     <text x="72" y="143" font-size="16" font-weight="700" letter-spacing="3" fill="#d8a44f">EIGHT ERDŐS PROGRAMMES</text>
   </g>
   <g font-family="Georgia, 'Times New Roman', serif" fill="#f5ead8">
-    <text x="72" y="248" font-size="67" letter-spacing="-2">Open mathematics.</text>
-    <text x="72" y="315" font-size="28" fill="#ded2c5">Checked proofs, papers and tools.</text>
-    <text x="72" y="351" font-size="28" fill="#ded2c5">Build on what is already there.</text>
+    <text x="72" y="248" font-size="67" letter-spacing="-2">Erdős #257.</text>
+    <text x="72" y="293" font-size="22" fill="#ded2c5">Positive host with finite-prime</text>
+    <text x="72" y="321" font-size="22" fill="#ded2c5">weighted mass at base two.</text>
+    <text x="72" y="349" font-size="22" fill="#ded2c5">Every infinite subset has an irrational</text>
+    <text x="72" y="377" font-size="22" fill="#ded2c5">sum at every integer base.</text>
   </g>
-  <text x="72" y="430" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="1.2" fill="#d8a44f">#1041 TOTAL-VARIATION FORM REFUTED</text>
+  <text x="72" y="430" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="1.2" fill="#d8a44f">ARBITRARY SUPPORTS REMAIN OPEN</text>
   <g transform="translate(670 170)" font-family="Arial, Helvetica, sans-serif">
     <text x="0" y="0" font-size="15" font-weight="700" letter-spacing="2.5" fill="#c8bcb2">EIGHT PROGRAMMES</text>
     <g fill="none" stroke="#9b7750" stroke-opacity=".5" stroke-width="1">
@@ -48,7 +50,7 @@
       <text x="55" y="75">factorial series</text><text x="288" y="75">reciprocal tails</text>
       <text x="55" y="163">binary totient</text><text x="288" y="163">prime-gap series</text>
       <text x="55" y="251">Mersenne supports</text><text x="288" y="251">three-prime LCMs</text>
-      <text x="65" y="339">lemniscate paths</text><text x="299" y="339">Lambert series</text>
+      <text x="85" y="339">lemniscate paths</text><text x="315" y="339">Lambert series</text>
     </g>
   </g>
   <g font-family="Arial, Helvetica, sans-serif" fill="#c8bcb2">
