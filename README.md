@@ -160,6 +160,7 @@ communicate the mathematical first contact before a reader opens the page, so
 `assets/og-frontier.svg` is the source of truth for the eight-problem
 composition. `index.html` points Open Graph and Twitter at the 1200 by 630 PNG
 because social crawlers do not reliably render SVG.
+The image URL carries a version query so a changed card gets a fresh cache key.
 
 The card leads with the Lean-checked #257 theorem: finite-prime weighted mass
 at base two on a positive host gives irrational sums for every infinite subset
