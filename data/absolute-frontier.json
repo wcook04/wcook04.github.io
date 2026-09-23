@@ -2,10 +2,10 @@
   "schema": "public_reading_map_v1",
   "generated_by": "scripts/build_absolute_frontier.py",
   "source_hashes": {
-    "plectis-ai-reader-complete.json": "00293d92a083f859238e384637541212fbe10c988cac08f42cd2fe7de689ebc8",
-    "lean/problems.json": "5c27ccfa55071a847c83a1feb245601dbac8f52a2fe21a95010352a8492e8dc2"
+    "plectis-ai-reader-complete.json": "224ed5c6401f401fca69cdfed5e03d87b910f18d58f9f1dbd0dfc76a8d2c0455",
+    "lean/problems.json": "2bb32403a072bce763baa3ae7094c2c52ea0ab02a4b5184b252daaac30be22bc"
   },
-  "public_source_commit": "a08529a329578d172a9a2e602bacba4a8cc760cd",
+  "public_source_commit": "0704643fda503ec9068f5c600da94fd96cdc7112",
   "reading_graph_path": "https://wcook04.github.io/plectis/plectis-ai-reader-complete.json#/scholarly_corpus/reading_graph",
   "systems": [
     {
@@ -41,7 +41,7 @@
       "title": "Reciprocal-tail rigidity near the Sylvester recurrence",
       "question": "Under a rapid-growth hypothesis on an integer sequence, does rationality of its reciprocal sum force the sequence to satisfy the Sylvester recurrence eventually?",
       "status": "open",
-      "paper_title": "Bounded Increments and Rational Reciprocal Sums",
+      "paper_title": "Cubic-Rate Irrationality and Reciprocal-Tail Rigidity",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-243-reciprocal-tail-rigidity.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_243.html",
       "source_pointer": "/scholarly_corpus/papers/2",
@@ -119,7 +119,7 @@
     {
       "problem": 1041,
       "title": "Short connections inside polynomial lemniscates",
-      "question": "For a monic polynomial whose roots lie in the open unit disc, must two roots be joinable by a curve of length less than two inside the open unit lemniscate? The registry has not adjudicated whether the checked total-variation formulation exactly matches this historical curve-length question.",
+      "question": "Must two roots of a monic polynomial in the open unit disc be joined by a sub-two-length curve inside its unit lemniscate? Ani’s degree-seven example refutes the exact Formal Conjectures statement; correspondence with the 1958 wording awaits human review.",
       "status": "open",
       "paper_title": "Paths in Polynomial Lemniscates: Trinomials and Critical-Value Bounds",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf",
