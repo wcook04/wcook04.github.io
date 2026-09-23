@@ -1040,7 +1040,7 @@
        as four stacked bands of one device rather than a list with two
        appendices bolted under it. The eyebrow is the .role line's type at the
        .kind line's size: already on the page twice, so it introduces nothing. */
-    .handoff, .note {
+    .participate, .handoff, .note {
       margin: clamp(2.2rem, 5svh, 3.2rem) 0 0;
       padding-top: clamp(1.5rem, 3.5svh, 2rem);
       border-top: 1px solid var(--hair-strong);
@@ -1053,7 +1053,7 @@
        under the name, so the mark introduces no new measurement, and the
        eyebrow comes up from grey. The prose does not move, fade or blur. A
        reader mid-sentence must not be told anything by the sentence shifting. */
-    .handoff::before, .note::before {
+    .participate::before, .handoff::before, .note::before {
       content: "";
       position: absolute; left: 0; top: -1px;
       width: 2.4rem; height: 1px;
@@ -1062,6 +1062,7 @@
       transform-origin: left center;
       transition: transform var(--t-response) var(--ease-scene);
     }
+    :root[data-scene="participate"] .participate::before,
     :root[data-scene="handoff"] .handoff::before,
     :root[data-scene="note"] .note::before { transform: scaleX(1); }
 
@@ -1073,12 +1074,13 @@
       color: var(--faint);
       transition: color var(--t-response) ease-out;
     }
+    :root[data-scene="participate"] .participate .eyebrow,
     :root[data-scene="handoff"] .handoff .eyebrow,
     :root[data-scene="note"] .note .eyebrow { color: var(--bone-soft); }
 
     /* Stillness means the marks are still there, just already arrived. */
     @media (prefers-reduced-motion: reduce) {
-      .handoff::before, .note::before { transition: none; transform: scaleX(1); }
+      .participate::before, .handoff::before, .note::before { transition: none; transform: scaleX(1); }
       .eyebrow { transition: none; }
     }
     .handoff__lede {
@@ -1266,11 +1268,11 @@
        rows use for their metadata. This is the one part of the page a reader
        has to take on trust, and setting it in the faintest ink on the page
        would quietly say it matters least. */
-    .note p {
+    .participate p, .note p {
       margin: .75rem 0 0; max-width: 30rem;
       font-size: .98rem; line-height: 1.6; color: var(--bone-soft);
     }
-    .note p:first-of-type { margin-top: .8rem; }
+    .participate p:first-of-type, .note p:first-of-type { margin-top: .8rem; }
 
     @media (prefers-reduced-motion: reduce) {
       .btn, .handoff__alt a { transition: none; }
@@ -2638,6 +2640,11 @@
 
 
 
+      <section class="participate" aria-labelledby="participate-h" data-scene-key="participate" data-dest-default="plectis-site">
+        <h2 class="eyebrow" id="participate-h">Take part</h2>
+        <p>Try an experiment on the public <a class="term" data-term="lean" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-lean">Lean</a> <a class="term" data-term="corpus" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-corpus">corpus</a>, work on an <a class="term is-again" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">open problem</a> or suggest a better way to run and <a class="term is-again" data-term="check" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-check">check</a> the work. <a href="https://wcook04.github.io/plectis/#contribute">The <span data-term-preview-only data-term="contribute">contribution</span> guide</a> shows how to send an idea, correction, <a class="term" data-term="proof" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-proof">proof</a> or infrastructure proposal and how each is credited.</p>
+      </section>
+
       <section class="handoff" aria-labelledby="handoff-h" data-scene-key="handoff" data-dest-default="review-json">
         <h2 class="eyebrow" id="handoff-h">Read with an AI</h2>
         <p><a href="https://wcook04.github.io/plectis/plectis-ai-review-packet.json" data-dest="review-json">Full <span data-term-preview-only data-term="packet">AI packet</span> and guided tours</a> · <a href="https://wcook04.github.io/plectis/plectis-reviewer-brief.json" data-dest="brief-json">Short <span data-term-preview-only data-term="reviewer_brief">reviewer brief</span></a> · <a href="https://wcook04.github.io/plectis/plectis-ai-reader-complete.json" data-dest="packet-json">Full <span data-term-preview-only data-term="paper">paper</span> text and reading routes</a></p>
@@ -3232,6 +3239,20 @@
         "reader_preview": "A conjecture is a precise mathematical claim proposed as true but not yet established by proof.",
         "reader_rule": "Evidence from many cases does not by itself settle a claim about all cases."
       },
+      "contribute": {
+        "preferred_label": "contribute",
+        "reader_card": "Here useful contributions include proofs, counterexamples, clearer explanations, software fixes, and reproducible reports of failed approaches. The public repositories provide concrete material against which a contribution can be inspected.",
+        "reader_deep": "A mathematical result remains attributable to the people who established it. Using Plectis as a tool or starting point does not transfer priority for their result to the project.",
+        "reader_preview": "To contribute is to supply work that helps a shared project advance or correct itself.",
+        "reader_rule": "Acceptance and attribution should follow the work and evidence, not the confidence of its presentation."
+      },
+      "corpus": {
+        "preferred_label": "corpus",
+        "reader_card": "The site uses the term for collections such as formal declarations, papers, or recorded examples. A particular revision or manifest can fix which items belong to the collection being described.",
+        "reader_deep": "A corpus can grow or change over time. Results about one snapshot should not silently be treated as results about every later version or every related repository.",
+        "reader_preview": "A corpus is a collection of material studied or managed as a body of work.",
+        "reader_rule": "Any reported count or check should identify the corpus and version it covers."
+      },
       "denominator": {
         "preferred_label": "denominator",
         "reader_card": "In 3/4, the denominator is 4. For a positive fraction interpreted as equal-sized parts, it specifies that the whole has been divided into four parts.",
@@ -3323,6 +3344,13 @@
         "reader_preview": "A Lambert series has the form ∑ aₙxⁿ/(1 − xⁿ), usually summed over positive integers n where it converges.",
         "reader_rule": "A power series ∑ aₙxⁿ is a different expression and is not automatically a Lambert series."
       },
+      "lean": {
+        "preferred_label": "Lean",
+        "reader_card": "Authors supply definitions, theorem statements, and proofs, often with tactics that help construct the proof object. Lean then checks that the object establishes the encoded proposition under its assumptions.",
+        "reader_deep": "Admissions, added axioms, or an incorrectly translated problem can limit what acceptance establishes. The papers therefore need readable statements and evidence of the relevant checks alongside the Lean source.",
+        "reader_preview": "Lean is a programming language and proof assistant used to state mathematics and check formal proofs.",
+        "reader_rule": "Successful checking applies to that precise formal statement."
+      },
       "lemniscate": {
         "preferred_label": "lemniscate",
         "reader_card": "The term is also used, with qualification, for a sublevel region such as |p(z)| < c or |p(z)| ≤ c. These regions can have several components surrounding the polynomial's roots.",
@@ -3378,6 +3406,13 @@
         "reader_deep": "The papers use prime factors to analyse denominators, periods, and reciprocal sums. Claims about consecutive primes also depend on excluding any other prime between the two named values.",
         "reader_preview": "A prime number is an integer greater than 1 whose only positive divisors are 1 and itself.",
         "reader_rule": "Being prime is different from being coprime to another number."
+      },
+      "proof": {
+        "preferred_label": "proof",
+        "reader_card": "It must cover the statement's full scope, including every case quantified by the claim. Examples and calculations can be parts of a proof when their role and coverage are justified.",
+        "reader_deep": "Lean checks encoded derivations, while readers also check that the encoded statement matches the intended mathematics. Some software pages call a checked authorization record a “proof”; that record establishes the named gate condition, whose scope and checking rules must be inspected.",
+        "reader_preview": "A proof is a logically valid argument establishing a statement from definitions, assumptions, and previously justified results.",
+        "reader_rule": "A proof of an implication establishes the conclusion under its hypotheses."
       },
       "reciprocal": {
         "preferred_label": "reciprocal",
