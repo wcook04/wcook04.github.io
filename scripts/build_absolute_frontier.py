@@ -80,10 +80,11 @@ def snapshot(site: Path) -> dict:
 
 
 def problem_boundary(row: dict) -> str:
-    # The compact source snapshot predates the qualified #1041 claim. Keep the
-    # historic question open while naming the checked total-variation boundary.
+    # The compact source snapshot predates the exact #1041 Hausdorff result.
+    # HausdorffLength.lean refutes the Formal Conjectures path-image statement
+    # for ani's polynomial; historical curve-length correspondence is unreviewed.
     if row['problem'] == 1041:
-        return 'checked total-variation form refuted; historical curve-length correspondence unreviewed'
+        return 'exact Formal Conjectures path-image bound refuted; historical curve-length correspondence unreviewed'
     return 'original problem remains open'
 
 
@@ -100,7 +101,7 @@ def render(payload: dict) -> str:
         <h2 id="absolute-frontier-title">Public work</h2>
         <p><a class="btn" href="{BASE}" data-dest="plectis-site">Explore Plectis</a></p>
         <p class="absolute-frontier__thesis">The project site introduces the research, software and recorded interface.</p>
-        <p class="af-route"><a href="{BASE}maths/" data-dest="math-frontier">Mathematics</a> <span>· eight programmes; #1041's checked total-variation form is refuted</span></p>
+        <p class="af-route"><a href="{BASE}maths/" data-dest="math-frontier">Mathematics</a> <span>· eight programmes; ani's #1041 example refutes an exact Formal Conjectures length statement</span></p>
         <p class="frontier-instruction"><span class="frontier-instruction__wide">Hover or focus a problem to preview it; activate the link to open its page.</span><span class="frontier-instruction__narrow">Open a problem page:</span></p>
         <div class="frontier" aria-label="Eight Erdős problem pages">
 {problem_routes}
@@ -131,7 +132,8 @@ def project(text: str, payload: dict) -> str:
         n=p['problem']
         pattern=rf'<span class="shot__problem" data-problem="{n}".*?(?=\s*<span class="shot__problem"|\s*</span>\s*</a>\s*<p class="dest__hint")'
         boundary=problem_boundary(p)
-        portrait_boundary=boundary.capitalize() if n == 1041 else 'The original problem remains open'
+        titled_boundary=boundary[:1].upper()+boundary[1:]
+        portrait_boundary=titled_boundary if n == 1041 else 'The original problem remains open'
         portrait_status='Qualified' if n == 1041 else p['status'].capitalize()
         sheet=f'''<span class="shot__problem" data-problem="{n}" aria-hidden="true">
           <span class="problem-sheet__topline"><span class="problem-sheet__number">Erdős #{n}</span><span class="problem-sheet__status">{e(portrait_status)}</span></span>
@@ -144,7 +146,7 @@ def project(text: str, payload: dict) -> str:
         text=replace_required(
             text,
             rf'(<span class="frontier-plate__number">{n}</span><span class="frontier-plate__handle">[^<]*</span><span class="frontier-plate__boundary">).*?(</span>)',
-            lambda m: m[1]+e(boundary.capitalize())+'.'+m[2],
+            lambda m: m[1]+e(titled_boundary)+'.'+m[2],
             f'frontier plate #{n} boundary', flags=re.S,
         )
     # The interactive portrait opens the same current page as its row.

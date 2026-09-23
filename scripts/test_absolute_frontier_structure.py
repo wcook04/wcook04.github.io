@@ -47,8 +47,9 @@ class AbsoluteFrontierStructureTests(unittest.TestCase):
 
     def test_1041_boundary_is_qualified_across_generated_surfaces(self):
         projected = project(self.markup, self.payload)
-        self.assertIn('1041\'s checked total-variation form is refuted', projected)
-        self.assertIn('Checked total-variation form refuted; historical curve-length correspondence unreviewed.', projected)
+        plain = without_term_markup(projected)
+        self.assertIn('ani\'s #1041 example refutes an exact Formal Conjectures length statement', plain)
+        self.assertIn('Exact Formal Conjectures path-image bound refuted; historical curve-length correspondence unreviewed.', plain)
         self.assertIn('<span class="problem-sheet__number">Erdős #1041</span><span class="problem-sheet__status">Qualified</span>', projected)
         self.assertEqual(projected.count('Original problem remains open.'), len(NUMBERS) - 1)
 
