@@ -42,6 +42,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "data" / "glossary-terms.json"
 INDEX = ROOT / "index.html"
+RUNTIME = ROOT / "scripts" / "glossary_hover_runtime.js"
 
 TERMS_BEGIN = "    /* BEGIN generated glossary terms */"
 TERMS_END = "    /* END generated glossary terms */"
@@ -420,7 +421,14 @@ def build(page: str, snapshot: dict) -> str:
         raise ValueError(
             f"index.html carries no generated-terms markers ({TERMS_BEGIN!r})"
         )
-    return linked[:start] + render_terms_block(snapshot, used) + linked[end + len(TERMS_END):]
+    built = linked[:start] + render_terms_block(snapshot, used) + linked[end + len(TERMS_END):]
+    # The page runtime is projected from its source alongside the derived terms.
+    # Tiny resolver fixtures intentionally contain no runtime.
+    runtime_start = built.find('    if (!document.querySelector("a.term, [data-term-preview-only][data-term]")) return;', start)
+    if runtime_start != -1:
+        runtime_end = built.index("  })();", runtime_start)
+        built = built[:runtime_start] + RUNTIME.read_text(encoding="utf-8") + built[runtime_end:]
+    return built
 
 
 def main(argv: list[str] | None = None) -> int:
