@@ -4,8 +4,8 @@
   "policy_source": "tools/meta/dissemination/term_linkability.py",
   "vocabulary_source": "codex/doctrine/system_vocabulary/term_registry.json",
   "glossary_href": "https://wcook04.github.io/plectis/docs/glossary.html",
-  "term_count": 778,
-  "phrase_count": 4296,
+  "term_count": 784,
+  "phrase_count": 4329,
   "terms": {
     "plectis": {
       "anchor": "glossary-plectis",
@@ -166,6 +166,14 @@
       "card": "Plectis uses several axes because one ranking would mix different things. Type A and Type B describe access to the working system; capability describes what the actor can do; its role describes how it participates in the work.",
       "rule": "A model's reasoning ability does not determine its file permissions or access to evidence.",
       "deep": "The same model can have different authority in two sessions, depending on the tools and material available to it."
+    },
+    "admissible_prime_tuple": {
+      "anchor": "glossary-admissible-prime-tuple",
+      "label": "admissible prime tuple",
+      "preview": "An admissible prime tuple is a finite set of distinct integer shifts that leaves at least one residue class unoccupied modulo every prime.",
+      "card": "For \\(H=\\{h_1,\\ldots,h_k\\}\\), admissibility means \\(\\nu_H(p)<p\\) for every prime \\(p\\), where \\(\\nu_H(p)\\) counts occupied residue classes. The pair \\(\\{0,2\\}\\) is admissible; \\(\\{0,1\\}\\) occupies both classes modulo 2.",
+      "rule": "This removes a local divisibility obstruction to infinitely many translates consisting entirely of primes. It does not prove that infinitely many such translates exist.",
+      "deep": "#251 discusses a uniform conditional counting statement for admissible tuples whose length and shift range grow with the counting parameter. Admissibility is one hypothesis; the quantitative prime-counting estimate is a separate, stronger assumption."
     },
     "admitted_proof_step": {
       "anchor": "glossary-admitted-proof-step",
@@ -1423,6 +1431,14 @@
       "rule": "A primitive nth root has exact multiplicative order n. Cyclotomic polynomials are irreducible over the rationals, but “cyclotomic factor” in a calculation may mean one copy appearing inside a larger product.",
       "deep": "The paper cancels cyclotomic factors before estimating rational-base denominators. The factorization isolates predictable roots-of-unity divisibility, allowing the remaining numerator and denominator growth to be measured more sharply."
     },
+    "d_finite_function": {
+      "anchor": "glossary-d-finite-function",
+      "label": "D-finite function",
+      "preview": "A D-finite function satisfies a nontrivial linear differential equation with polynomial coefficients.",
+      "card": "Over a characteristic-zero coefficient field, the equation has the form \\(\\sum_{j=0}^{m}P_j(z)F^{(j)}(z)=0\\), with polynomials not all zero. For instance, \\(F(z)=e^z\\) satisfies \\(F^{\\prime}-F=0\\).",
+      "rule": "The definition also applies to formal power series using formal derivatives. D-finite does not mean polynomial, rational, or algebraic: the exponential supplies a counterexample.",
+      "deep": "#249 cites classification results for D-finite generating series with multiplicative coefficients. Their hypotheses constrain the whole coefficient sequence and function. The manuscript explicitly separates these functional results from the unresolved arithmetic of the binary totient-series value."
+    },
     "field": {
       "anchor": "glossary-field",
       "label": "data field",
@@ -2639,6 +2655,14 @@
       "rule": "Judge hard-coding by the value’s authority and expected rate of change: fixed ownership can be appropriate, while copied runtime facts need a refresh path.",
       "deep": "The defect is not literal syntax by itself. A mathematical constant, file signature, compatibility token, or deliberately fixed policy default may belong directly in source. Trouble arises when independently changing information is copied without provenance, validation, or regeneration, producing several apparent authorities. Alternatives include configuration, lookup, dependency injection, computed projection, or generated code, each carrying different complexity and failure modes. A sound design states who owns the value, how changes propagate, and whether divergence can be detected."
     },
+    "hardy_littlewood_prime_tuple_conjecture": {
+      "anchor": "glossary-hardy-littlewood-prime-tuple-conjecture",
+      "label": "Hardy–Littlewood prime-tuple conjecture",
+      "preview": "The Hardy–Littlewood prime-tuple conjecture predicts an asymptotic count of simultaneous prime translates of each fixed admissible set of shifts.",
+      "card": "For a fixed nonempty admissible set \\(H=\\{h_1,\\ldots,h_k\\}\\) of distinct integer shifts, it predicts \\(\\#\\{1\\le n\\le x:n+h_i\\text{ is prime for every }i\\}\\sim\\mathfrak S(H)\\int_2^x(\\log t)^{-k}\\,dt\\) as \\(x\\to\\infty\\). The singular series supplies the local congruence correction.",
+      "rule": "The usual fixed-tuple asymptotic gives no uniform rate for tuples whose sizes or shifts grow with the parameter. Such uniform versions are stronger hypotheses.",
+      "deep": "#251 discusses a version with \\(k\\le(\\log\\log x)^3\\), shifts in \\([0,(\\log x)^2]\\), and error at most \\(Cx^{1-\\delta}\\). Constants are chosen before the tuple. The paper assumes none of these hypotheses; the cited irrationality and normality results remain conditional."
+    },
     "harmonic_extension": {
       "anchor": "glossary-harmonic-extension",
       "label": "harmonic extension",
@@ -3398,6 +3422,14 @@
       "card": "JSON, CSV, typed records, and documented APIs can be machine-readable when their grammar and field meanings are explicit. Human-readable prose may still be processed by software, but ambiguity makes it a weaker contract. Machine readability concerns form, not truth or quality.",
       "rule": "Consistent interpretation depends on an agreed syntax and field meanings; stable identifiers and version rules matter when records are referenced or the format evolves.",
       "deep": "Machine-readable information has enough explicit structure for software to parse it consistently without relying on visual layout or open-ended human interpretation. Formats such as JSON, CSV, XML, typed records, and APIs can qualify when their syntax, encoding, field meanings, identifiers, and version rules are documented. Merely placing prose in a digital file does not provide the same contract. Successful parsing establishes structural acceptance, not truth, completeness, safety, or semantic agreement. Independent consumers also need evolution and compatibility rules when producers may add, remove, or reinterpret fields."
+    },
+    "mahler_function": {
+      "anchor": "glossary-mahler-function",
+      "label": "Mahler function",
+      "preview": "A Mahler function satisfies a nontrivial linear functional equation with polynomial coefficients relating it to its successive power substitutions.",
+      "card": "For integers \\(k\\ge2\\) and \\(d\\ge1\\), a series \\(F\\) is \\(k\\)-Mahler if \\(\\sum_{i=0}^{d}P_i(z)F(z^{k^i})=0\\), where the polynomials have coefficients in the chosen field and \\(P_0P_d\\ne0\\). The series may be interpreted formally.",
+      "rule": "This is a functional equation for the entire series. It does not determine whether a particular value at a rational input is rational.",
+      "deep": "In #249, integer coefficients with polynomial growth would make a \\(k\\)-Mahler series \\(k\\)-regular by the cited height theorem. The proved nonregularity of the totient sequence therefore excludes such an equation for its generating function; it does not settle the value at \\(1/2\\)."
     },
     "manifest": {
       "anchor": "glossary-manifest",
@@ -4391,6 +4423,14 @@
       "rule": "Some libraries also define a strict counting version using primes less than x. The inequality convention matters at a prime input and must be checked.",
       "deep": "The #251 reasoning surface explicitly defines \\(\\pi(x)\\) as the number of primes at most x. It uses a binomial-coefficient estimate to obtain a concrete polynomial upper bound for the nth prime, alongside separate asymptotic arguments using the prime number theorem. Mathlib distinguishes primeCounting from its strict variant primeCounting′."
     },
+    "prime_tuple_singular_series": {
+      "anchor": "glossary-prime-tuple-singular-series",
+      "label": "prime-tuple singular series",
+      "preview": "The prime-tuple singular series is an infinite product correcting the predicted prime-pattern density for residue constraints at every prime.",
+      "card": "For a fixed set \\(H\\) of \\(k\\) distinct integer shifts, it is \\(\\mathfrak S(H)=\\prod_{p\\text{ prime}}(1-\\nu_H(p)/p)(1-1/p)^{-k}\\). Here \\(\\nu_H(p)\\) is the number of residue classes occupied by the shifts.",
+      "rule": "An inadmissible tuple makes one factor zero. For a fixed admissible tuple the product converges to a positive number; it is a density correction, not a probability by itself.",
+      "deep": "In #251, the hypothesized count has main term \\(\\mathfrak S(H)\\int_2^x(\\log t)^{-k}\\,dt\\). The singular series accounts for local prime congruences; controlling the error uniformly across growing tuples requires an additional conjectural estimate."
+    },
     "prime_weighted_mass": {
       "anchor": "glossary-prime-weighted-mass",
       "label": "prime-weighted mass",
@@ -5206,6 +5246,14 @@
       "card": "Sandboxing reduces the reach of mistakes or hostile behaviour by restricting selected capabilities. Its protection is only as broad as the configured boundaries and the enforcement layer that maintains them.",
       "rule": "A sandbox confines effects only across its enforced boundaries; allowed paths, network access, inherited credentials, host interfaces, and escape mechanisms remain inside its effective capability set.",
       "deep": "A sandbox runs code with a constrained view of its surroundings. Depending on the design, it may limit filesystem paths, network destinations, system calls, devices, process creation, memory, time, or credentials. These restrictions reduce potential impact, but they do not establish that the code is correct or safe. A sandbox that permits writes to a shared directory still allows damage there, and a network-enabled sandbox can affect reachable services. Isolation also depends on correct configuration and enforcement; a vulnerability in the boundary can permit escape. Sandbox claims therefore describe concrete restrictions rather than absolute protection."
+    },
+    "saturated_submodule": {
+      "anchor": "glossary-saturated-submodule",
+      "label": "saturated submodule",
+      "preview": "An integer submodule is saturated in its ambient module when it contains every ambient element whose nonzero integer multiple it contains.",
+      "card": "An integer module is a group with commutative addition (order does not matter), with integers acting by repeated addition; a submodule is a subgroup. For \\(N\\subseteq M\\), saturation means that \\(rx\\in N\\), with \\(x\\in M\\) and a nonzero integer \\(r\\), implies \\(x\\in N\\). For example, \\(2\\mathbb Z\\) is not saturated in \\(\\mathbb Z\\): it contains twice 1 but omits 1.",
+      "rule": "The ambient module matters. Having an integer basis or knowing all integer relations among the chosen generators does not establish saturation.",
+      "deep": "In #249, the module generated by the base-two totient sections through any level at least two contains \\(\\varphi(4n+3)\\) but omits the integer-valued sequence \\(\\varphi(4n+3)/2\\). Its rational span therefore contains integer-valued sequences outside its integer span."
     },
     "scalar": {
       "anchor": "glossary-scalar",
@@ -6266,6 +6314,14 @@
       "type_a_operating_register"
     ],
     [
+      "hardy-littlewood prime-tuple conjectures",
+      "hardy_littlewood_prime_tuple_conjecture"
+    ],
+    [
+      "hardy–littlewood prime-tuple conjectures",
+      "hardy_littlewood_prime_tuple_conjecture"
+    ],
+    [
       "heine expansion of a moment determinants",
       "heine_determinant_identity"
     ],
@@ -6284,6 +6340,14 @@
     [
       "external or injected-context cognitions",
       "type_b"
+    ],
+    [
+      "hardy-littlewood prime-tuple conjecture",
+      "hardy_littlewood_prime_tuple_conjecture"
+    ],
+    [
+      "hardy–littlewood prime-tuple conjecture",
+      "hardy_littlewood_prime_tuple_conjecture"
     ],
     [
       "heine expansion of a moment determinant",
@@ -6318,8 +6382,24 @@
       "lean_standard_axioms"
     ],
     [
+      "hardy-littlewood k-tuples conjectures",
+      "hardy_littlewood_prime_tuple_conjecture"
+    ],
+    [
+      "hardy–littlewood k-tuples conjectures",
+      "hardy_littlewood_prime_tuple_conjecture"
+    ],
+    [
       "propext, quot.sound, classical.choice",
       "lean_standard_axioms"
+    ],
+    [
+      "hardy-littlewood k-tuples conjecture",
+      "hardy_littlewood_prime_tuple_conjecture"
+    ],
+    [
+      "hardy–littlewood k-tuples conjecture",
+      "hardy_littlewood_prime_tuple_conjecture"
     ],
     [
       "completely multiplicative functions",
@@ -6348,6 +6428,10 @@
     [
       "completely multiplicative function",
       "completely_multiplicative_function"
+    ],
+    [
+      "differentiably finite power series",
+      "d_finite_function"
     ],
     [
       "for all sufficiently large indices",
@@ -6402,6 +6486,10 @@
       "bridge"
     ],
     [
+      "singular series of a prime tuples",
+      "prime_tuple_singular_series"
+    ],
+    [
       "summable divisor-cover criterions",
       "divisor_cover"
     ],
@@ -6420,6 +6508,14 @@
     [
       "give your agent a research shift",
       "research_shift"
+    ],
+    [
+      "hardy-littlewood singular series",
+      "prime_tuple_singular_series"
+    ],
+    [
+      "hardy–littlewood singular series",
+      "prime_tuple_singular_series"
     ],
     [
       "kronecker approximation theorems",
@@ -6448,6 +6544,10 @@
     [
       "single-call external worker lane",
       "bridge"
+    ],
+    [
+      "singular series of a prime tuple",
+      "prime_tuple_singular_series"
     ],
     [
       "summable divisor-cover criterion",
@@ -7030,6 +7130,10 @@
       "lattice_transposition"
     ],
     [
+      "prime-tuple singular series",
+      "prime_tuple_singular_series"
+    ],
+    [
       "prime-weighted support mass",
       "prime_weighted_mass"
     ],
@@ -7068,6 +7172,10 @@
     [
       "typed storage rename proofs",
       "rename_migration_receipt"
+    ],
+    [
+      "admissible tuple of shifts",
+      "admissible_prime_tuple"
     ],
     [
       "analytic monodromy theorem",
@@ -7398,6 +7506,10 @@
       "actor_axes"
     ],
     [
+      "admissible prime patterns",
+      "admissible_prime_tuple"
+    ],
+    [
       "agent operable procedures",
       "skill"
     ],
@@ -7670,6 +7782,10 @@
       "forecasting"
     ],
     [
+      "saturated integer modules",
+      "saturated_submodule"
+    ],
+    [
       "self-model control planes",
       "epistemic_control_plane"
     ],
@@ -7752,6 +7868,10 @@
     [
       "workingness control plane",
       "epistemic_control_plane"
+    ],
+    [
+      "admissible prime pattern",
+      "admissible_prime_tuple"
     ],
     [
       "agent operable procedure",
@@ -8106,6 +8226,10 @@
       "riemann_hurwitz_formula"
     ],
     [
+      "saturated integer module",
+      "saturated_submodule"
+    ],
+    [
       "security vulnerabilities",
       "vulnerability"
     ],
@@ -8216,6 +8340,10 @@
     [
       "worker affordance packet",
       "row_job"
+    ],
+    [
+      "admissible prime tuples",
+      "admissible_prime_tuple"
     ],
     [
       "algebraic branch points",
@@ -8708,6 +8836,10 @@
     [
       "absolutely convergents",
       "absolute_convergence"
+    ],
+    [
+      "admissible prime tuple",
+      "admissible_prime_tuple"
     ],
     [
       "agent-native workflows",
@@ -9484,6 +9616,10 @@
     [
       "cyclotomic polynomial",
       "cyclotomic_polynomial"
+    ],
+    [
+      "d-finite power series",
+      "d_finite_function"
     ],
     [
       "decidable proposition",
@@ -10698,6 +10834,10 @@
       "compression_profile"
     ],
     [
+      "saturated submodules",
+      "saturated_submodule"
+    ],
+    [
       "semantic path handle",
       "path_handle"
     ],
@@ -11522,6 +11662,10 @@
       "separatrix"
     ],
     [
+      "saturated submodule",
+      "saturated_submodule"
+    ],
+    [
       "separable extension",
       "separable_extension"
     ],
@@ -11846,6 +11990,10 @@
       "cyclotomic_polynomial"
     ],
     [
+      "d-finite functions",
+      "d_finite_function"
+    ],
+    [
       "decidable problems",
       "decidability"
     ],
@@ -12084,6 +12232,10 @@
     [
       "irrationality test",
       "irrationality_criterion"
+    ],
+    [
+      "k-mahler functions",
+      "mahler_function"
     ],
     [
       "k-regular sequence",
@@ -12834,6 +12986,10 @@
       "cyclotomic_polynomial"
     ],
     [
+      "d-finite function",
+      "d_finite_function"
+    ],
+    [
       "decidable problem",
       "decidability"
     ],
@@ -13088,6 +13244,10 @@
     [
       "jacobian matrixes",
       "jacobian_matrix"
+    ],
+    [
+      "k-mahler function",
+      "mahler_function"
     ],
     [
       "kernel acceptance",
@@ -14222,6 +14382,10 @@
       "machine_readable"
     ],
     [
+      "mahler functions",
+      "mahler_function"
+    ],
+    [
       "mathematical set",
       "set"
     ],
@@ -14974,6 +15138,10 @@
       "doctrine"
     ],
     [
+      "d-finite series",
+      "d_finite_function"
+    ],
+    [
       "definition band",
       "band"
     ],
@@ -15206,6 +15374,10 @@
       "type_a_judgment"
     ],
     [
+      "k-mahler series",
+      "mahler_function"
+    ],
+    [
       "kernel checkers",
       "proof_checker"
     ],
@@ -15248,6 +15420,10 @@
     [
       "machine-checked",
       "machine_checked"
+    ],
+    [
+      "mahler function",
+      "mahler_function"
     ],
     [
       "mersenne number",
@@ -17456,6 +17632,10 @@
     [
       "linear spaces",
       "vector_space"
+    ],
+    [
+      "mahler series",
+      "mahler_function"
     ],
     [
       "mathematician",
@@ -23427,11 +23607,15 @@
     "care passion common sense judgment packets": "(?<![\\w])care[\\s\\u00a0]+passion[\\s\\u00a0]+common[\\s\\u00a0]+sense[\\s\\u00a0]+judgment[\\s\\u00a0]+packets(?![\\w])",
     "care passion common sense judgment packet": "(?<![\\w])care[\\s\\u00a0]+passion[\\s\\u00a0]+common[\\s\\u00a0]+sense[\\s\\u00a0]+judgment[\\s\\u00a0]+packet(?![\\w])",
     "operational register type a care passions": "(?<![\\w])operational[\\s\\u00a0]+register[\\s\\u00a0]+type[\\s\\u00a0]+a[\\s\\u00a0]+care[\\s\\u00a0]+passions(?![\\w])",
+    "hardy-littlewood prime-tuple conjectures": "(?<![\\w])hardy[-\\u2010-\\u2015\\u2212]littlewood[\\s\\u00a0]+prime[-\\u2010-\\u2015\\u2212]tuple[\\s\\u00a0]+conjectures(?![\\w])",
+    "hardy–littlewood prime-tuple conjectures": "(?<![\\w])hardy[-\\u2010-\\u2015\\u2212]littlewood[\\s\\u00a0]+prime[-\\u2010-\\u2015\\u2212]tuple[\\s\\u00a0]+conjectures(?![\\w])",
     "heine expansion of a moment determinants": "(?<![\\w])heine[\\s\\u00a0]+expansion[\\s\\u00a0]+of[\\s\\u00a0]+a[\\s\\u00a0]+moment[\\s\\u00a0]+determinants(?![\\w])",
     "operational register type a care passion": "(?<![\\w])operational[\\s\\u00a0]+register[\\s\\u00a0]+type[\\s\\u00a0]+a[\\s\\u00a0]+care[\\s\\u00a0]+passion(?![\\w])",
     "weyl criterion for uniform distributions": "(?<![\\w])weyl[\\s\\u00a0]+criterion[\\s\\u00a0]+for[\\s\\u00a0]+uniform[\\s\\u00a0]+distributions(?![\\w])",
     "chebyshev polynomial of the first kinds": "(?<![\\w])chebyshev[\\s\\u00a0]+polynomial[\\s\\u00a0]+of[\\s\\u00a0]+the[\\s\\u00a0]+first[\\s\\u00a0]+kinds(?![\\w])",
     "external or injected-context cognitions": "(?<![\\w])external[\\s\\u00a0]+or[\\s\\u00a0]+injected[-\\u2010-\\u2015\\u2212]context[\\s\\u00a0]+cognitions(?![\\w])",
+    "hardy-littlewood prime-tuple conjecture": "(?<![\\w])hardy[-\\u2010-\\u2015\\u2212]littlewood[\\s\\u00a0]+prime[-\\u2010-\\u2015\\u2212]tuple[\\s\\u00a0]+conjecture(?![\\w])",
+    "hardy–littlewood prime-tuple conjecture": "(?<![\\w])hardy[-\\u2010-\\u2015\\u2212]littlewood[\\s\\u00a0]+prime[-\\u2010-\\u2015\\u2212]tuple[\\s\\u00a0]+conjecture(?![\\w])",
     "heine expansion of a moment determinant": "(?<![\\w])heine[\\s\\u00a0]+expansion[\\s\\u00a0]+of[\\s\\u00a0]+a[\\s\\u00a0]+moment[\\s\\u00a0]+determinant(?![\\w])",
     "lebesgue dominated convergence theorems": "(?<![\\w])lebesgue[\\s\\u00a0]+dominated[\\s\\u00a0]+convergence[\\s\\u00a0]+theorems(?![\\w])",
     "linearly independent over the rationals": "(?<![\\w])linearly[\\s\\u00a0]+independent[\\s\\u00a0]+over[\\s\\u00a0]+the[\\s\\u00a0]+rationals(?![\\w])",
@@ -23440,7 +23624,11 @@
     "external or injected-context cognition": "(?<![\\w])external[\\s\\u00a0]+or[\\s\\u00a0]+injected[-\\u2010-\\u2015\\u2212]context[\\s\\u00a0]+cognition(?![\\w])",
     "lebesgue dominated convergence theorem": "(?<![\\w])lebesgue[\\s\\u00a0]+dominated[\\s\\u00a0]+convergence[\\s\\u00a0]+theorem(?![\\w])",
     "propext, quot.sound, classical.choices": "(?<![\\w])propext,[\\s\\u00a0]+quot\\.sound,[\\s\\u00a0]+classical\\.choices(?![\\w])",
+    "hardy-littlewood k-tuples conjectures": "(?<![\\w])hardy[-\\u2010-\\u2015\\u2212]littlewood[\\s\\u00a0]+k[-\\u2010-\\u2015\\u2212]tuples[\\s\\u00a0]+conjectures(?![\\w])",
+    "hardy–littlewood k-tuples conjectures": "(?<![\\w])hardy[-\\u2010-\\u2015\\u2212]littlewood[\\s\\u00a0]+k[-\\u2010-\\u2015\\u2212]tuples[\\s\\u00a0]+conjectures(?![\\w])",
     "propext, quot.sound, classical.choice": "(?<![\\w])propext,[\\s\\u00a0]+quot\\.sound,[\\s\\u00a0]+classical\\.choice(?![\\w])",
+    "hardy-littlewood k-tuples conjecture": "(?<![\\w])hardy[-\\u2010-\\u2015\\u2212]littlewood[\\s\\u00a0]+k[-\\u2010-\\u2015\\u2212]tuples[\\s\\u00a0]+conjecture(?![\\w])",
+    "hardy–littlewood k-tuples conjecture": "(?<![\\w])hardy[-\\u2010-\\u2015\\u2212]littlewood[\\s\\u00a0]+k[-\\u2010-\\u2015\\u2212]tuples[\\s\\u00a0]+conjecture(?![\\w])",
     "completely multiplicative functions": "(?<![\\w])completely[\\s\\u00a0]+multiplicative[\\s\\u00a0]+functions(?![\\w])",
     "integrated development environments": "(?<![\\w])integrated[\\s\\u00a0]+development[\\s\\u00a0]+environments(?![\\w])",
     "judgment governs unsettled grammars": "(?<![\\w])judgment[\\s\\u00a0]+governs[\\s\\u00a0]+unsettled[\\s\\u00a0]+grammars(?![\\w])",
@@ -23448,6 +23636,7 @@
     "application programming interfaces": "(?<![\\w])application[\\s\\u00a0]+programming[\\s\\u00a0]+interfaces(?![\\w])",
     "application-programming interfaces": "(?<![\\w])application[-\\u2010-\\u2015\\u2212]programming[\\s\\u00a0]+interfaces(?![\\w])",
     "completely multiplicative function": "(?<![\\w])completely[\\s\\u00a0]+multiplicative[\\s\\u00a0]+function(?![\\w])",
+    "differentiably finite power series": "(?<![\\w])differentiably[\\s\\u00a0]+finite[\\s\\u00a0]+power[\\s\\u00a0]+series(?![\\w])",
     "for all sufficiently large indices": "(?<![\\w])for[\\s\\u00a0]+all[\\s\\u00a0]+sufficiently[\\s\\u00a0]+large[\\s\\u00a0]+indices(?![\\w])",
     "integrated development environment": "(?<![\\w])integrated[\\s\\u00a0]+development[\\s\\u00a0]+environment(?![\\w])",
     "judgment governs unsettled grammar": "(?<![\\w])judgment[\\s\\u00a0]+governs[\\s\\u00a0]+unsettled[\\s\\u00a0]+grammar(?![\\w])",
@@ -23461,11 +23650,14 @@
     "one-dimensional hausdorff measure": "(?<![\\w])one[-\\u2010-\\u2015\\u2212]dimensional[\\s\\u00a0]+hausdorff[\\s\\u00a0]+measure(?![\\w])",
     "primes in arithmetic progressions": "(?<![\\w])primes[\\s\\u00a0]+in[\\s\\u00a0]+arithmetic[\\s\\u00a0]+progressions(?![\\w])",
     "single-call external worker lanes": "(?<![\\w])single[-\\u2010-\\u2015\\u2212]call[\\s\\u00a0]+external[\\s\\u00a0]+worker[\\s\\u00a0]+lanes(?![\\w])",
+    "singular series of a prime tuples": "(?<![\\w])singular[\\s\\u00a0]+series[\\s\\u00a0]+of[\\s\\u00a0]+a[\\s\\u00a0]+prime[\\s\\u00a0]+tuples(?![\\w])",
     "summable divisor-cover criterions": "(?<![\\w])summable[\\s\\u00a0]+divisor[-\\u2010-\\u2015\\u2212]cover[\\s\\u00a0]+criterions(?![\\w])",
     "agent authored durable synthesis": "(?<![\\w])agent[\\s\\u00a0]+authored[\\s\\u00a0]+durable[\\s\\u00a0]+synthesis(?![\\w])",
     "controlled experiment substrates": "(?<![\\w])controlled[\\s\\u00a0]+experiment[\\s\\u00a0]+substrates(?![\\w])",
     "critique becomes thinking traits": "(?<![\\w])critique[\\s\\u00a0]+becomes[\\s\\u00a0]+thinking[\\s\\u00a0]+traits(?![\\w])",
     "give your agent a research shift": "(?<![\\w])give[\\s\\u00a0]+your[\\s\\u00a0]+agent[\\s\\u00a0]+a[\\s\\u00a0]+research[\\s\\u00a0]+shift(?![\\w])",
+    "hardy-littlewood singular series": "(?<![\\w])hardy[-\\u2010-\\u2015\\u2212]littlewood[\\s\\u00a0]+singular[\\s\\u00a0]+series(?![\\w])",
+    "hardy–littlewood singular series": "(?<![\\w])hardy[-\\u2010-\\u2015\\u2212]littlewood[\\s\\u00a0]+singular[\\s\\u00a0]+series(?![\\w])",
     "kronecker approximation theorems": "(?<![\\w])kronecker[\\s\\u00a0]+approximation[\\s\\u00a0]+theorems(?![\\w])",
     "nearly-mathematical system rules": "(?<![\\w])nearly[-\\u2010-\\u2015\\u2212]mathematical[\\s\\u00a0]+system[\\s\\u00a0]+rules(?![\\w])",
     "polya area-capacity inequalities": "(?<![\\w])polya[\\s\\u00a0]+area[-\\u2010-\\u2015\\u2212]capacity[\\s\\u00a0]+inequalities(?![\\w])",
@@ -23473,6 +23665,7 @@
     "pólya area–capacity inequalities": "(?<![\\w])pólya[\\s\\u00a0]+area[-\\u2010-\\u2015\\u2212]capacity[\\s\\u00a0]+inequalities(?![\\w])",
     "schema backed contract authority": "(?<![\\w])schema[\\s\\u00a0]+backed[\\s\\u00a0]+contract[\\s\\u00a0]+authority(?![\\w])",
     "single-call external worker lane": "(?<![\\w])single[-\\u2010-\\u2015\\u2212]call[\\s\\u00a0]+external[\\s\\u00a0]+worker[\\s\\u00a0]+lane(?![\\w])",
+    "singular series of a prime tuple": "(?<![\\w])singular[\\s\\u00a0]+series[\\s\\u00a0]+of[\\s\\u00a0]+a[\\s\\u00a0]+prime[\\s\\u00a0]+tuple(?![\\w])",
     "summable divisor-cover criterion": "(?<![\\w])summable[\\s\\u00a0]+divisor[-\\u2010-\\u2015\\u2212]cover[\\s\\u00a0]+criterion(?![\\w])",
     "total variation of distributions": "(?<![\\w])total[\\s\\u00a0]+variation[\\s\\u00a0]+of[\\s\\u00a0]+distributions(?![\\w])",
     "uniform distribution modulo ones": "(?<![\\w])uniform[\\s\\u00a0]+distribution[\\s\\u00a0]+modulo[\\s\\u00a0]+ones(?![\\w])",
@@ -23618,6 +23811,7 @@
     "number-of-divisors function": "(?<![\\w])number[-\\u2010-\\u2015\\u2212]of[-\\u2010-\\u2015\\u2212]divisors[\\s\\u00a0]+function(?![\\w])",
     "polynomial irreducibilities": "(?<![\\w])polynomial[\\s\\u00a0]+irreducibilities(?![\\w])",
     "portable invariant routings": "(?<![\\w])portable[\\s\\u00a0]+invariant[\\s\\u00a0]+routings(?![\\w])",
+    "prime-tuple singular series": "(?<![\\w])prime[-\\u2010-\\u2015\\u2212]tuple[\\s\\u00a0]+singular[\\s\\u00a0]+series(?![\\w])",
     "prime-weighted support mass": "(?<![\\w])prime[-\\u2010-\\u2015\\u2212]weighted[\\s\\u00a0]+support[\\s\\u00a0]+mass(?![\\w])",
     "reciprocal-summable support": "(?<![\\w])reciprocal[-\\u2010-\\u2015\\u2212]summable[\\s\\u00a0]+support(?![\\w])",
     "results and remaining works": "(?<![\\w])results[\\s\\u00a0]+and[\\s\\u00a0]+remaining[\\s\\u00a0]+works(?![\\w])",
@@ -23628,6 +23822,7 @@
     "total variation of a curves": "(?<![\\w])total[\\s\\u00a0]+variation[\\s\\u00a0]+of[\\s\\u00a0]+a[\\s\\u00a0]+curves(?![\\w])",
     "truth-state action boundary": "(?<![\\w])truth[-\\u2010-\\u2015\\u2212]state[\\s\\u00a0]+action[\\s\\u00a0]+boundary(?![\\w])",
     "typed storage rename proofs": "(?<![\\w])typed[\\s\\u00a0]+storage[\\s\\u00a0]+rename[\\s\\u00a0]+proofs(?![\\w])",
+    "admissible tuple of shifts": "(?<![\\w])admissible[\\s\\u00a0]+tuple[\\s\\u00a0]+of[\\s\\u00a0]+shifts(?![\\w])",
     "analytic monodromy theorem": "(?<![\\w])analytic[\\s\\u00a0]+monodromy[\\s\\u00a0]+theorem(?![\\w])",
     "annihilator of a subspaces": "(?<![\\w])annihilator[\\s\\u00a0]+of[\\s\\u00a0]+a[\\s\\u00a0]+subspaces(?![\\w])",
     "approximation by rationals": "(?<![\\w])approximation[\\s\\u00a0]+by[\\s\\u00a0]+rationals(?![\\w])",
@@ -23710,6 +23905,7 @@
     "upper banach density zeros": "(?<![\\w])upper[\\s\\u00a0]+banach[\\s\\u00a0]+density[\\s\\u00a0]+zeros(?![\\w])",
     "workingness control planes": "(?<![\\w])workingness[\\s\\u00a0]+control[\\s\\u00a0]+planes(?![\\w])",
     "actor classification axes": "(?<![\\w])actor[\\s\\u00a0]+classification[\\s\\u00a0]+axes(?![\\w])",
+    "admissible prime patterns": "(?<![\\w])admissible[\\s\\u00a0]+prime[\\s\\u00a0]+patterns(?![\\w])",
     "agent operable procedures": "(?<![\\w])agent[\\s\\u00a0]+operable[\\s\\u00a0]+procedures(?![\\w])",
     "analytic inverse branches": "(?<![\\w])analytic[\\s\\u00a0]+inverse[\\s\\u00a0]+branches(?![\\w])",
     "annex prior-art pressures": "(?<![\\w])annex[\\s\\u00a0]+prior[-\\u2010-\\u2015\\u2212]art[\\s\\u00a0]+pressures(?![\\w])",
@@ -23778,6 +23974,7 @@
     "rename migration receipts": "(?<![\\w])rename[\\s\\u00a0]+migration[\\s\\u00a0]+receipts(?![\\w])",
     "repo control query spines": "(?<![\\w])repo[\\s\\u00a0]+control[\\s\\u00a0]+query[\\s\\u00a0]+spines(?![\\w])",
     "research and forecastings": "(?<![\\w])research[\\s\\u00a0]+and[\\s\\u00a0]+forecastings(?![\\w])",
+    "saturated integer modules": "(?<![\\w])saturated[\\s\\u00a0]+integer[\\s\\u00a0]+modules(?![\\w])",
     "self-model control planes": "(?<![\\w])self[-\\u2010-\\u2015\\u2212]model[\\s\\u00a0]+control[\\s\\u00a0]+planes(?![\\w])",
     "separable field extension": "(?<![\\w])separable[\\s\\u00a0]+field[\\s\\u00a0]+extension(?![\\w])",
     "situated repair judgments": "(?<![\\w])situated[\\s\\u00a0]+repair[\\s\\u00a0]+judgments(?![\\w])",
@@ -23799,6 +23996,7 @@
     "useful findings registers": "(?<![\\w])useful[\\s\\u00a0]+findings[\\s\\u00a0]+registers(?![\\w])",
     "worker affordance packets": "(?<![\\w])worker[\\s\\u00a0]+affordance[\\s\\u00a0]+packets(?![\\w])",
     "workingness control plane": "(?<![\\w])workingness[\\s\\u00a0]+control[\\s\\u00a0]+plane(?![\\w])",
+    "admissible prime pattern": "(?<![\\w])admissible[\\s\\u00a0]+prime[\\s\\u00a0]+pattern(?![\\w])",
     "agent operable procedure": "(?<![\\w])agent[\\s\\u00a0]+operable[\\s\\u00a0]+procedure(?![\\w])",
     "annex prior-art pressure": "(?<![\\w])annex[\\s\\u00a0]+prior[-\\u2010-\\u2015\\u2212]art[\\s\\u00a0]+pressure(?![\\w])",
     "area-capacity inequality": "(?<![\\w])area[-\\u2010-\\u2015\\u2212]capacity[\\s\\u00a0]+inequality(?![\\w])",
@@ -23887,6 +24085,7 @@
     "research and forecasting": "(?<![\\w])research[\\s\\u00a0]+and[\\s\\u00a0]+forecasting(?![\\w])",
     "riemann-hurwitz formulas": "(?<![\\w])riemann[-\\u2010-\\u2015\\u2212]hurwitz[\\s\\u00a0]+formulas(?![\\w])",
     "riemann–hurwitz formulas": "(?<![\\w])riemann[-\\u2010-\\u2015\\u2212]hurwitz[\\s\\u00a0]+formulas(?![\\w])",
+    "saturated integer module": "(?<![\\w])saturated[\\s\\u00a0]+integer[\\s\\u00a0]+module(?![\\w])",
     "security vulnerabilities": "(?<![\\w])security[\\s\\u00a0]+vulnerabilities(?![\\w])",
     "selectable row readiness": "(?<![\\w])selectable[\\s\\u00a0]+row[\\s\\u00a0]+readiness(?![\\w])",
     "self-model control plane": "(?<![\\w])self[-\\u2010-\\u2015\\u2212]model[\\s\\u00a0]+control[\\s\\u00a0]+plane(?![\\w])",
@@ -23915,6 +24114,7 @@
     "whole system correctness": "(?<![\\w])whole[\\s\\u00a0]+system[\\s\\u00a0]+correctness(?![\\w])",
     "whole-system correctness": "(?<![\\w])whole[-\\u2010-\\u2015\\u2212]system[\\s\\u00a0]+correctness(?![\\w])",
     "worker affordance packet": "(?<![\\w])worker[\\s\\u00a0]+affordance[\\s\\u00a0]+packet(?![\\w])",
+    "admissible prime tuples": "(?<![\\w])admissible[\\s\\u00a0]+prime[\\s\\u00a0]+tuples(?![\\w])",
     "algebraic branch points": "(?<![\\w])algebraic[\\s\\u00a0]+branch[\\s\\u00a0]+points(?![\\w])",
     "always changing systems": "(?<![\\w])always[\\s\\u00a0]+changing[\\s\\u00a0]+systems(?![\\w])",
     "always-changing systems": "(?<![\\w])always[-\\u2010-\\u2015\\u2212]changing[\\s\\u00a0]+systems(?![\\w])",
@@ -24038,6 +24238,7 @@
     "vector-space dimensions": "(?<![\\w])vector[-\\u2010-\\u2015\\u2212]space[\\s\\u00a0]+dimensions(?![\\w])",
     "workingness instruments": "(?<![\\w])workingness[\\s\\u00a0]+instruments(?![\\w])",
     "absolutely convergents": "(?<![\\w])absolutely[\\s\\u00a0]+convergents(?![\\w])",
+    "admissible prime tuple": "(?<![\\w])admissible[\\s\\u00a0]+prime[\\s\\u00a0]+tuple(?![\\w])",
     "agent-native workflows": "(?<![\\w])agent[-\\u2010-\\u2015\\u2212]native[\\s\\u00a0]+workflows(?![\\w])",
     "algebraic branch point": "(?<![\\w])algebraic[\\s\\u00a0]+branch[\\s\\u00a0]+point(?![\\w])",
     "always changing system": "(?<![\\w])always[\\s\\u00a0]+changing[\\s\\u00a0]+system(?![\\w])",
@@ -24232,6 +24433,7 @@
     "curve total variation": "(?<![\\w])curve[\\s\\u00a0]+total[\\s\\u00a0]+variation(?![\\w])",
     "cutoff approximations": "(?<![\\w])cutoff[\\s\\u00a0]+approximations(?![\\w])",
     "cyclotomic polynomial": "(?<![\\w])cyclotomic[\\s\\u00a0]+polynomial(?![\\w])",
+    "d-finite power series": "(?<![\\w])d[-\\u2010-\\u2015\\u2212]finite[\\s\\u00a0]+power[\\s\\u00a0]+series(?![\\w])",
     "decidable proposition": "(?<![\\w])decidable[\\s\\u00a0]+proposition(?![\\w])",
     "definitional equality": "(?<![\\w])definitional[\\s\\u00a0]+equality(?![\\w])",
     "definitionally equals": "(?<![\\w])definitionally[\\s\\u00a0]+equals(?![\\w])",
@@ -24535,6 +24737,7 @@
     "row omission receipt": "(?<![\\w])row[\\s\\u00a0]+omission[\\s\\u00a0]+receipt(?![\\w])",
     "runtime environments": "(?<![\\w])runtime[\\s\\u00a0]+environments(?![\\w])",
     "russian doll profile": "(?<![\\w])russian[\\s\\u00a0]+doll[\\s\\u00a0]+profile(?![\\w])",
+    "saturated submodules": "(?<![\\w])saturated[\\s\\u00a0]+submodules(?![\\w])",
     "semantic path handle": "(?<![\\w])semantic[\\s\\u00a0]+path[\\s\\u00a0]+handle(?![\\w])",
     "separable extensions": "(?<![\\w])separable[\\s\\u00a0]+extensions(?![\\w])",
     "source-linked slices": "(?<![\\w])source[-\\u2010-\\u2015\\u2212]linked[\\s\\u00a0]+slices(?![\\w])",
@@ -24741,6 +24944,7 @@
     "runtime environment": "(?<![\\w])runtime[\\s\\u00a0]+environment(?![\\w])",
     "runtime metabolisms": "(?<![\\w])runtime[\\s\\u00a0]+metabolisms(?![\\w])",
     "saddle separatrixes": "(?<![\\w])saddle[\\s\\u00a0]+separatrixes(?![\\w])",
+    "saturated submodule": "(?<![\\w])saturated[\\s\\u00a0]+submodule(?![\\w])",
     "separable extension": "(?<![\\w])separable[\\s\\u00a0]+extension(?![\\w])",
     "series convergences": "(?<![\\w])series[\\s\\u00a0]+convergences(?![\\w])",
     "short problem notes": "(?<![\\w])short[\\s\\u00a0]+problem[\\s\\u00a0]+notes(?![\\w])",
@@ -24822,6 +25026,7 @@
     "copied source body": "(?<![\\w])copied[\\s\\u00a0]+source[\\s\\u00a0]+body(?![\\w])",
     "coverage fractions": "(?<![\\w])coverage[\\s\\u00a0]+fractions(?![\\w])",
     "cyclotomic factors": "(?<![\\w])cyclotomic[\\s\\u00a0]+factors(?![\\w])",
+    "d-finite functions": "(?<![\\w])d[-\\u2010-\\u2015\\u2212]finite[\\s\\u00a0]+functions(?![\\w])",
     "decidable problems": "(?<![\\w])decidable[\\s\\u00a0]+problems(?![\\w])",
     "decision authority": "(?<![\\w])decision[\\s\\u00a0]+authority(?![\\w])",
     "decision threshold": "(?<![\\w])decision[\\s\\u00a0]+threshold(?![\\w])",
@@ -24882,6 +25087,7 @@
     "invariant property": "(?<![\\w])invariant[\\s\\u00a0]+property(?![\\w])",
     "irrational numbers": "(?<![\\w])irrational[\\s\\u00a0]+numbers(?![\\w])",
     "irrationality test": "(?<![\\w])irrationality[\\s\\u00a0]+test(?![\\w])",
+    "k-mahler functions": "(?<![\\w])k[-\\u2010-\\u2015\\u2212]mahler[\\s\\u00a0]+functions(?![\\w])",
     "k-regular sequence": "(?<![\\w])k[-\\u2010-\\u2015\\u2212]regular[\\s\\u00a0]+sequence(?![\\w])",
     "kernel acceptances": "(?<![\\w])kernel[\\s\\u00a0]+acceptances(?![\\w])",
     "kronecker theorems": "(?<![\\w])kronecker[\\s\\u00a0]+theorems(?![\\w])",
@@ -25069,6 +25275,7 @@
     "critical postures": "(?<![\\w])critical[\\s\\u00a0]+postures(?![\\w])",
     "curated externals": "(?<![\\w])curated[\\s\\u00a0]+externals(?![\\w])",
     "cyclotomic factor": "(?<![\\w])cyclotomic[\\s\\u00a0]+factor(?![\\w])",
+    "d-finite function": "(?<![\\w])d[-\\u2010-\\u2015\\u2212]finite[\\s\\u00a0]+function(?![\\w])",
     "decidable problem": "(?<![\\w])decidable[\\s\\u00a0]+problem(?![\\w])",
     "definite integral": "(?<![\\w])definite[\\s\\u00a0]+integral(?![\\w])",
     "demo take console": "(?<![\\w])demo[\\s\\u00a0]+take[\\s\\u00a0]+console(?![\\w])",
@@ -25133,6 +25340,7 @@
     "inverse functions": "(?<![\\w])inverse[\\s\\u00a0]+functions(?![\\w])",
     "invertible matrix": "(?<![\\w])invertible[\\s\\u00a0]+matrix(?![\\w])",
     "jacobian matrixes": "(?<![\\w])jacobian[\\s\\u00a0]+matrixes(?![\\w])",
+    "k-mahler function": "(?<![\\w])k[-\\u2010-\\u2015\\u2212]mahler[\\s\\u00a0]+function(?![\\w])",
     "kernel acceptance": "(?<![\\w])kernel[\\s\\u00a0]+acceptance(?![\\w])",
     "kronecker theorem": "(?<![\\w])kronecker[\\s\\u00a0]+theorem(?![\\w])",
     "laboratory ledger": "(?<![\\w])laboratory[\\s\\u00a0]+ledger(?![\\w])",
@@ -25416,6 +25624,7 @@
     "machine readable": "(?<![\\w])machine[\\s\\u00a0]+readable(?![\\w])",
     "machine-checkeds": "(?<![\\w])machine[-\\u2010-\\u2015\\u2212]checkeds(?![\\w])",
     "machine-readable": "(?<![\\w])machine[-\\u2010-\\u2015\\u2212]readable(?![\\w])",
+    "mahler functions": "(?<![\\w])mahler[\\s\\u00a0]+functions(?![\\w])",
     "mathematical set": "(?<![\\w])mathematical[\\s\\u00a0]+set(?![\\w])",
     "mersenne numbers": "(?<![\\w])mersenne[\\s\\u00a0]+numbers(?![\\w])",
     "message payloads": "(?<![\\w])message[\\s\\u00a0]+payloads(?![\\w])",
@@ -25604,6 +25813,7 @@
     "css stylesheets": "(?<![\\w])css[\\s\\u00a0]+stylesheets(?![\\w])",
     "cumulative lcms": "(?<![\\w])cumulative[\\s\\u00a0]+lcms(?![\\w])",
     "curated meaning": "(?<![\\w])curated[\\s\\u00a0]+meaning(?![\\w])",
+    "d-finite series": "(?<![\\w])d[-\\u2010-\\u2015\\u2212]finite[\\s\\u00a0]+series(?![\\w])",
     "definition band": "(?<![\\w])definition[\\s\\u00a0]+band(?![\\w])",
     "dependent types": "(?<![\\w])dependent[\\s\\u00a0]+types(?![\\w])",
     "diebold mariano": "(?<![\\w])diebold[\\s\\u00a0]+mariano(?![\\w])",
@@ -25662,6 +25872,7 @@
     "jacobi matrixes": "(?<![\\w])jacobi[\\s\\u00a0]+matrixes(?![\\w])",
     "jacobian matrix": "(?<![\\w])jacobian[\\s\\u00a0]+matrix(?![\\w])",
     "judgment traits": "(?<![\\w])judgment[\\s\\u00a0]+traits(?![\\w])",
+    "k-mahler series": "(?<![\\w])k[-\\u2010-\\u2015\\u2212]mahler[\\s\\u00a0]+series(?![\\w])",
     "kernel checkers": "(?<![\\w])kernel[\\s\\u00a0]+checkers(?![\\w])",
     "kind atlas kind": "(?<![\\w])kind[\\s\\u00a0]+atlas[\\s\\u00a0]+kind(?![\\w])",
     "kronecker flows": "(?<![\\w])kronecker[\\s\\u00a0]+flows(?![\\w])",
@@ -25673,6 +25884,7 @@
     "live substrates": "(?<![\\w])live[\\s\\u00a0]+substrates(?![\\w])",
     "logarithmic cap": "(?<![\\w])logarithmic[\\s\\u00a0]+cap(?![\\w])",
     "machine-checked": "(?<![\\w])machine[-\\u2010-\\u2015\\u2212]checked(?![\\w])",
+    "mahler function": "(?<![\\w])mahler[\\s\\u00a0]+function(?![\\w])",
     "mersenne number": "(?<![\\w])mersenne[\\s\\u00a0]+number(?![\\w])",
     "message payload": "(?<![\\w])message[\\s\\u00a0]+payload(?![\\w])",
     "metabolism jobs": "(?<![\\w])metabolism[\\s\\u00a0]+jobs(?![\\w])",
@@ -26225,6 +26437,7 @@
     "legacy routes": "(?<![\\w])legacy[\\s\\u00a0]+routes(?![\\w])",
     "limit infimum": "(?<![\\w])limit[\\s\\u00a0]+infimum(?![\\w])",
     "linear spaces": "(?<![\\w])linear[\\s\\u00a0]+spaces(?![\\w])",
+    "mahler series": "(?<![\\w])mahler[\\s\\u00a0]+series(?![\\w])",
     "mathematician": "(?<![\\w])mathematician(?![\\w])",
     "matrix minors": "(?<![\\w])matrix[\\s\\u00a0]+minors(?![\\w])",
     "maximal ideal": "(?<![\\w])maximal[\\s\\u00a0]+ideal(?![\\w])",
@@ -27716,6 +27929,6 @@
     "tls": "(?<![\\w])tls(?![\\w])",
     "url": "(?<![\\w])url(?![\\w])"
   },
-  "source_hash": "sha256:a29b42ca3926f0cf38120be6b7a2ef232ee110ab7db5602d3eb975db12c9cf06",
-  "content_graph_hash": "sha256:e603e450c92e38c5e70898d4a5dd133e33859b5e68924ac854d4b6224d3c1d62"
+  "source_hash": "sha256:b17e183b3fc7c704ac4fe59e25a4a457ae91c36f66777b5cfb1b603561adb298",
+  "content_graph_hash": "sha256:4e81e729bb1f4db6922f2f8b353da0f69c14d52fa8f74f485c3e0a63e2689fbc"
 }
