@@ -4,7 +4,7 @@ import json
 import re
 from html import unescape
 from pathlib import Path
-from build_absolute_frontier import SOURCE, INDEX, BEGIN, END, NUMBERS, project, without_term_markup
+from build_absolute_frontier import SOURCE, INDEX, BEGIN, END, NUMBERS, SYSTEM_PAPERS, project, without_term_markup
 
 
 def main():
@@ -14,7 +14,8 @@ def main():
     if without_term_markup(project(markup,payload))!=text:
         raise SystemExit('generated reading map or problem portraits have drifted')
     assert [p['problem'] for p in payload['items']]==NUMBERS
-    assert all(p['status']=='open' for p in payload['items'])
+    assert all(p['status'] == ('formal statement refuted' if p['problem'] == 1041 else 'open')
+               for p in payload['items'])
     region=text[text.index(BEGIN):text.index(END)]
     # The root page keeps each problem to one compact, source-backed route. It
     # does not duplicate the research introductions or paper catalogue.
@@ -26,7 +27,7 @@ def main():
     problem_routes = re.findall(r'<a href="[^"]+" data-dest="problem-(\d+)">', region)
     assert [int(number) for number in problem_routes] == NUMBERS
     assert len(re.findall(r'<a\s', region)) == len(NUMBERS) + 6
-    assert [p['paper_id'] for p in payload['systems']]==['claim-faithful-publication-systems','open-source-mathematics-strategy']
+    assert tuple(p['paper_id'] for p in payload['systems']) == SYSTEM_PAPERS
     for row in payload['items']:
         assert f'data-problem="{row["problem"]}"' in text
         assert row['paper_href'] and row['page_href']

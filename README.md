@@ -54,7 +54,7 @@ anything, and the sitemap it declared had never been discovered by that route.
 | `assets/plate-01*` | Archived artwork retained locally; it is not part of the reading surface. |
 | `assets/previews/` | Screenshots of each public destination, used as stills on the front door. |
 | `assets/og-frontier.svg` / `.png` | The claim-bounded eight-problem social preview and its PNG delivery file. |
-| `data/glossary-terms.json` | The governed public vocabulary, exported from the Plectis substrate: 486 terms with their reader cards, and the 2,354 surface forms that are safe to resolve on a bare word. |
+| `data/glossary-terms.json` | The governed public vocabulary, exported from the Plectis substrate with reader cards and surface forms that are safe to resolve on a bare word. |
 | `scripts/build_glossary_term_layer.py` | Links every governed term the page actually uses and regenerates the preview payload. Re-runnable: it unwraps its own anchors before it writes. |
 | `scripts/check_frontier_surface.py` | Static guard for compact destinations, the complete eight-problem source and keyboard access. |
 | `scripts/check_public_routes.py` | Live smoke check for the public Plectis, paper, Lean, verification, Comparator, replay, citation, and updates hand-offs. |

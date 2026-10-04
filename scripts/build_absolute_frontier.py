@@ -23,6 +23,9 @@ LEAN = 'https://github.com/wcook04/plectis-erdos'
 SOFTWARE = 'https://github.com/wcook04/plectis'
 NUMBERS = [68, 243, 249, 251, 257, 269, 1041, 1049]
 CORPUS_REPOSITORIES = ('plectis-erdos', 'plectis-lean-erdos249-257')
+# The publication registry retired open-source-mathematics-strategy in favour
+# of this paper; the current packet intentionally omits the retired manuscript.
+SYSTEM_PAPERS = ('claim-faithful-publication-systems',)
 TERM = re.compile(r'<a class="term(?: is-again)?" data-term="[^"]*" href="[^"]*">(.*?)</a>', re.S)
 PASSIVE_TERM = re.compile(r'<span data-term-preview-only data-term="[^"]*">(.*?)</span>', re.S)
 e = html.escape
@@ -70,7 +73,10 @@ def snapshot(site: Path) -> dict:
         items.append(item)
     if [p['problem'] for p in items] != NUMBERS:
         raise ValueError('source does not contain exactly the eight expected problems')
-    systems = [papers[k] for k in ('claim-faithful-publication-systems','open-source-mathematics-strategy')]
+    missing = set(SYSTEM_PAPERS) - papers.keys()
+    if missing:
+        raise ValueError('missing current orientation papers: ' + ', '.join(sorted(missing)))
+    systems = [papers[k] for k in SYSTEM_PAPERS]
     return {'schema':'public_reading_map_v1', 'generated_by':'scripts/build_absolute_frontier.py',
             'source_hashes':{name:hashlib.sha256(data).hexdigest() for name,data in raw.items()},
             'public_source_commit':corpus_revision(corpus),
@@ -182,6 +188,6 @@ def main():
                 pdf=args.site_root/'papers'/item['paper_href'].rsplit('/',1)[1]
                 out=ROOT/'assets/previews'/f"paper-{item['problem']}-640"
                 subprocess.run(['pdftoppm','-f','1','-singlefile','-scale-to-x','640','-scale-to-y','-1','-H','411','-jpeg','-jpegopt','quality=80',str(pdf),str(out)],check=True,capture_output=True)
-        print('Refreshed two orientation papers and all eight problem routes')
+        print('Refreshed current orientation paper and all eight problem routes')
 
 if __name__=='__main__': main()

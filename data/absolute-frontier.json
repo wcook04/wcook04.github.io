@@ -2,21 +2,16 @@
   "schema": "public_reading_map_v1",
   "generated_by": "scripts/build_absolute_frontier.py",
   "source_hashes": {
-    "plectis-ai-reader-complete.json": "48edd9e7aae3ef073a32d4ec82f70102c755d75ce8e4e080654761e69a0a542d",
-    "lean/problems.json": "2bb32403a072bce763baa3ae7094c2c52ea0ab02a4b5184b252daaac30be22bc"
+    "plectis-ai-reader-complete.json": "1d99518f7b1ceea089f5146ab16acd622c4df92cbecf445d4c52d6f4751e005c",
+    "lean/problems.json": "e8e1d7c043cfc172833f1cf5a60896534759346bc65a1e62f5d50bbf5dc5c175"
   },
-  "public_source_commit": "83cea1add02931a4363d56017a7cb8f8b3bef70f",
+  "public_source_commit": "090c1715e78dad3d7709f42c0458e2986ee67e5e",
   "reading_graph_path": "https://wcook04.github.io/plectis/plectis-ai-reader-complete.json#/scholarly_corpus/reading_graph",
   "systems": [
     {
-      "title": "Problem-Sized Lean Worlds",
+      "title": "A Repository-Based System for Research and Publication",
       "href": "https://wcook04.github.io/plectis/papers/claim-faithful-publication-systems-paper.pdf",
       "paper_id": "claim-faithful-publication-systems"
-    },
-    {
-      "title": "From Spare Compute to Cumulative Mathematics",
-      "href": "https://wcook04.github.io/plectis/papers/open-source-mathematics-strategy.pdf",
-      "paper_id": "open-source-mathematics-strategy"
     }
   ],
   "items": [
@@ -25,13 +20,13 @@
       "title": "The factorial-denominator series",
       "question": "Is the series sum_{n >= 2} 1/(n! - 1) irrational?",
       "status": "open",
-      "paper_title": "Two Incomparable Denominator Exclusions for $\\sum_{n\\ge2}(n!-1)^{-1}$",
+      "paper_title": "Integer Linear Forms for a Factorial Reciprocal Series",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-68-factorial-denominator-irrationality.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_68.html",
       "source_pointer": "/scholarly_corpus/papers/0",
       "long_records": [
         {
-          "title": "Denominators and Rationality Criteria for $\\sum_{n\\ge2}(n!-1)^{-1}$",
+          "title": "Factorial Linear Forms and Denominators Detailed Proofs and Rationality Criteria",
           "href": "https://wcook04.github.io/plectis/papers/erdos68-factorial-reasoning-surface.pdf"
         }
       ]
@@ -41,13 +36,13 @@
       "title": "Reciprocal-tail rigidity near the Sylvester recurrence",
       "question": "Under a rapid-growth hypothesis on an integer sequence, does rationality of its reciprocal sum force the sequence to satisfy the Sylvester recurrence eventually?",
       "status": "open",
-      "paper_title": "Cubic-Rate Irrationality and Reciprocal-Tail Rigidity",
+      "paper_title": "Reciprocal Sums and the Sylvester Recurrence",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-243-reciprocal-tail-rigidity.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_243.html",
       "source_pointer": "/scholarly_corpus/papers/2",
       "long_records": [
         {
-          "title": "Reciprocal-Tail Rigidity: Theorems, Proofs and Questions",
+          "title": "Reciprocal Sums and the Sylvester Recurrence: Further Results and Proofs",
           "href": "https://wcook04.github.io/plectis/papers/erdos243-reciprocal-tail-reasoning-surface.pdf"
         }
       ]
@@ -57,7 +52,7 @@
       "title": "The binary totient series",
       "question": "Is the binary Lambert series sum phi(n)/2^n irrational?",
       "status": "open",
-      "paper_title": "Bases and Integral Relations for the $k$-Kernel of Euler's Totient",
+      "paper_title": "Integral Relations among Totient Sections",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-249-binary-totient-series.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_249.html",
       "source_pointer": "/scholarly_corpus/papers/4",
@@ -89,7 +84,7 @@
       "title": "Reciprocal sums over infinite exponent supports",
       "question": "Is the sum of 1/(2^n-1) over every infinite set of positive exponents irrational?",
       "status": "open",
-      "paper_title": "Weighted Support Criteria for Reciprocal Mersenne Subseries",
+      "paper_title": "Irrationality criteria for Lambert subseries",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-257-mersenne-support-subseries.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_257.html",
       "source_pointer": "/scholarly_corpus/papers/8",
@@ -105,13 +100,13 @@
       "title": "Three-prime running least common multiples",
       "question": "For a finite set of at least two primes, is the sum of reciprocals of the running least common multiples of the smooth numbers irrational? This library treats the three-prime case.",
       "status": "open",
-      "paper_title": "No Finite Separable Representation at Three Prime Generators",
+      "paper_title": "Distinct running least common multiples",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-269-three-prime-running-lcm.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_269.html",
       "source_pointer": "/scholarly_corpus/papers/11",
       "long_records": [
         {
-          "title": "The Three-Prime Running LCM: Kernel Rank and Tail Arithmetic",
+          "title": "Running least common multiples: distinct values and multiplicities",
           "href": "https://wcook04.github.io/plectis/papers/erdos269-running-lcm-reasoning-surface.pdf"
         }
       ]
@@ -120,14 +115,14 @@
       "problem": 1041,
       "title": "Short connections inside polynomial lemniscates",
       "question": "Must two roots of a monic polynomial in the open unit disc be joined by a sub-two-length curve inside its unit lemniscate? Ani’s degree-seven example refutes the exact Formal Conjectures statement; correspondence with the 1958 wording awaits human review.",
-      "status": "open",
-      "paper_title": "Paths in Polynomial Lemniscates: Trinomials and Critical-Value Bounds",
+      "status": "formal statement refuted",
+      "paper_title": "Paths in Polynomial Lemniscates: A Degree-Seven Counterexample and Radial Connections",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-1041-lemniscate-newton-flow.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_1041.html",
       "source_pointer": "/scholarly_corpus/papers/12",
       "long_records": [
         {
-          "title": "Paths in Polynomial Lemniscates: Proofs and Examples",
+          "title": "Paths in Polynomial Lemniscates: A Degree-Seven Counterexample and Radial Connections",
           "href": "https://wcook04.github.io/plectis/papers/erdos1041-lemniscate-reasoning-surface.pdf"
         }
       ]
@@ -137,13 +132,13 @@
       "title": "Lambert-type series at rational bases",
       "question": "For which rational bases is the corresponding series irrational? The first resistant explicit base is three halves.",
       "status": "open",
-      "paper_title": "Zudilin's Forms at Rational Bases and the Exact Normalised Hankel Order",
+      "paper_title": "Hankel Determinants of Geometric Moments and Rational Lambert Values",
       "paper_href": "https://wcook04.github.io/plectis/papers/erdos-1049-rational-base-lambert.pdf",
       "page_href": "https://wcook04.github.io/plectis/maths/problems/erdos_1049.html",
       "source_pointer": "/scholarly_corpus/papers/14",
       "long_records": [
         {
-          "title": "Zudilin's Forms at Rational Bases: Proofs and Research Record",
+          "title": "Geometric Moments and Rational Lambert Values: Proofs and Further Results",
           "href": "https://wcook04.github.io/plectis/papers/erdos1049-rational-base-lambert-reasoning-surface.pdf"
         }
       ]

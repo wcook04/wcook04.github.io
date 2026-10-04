@@ -6,7 +6,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from build_absolute_frontier import corpus_revision
+from build_absolute_frontier import NUMBERS, corpus_revision, snapshot
 from check_public_routes import BASE, destinations, group_destinations, read_destination, validate_body
 
 
@@ -31,6 +31,37 @@ class PublicReadingMapTests(unittest.TestCase):
         ]):
             with self.subTest(maps=maps), self.assertRaises(ValueError):
                 corpus_revision({'repository_maps': maps})
+
+    def orientation_snapshot(self, system_ids):
+        papers = [{'paper_id': f'erdos{n}', 'title': f'Problem {n}',
+                   'public_pdf_url': f'{BASE}papers/erdos{n}.pdf',
+                   'source_embedded': True, 'body': 'Manuscript'} for n in NUMBERS]
+        papers += [{'paper_id': name, 'title': name,
+                    'public_pdf_url': f'{BASE}papers/{name}.pdf',
+                    'source_embedded': True, 'body': 'Manuscript'} for name in system_ids]
+        packet = {'scholarly_corpus': {'papers': papers, 'repository_maps': [
+            {'repository': 'plectis-erdos', 'revision': 'current'}]}}
+        problems = {'problems': [{'erdos_number': n, 'short_title': str(n),
+                    'question': 'Question', 'status': 'open',
+                    'paper': {'paper_id': f'erdos{n}'}} for n in NUMBERS]}
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / 'lean').mkdir()
+            (root / 'plectis-ai-reader-complete.json').write_text(json.dumps(packet))
+            (root / 'lean/problems.json').write_text(json.dumps(problems))
+            return snapshot(root)
+
+    def test_retired_orientation_paper_is_not_required_or_republished(self):
+        current = 'claim-faithful-publication-systems'
+        for names in ([current], [current, 'open-source-mathematics-strategy']):
+            with self.subTest(names=names):
+                payload = self.orientation_snapshot(names)
+                self.assertEqual([row['paper_id'] for row in payload['systems']], [current])
+                self.assertEqual([row['problem'] for row in payload['items']], NUMBERS)
+
+    def test_current_orientation_paper_remains_required(self):
+        with self.assertRaisesRegex(ValueError, 'missing current orientation papers'):
+            self.orientation_snapshot(['open-source-mathematics-strategy'])
 
     def test_front_page_links_retain_fragments_and_fetch_documents_once(self):
         urls = destinations({'systems': [], 'items': []},
