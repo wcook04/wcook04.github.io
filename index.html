@@ -2645,6 +2645,7 @@
       <section class="participate" aria-labelledby="participate-h" data-scene-key="participate" data-dest-default="plectis-site">
         <h2 class="eyebrow" id="participate-h">Take part</h2>
         <p>Try an experiment on the public <a class="term" data-term="lean" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-lean">Lean</a> <a class="term" data-term="corpus" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-corpus">corpus</a>, work on an <a class="term is-again" data-term="open_problem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-open-problem">open problem</a> or suggest a better way to run and <a class="term is-again" data-term="check" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-check">check</a> the work. <a href="https://wcook04.github.io/plectis/#contribute">The <span data-term-preview-only data-term="contribute">contribution</span> guide</a> shows how to send an idea, correction, <a class="term is-again" data-term="proof" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-proof">proof</a> or infrastructure proposal and how each is credited.</p>
+        <p>For a small example, try <a href="https://github.com/wcook04/plectis-erdos/blob/main/docs/reading-edition/enclosure-product-use.md" data-to="repo">multiplying two <span data-term-preview-only data-term="polynomial">polynomial</span> approximations</a>. The question is whether their error <a class="term is-again" data-term="bound" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-bound">bounds</a> guarantee the <a class="term" data-term="product" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-product">product</a>’s accuracy. The note <a class="term" data-term="contributor_credit" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-contributor-credit">credits</a> the original <a class="term" data-term="theorem" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-theorem">theorem</a> and includes an <a class="term" data-term="exact_rational_arithmetic" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-exact-rational-arithmetic">exact arithmetic</a> <a class="term" data-term="checker" href="https://wcook04.github.io/plectis/docs/glossary.html#glossary-checker">checker</a>.</p>
       </section>
 
       <section class="handoff" aria-labelledby="handoff-h" data-scene-key="handoff" data-dest-default="review-json">
@@ -3234,6 +3235,13 @@
         "reader_preview": "A check is an examination of whether something satisfies a stated condition.",
         "reader_rule": "The result should say what was examined and which condition passed or failed."
       },
+      "checker": {
+        "preferred_label": "checker",
+        "reader_card": "A syntax checker, link checker, and proof checker each answer a different question. Their outputs are useful when the rules, inputs, and failure conditions are clear enough to inspect.",
+        "reader_deep": "The rules may still omit something important to the wider task. Plectis therefore connects checker results to specific claims rather than treating every pass as general approval.",
+        "reader_preview": "A checker is a program or procedure that evaluates an input against specified rules.",
+        "reader_rule": "A pass establishes satisfaction of the implemented rules, subject to the checker's own correctness."
+      },
       "closed_route": {
         "preferred_label": "closed route",
         "reader_card": "The working records keep the reason for closure, such as a counterexample or a proved obstruction. This lets later researchers understand the failure before trying a similar idea.",
@@ -3276,6 +3284,13 @@
         "reader_preview": "To contribute is to supply work that helps a shared project advance or correct itself.",
         "reader_rule": "Acceptance and attribution should follow the work and evidence, not the confidence of its presentation."
       },
+      "contributor_credit": {
+        "preferred_label": "contributor credit",
+        "reader_card": "Plectis aims to preserve attribution for accepted results, corrections, and other useful work, including when later work builds on them. Describing the contribution makes the credit more informative than simply listing a name.",
+        "reader_deep": "The project's contribution record is not a substitute for scholarly priority or publication conventions. A result's authors retain credit for establishing it, including when this system helped them work.",
+        "reader_preview": "Contributor credit records who supplied a piece of work and what that contribution was.",
+        "reader_rule": "Human authorship and the use of AI or other tools should be recorded distinctly."
+      },
       "corpus": {
         "preferred_label": "corpus",
         "reader_card": "The site uses the term for collections such as formal declarations, papers, or recorded examples. A particular revision or manifest can fix which items belong to the collection being described.",
@@ -3310,6 +3325,13 @@
         "reader_deep": "An equivalent reformulation, a finite computation, and an unconditional proof are different forms of progress and should retain their own descriptions.",
         "reader_preview": "An Erdős problem is a mathematical question associated with Paul Erdős; this site uses the numbering of the Erdős Problems database.",
         "reader_rule": "Compare a paper's exact statement with the original question before interpreting a result as a solution."
+      },
+      "exact_rational_arithmetic": {
+        "preferred_label": "exact rational arithmetic",
+        "reader_card": "For example, \\(1/3 + 1/6\\) is stored and simplified to \\(1/2\\) using integer operations. Provided the implementation supports the required integer sizes, these operations introduce no rounding error.",
+        "reader_deep": "The papers use it when a tiny difference or precise equality matters. It settles the computed rational expression, while an argument about an infinite limit may also need a proved bound on the omitted terms.",
+        "reader_preview": "Exact rational arithmetic calculates with integer numerators and denominators instead of rounded decimal values.",
+        "reader_rule": "Exact calculation still depends on correct inputs, algorithms, and interpretation."
       },
       "factorial": {
         "preferred_label": "factorial",
@@ -3423,6 +3445,13 @@
         "reader_preview": "A mathematical paper presents a question, argument, or result in a form intended for readers to study and assess.",
         "reader_rule": "The file format does not determine the work's evidence or review status."
       },
+      "polynomial": {
+        "preferred_label": "polynomial",
+        "reader_card": "For example, \\(f(z)=z^{3}+2z-5\\) is a polynomial: its terms use powers 3, 1, and 0, and its coefficients are 1, 2, and -5. Expressions such as \\(1/z\\) or \\(\\sqrt z\\) are not polynomials in z.",
+        "reader_deep": "The lemniscate papers study complex polynomials through their zeros, derivative, critical values, and sets where \\(|f(z)|\\) stays below a threshold.",
+        "reader_preview": "A finite sum of constant multiples of nonnegative whole-number powers of a variable.",
+        "reader_rule": "The degree is the largest exponent with nonzero coefficient. Evaluating the polynomial means substituting a number for the variable and carrying out the indicated arithmetic."
+      },
       "prime": {
         "preferred_label": "prime",
         "reader_card": "The primes begin 2, 3, 5, 7, 11. The number 1 is not prime. Every integer greater than 1 factors uniquely into primes, apart from the order of the factors.",
@@ -3436,6 +3465,13 @@
         "reader_deep": "In mathematical research plans, “producer” can also name a missing construction that would supply a required object. Its exact target and logical role must then be stated in the surrounding argument.",
         "reader_preview": "A producer is the person, model, or program that generates an output.",
         "reader_rule": "Acceptance should depend on the output and evidence rather than on confidence in the producer's presentation."
+      },
+      "product": {
+        "preferred_label": "product",
+        "reader_card": "For example, 12 is the product of 3 and 4. The notation \\(\\prod\\) can indicate multiplication over a family of factors, just as \\(\\sum\\) indicates addition over terms.",
+        "reader_deep": "For an infinite product, convergence needs a definition and proof appropriate to that setting. A long finite multiplication does not automatically determine the behaviour of the infinite expression.",
+        "reader_preview": "In mathematics, a product is the result of multiplication; in software discussions, it can mean an offering intended for users.",
+        "reader_rule": "The surrounding subject distinguishes the arithmetic meaning from the software meaning."
       },
       "proof": {
         "preferred_label": "proof",
@@ -3548,6 +3584,13 @@
         "reader_deep": "Its terms are pairwise coprime and grow rapidly. Reciprocal identities associated with the sequence make it useful in questions about unit fractions and the values of structured infinite sums.",
         "reader_preview": "Sylvester's sequence starts with 2, and each later term is one plus the product of all preceding terms.",
         "reader_rule": "The starting value and indexing convention should be checked when comparing formulas."
+      },
+      "theorem": {
+        "preferred_label": "theorem",
+        "reader_card": "Its conclusion applies to every case covered by those assumptions. The word describes a proved result; importance, difficulty, and originality are separate questions.",
+        "reader_deep": "In Lean, a declaration labelled `theorem` can still depend on admissions or added axioms unless these are audited. The keyword alone is therefore insufficient evidence that the intended result has been fully proved on the permitted foundations.",
+        "reader_preview": "A theorem is a mathematical statement established by proof within stated assumptions and definitions.",
+        "reader_rule": "Read the theorem together with its hypotheses and the evidence for its proof."
       },
       "totient": {
         "preferred_label": "totient",
