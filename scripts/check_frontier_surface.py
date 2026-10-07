@@ -26,14 +26,17 @@ def main():
     assert 'id="eight-problem-frontier" tabindex="-1"' in region
     problem_routes = re.findall(r'<a href="[^"]+" data-dest="problem-(\d+)">', region)
     assert [int(number) for number in problem_routes] == NUMBERS
-    assert len(re.findall(r'<a\s', region)) == len(NUMBERS) + 6
+    assert len(re.findall(r'<a\s', region)) == len(NUMBERS) + 8
+    assert 'maths/documents/weighted-257-task.html' in region
+    assert 'https://youtu.be/VoWByIOIuBE' in region
+    assert 'maths/papers/claim-faithful-publication-systems.html' in region
     assert tuple(p['paper_id'] for p in payload['systems']) == SYSTEM_PAPERS
     for row in payload['items']:
         assert f'data-problem="{row["problem"]}"' in text
         assert row['paper_href'] and row['page_href']
         assert row['page_href'] in text
     assert 'https://github.com/wcook04/plectis-erdos' in text  # renamed 2026-09; the old address redirects
-    assert 'https://github.com/wcook04/plectis' in text
+    assert 'href="https://github.com/wcook04/plectis"' not in text
     assert 'plectis-ai-reader-complete.json' in text
     assert '13-paper' not in text and 'Five results' not in text
     ids=re.findall(r'\bid="([^"]+)"',markup)

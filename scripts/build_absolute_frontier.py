@@ -20,7 +20,6 @@ BEGIN = '      <!-- BEGIN generated absolute frontier -->'
 END = '      <!-- END generated absolute frontier -->'
 BASE = 'https://wcook04.github.io/plectis/'
 LEAN = 'https://github.com/wcook04/plectis-erdos'
-SOFTWARE = 'https://github.com/wcook04/plectis'
 NUMBERS = [68, 243, 249, 251, 257, 269, 1041, 1049]
 CORPUS_REPOSITORIES = ('plectis-erdos', 'plectis-lean-erdos249-257')
 # The publication registry retired open-source-mathematics-strategy in favour
@@ -105,16 +104,17 @@ def render(payload: dict) -> str:
     return f'''{BEGIN}
       <section class="absolute-frontier" id="eight-problem-frontier" tabindex="-1" aria-labelledby="absolute-frontier-title" data-scene-key="opening">
         <h2 id="absolute-frontier-title">Public work</h2>
-        <p><a class="btn" href="{BASE}" data-dest="plectis-site">Explore Plectis</a></p>
-        <p class="absolute-frontier__thesis">The project site introduces the research, software and recorded interface.</p>
+        <p><a class="btn" href="{BASE}maths/documents/weighted-257-task.html">Try a research question</a></p>
+        <p class="absolute-frontier__thesis">Work through one example with optional hints and its sources. No installation needed.</p>
+        <p class="af-route"><a href="https://youtu.be/VoWByIOIuBE" data-to="video">Watch the walkthrough, 4:57</a> to see the research software, or <a href="{BASE}maths/papers/claim-faithful-publication-systems.html">read how the system works</a>.</p>
+        <p class="af-route"><a href="{BASE}" data-dest="plectis-site">Explore Plectis</a> for the maps, papers and other demonstrations.</p>
         <p class="af-route"><a href="{BASE}maths/" data-dest="math-frontier">Mathematics</a> <span>· eight programmes; ani's #1041 example refutes an exact Formal Conjectures length statement</span></p>
         <p class="frontier-instruction"><span class="frontier-instruction__wide">Hover or focus a problem to preview it; activate the link to open its page.</span><span class="frontier-instruction__narrow">Open a problem page:</span></p>
         <div class="frontier" aria-label="Eight Erdős problem pages">
 {problem_routes}
         </div>
-        <p class="af-route"><a href="{SOFTWARE}" data-to="repo">Software repository</a> <span>· public research and engineering tools</span></p>
         <p class="af-route"><a href="{LEAN}" data-dest="lean-github" data-to="repo">Mathematics repository</a> <span>· formal source and ways to continue the work</span></p>
-        <p class="af-route"><a href="{BASE}docs/papers.html" data-dest="papers-catalogue">Papers</a> · <a href="{BASE}#demo-videos">Watch the introduction</a></p>
+        <p class="af-route"><a href="{BASE}docs/papers.html" data-dest="papers-catalogue">All papers</a> · <a href="{BASE}#demo-videos">All films</a></p>
       </section>
 {END}'''
 

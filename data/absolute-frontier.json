@@ -2,10 +2,10 @@
   "schema": "public_reading_map_v1",
   "generated_by": "scripts/build_absolute_frontier.py",
   "source_hashes": {
-    "plectis-ai-reader-complete.json": "3be114566fe46ea48577b140ae6301e3544f4c1a05e05d4a495bed3c85c09c79",
+    "plectis-ai-reader-complete.json": "2970d3265d2a07f84901a2f49c334b8014a1b5d413c2ec127b7600a09764e09c",
     "lean/problems.json": "e8e1d7c043cfc172833f1cf5a60896534759346bc65a1e62f5d50bbf5dc5c175"
   },
-  "public_source_commit": "f9ad7e269da32d27ab71ddb3ae576a2844ac7b57",
+  "public_source_commit": "213d400939db818e99dc8214a8532046f3dbcde8",
   "reading_graph_path": "https://wcook04.github.io/plectis/plectis-ai-reader-complete.json#/scholarly_corpus/reading_graph",
   "systems": [
     {
@@ -26,7 +26,7 @@
       "source_pointer": "/scholarly_corpus/papers/0",
       "long_records": [
         {
-          "title": "Factorial Linear Forms and Denominators Detailed Proofs and Rationality Criteria",
+          "title": "Factorial Linear Forms and Denominators: Detailed Proofs and Rationality Criteria",
           "href": "https://wcook04.github.io/plectis/papers/erdos68-factorial-reasoning-surface.pdf"
         }
       ]

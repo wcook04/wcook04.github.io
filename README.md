@@ -10,7 +10,6 @@ index and the paper catalogue. The root page does not repeat those introductions
 |---|---|
 | **Front door** | <https://wcook04.github.io/>: this repository |
 | **Plectis, the site** | <https://wcook04.github.io/plectis/> · [docs](https://wcook04.github.io/plectis/docs/) · [papers](https://wcook04.github.io/plectis/docs/papers.html) |
-| **Plectis, the repository** | <https://github.com/wcook04/plectis> |
 | **Lean research repository** | <https://github.com/wcook04/plectis-erdos> |
 | **Videos** | [1 min](https://youtu.be/R_--vExxWyk) · [5 min](https://youtu.be/VoWByIOIuBE) · [29 min](https://youtu.be/jA_xC8gmdSs) |
 
@@ -61,8 +60,10 @@ anything, and the sitemap it declared had never been discovered by that route.
 
 ## Refresh and check
 
-The Plectis site is the primary project introduction. The root page also links
-directly to the mathematics index, both repositories, the papers and the films.
+The Plectis site is the primary project introduction. The root page introduces
+Will's role and links directly to a research task, the 4:57 walkthrough, the
+current systems paper, the mathematics index, the Lean repository and all films.
+The historical toolkit is outside the current programme.
 The source snapshot and decorative previews retain all eight problems equally;
 the full questions and paper notes live on the mathematics pages. The JSON
 handoff embeds the published manuscripts and reading routes.
