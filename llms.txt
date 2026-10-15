@@ -4,12 +4,12 @@
 
 ## Start here
 
-- [Project directory](https://wcook04.github.io/agent-guide.md): choose the owning website, follow its machine-readable map, and preserve source attribution and claim limits.
-- [Plectis](https://wcook04.github.io/plectis/llms.txt): mathematical research, papers, the toolkit, typed content graphs and research maps.
-- [Plectis Atlas](https://wcook04.github.io/plectis-atlas/llms.txt): an independent reader for OpenAI's mathematics release, its family map and attributed outside readings.
-- [Plectis Zenith](https://wcook04.github.io/plectis-zenith/llms.txt): experimental research on executable investigations, public evidence and the research graph.
+- [Project directory](https://wcook04.github.io/agent-guide.md): choose a website, follow its data files to the original source, and retain the stated result and its limits.
+- [Plectis](https://wcook04.github.io/plectis/llms.txt): mathematical research, papers, the toolkit, maps of papers, proof statements and programs, with labelled relationships.
+- [Plectis Atlas](https://wcook04.github.io/plectis-atlas/llms.txt): an independent reader for OpenAI's mathematics release, a map of related papers and comments credited to outside readers.
+- [Plectis Zenith](https://wcook04.github.io/plectis-zenith/llms.txt): experiments that investigate software and repair errors, with recorded results and graphs of the programs' dependencies.
 
 ## Compatibility
 
 - [Retained root reading map](https://wcook04.github.io/data/absolute-frontier.json): historical snapshot with source hashes, paper URLs and problem URLs. Use each project's current entry above for current claims.
-- [Microcosm compatibility map](https://wcook04.github.io/microcosm-substrate/legacy-route-manifest.json): old routes now point to Plectis; this is not a separate active project.
+- [Microcosm compatibility map](https://wcook04.github.io/microcosm-substrate/legacy-route-manifest.json): old website addresses now point to Plectis; Microcosm was the project's earlier name.

@@ -48,9 +48,9 @@ class AbsoluteFrontierStructureTests(unittest.TestCase):
     def test_1041_boundary_is_qualified_across_generated_surfaces(self):
         projected = project(self.markup, self.payload)
         plain = without_term_markup(projected)
-        self.assertIn('ani\'s #1041 example refutes an exact Formal Conjectures length statement', plain)
+        self.assertIn('the proof software Lean verifies that ani\'s example contradicts the version in Formal Conjectures', plain)
         self.assertIn('Exact Formal Conjectures path-image bound refuted; historical curve-length correspondence unreviewed.', plain)
-        self.assertIn('<span class="problem-sheet__number">Erdős #1041</span><span class="problem-sheet__status">Qualified</span>', projected)
+        self.assertIn('<span class="problem-sheet__number">Erdős #1041</span><span class="problem-sheet__status">Formal version refuted</span>', projected)
         self.assertEqual(projected.count('Original problem remains open.'), len(NUMBERS) - 1)
 
     def test_projection_comparison_ignores_both_term_link_forms(self):

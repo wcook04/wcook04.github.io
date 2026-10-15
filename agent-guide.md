@@ -1,6 +1,6 @@
 # Explore Will Cook's public websites with an agent
 
-Start with the website that owns your question. Each entry below is plain text and links to public source data; a browser or JavaScript is not required. Follow the smaller index before downloading a complete corpus. This directory is navigation, not evidence that a research claim is true.
+An AI agent can read these websites by downloading their text and data files. It does not need to control a browser. The entry files below list the papers, programs and map data available on each site. Download the smaller index first, then the files needed to answer your question. The links help you find evidence; they do not establish whether a research result is correct.
 
 ## Choose a website
 
@@ -8,7 +8,7 @@ Start with the website that owns your question. Each entry below is plain text a
 | --- | --- | --- | --- |
 | What is Plectis, and what research, papers and tools can I inspect? | [Plectis](https://wcook04.github.io/plectis/) | [Plectis agent entry](https://wcook04.github.io/plectis/llms.txt) | [Toolkit](https://github.com/wcook04/plectis), [Erdős research](https://github.com/wcook04/plectis-erdos) and [Lean source](https://github.com/wcook04/plectis-erdos-lean) |
 | What did OpenAI's mathematics release contain, and what did outside readers find? | [Plectis Atlas](https://wcook04.github.io/plectis-atlas/) | [Atlas agent entry](https://wcook04.github.io/plectis-atlas/llms.txt) | [Atlas source](https://github.com/wcook04/plectis-atlas) |
-| What do the executable-investigation experiments and research graph show? | [Plectis Zenith](https://wcook04.github.io/plectis-zenith/) | [Zenith agent entry](https://wcook04.github.io/plectis-zenith/llms.txt) | [Zenith source](https://github.com/wcook04/plectis-zenith) |
+| How does Zenith use experiments to investigate software and repair errors? | [Plectis Zenith](https://wcook04.github.io/plectis-zenith/) | [Zenith agent entry](https://wcook04.github.io/plectis-zenith/llms.txt) | [Zenith source](https://github.com/wcook04/plectis-zenith) |
 
 ```sh
 curl -fsSL https://wcook04.github.io/llms.txt
@@ -17,14 +17,14 @@ curl -fsSL https://wcook04.github.io/plectis-atlas/llms.txt
 
 ## Navigate maps without rendering them
 
-The website-specific entries link to their own graph, index and record interfaces. Fetch that site's index, choose an object by its published identifier or title, then follow its relation and source URLs. Preserve the record's attribution, scope and revision when reporting what you found. An edge in a map is a navigation relationship; it does not establish a theorem, review or endorsement.
+Each website publishes its map as JSON, a text format that programs can read. A map contains records for papers, results or programs, and links between those records. Download the index, find a record by its identifier or title, and follow its links to the original source. Read what each link means: a citation, a dependency and membership in a group describe different relationships. When reporting a result, name its author, source version, stated result and remaining uncertainty.
 
-The root homepage's [reading-map JSON](https://wcook04.github.io/data/absolute-frontier.json) contains `systems` with paper identifiers and `href` destinations, and `items` with `problem`, `paper_href`, `page_href` and `long_records`. Its `source_hashes` identify the snapshot's inputs. It is historical: follow the destination site's current entry before describing present research status. This host-root page is not the current Plectis introduction.
+The root homepage's [reading-map JSON](https://wcook04.github.io/data/absolute-frontier.json) contains `systems` with paper identifiers and `href` destinations, and `items` with `problem`, `paper_href`, `page_href` and `long_records`. Its `source_hashes` identify the versions of the source files used to build that snapshot. This is historical data: follow the destination site's current entry before describing present research status. The homepage at this address is an older introduction to Plectis.
 
 ## Retained and related routes
 
-[Microcosm](https://wcook04.github.io/microcosm-substrate/) is the retired name and its website forwards to Plectis. The [compatibility manifest](https://wcook04.github.io/microcosm-substrate/legacy-route-manifest.json) preserves old published URLs.
+Microcosm was the project's earlier name. Its [old website](https://wcook04.github.io/microcosm-substrate/) forwards to Plectis. The [old-to-new address list](https://wcook04.github.io/microcosm-substrate/legacy-route-manifest.json) lets an agent find the current destination of a published link.
 
 [Safety Core](https://github.com/wcook04/safety-core) and [One Checkout](https://github.com/wcook04/one-checkout) are repository projects with their own README and agent instructions. They have no separate website in this directory.
 
-The published files are static and fetched only when requested. These agent routes add no JavaScript, background data fetches or rendering work to the human-facing homepage.
+These files are downloaded only when someone requests them. Adding them does not make the homepage run more JavaScript or download extra data in the background.

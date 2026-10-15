@@ -104,16 +104,17 @@ def render(payload: dict) -> str:
     return f'''{BEGIN}
       <section class="absolute-frontier" id="eight-problem-frontier" tabindex="-1" aria-labelledby="absolute-frontier-title" data-scene-key="opening">
         <h2 id="absolute-frontier-title">Public work</h2>
-        <p><a class="btn" href="{BASE}maths/documents/weighted-257-task.html">Try a research question</a></p>
-        <p class="absolute-frontier__thesis">Work through one example with optional hints and its sources. No installation needed.</p>
-        <p class="af-route"><a href="https://youtu.be/VoWByIOIuBE" data-to="video">Watch the walkthrough, 4:57</a> to see the research software, or <a href="{BASE}maths/papers/claim-faithful-publication-systems.html">read how the system works</a>.</p>
-        <p class="af-route"><a href="{BASE}" data-dest="plectis-site">Explore Plectis</a> for the maps, papers and other demonstrations.</p>
-        <p class="af-route"><a href="{BASE}maths/" data-dest="math-frontier">Mathematics</a> <span>· eight programmes; ani's #1041 example refutes an exact Formal Conjectures length statement</span></p>
-        <p class="frontier-instruction"><span class="frontier-instruction__wide">Hover or focus a problem to preview it; activate the link to open its page.</span><span class="frontier-instruction__narrow">Open a problem page:</span></p>
+        <p><a class="btn" href="{BASE}maths/documents/weighted-257-task.html">Try a mathematics problem</a></p>
+        <p class="absolute-frontier__thesis">Read an example, try the question and reveal hints when you need them. You can do this in your browser.</p>
+        <p class="af-route"><a href="https://youtu.be/VoWByIOIuBE" data-to="video">Watch a software demonstration, 4:57</a> to see the research software, or <a href="{BASE}maths/papers/claim-faithful-publication-systems.html">read a paper about how I organise the research</a>.</p>
+        <p class="af-route"><a href="{BASE}" data-dest="plectis-site">Current Plectis website</a>: papers, maps and software demonstrations.</p>
+        <p class="af-route"><a href="{BASE}maths/" data-dest="math-frontier">Mathematics papers</a> <span>describe eight Erdős problems, the results so far and what is still unresolved.</span></p>
+        <p class="af-route">For #1041, the proof software Lean verifies that ani's example contradicts the version in Formal Conjectures, a collection of questions written for proof software. Whether that version matches the original question remains unreviewed.</p>
+        <p class="frontier-instruction"><span class="frontier-instruction__wide">Move the pointer over a problem, or reach it with the Tab key, to preview it. Select its link to open the page.</span><span class="frontier-instruction__narrow">Open a problem page:</span></p>
         <div class="frontier" aria-label="Eight Erdős problem pages">
 {problem_routes}
         </div>
-        <p class="af-route"><a href="{LEAN}" data-dest="lean-github" data-to="repo">Mathematics repository</a> <span>· formal source and ways to continue the work</span></p>
+        <p class="af-route"><a href="{LEAN}" data-dest="lean-github" data-to="repo">Proof files and research code</a> <span>include instructions for reading and extending the proofs.</span></p>
         <p class="af-route"><a href="{BASE}docs/papers.html" data-dest="papers-catalogue">All papers</a> · <a href="{BASE}#demo-videos">All films</a></p>
       </section>
 {END}'''
@@ -140,13 +141,13 @@ def project(text: str, payload: dict) -> str:
         boundary=problem_boundary(p)
         titled_boundary=boundary[:1].upper()+boundary[1:]
         portrait_boundary=titled_boundary if n == 1041 else 'The original problem remains open'
-        portrait_status='Qualified' if n == 1041 else p['status'].capitalize()
+        portrait_status='Formal version refuted' if n == 1041 else p['status'].capitalize()
         sheet=f'''<span class="shot__problem" data-problem="{n}" aria-hidden="true">
           <span class="problem-sheet__topline"><span class="problem-sheet__number">Erdős #{n}</span><span class="problem-sheet__status">{e(portrait_status)}</span></span>
           <span class="problem-sheet__title">{e(p['title'])}</span>
           <span class="problem-sheet__question"><span class="problem-sheet__label">Question</span>{e(p['question'])}</span>
           <span class="problem-sheet__section"><span class="problem-sheet__label">Short note</span>{e(p['paper_title'])}</span>
-          <span class="problem-sheet__section problem-sheet__section--open"><span class="problem-sheet__label">Research status</span>{e(portrait_boundary)}. The problem page separates results, evidence and remaining work.</span></span>'''
+          <span class="problem-sheet__section problem-sheet__section--open"><span class="problem-sheet__label">Research status</span>{e(portrait_boundary)}. The linked page gives the precise statements, proof files and unresolved questions.</span></span>'''
         text=replace_required(text,pattern,lambda _:sheet,f'portrait #{n}',flags=re.S)
         text=replace_required(text,rf'(<span class="frontier-plate__number">{n}</span><span class="frontier-plate__handle">).*?(</span>)',lambda m:m[1]+e(p['title'])+m[2],f'frontier plate #{n}',flags=re.S)
         text=replace_required(

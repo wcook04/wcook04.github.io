@@ -45,6 +45,22 @@ python3 scripts/check_frontier_surface.py
 
 To inspect the historical page locally, run `python3 -m http.server 8000` and open [localhost:8000](http://localhost:8000). Update an owning script before regenerating a marked HTML region.
 
+## Editing public wording
+
+Write for someone who has never used this software or read about the project.
+Name the person or program, what it does, and the object it reads or changes.
+For “check” or “verify”, say which program compares which evidence and what its
+answer establishes. For example, “Lean verifies whether the proof follows from
+its assumptions” is more useful than “the work is checked”. Define technical
+terms where a reader first needs them. Keep the exact mathematical statements,
+assumptions, attribution and unsolved questions unchanged.
+
+Review the complete page, its link labels, previews, error page and generated
+text. Edit `scripts/build_absolute_frontier.py` for the marked reading-map and
+problem-preview sections, then rebuild those sections and the glossary links.
+Use the existing layout and inspect the finished page at laptop and phone sizes;
+a phrase scan alone cannot show whether the explanation makes sense.
+
 ## Credit and licence
 
 The mark and page content are © Will Cook. Linked projects retain their own authorship, licences and acknowledgements; follow the current Plectis site for those records.
