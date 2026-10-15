@@ -1,7 +1,5 @@
-# Crawlers only ever read robots.txt at the host root, so this is the one that
-# counts. The copy at /plectis/robots.txt is never fetched by anything.
+# Host-wide rules: the separately deployed project websites remain crawlable.
 User-agent: *
 Allow: /
 
 Sitemap: https://wcook04.github.io/sitemap.xml
-Sitemap: https://wcook04.github.io/plectis/sitemap.xml

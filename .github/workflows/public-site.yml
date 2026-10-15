@@ -12,10 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
-      - name: Test reading-map and route validation
-        run: python3 -m unittest discover -s scripts -p 'test_*.py'
-      - name: Check generated front-door content
-        run: |
-          python3 scripts/build_absolute_frontier.py --check
-          python3 scripts/build_glossary_term_layer.py --check
-          python3 scripts/check_frontier_surface.py
+      - name: Test redirect and repository validation
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
+      - name: Keep the old homepage retired
+        run: python3 scripts/check_redirect_site.py

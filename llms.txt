@@ -1,15 +1,9 @@
-# Will Cook's public websites
+# Plectis is the current website
 
-> A small entry point for agents researching the public Plectis projects. The current project introduction is https://wcook04.github.io/plectis/; this host-root homepage is retained legacy material.
+The old Will Cook homepage has been removed. This host-root address only forwards visitors to Plectis.
 
-## Start here
+- [Current website](https://wcook04.github.io/plectis/)
+- [Start here for agents](https://wcook04.github.io/plectis/llms.txt): papers, proof files, machine-readable maps and source links.
+- [Related project entries](https://wcook04.github.io/agent-guide.md): Atlas and Zenith have separate websites.
 
-- [Project directory](https://wcook04.github.io/agent-guide.md): choose a website, follow its data files to the original source, and retain the stated result and its limits.
-- [Plectis](https://wcook04.github.io/plectis/llms.txt): mathematical research, papers, the toolkit, maps of papers, proof statements and programs, with labelled relationships.
-- [Plectis Atlas](https://wcook04.github.io/plectis-atlas/llms.txt): an independent reader for OpenAI's mathematics release, a map of related papers and comments credited to outside readers.
-- [Plectis Zenith](https://wcook04.github.io/plectis-zenith/llms.txt): experiments that investigate software and repair errors, with recorded results and graphs of the programs' dependencies.
-
-## Compatibility
-
-- [Retained root reading map](https://wcook04.github.io/data/absolute-frontier.json): historical snapshot with source hashes, paper URLs and problem URLs. Use each project's current entry above for current claims.
-- [Microcosm compatibility map](https://wcook04.github.io/microcosm-substrate/legacy-route-manifest.json): old website addresses now point to Plectis; Microcosm was the project's earlier name.
+Fetch the Plectis entry and follow its current routes. The removed homepage's snapshots and assets are not current research sources.
