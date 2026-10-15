@@ -2,15 +2,41 @@
 """Regression tests for public snapshot identity and route validation."""
 import hashlib
 import json
+import shutil
 from pathlib import Path
 import tempfile
 import unittest
 
 from build_absolute_frontier import NUMBERS, corpus_revision, snapshot
 from check_public_routes import BASE, destinations, group_destinations, read_destination, validate_body
+from check_frontier_surface import check_agent_navigation
 
 
 class PublicReadingMapTests(unittest.TestCase):
+    def test_agent_routes_reject_missing_files_wrong_prefix_and_preload(self):
+        source = Path(__file__).resolve().parents[1]
+        mutations = (
+            ('.nojekyll', None, 'raw Markdown publication'),
+            ('llms.txt', lambda text: text.replace('/plectis-atlas/llms.txt', '/atlas/llms.txt'), 'missing project route'),
+            ('index.html', lambda text: text.replace('rel="help" type="text/plain"', 'rel="preload" type="text/plain"'), 'discovery links'),
+            ('index.html', lambda text: text.replace('</head>', '<link rel="prefetch" href="/agent-guide.md"></head>'), 'only on request'),
+            ('agent-guide.md', None, 'missing root agent interface'),
+        )
+        for name, mutate, message in mutations:
+            with self.subTest(name=name, message=message), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                (root / 'data').mkdir()
+                for relative in ('.nojekyll', 'README.md', 'index.html', 'llms.txt', 'agent-guide.md', 'data/absolute-frontier.json'):
+                    shutil.copy2(source / relative, root / relative)
+                check_agent_navigation(root)
+                path = root / name
+                if mutate:
+                    path.write_text(mutate(path.read_text()))
+                else:
+                    path.unlink()
+                with self.assertRaisesRegex(AssertionError, message):
+                    check_agent_navigation(root)
+
     def test_current_and_historical_repository_names(self):
         for name in ('plectis-erdos', 'plectis-lean-erdos249-257'):
             with self.subTest(name=name):

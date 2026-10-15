@@ -1,0 +1,15 @@
+# Will Cook's public websites
+
+> A small entry point for agents researching the public Plectis projects. The current project introduction is https://wcook04.github.io/plectis/; this host-root homepage is retained legacy material.
+
+## Start here
+
+- [Project directory](https://wcook04.github.io/agent-guide.md): choose the owning website, follow its machine-readable map, and preserve source attribution and claim limits.
+- [Plectis](https://wcook04.github.io/plectis/llms.txt): mathematical research, papers, the toolkit, typed content graphs and research maps.
+- [Plectis Atlas](https://wcook04.github.io/plectis-atlas/llms.txt): an independent reader for OpenAI's mathematics release, its family map and attributed outside readings.
+- [Plectis Zenith](https://wcook04.github.io/plectis-zenith/llms.txt): experimental research on executable investigations, public evidence and the research graph.
+
+## Compatibility
+
+- [Retained root reading map](https://wcook04.github.io/data/absolute-frontier.json): historical snapshot with source hashes, paper URLs and problem URLs. Use each project's current entry above for current claims.
+- [Microcosm compatibility map](https://wcook04.github.io/microcosm-substrate/legacy-route-manifest.json): old routes now point to Plectis; this is not a separate active project.

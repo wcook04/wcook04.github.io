@@ -6,12 +6,24 @@ This repository contains Will Cook's deprecated host-root homepage and host-wide
 
 [Current website](https://wcook04.github.io/plectis/) · [Mathematics](https://wcook04.github.io/plectis/maths/) · [Papers](https://wcook04.github.io/plectis/docs/papers.html) · [Videos](https://wcook04.github.io/plectis/#videos)
 
+## Explore with an agent
+
+The websites are agent navigable: start with [the plain-text entry](https://wcook04.github.io/llms.txt) or [the Markdown project directory](https://wcook04.github.io/agent-guide.md), then follow a project's map and source records without running JavaScript.
+
+```sh
+curl -fsSL https://wcook04.github.io/llms.txt
+```
+
+The directory routes to Plectis, Atlas and Zenith. The root reading map is a retained snapshot; each destination owns its current claims. Agent files load only when requested and add no runtime work to the homepage.
+
 ## Repository map
 
 | Path | Purpose |
 |---|---|
 | `index.html`, `404.html` | Legacy homepage and host-root error page. |
-| `favicon.ico`, `site.webmanifest`, `robots.txt` | Host-wide identity and search-discovery files. |
+| `favicon.ico`, `site.webmanifest`, `robots.txt`, `sitemap.xml` | Host-wide identity and search-discovery files. |
+| [`.nojekyll`](.nojekyll) | Serve the authored static files directly, including raw Markdown agent routes. |
+| [`llms.txt`](llms.txt), [`agent-guide.md`](agent-guide.md) | Static agent entry and project directory; maintained here. |
 | `assets/` | Existing brand assets, destination screenshots and archived artwork. |
 | `data/` | The historical reading map and glossary snapshot. |
 | `scripts/` | Builders and checks for the legacy page. |
