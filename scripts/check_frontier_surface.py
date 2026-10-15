@@ -49,8 +49,9 @@ def check_agent_navigation(root: Path):
             path = urlsplit(url).path.lstrip('/')
             # Project deployments have separate owners. Check only this repo's
             # static root and data routes offline; verify project links live.
-            if path in files or path.startswith('data/'):
-                assert (root / path).is_file(), f'missing local directory route: {path}'
+            if path.split('/', 1)[0] not in ('plectis', 'plectis-atlas', 'plectis-zenith', 'microcosm-substrate'):
+                local = root / (path or 'index.html')
+                assert local.is_file(), f'missing local directory route: {path}'
     data = json.loads((root / 'data/absolute-frontier.json').read_text())
     assert data['source_hashes'] and data['systems'] and data['items']
     assert all(row.get('paper_id') and row.get('href') for row in data['systems'])

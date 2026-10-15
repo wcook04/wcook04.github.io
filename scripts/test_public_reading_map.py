@@ -18,6 +18,7 @@ class PublicReadingMapTests(unittest.TestCase):
         mutations = (
             ('.nojekyll', None, 'raw Markdown publication'),
             ('llms.txt', lambda text: text.replace('/plectis-atlas/llms.txt', '/atlas/llms.txt'), 'missing project route'),
+            ('llms.txt', lambda text: text.replace('/agent-guide.md', '/missing-guide.md'), 'missing local directory route'),
             ('index.html', lambda text: text.replace('rel="help" type="text/plain"', 'rel="preload" type="text/plain"'), 'discovery links'),
             ('index.html', lambda text: text.replace('</head>', '<link rel="prefetch" href="/agent-guide.md"></head>'), 'only on request'),
             ('agent-guide.md', None, 'missing root agent interface'),
