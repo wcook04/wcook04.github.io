@@ -4,6 +4,18 @@ The old Will Cook homepage has been removed. The current website is **[Plectis](
 
 This repository keeps the root address `wcook04.github.io` forwarding to Plectis. It contains no portfolio, research snapshots, artwork or page-generation tools. Git history retains the removed source.
 
+## Project films
+
+| Film | Watch |
+|---|---|
+| Plectis introduction | [YouTube](https://www.youtube.com/watch?v=uO2lbstEH9M) |
+| A proof, step by step | [YouTube](https://www.youtube.com/watch?v=Ok5LkL1owjA) |
+| CodeMap | [YouTube](https://www.youtube.com/watch?v=6rP-pS8Ni4E) |
+| One Checkout | [YouTube](https://www.youtube.com/watch?v=HUciGvGo2ss) |
+| Mathematics overview | [YouTube](https://www.youtube.com/watch?v=4jObDlHmJRA) |
+| Plectis Atlas | [YouTube](https://www.youtube.com/watch?v=uLHWmBLsAHE) |
+| Safety Core | [YouTube](https://www.youtube.com/watch?v=CY4A1aEPCGc) |
+
 ## Read with an agent
 
 Plectis is agent navigable. Its [plain-text entry](https://wcook04.github.io/plectis/llms.txt) links papers, proof files, machine-readable maps and the records needed to follow their relationships.
