@@ -2,8 +2,8 @@
 
 The old Will Cook homepage has been removed. This host-root address only forwards visitors to Plectis.
 
-- [Current website](https://wcook04.github.io/plectis/)
-- [Start here for agents](https://wcook04.github.io/plectis/llms.txt): papers, proof files, machine-readable maps and source links.
+- [Current website](https://wcook04.github.io/practical-formal-verification/)
+- [Start here for agents](https://wcook04.github.io/practical-formal-verification/llms.txt): papers, proof files, machine-readable maps and source links.
 - [Related project entries](https://wcook04.github.io/agent-guide.md): Atlas and Zenith have separate websites.
 
 Fetch the Plectis entry and follow its current routes. The removed homepage's snapshots and assets are not current research sources.

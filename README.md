@@ -1,6 +1,6 @@
 # Redirect to Plectis
 
-The old Will Cook homepage has been removed. The current website is **[Plectis](https://wcook04.github.io/plectis/)**.
+The old Will Cook homepage has been removed. The current website is **[Plectis](https://wcook04.github.io/practical-formal-verification/)**.
 
 This repository keeps the root address `wcook04.github.io` forwarding to Plectis. It contains no portfolio, research snapshots, artwork or page-generation tools. Git history retains the removed source.
 
@@ -12,10 +12,10 @@ This repository keeps the root address `wcook04.github.io` forwarding to Plectis
 
 ## Read with an agent
 
-Plectis is agent navigable. Its [plain-text entry](https://wcook04.github.io/plectis/llms.txt) links papers, proof files, machine-readable maps and the records needed to follow their relationships.
+Plectis is agent navigable. Its [plain-text entry](https://wcook04.github.io/practical-formal-verification/llms.txt) links papers, proof files, machine-readable maps and the records needed to follow their relationships.
 
 ```sh
-curl -fsSL https://wcook04.github.io/plectis/llms.txt
+curl -fsSL https://wcook04.github.io/practical-formal-verification/llms.txt
 ```
 
 The small [root entry](llms.txt) and [project pointers](agent-guide.md) preserve existing discovery addresses. They direct agents to the current websites.

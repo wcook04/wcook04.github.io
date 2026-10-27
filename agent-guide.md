@@ -1,9 +1,9 @@
 # The website has moved to Plectis
 
-The old homepage has been removed. Start at [Plectis](https://wcook04.github.io/plectis/) or download [its agent entry](https://wcook04.github.io/plectis/llms.txt) to find the current papers, proof files and machine-readable maps.
+The old homepage has been removed. Start at [Plectis](https://wcook04.github.io/practical-formal-verification/) or download [its agent entry](https://wcook04.github.io/practical-formal-verification/llms.txt) to find the current papers, proof files and machine-readable maps.
 
 ```sh
-curl -fsSL https://wcook04.github.io/plectis/llms.txt
+curl -fsSL https://wcook04.github.io/practical-formal-verification/llms.txt
 ```
 
 These separate project websites remain available:

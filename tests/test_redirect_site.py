@@ -28,7 +28,7 @@ class RedirectTests(unittest.TestCase):
 
     def test_no_javascript_fallback_link_is_required(self):
         self.files["index.html"] = self.files["index.html"].replace(
-            b'href="https://wcook04.github.io/plectis/">Open',
+            b'href="https://wcook04.github.io/practical-formal-verification/">Open',
             b'href="/old-homepage.html">Open')
         self.assertTrue(any("ordinary link" in error for error in CHECK.validate(self.files)))
 
@@ -38,7 +38,7 @@ class RedirectTests(unittest.TestCase):
 
     def test_sitemap_cannot_advertise_retired_homepage(self):
         self.files["sitemap.xml"] = self.files["sitemap.xml"].replace(
-            b"https://wcook04.github.io/plectis/sitemap.xml", b"https://wcook04.github.io/")
+            b"https://wcook04.github.io/practical-formal-verification/sitemap.xml", b"https://wcook04.github.io/")
         self.assertTrue(any("retired page" in error for error in CHECK.validate(self.files)))
 
     def test_index_uses_staged_contents_and_honours_deletions(self):

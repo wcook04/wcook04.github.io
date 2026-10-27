@@ -9,7 +9,7 @@ import subprocess
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
-CANONICAL = "https://wcook04.github.io/plectis/"
+CANONICAL = "https://wcook04.github.io/practical-formal-verification/"
 REQUIRED = {
     ".github/workflows/public-site.yml", ".gitignore", ".nojekyll",
     "index.html", "404.html", "README.md", "llms.txt", "agent-guide.md",
