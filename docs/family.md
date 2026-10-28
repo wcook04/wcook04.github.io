@@ -89,8 +89,13 @@ A film in preparation. It has no link, because there is nothing to open yet:
 </figure>
 ```
 
+On the Plectis pages the figure also carries `data-term-auto="off"`, so the
+glossary linker leaves a film's title and description as written.
+
 `film-slot--small` and `film-slot--large` change only the play chip and the
-title size. The sister sites:
+title size. `film-slot--inline` sets a small still beside its title, for a
+film about the apparatus on a page whose subject is something else (the Maths
+Map film beside the map of results). The sister sites:
 
 ```html
 <nav class="fam-sites" aria-label="Will Cook's websites">
