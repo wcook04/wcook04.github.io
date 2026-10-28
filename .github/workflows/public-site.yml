@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
-      - name: Test redirect and repository validation
+      - name: Test the home page and repository checks
         run: python3 -m unittest discover -s tests -p 'test_*.py'
-      - name: Keep the old homepage retired
-        run: python3 scripts/check_redirect_site.py
+      - name: Check the pages match sites.json and load nothing from other hosts
+        run: python3 scripts/check_hub_site.py

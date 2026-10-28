@@ -1,0 +1,140 @@
+# One family of websites
+
+Will Cook's websites are separate projects with separate repositories, but a
+reader moving between them should always know where they are and how to get
+back. Every site carries the same three things, in its own stack:
+
+1. **The ladder** at the start of its header: `Will Cook / <site name>`. "Will
+   Cook" links to the home page, <https://wcook04.github.io/>, which lists every
+   website and every film.
+2. **Film slots** for the films about that site: the still with its play chip
+   and running time once a film is on YouTube, and a held frame marked "In
+   preparation" until then.
+3. **Sister sites** in its footer: the other websites by name, and "All
+   websites and films" back to the home page.
+
+The list of websites and films is [`sites.json`](../sites.json) in this
+repository. Each site keeps a copy beside its own source (`family.json`) and
+renders from it at build time, so no page requests anything from another host
+or depends on JavaScript to show its films.
+
+The shared styles are [`assets/family/family.css`](../assets/family/family.css).
+Copy the file unchanged and map the site's tokens onto its `--fam-*` names:
+
+```css
+:root {
+  --fam-page: var(--ground);     /* the site's page colour */
+  --fam-surface: var(--surface);
+  --fam-ink: var(--ink);
+  --fam-ink-soft: var(--ink-2);
+  --fam-muted: var(--ink-2);
+  --fam-faint: var(--ink-3);
+  --fam-rule: var(--rule);
+  --fam-rule-strong: var(--rule-strong);
+  --fam-accent: var(--accent);   /* links and focus */
+  --fam-serif: var(--font-serif);
+  --fam-sans: var(--font-sans);
+}
+```
+
+## Markup
+
+The ladder:
+
+```html
+<span class="fam-ladder">
+  <a class="fam-ladder__up" href="https://wcook04.github.io/" rel="author">Will Cook</a>
+  <span class="fam-ladder__sep" aria-hidden="true">/</span>
+  <!-- the site's own wordmark, linking to its home page -->
+</span>
+```
+
+A released film. The still and the title open the same video, so only the
+title is in the Tab order, and it says the running time in words:
+
+```html
+<figure class="film-slot">
+  <a class="film-slot__frame" href="https://www.youtube.com/watch?v=ID" target="_blank"
+     rel="noopener noreferrer" aria-hidden="true" tabindex="-1">
+    <img src="assets/films/atlas-640.webp"
+         srcset="assets/films/atlas-640.webp 640w, assets/films/atlas-1280.webp 1280w"
+         sizes="(min-width: 960px) 480px, 100vw"
+         alt="" width="1280" height="720" loading="lazy" decoding="async">
+    <span class="film-slot__play"></span>
+    <span class="film-slot__time">5:27</span>
+  </a>
+  <figcaption class="film-slot__caption">
+    <p class="film-slot__title"><a href="https://www.youtube.com/watch?v=ID" target="_blank"
+       rel="noopener noreferrer">Plectis Atlas: compare maths papers with the reports that check them<span
+       class="sr-only">, video on YouTube, 5 minutes 27 seconds</span></a></p>
+    <p class="film-slot__text">One or two sentences from the film's description.</p>
+  </figcaption>
+</figure>
+```
+
+A film in preparation. It has no link, because there is nothing to open yet:
+
+```html
+<figure class="film-slot film-slot--pending">
+  <div class="film-slot__frame film-slot__frame--pending" aria-hidden="true">
+    <span class="film-slot__series">Lean Exposition</span>
+    <span class="film-slot__name">SK reading interface</span>
+    <span class="film-slot__status">In preparation</span>
+  </div>
+  <figcaption class="film-slot__caption">
+    <p class="film-slot__title">SK reading interface</p>
+    <p class="film-slot__meta">Video in preparation</p>
+    <p class="film-slot__text">One sentence on what the film will show.</p>
+  </figcaption>
+</figure>
+```
+
+`film-slot--small` and `film-slot--large` change only the play chip and the
+title size. The sister sites:
+
+```html
+<nav class="fam-sites" aria-label="Will Cook's websites">
+  <p class="fam-sites__title">More from Will Cook</p>
+  <ul class="fam-sites__list">
+    <li><a href="https://wcook04.github.io/practical-formal-verification/maths/">Mathematics</a></li>
+    <li><a href="https://wcook04.github.io/lean-exposition-site/" aria-current="page">SK exposition</a></li>
+    <!-- … every site in sites.json order, then: -->
+    <li><a href="https://wcook04.github.io/">All websites and films</a></li>
+  </ul>
+</nav>
+```
+
+On the site being read, its own entry keeps `aria-current="page"` and is
+shown, not removed, so the list reads the same everywhere.
+
+## Rules
+
+- **No embedded players.** A film opens on YouTube in a new tab. Pages load
+  nothing from YouTube or any other host, and a site's content security
+  policy needs no change.
+- **Never invent a link.** A film without a `youtube` value is shown in
+  preparation. Its title is the working title, and its description says what
+  it will show, taken from its script.
+- **Stills are the uploaded thumbnails**, served as 640 and 1280 px WebP
+  copies made with `cwebp -q 80 -m 6 -resize <width> 0`, the settings of the
+  Plectis site's `plectis_thumbnail_cards.py web`. They live in this
+  repository's `assets/films/`; a site copies the ones it shows.
+- **Words.** British spelling, sentence case, no em dashes. Name things by
+  what they are: "PDF, 26 pages", not "Download".
+- **Colour.** The family's ground is the warm paper of the Plectis sites
+  (`#f8f0e2` by day, `#1c1526` at night) with ink `#191520` / `#f2e6d4`. A
+  site keeps its own meaning-carrying colours (a map's categories, a check's
+  outcome) on that ground.
+
+## Add a released film
+
+1. In `sites.json`, set the film's `youtube`, `duration_seconds` and `still`
+   (for example `assets/films/sk-no-gap`), and update its title and
+   description to the published ones.
+2. Make the still's two copies from the uploaded thumbnail:
+   `cwebp -q 80 -m 6 -resize 640 0 thumb.png -o assets/films/<id>-640.webp`
+   and the same with 1280.
+3. Run `python3 scripts/build_hub.py` and commit. The home page now shows it.
+4. Copy `sites.json` to each site that shows the film (its `family.json`)
+   with the two stills, rebuild that site and publish it. The film's site
+   lists where it appears.
