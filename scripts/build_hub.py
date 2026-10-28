@@ -136,11 +136,12 @@ def still_img(still: str, *, sizes: str, loading: str = "lazy") -> str:
             f'sizes="{e(sizes)}" alt="" width="1280" height="720" loading="{loading}" decoding="async">')
 
 
-def film_slot(film: dict, *, series: str, size: str = "", sizes: str = "(min-width: 1180px) 360px, (min-width: 720px) 45vw, 100vw") -> str:
+def film_slot(film: dict, *, series: str, size: str = "", with_text: bool = True,
+              sizes: str = "(min-width: 1180px) 360px, (min-width: 720px) 45vw, 100vw") -> str:
     """The family's film slot (docs/family.md): a still that opens YouTube, or a held frame."""
     classes = "film-slot" + (f" film-slot--{size}" if size else "")
     title = e(film["title"])
-    text = f'<p class="film-slot__text">{e(film["description"])}</p>'
+    text = f'<p class="film-slot__text">{e(film["description"])}</p>' if with_text else ""
     if film.get("youtube"):
         link = e(film["youtube"])
         seconds = film["duration_seconds"]
@@ -282,8 +283,11 @@ def render_index(registry: dict) -> str:
                     f'<p class="film-group__links"><a class="film-group__site" href="{e(site["url"])}">Open the website</a>{repos}</p></div>')
         else:
             head = (f'<div class="film-group__head"><h3 class="film-group__title" id="films-{e(group["id"])}-title">{e(group["title"])}</h3></div>')
+        # Each group fills its row: one film is a wide card, two share the
+        # row, three take thirds, and the introduction leads its own row.
+        grid = "film-grid--lead" if group["id"] == "overview" else f"film-grid--count-{min(len(group['films']), 3)}"
         groups_html.append(f'<section class="film-group" id="films-{e(group["id"])}" aria-labelledby="films-{e(group["id"])}-title">'
-                           f'{head}<ul class="film-grid" role="list">{"".join(slots)}</ul></section>')
+                           f'{head}<ul class="film-grid {grid}" role="list">{"".join(slots)}</ul></section>')
 
     contact = "".join(f'<li><a href="{e(c["href"])}"{"" if c["href"].startswith("mailto:") else " rel=\"me noopener\""}>{e(c["label"])}</a></li>'
                       for c in owner["contact"])
@@ -306,10 +310,13 @@ def render_index(registry: dict) -> str:
   <main id="main">
     <section class="hub-intro" aria-labelledby="hub-title">
       <div class="wrap">
-        <div class="hub-intro__copy">
-          <h1 class="hub-title" id="hub-title">{e(owner["name"])}</h1>
-          <p class="hub-lede">{e(owner["lede"])}</p>
-          <p class="hub-orient">Each project has its own website. New here? <a href="{e(intro["youtube"])}" target="_blank" rel="noopener noreferrer">Watch the introduction<span class="sr-only">, video on YouTube, {spoken(intro["duration_seconds"])}</span></a>, {clock(intro["duration_seconds"])}, on how they fit together.</p>
+        <div class="hub-intro__top">
+          <div class="hub-intro__copy">
+            <h1 class="hub-title" id="hub-title">{e(owner["name"])}</h1>
+            <p class="hub-lede">{e(owner["lede"])}</p>
+            <p class="hub-orient">Each project has its own website, listed below. New here? Start with the introduction, which explains how they fit together.</p>
+          </div>
+          <div class="hub-intro__film">{film_slot(intro, series="Will Cook", size="inline", with_text=False, sizes="(min-width: 1024px) 240px, 100vw")}</div>
         </div>
         <div class="hub-sites">
           <div class="hub-sites__list">

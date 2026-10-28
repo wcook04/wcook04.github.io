@@ -118,10 +118,10 @@ main#main:focus { outline: none; }
 .hub-header__inner .theme-toggle { order: 3; }
 .hub-nav { order: 2; }
 @media (max-width: 559.98px) {
-  .hub-header__inner { padding-block: 0.55rem 0.35rem; }
+  .hub-header__inner { padding-block: 0.35rem 0.1rem; row-gap: 0; }
   .hub-wordmark { font-size: 1.15rem; }
-  .hub-nav { order: 4; width: 100%; gap: 0.2rem 1.25rem; font-size: 0.94rem; }
-  .hub-nav a { min-height: 2.25rem; display: inline-flex; align-items: center; }
+  .hub-nav { order: 4; width: 100%; gap: 0 1.25rem; font-size: 0.94rem; }
+  .hub-nav a { min-height: 2rem; display: inline-flex; align-items: center; }
 }
 
 /* The house day / night switch (style.css .theme-toggle), injected by hub.js. */
@@ -177,6 +177,15 @@ main#main:focus { outline: none; }
   font-size: clamp(1.6rem, 1.25rem + 1vw, 2.15rem); line-height: 1.12; letter-spacing: -0.012em;
 }
 .hub-sites { display: grid; gap: 2.5rem; margin-top: clamp(1.8rem, 3.2vw, 2.6rem); }
+/* The introduction film sits beside the opening words, so the top of the page
+   has no empty half. */
+.hub-intro__top { display: grid; gap: 1.4rem; }
+.hub-intro__film .film-slot { max-width: 34rem; }
+@media (min-width: 1024px) {
+  .hub-intro__top { grid-template-columns: minmax(0, 10fr) minmax(0, 12fr); gap: clamp(2.5rem, 4vw, 4rem); align-items: end; }
+  .hub-intro__film .film-slot--inline { grid-template-columns: minmax(10rem, 15rem) minmax(0, 1fr); align-items: center; }
+  .hub-intro__film .film-slot__title { font-size: 1.15rem; }
+}
 .site-index { list-style: none; margin: 1rem 0 0; padding: 0; border-bottom: 1px solid var(--rule); }
 .site-row {
   display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.9rem;
@@ -257,13 +266,21 @@ main#main:focus { outline: none; }
 .film-group__repo { color: var(--muted); text-decoration: underline; text-decoration-color: var(--rule-strong); }
 .film-group__repo:hover { color: var(--accent); text-decoration-color: var(--accent); }
 .film-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 2.2rem 1.6rem; grid-template-columns: minmax(0, 1fr); }
+/* One film: a wide card, the still beside its title and description. The
+   introduction's group is two such rows: the introduction with the larger
+   still, then its first version, so neither leaves a gap beside the other. */
 @media (min-width: 640px) {
-  .film-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .film-grid__item--lead { grid-column: 1 / -1; }
+  .film-grid--count-1 .film-slot, .film-grid--lead .film-slot {
+    display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 0 clamp(1.2rem, 3vw, 2.4rem); align-items: center;
+  }
+  .film-grid--lead .film-grid__item--lead .film-slot { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .film-grid--lead .film-grid__item:not(.film-grid__item--lead) .film-slot { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
+  .film-grid--count-1 .film-slot .film-slot__caption, .film-grid--lead .film-slot .film-slot__caption { margin-top: 0; }
+  .film-grid--count-1 .film-slot .film-slot__title { font-size: clamp(1.2rem, 1.05rem + 0.5vw, 1.45rem); }
+  .film-grid--count-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media (min-width: 1024px) {
-  .film-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .film-grid__item--lead { grid-column: span 2; }
+@media (min-width: 760px) {
+  .film-grid--count-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 .film-grid__item { min-width: 0; }
 .film-grid .film-slot__text { font-size: 0.93rem; }
