@@ -239,6 +239,13 @@ main#main:focus { outline: none; }
 .map-site__name a::after, .map-repo__name a::after { content: "\00a0\2197"; font-family: var(--font-sans); font-size: 0.62em; font-weight: 400; color: var(--faint); }
 .map-site__name a:hover { text-decoration: underline; text-decoration-color: var(--rule-control); }
 .map-site__purpose { margin-top: 0.25rem; max-width: 62ch; font-size: 0.92rem; line-height: 1.48; color: var(--ink-soft); }
+/* A website's main places, one step away: the full-screen maths map, the
+   SK argument map, a paper's PDF. They leave this page, so each carries the
+   outbound arrow. */
+.map-site__routes { margin-top: 0.45rem; display: flex; flex-wrap: wrap; gap: 0.15rem 1.1rem; font-size: 0.9rem; line-height: 1.45; }
+.map-site__routes a { font-weight: 600; color: var(--accent); text-decoration: none; min-height: 24px; display: inline-flex; align-items: center; }
+.map-site__routes a::after { content: "\00a0\2197"; font-weight: 400; font-size: 0.8em; }
+.map-site__routes a:hover { text-decoration: underline; text-underline-offset: 0.16em; }
 .map-site--here .map-site__name { color: var(--ink-soft); }
 
 /* Videos: the family's inline film slot, held compact. */
@@ -406,3 +413,12 @@ main#main:focus { outline: none; }
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   .hub-header { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--page); }
 }
+
+/* In the gallery a film that is not out yet holds a shorter place: its name in
+   the family's held frame, without a screen-sized empty box beside the films
+   that can be watched now. */
+.hub-films .film-slot__frame--pending { aspect-ratio: 16 / 7; }
+/* The caption under a held frame already says "Video in preparation", so the
+   frame carries the film's name alone (the house rule for a held frame). */
+.hub-films .film-slot__frame--pending { justify-content: center; }
+.hub-films .film-slot__series, .hub-films .film-slot__status { display: none; }

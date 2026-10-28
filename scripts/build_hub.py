@@ -90,6 +90,9 @@ def validate_registry(registry: dict, root: Path = ROOT, exists=None) -> list[st
     if unplaced:
         problems.append("repositories on no website or tool: " + ", ".join(sorted(unplaced)))
     for site in registry["sites"]:
+        hrefs = [r["href"] for r in site.get("routes", [])]
+        if len(hrefs) != len(set(hrefs)) or any(not h.startswith(HOME) or not r.get("label") for h, r in zip(hrefs, site.get("routes", []))):
+            problems.append(f"{site['id']}: each route needs a label and an address on {HOME}, once")
         if not site["url"].startswith(HOME):
             problems.append(f"{site['id']}: websites live under {HOME}")
         for scheme in ("light", "dark"):
@@ -251,7 +254,14 @@ def map_site(site: dict) -> str:
             f'<a class="map-site__shot" href="{url}" aria-hidden="true" tabindex="-1">'
             f'{capture_img(site, "light", sizes=MAP_SHOT_SIZES)}{capture_img(site, "dark", sizes=MAP_SHOT_SIZES)}</a>'
             f'<div class="map-site__body"><h3 class="map-site__name"><a href="{url}">{e(site["name"])}</a></h3>'
-            f'<p class="map-site__purpose">{e(site["purpose"])}</p></div></div></div>')
+            f'<p class="map-site__purpose">{e(site["purpose"])}</p>{site_routes(site)}</div></div></div>')
+
+
+def site_routes(site: dict) -> str:
+    """Straight to a website's main places: its full-screen map, its papers, its paper's PDF."""
+    links = "".join(f'<a href="{e(r["href"])}">{e(r["label"])}<span class="sr-only">, on {e(site["name"])}</span></a>'
+                    for r in site.get("routes", []))
+    return f'<p class="map-site__routes">{links}</p>' if links else ""
 
 
 def map_tool(project: dict, repos: list[dict]) -> str:
@@ -275,8 +285,8 @@ def render_map(registry: dict) -> str:
     rows = [map_row(
         "start",
         '<div class="map-cell map-cell--site"><div class="map-site map-site--here">'
-        '<div class="map-site__body"><h3 class="map-site__name">This page</h3>'
-        '<p class="map-site__purpose">Every website, video and repository</p></div></div></div>',
+        '<div class="map-site__body"><h3 class="map-site__name">Start here</h3>'
+        '<p class="map-site__purpose">Two introductions to how the projects below fit together.</p></div></div></div>',
         map_films([films[f] for f in overview["films"]], series="Will Cook"),
         map_code(f'<ul class="map-repos" role="list">{map_repo(profile.rsplit("/", 1)[1], profile, "All public repositories")}</ul>'),
         extra=" map-row--start")]

@@ -166,6 +166,10 @@ def validate(files: dict[str, bytes]) -> list[str]:
         for site in registry["sites"]:
             if site["url"] not in hrefs:
                 errors.append(f"index.html: website not linked: {site['name']}")
+        for site in registry["sites"]:
+            for route in site.get("routes", []):
+                if route["href"] not in hrefs:
+                    errors.append(f"index.html: {site['name']} route not linked: {route['label']}")
         for film in registry["films"]:
             if film.get("youtube") and film["youtube"] not in hrefs:
                 errors.append(f"index.html: released film not linked: {film['title']}")
