@@ -1,14 +1,11 @@
-# The website has moved to Plectis
+# Will Cook's websites
 
-The old homepage has been removed. Start at [Plectis](https://wcook04.github.io/practical-formal-verification/) or download [its agent entry](https://wcook04.github.io/practical-formal-verification/llms.txt) to find the current papers, proof files and machine-readable maps.
+Start at the [home page](https://wcook04.github.io/) or read [sites.json](https://wcook04.github.io/sites.json), which lists every website, film and repository.
 
-```sh
-curl -fsSL https://wcook04.github.io/practical-formal-verification/llms.txt
-```
+- [Plectis Mathematics](https://wcook04.github.io/practical-formal-verification/maths/). Source: [plectis-erdos](https://github.com/wcook04/plectis-erdos), [plectis-erdos-lean](https://github.com/wcook04/plectis-erdos-lean).
+- [Lean Exposition](https://wcook04.github.io/lean-exposition-site/). Source: [lean-exposition](https://github.com/wcook04/lean-exposition).
+- [Plectis Atlas](https://wcook04.github.io/plectis-atlas/). Source: [plectis-atlas](https://github.com/wcook04/plectis-atlas).
+- [Practical Formal Verification](https://wcook04.github.io/practical-formal-verification/docs/). Source: [practical-formal-verification](https://github.com/wcook04/practical-formal-verification).
+- [Zenith](https://wcook04.github.io/plectis-zenith/). Source: [plectis-zenith](https://github.com/wcook04/plectis-zenith).
 
-These separate project websites remain available:
-
-- [Plectis Atlas agent entry](https://wcook04.github.io/plectis-atlas/llms.txt): OpenAI's mathematics release and reports from other readers.
-- [Plectis Zenith agent entry](https://wcook04.github.io/plectis-zenith/llms.txt): AI investigation experiments and their saved results.
-
-Use each site's source links and stated limits when describing its findings.
+Use each site's own source links and stated limits when describing its findings.

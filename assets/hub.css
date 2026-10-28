@@ -1,0 +1,424 @@
+/* The home page of wcook04.github.io: a map of Will Cook's websites, videos
+   and repositories, then his films with their descriptions.
+
+   The page wears the Plectis sites' paper: their tokens, their two typefaces
+   (STIX Two Text and Source Sans 3, subset and renamed by the Plectis site's
+   build_plectis_web_fonts.py), their header grammar, buttons and theme switch,
+   copied from ai_workflow sites/microcosm/assets/style.css (28 October 2026).
+   The film slots, the header ladder and the sister-site list come from
+   family.css, which every site shares. */
+
+@font-face { font-family: "Plectis Serif"; src: url("fonts/plectis-serif.woff2") format("woff2"); font-weight: 400 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Plectis Serif"; src: url("fonts/plectis-serif-italic.woff2") format("woff2"); font-weight: 400 700; font-style: italic; font-display: swap; }
+@font-face { font-family: "Plectis Sans"; src: url("fonts/plectis-sans.woff2") format("woff2"); font-weight: 200 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Plectis Serif Fallback"; src: local("Times New Roman"), local("TimesNewRomanPSMT"), local("Liberation Serif"); size-adjust: 105.63%; ascent-override: 72.14%; descent-override: 22.53%; line-gap-override: 23.67%; }
+@font-face { font-family: "Plectis Sans Fallback"; src: local("Arial"), local("ArialMT"), local("Liberation Sans"); size-adjust: 94.72%; ascent-override: 108.11%; descent-override: 42.23%; line-gap-override: 0%; }
+
+:root {
+  --page: #f8f0e2;
+  --surface: #fffdf7;
+  --surface-sunk: #f1e7d4;
+  --ink: #191520;
+  --ink-soft: #342d3d;
+  --muted: #544d5d;
+  --faint: #6d6473;
+  --rule: #eaddc9;
+  --rule-strong: #d9c7ae;
+  --rule-control: #96836a;
+  --accent: #29527b;
+  --accent-strong: #1b3f65;
+  --link-ext: #8f6212;
+  --ink-press: #000000;
+  --ink-rgb: 25, 21, 32;
+  --font-serif: "Plectis Serif", "Plectis Serif Fallback", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Plectis Sans", "Plectis Sans Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, system-ui, sans-serif;
+  --max: 1200px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --header-h: 64px;
+  --r-control: 7px;
+  --r-pill: 999px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: cubic-bezier(0.2, 0.75, 0.25, 1);
+  --dur: 0.16s;
+  --dur-slow: 0.2s;
+  color-scheme: light;
+}
+/* Dark values mirror the attribute block below; keep the two in sync. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --page: #1c1526; --surface: #272132; --surface-sunk: #2f2839;
+    --ink: #f2e6d4; --ink-soft: #ddcdbb; --muted: #bcb8c6; --faint: #a6a2b1;
+    --rule: #363040; --rule-strong: #484251; --rule-control: #757080;
+    --accent: #97c1df; --accent-strong: #bdd8ec; --link-ext: #e6b264;
+    --ink-press: #ffffff; --ink-rgb: 0, 0, 0;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #1c1526; --surface: #272132; --surface-sunk: #2f2839;
+  --ink: #f2e6d4; --ink-soft: #ddcdbb; --muted: #bcb8c6; --faint: #a6a2b1;
+  --rule: #363040; --rule-strong: #484251; --rule-control: #757080;
+  --accent: #97c1df; --accent-strong: #bdd8ec; --link-ext: #e6b264;
+  --ink-press: #ffffff; --ink-rgb: 0, 0, 0;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-padding-top: calc(var(--header-h) + 16px); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body {
+  margin: 0; background: var(--page); color: var(--ink);
+  font-family: var(--font-sans); font-size: 1rem; line-height: 1.6;
+  font-kerning: normal; text-rendering: optimizeLegibility;
+}
+/* The scheme flips without a smear: no colour transition runs while it changes. */
+.vt-theme *, .vt-theme *::before, .vt-theme *::after { transition: none !important; }
+img { max-width: 100%; }
+a { color: var(--accent); text-underline-offset: 0.16em; text-decoration-thickness: 1px; }
+a:hover { color: var(--accent-strong); }
+:where(a, button):where(:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+p { margin: 0; }
+h1, h2, h3 { margin: 0; font-weight: 400; text-wrap: balance; }
+p { text-wrap: pretty; }
+code { font-size: 0.92em; }
+.wrap { width: min(var(--max), 100% - 2 * var(--gutter)); margin-inline: auto; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; left: -9999px; top: 0; z-index: 50;
+  background: var(--ink); color: var(--page); padding: 0.6rem 0.9rem; border-radius: 0 0 6px 0;
+}
+.skip-link:focus { left: 0; color: var(--page); }
+main#main:focus { outline: none; }
+
+/* ---------------------------------------------------------------- header */
+.hub-header { border-bottom: 1px solid var(--rule); background: var(--page); }
+@media (min-width: 720px) {
+  .hub-header {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--page) 94%, transparent);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
+}
+.hub-header__inner { min-height: var(--header-h); display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1.6rem; }
+.hub-wordmark {
+  display: inline-flex; align-items: center; gap: 0.55rem; margin-right: auto;
+  font-family: var(--font-serif); font-size: 1.28rem; font-weight: 500; letter-spacing: -0.01em;
+  color: var(--ink); text-decoration: none; white-space: nowrap;
+}
+.hub-wordmark:hover { color: var(--ink); }
+.hub-wordmark__mark { display: block; width: 26px; height: 26px; }
+.hub-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 1.6rem; font-size: 0.95rem; }
+.hub-nav a { color: var(--ink-soft); text-decoration: none; padding-block: 0.3rem; border-bottom: 1px solid transparent; }
+.hub-nav a:hover { color: var(--ink); border-bottom-color: var(--rule-strong); }
+/* The switch's slot is held before hub.js builds it, so nothing moves. */
+.hub-header__inner::after { content: ""; display: block; width: 2.9rem; height: 1.6rem; order: 3; }
+.hub-header__inner:has(.theme-toggle)::after { display: none; }
+.hub-header__inner .theme-toggle { order: 3; }
+.hub-nav { order: 2; }
+@media (max-width: 559.98px) {
+  .hub-header__inner { padding-block: 0.35rem 0.1rem; row-gap: 0; }
+  .hub-wordmark { font-size: 1.15rem; }
+  .hub-nav { order: 4; width: 100%; gap: 0 1.25rem; font-size: 0.94rem; }
+  .hub-nav a { min-height: 2rem; display: inline-flex; align-items: center; }
+}
+
+/* The house day / night switch (style.css .theme-toggle), injected by hub.js. */
+.theme-toggle {
+  flex: none; display: inline-flex; align-items: center;
+  margin: 0; padding: 0; border: 0; background: none; cursor: pointer;
+  line-height: 0; -webkit-tap-highlight-color: transparent; min-height: 32px;
+}
+.theme-toggle__track {
+  position: relative; display: block; width: 2.9rem; height: 1.6rem;
+  border-radius: var(--r-pill);
+  background: var(--surface-sunk); border: 1px solid var(--rule-strong);
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.theme-toggle:hover .theme-toggle__track { border-color: var(--ink-soft); }
+.theme-toggle__ico {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  display: grid; place-items: center; color: var(--faint);
+  transition: color var(--dur) var(--ease), opacity var(--dur) var(--ease);
+}
+.theme-toggle__ico--sun { left: 0.36rem; color: var(--accent); }
+.theme-toggle__ico--moon { right: 0.34rem; opacity: 0.5; }
+.theme-toggle__ico svg { display: block; }
+.theme-toggle__knob {
+  position: absolute; top: 50%; left: 0.2rem;
+  width: 1.2rem; height: 1.2rem; border-radius: 50%;
+  background: var(--ink); box-shadow: 0 1px 2px rgba(var(--ink-rgb), 0.28);
+  transform: translateY(-50%);
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+.theme-toggle[aria-checked="true"] .theme-toggle__knob { transform: translate(1.3rem, -50%); }
+.theme-toggle[aria-checked="true"] .theme-toggle__ico--sun { color: var(--faint); opacity: 0.5; }
+.theme-toggle[aria-checked="true"] .theme-toggle__ico--moon { opacity: 1; color: var(--accent); }
+.theme-toggle:focus-visible { outline: none; }
+.theme-toggle:focus-visible .theme-toggle__track { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ---------------------------------------------------------------- introduction and websites */
+.hub-intro { padding-block: clamp(2rem, 4vw, 3.2rem) clamp(2.2rem, 4vw, 3.2rem); }
+.hub-title {
+  font-family: var(--font-serif); font-weight: 500; color: var(--ink);
+  font-size: clamp(2.5rem, 1.7rem + 2.4vw, 3.6rem); line-height: 1.02; letter-spacing: -0.02em;
+}
+.hub-title--small { font-size: clamp(2rem, 1.5rem + 1.6vw, 2.8rem); }
+.hub-lede {
+  margin-top: 0.9rem; max-width: 38em;
+  font-family: var(--font-serif); font-size: clamp(1.12rem, 1.02rem + 0.3vw, 1.27rem); line-height: 1.5;
+  color: var(--ink-soft);
+}
+.hub-orient { margin-top: 0.7rem; max-width: 46em; font-size: 0.98rem; color: var(--muted); }
+.hub-orient a { font-weight: 600; }
+.hub-section-title {
+  font-family: var(--font-serif); font-weight: 400; color: var(--ink);
+  font-size: clamp(1.6rem, 1.25rem + 1vw, 2.15rem); line-height: 1.12; letter-spacing: -0.012em;
+}
+/* The introduction film sits beside the opening words, so the top of the page
+   has no empty half. */
+.hub-intro__top { display: grid; gap: 1.4rem; }
+.hub-intro__film .film-slot { max-width: 34rem; }
+@media (min-width: 1024px) {
+  .hub-intro__top { grid-template-columns: minmax(0, 10fr) minmax(0, 12fr); gap: clamp(2.5rem, 4vw, 4rem); align-items: end; }
+  .hub-intro__film .film-slot--inline { grid-template-columns: minmax(10rem, 15rem) minmax(0, 1fr); align-items: center; }
+  .hub-intro__film .film-slot__title { font-size: 1.15rem; }
+}
+.site-shot { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+.site-shot--dark { display: none; }
+:root[data-theme="dark"] .site-shot--light { display: none; }
+:root[data-theme="dark"] .site-shot--dark { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .site-shot--light { display: none; }
+  :root:not([data-theme]) .site-shot--dark { display: block; }
+}
+
+/* ---------------------------------------------------------------- the map
+   Every website, video and repository in one place, one row per project:
+   its videos, its website or tool, its code on GitHub. Without a script the
+   grid alone groups them and every link works; assets/hub-map.js draws the
+   lines between the columns (adapted from the Plectis film map's cables) and
+   lights the row a reader points at or tabs into. Below the three-column
+   width each row reads as a list: the website, then its videos, then its
+   code. */
+.hub-map { padding-block: clamp(2.4rem, 4.6vw, 3.6rem) clamp(2.8rem, 5vw, 4rem); border-top: 1px solid var(--rule); }
+.hub-map__head { display: grid; gap: 0.5rem; margin-bottom: clamp(1.2rem, 2.4vw, 1.8rem); }
+.hub-map__lede { max-width: 64ch; color: var(--muted); }
+.hub-map__wide { display: none; }
+.map {
+  position: relative;
+  --map-line: color-mix(in srgb, var(--rule-strong) 45%, var(--rule-control));
+  --map-gutter: clamp(3rem, 4.8vw, 4.25rem);
+}
+.map-cols { display: none; }
+.map-rows { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--rule); }
+.map-row {
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.9rem;
+  padding-block: 1.1rem 1.2rem; border-top: 1px solid var(--rule);
+}
+.map-cell { min-width: 0; }
+/* A cell's label says what the column holds. Beside the column heads it is
+   for screen readers only; in the stacked list it is printed. */
+.map-cell__label { margin: 0 0 0.45rem; font-size: 0.82rem; font-weight: 600; color: var(--faint); }
+.map-cell--site .map-cell__label { display: none; }
+
+/* A website or tool: the row's name. */
+.map-site { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 0 0.9rem; align-items: center; }
+.map-site--tool, .map-site--here { grid-template-columns: minmax(0, 1fr); }
+.map-site__shot {
+  display: block; aspect-ratio: 1440 / 790; overflow: hidden; border-radius: 6px;
+  background: var(--surface); box-shadow: 0 0 0 1px var(--rule-strong);
+  transition: box-shadow var(--dur) var(--ease);
+}
+.map-site__name { font-family: var(--font-serif); font-size: 1.25rem; line-height: 1.2; font-weight: 500; letter-spacing: -0.008em; color: var(--ink); }
+.map-site__name a { color: var(--ink); text-decoration: none; }
+/* Each name opens another website (or its code): the arrow says it leaves
+   this page, glued to the last word so it never wraps alone. */
+.map-site__name a::after, .map-repo__name a::after { content: "\00a0\2197"; font-family: var(--font-sans); font-size: 0.62em; font-weight: 400; color: var(--faint); }
+.map-site__name a:hover { text-decoration: underline; text-decoration-color: var(--rule-control); }
+.map-site__purpose { margin-top: 0.25rem; max-width: 62ch; font-size: 0.92rem; line-height: 1.48; color: var(--ink-soft); }
+/* A website's main places, one step away: the full-screen maths map, the
+   SK argument map, a paper's PDF. They leave this page, so each carries the
+   outbound arrow. */
+.map-site__routes { margin-top: 0.45rem; display: flex; flex-wrap: wrap; gap: 0.15rem 1.1rem; font-size: 0.9rem; line-height: 1.45; }
+.map-site__routes a { font-weight: 600; color: var(--accent); text-decoration: none; min-height: 24px; display: inline-flex; align-items: center; }
+.map-site__routes a::after { content: "\00a0\2197"; font-weight: 400; font-size: 0.8em; }
+.map-site__routes a:hover { text-decoration: underline; text-underline-offset: 0.16em; }
+.map-site--here .map-site__name { color: var(--ink-soft); }
+
+/* Videos: the family's inline film slot, held compact. */
+.map-films, .map-repos { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
+.map-film .film-slot--inline { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0 0.85rem; align-items: center; }
+.map-film .film-slot--inline .film-slot__frame { max-width: none; --play: 28px; border-radius: 6px; }
+.map-film .film-slot.film-slot--inline .film-slot__caption { margin-top: 0; gap: 0.1rem; }
+.map-film .film-slot.film-slot--inline .film-slot__title { font-size: 0.97rem; line-height: 1.26; }
+.map-film .film-slot.film-slot--inline .film-slot__name { font-size: 0.8rem; }
+.map-film .film-slot .film-slot__meta { font-size: 0.82rem; }
+
+/* Code: each repository's name, which opens it, and what it holds. */
+.map-repo { margin: 0; }
+.map-repo__name { font-size: 0.98rem; line-height: 1.3; font-weight: 600; overflow-wrap: anywhere; }
+.map-repo__name a { color: var(--ink); text-decoration: none; }
+.map-repo__name a:hover { text-decoration: underline; text-decoration-color: var(--rule-control); }
+.map-repo__text { margin-top: 0.12rem; font-size: 0.87rem; line-height: 1.42; color: var(--muted); }
+.map-repo--none { font-size: 0.87rem; line-height: 1.42; color: var(--muted); }
+
+/* The tools stand under their own name: they have no website. */
+.map-rows__group { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 1rem; padding-block: 1.5rem 0.55rem; border-top: 1px solid var(--rule); }
+.map-rows__group-title { font-family: var(--font-serif); font-size: 1.12rem; line-height: 1.25; font-weight: 500; color: var(--ink); }
+.map-rows__group-text { font-size: 0.9rem; color: var(--muted); }
+
+/* The stacked list: the website first, its videos and code under it, set
+   in from the name so they read as its own. */
+@media (max-width: 959.98px) {
+  .map-row > .map-cell--videos, .map-row > .map-cell--code { padding-left: 0.95rem; margin-left: 0.15rem; border-left: 1px solid var(--rule-strong); }
+  .map-site { align-items: start; }
+  .map-site__shot { margin-top: 0.3rem; }
+  .map-row { gap: 0.75rem; }
+  .map-cell__label { margin-bottom: 0.3rem; }
+}
+@media (max-width: 560px) {
+  .map-site { grid-template-columns: 5.6rem minmax(0, 1fr); gap: 0 0.75rem; }
+  .map-site--tool, .map-site--here { grid-template-columns: minmax(0, 1fr); }
+  .map-site__name { font-size: 1.16rem; }
+  .map-site__purpose { font-size: 0.9rem; }
+  .map-film .film-slot--inline { grid-template-columns: 6.5rem minmax(0, 1fr); gap: 0 0.75rem; }
+}
+
+/* Three columns: videos | websites and tools | code, with an open gutter
+   between them for the lines. Each cell's nodes sit at the middle of their
+   row, so a single video beside a website and two repositories leaves no
+   tall empty column; a single video takes a larger still. */
+@media (min-width: 960px) {
+  html.scripting .hub-map__wide { display: inline; }
+  html.scripting .hub-map__narrow { display: none; }
+  .map-cols, .map-row {
+    grid-template-columns: minmax(0, 30fr) minmax(0, 42fr) minmax(0, 28fr);
+    grid-template-areas: "videos site code"; column-gap: var(--map-gutter);
+  }
+  .map-cols { display: grid; padding-bottom: 0.55rem; }
+  .map-cols__head { font-size: 0.84rem; font-weight: 600; color: var(--faint); }
+  .map-cols__head--0 { grid-area: videos; }
+  .map-cols__head--1 { grid-area: site; }
+  .map-cols__head--2 { grid-area: code; }
+  .map-row { align-items: center; row-gap: 0; padding-block: 1rem; }
+  .map-cell--videos { grid-area: videos; }
+  .map-cell--site { grid-area: site; }
+  .map-cell--code { grid-area: code; }
+  .map-cell__label {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+  .map-site { grid-template-columns: clamp(6rem, 10vw - 1rem, 9rem) minmax(0, 1fr); gap: 0 1rem; }
+  .map-site--tool, .map-site--here { grid-template-columns: minmax(0, 1fr); }
+  .map-films--one .film-slot--inline { grid-template-columns: clamp(7.5rem, 11vw - 1rem, 9.5rem) minmax(0, 1fr); }
+  .map-films--one .film-slot--inline .film-slot__frame { --play: 32px; }
+  .map-rows__group { padding-block: 1.6rem 0.6rem; }
+  .map-rows__group-title { grid-column: auto; }
+}
+
+/* The lines (assets/hub-map.js). At rest a quiet rule; the row a reader
+   points at or tabs into comes up to the accent ink with its end dots, and
+   the other rows step back. */
+.map__lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
+.map__line { transition: opacity var(--dur) var(--ease); }
+.map__line path { fill: none; stroke: var(--map-line); stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
+.map__line circle { fill: var(--page); stroke: var(--accent); stroke-width: 1.25; opacity: 0; transition: opacity var(--dur) var(--ease); }
+.map__line.is-lit path { stroke: var(--accent); stroke-width: 2; }
+.map__line.is-lit circle { opacity: 1; }
+.map.is-tracing .map__line:not(.is-lit) { opacity: 0.45; }
+.map-row { transition: opacity var(--dur) var(--ease); }
+.map.is-tracing .map-row:not(.is-lit), .map.is-tracing .map-rows__group { opacity: 0.45; }
+.map-row.is-lit .map-site__name a, .map-row.is-lit .map-repo__name a, .map-row.is-lit .film-slot__title a { color: var(--accent); }
+.map-row.is-lit .map-site__shot, .map-row.is-lit .film-slot__frame { box-shadow: 0 0 0 1px var(--accent); }
+/* The light that runs once along a pointed row: a bead with three fading
+   dots behind it, the film map's mark. */
+.map__bead circle { fill: var(--accent); }
+.map__bead circle:first-child { fill: var(--ink); stroke: var(--accent); stroke-width: 1.5; }
+.map__bead circle:nth-child(2) { opacity: 0.55; }
+.map__bead circle:nth-child(3) { opacity: 0.36; }
+.map__bead circle:nth-child(4) { opacity: 0.2; }
+@media (max-width: 959.98px) { .map__lines { display: none; } }
+@media (forced-colors: active) {
+  .map__line path { stroke: GrayText; }
+  .map__line.is-lit path { stroke: Highlight; }
+  .map__bead { display: none; }
+}
+
+/* ---------------------------------------------------------------- videos */
+.hub-films { padding-block: clamp(3rem, 6vw, 5rem); border-top: 1px solid var(--rule); }
+.hub-films__head { display: grid; gap: 0.5rem; margin-bottom: clamp(1.6rem, 3vw, 2.4rem); }
+.hub-films__lede { max-width: 60ch; color: var(--muted); }
+.film-group + .film-group { padding-top: clamp(1.6rem, 3vw, 2.2rem); }
+.film-group + .film-group { margin-top: clamp(1.2rem, 2.4vw, 1.8rem); border-top: 1px solid var(--rule); }
+.film-group__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.3rem 1.5rem; margin-bottom: 1.2rem; }
+.film-group__title { font-family: var(--font-serif); font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem); line-height: 1.2; font-weight: 500; color: var(--ink); }
+.film-group__links { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 1.3rem; font-size: 0.94rem; }
+.film-group__site { font-weight: 600; text-decoration: none; }
+.film-group__site::after { content: "\00a0\2197"; font-weight: 400; }
+.film-group__site:hover { text-decoration: underline; }
+.film-group__repo { color: var(--muted); text-decoration: underline; text-decoration-color: var(--rule-strong); }
+.film-group__repo:hover { color: var(--accent); text-decoration-color: var(--accent); }
+.film-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 2.2rem 1.6rem; grid-template-columns: minmax(0, 1fr); }
+/* One film: a wide card, the still beside its title and description. The
+   introduction's group is two such rows: the introduction with the larger
+   still, then its first version, so neither leaves a gap beside the other. */
+@media (min-width: 640px) {
+  .film-grid--count-1 .film-slot, .film-grid--lead .film-slot {
+    display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 0 clamp(1.2rem, 3vw, 2.4rem); align-items: center;
+  }
+  .film-grid--lead .film-grid__item--lead .film-slot { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .film-grid--lead .film-grid__item:not(.film-grid__item--lead) .film-slot { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
+  .film-grid--count-1 .film-slot .film-slot__caption, .film-grid--lead .film-slot .film-slot__caption { margin-top: 0; }
+  .film-grid--count-1 .film-slot .film-slot__title { font-size: clamp(1.2rem, 1.05rem + 0.5vw, 1.45rem); }
+  .film-grid--count-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 760px) {
+  .film-grid--count-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.film-grid__item { min-width: 0; }
+.film-grid .film-slot__text { font-size: 0.93rem; }
+
+/* ---------------------------------------------------------------- contact and footer */
+.hub-contact { padding-block: clamp(3rem, 6vw, 5rem); border-top: 1px solid var(--rule); }
+.hub-contact__grid { display: grid; gap: 1.2rem; }
+@media (min-width: 1024px) { .hub-contact__grid { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(2.5rem, 4vw, 4rem); } }
+.hub-contact__text { display: grid; gap: 1rem; max-width: 62ch; font-family: var(--font-serif); font-size: 1.08rem; line-height: 1.6; color: var(--ink-soft); }
+.hub-contact__links { list-style: none; margin: 0.4rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.6rem; font-family: var(--font-sans); font-size: 0.95rem; }
+.hub-contact__links a {
+  display: inline-flex; align-items: center; min-height: 2.5rem; padding: 0.45rem 1rem;
+  border: 1px solid var(--rule-control); border-radius: var(--r-control); background: var(--surface);
+  color: var(--ink); text-decoration: none; font-weight: 500;
+  transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.hub-contact__links a:hover { border-color: var(--ink-soft); color: var(--ink); }
+@media (hover: hover) and (pointer: fine) { .hub-contact__links a:hover { transform: translateY(-1px); } }
+.hub-contact__links a:active { transform: translateY(1px); }
+.hub-footer { border-top: 1px solid var(--rule); padding-block: 1.6rem 2.4rem; font-size: 0.88rem; color: var(--muted); }
+.hub-footer__inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.6rem 2rem; }
+.hub-footer a { color: var(--muted); margin-right: 1.2rem; }
+.hub-footer a:last-child { margin-right: 0; }
+.hub-footer a:hover { color: var(--accent); }
+
+/* ---------------------------------------------------------------- missing page */
+.hub-missing { padding-block: clamp(3rem, 8vw, 6rem); }
+.hub-missing__list { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: 0.4rem; font-family: var(--font-serif); font-size: 1.2rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .map-row, .map__line, .map__line circle, .theme-toggle__knob, .theme-toggle__track, .theme-toggle__ico,
+  .hub-contact__links a { transition: none; }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .hub-header { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--page); }
+}
+
+/* In the gallery a film that is not out yet holds a shorter place: its name in
+   the family's held frame, without a screen-sized empty box beside the films
+   that can be watched now. */
+.hub-films .film-slot__frame--pending { aspect-ratio: 16 / 7; }
+/* The caption under a held frame already says "Video in preparation", so the
+   frame carries the film's name alone (the house rule for a held frame). */
+.hub-films .film-slot__frame--pending { justify-content: center; }
+.hub-films .film-slot__series, .hub-films .film-slot__status { display: none; }

@@ -1,53 +1,88 @@
-# Redirect to Plectis
+# Will Cook's home page
 
-The old Will Cook homepage has been removed. The current website is **[Plectis](https://wcook04.github.io/practical-formal-verification/)**.
+**[wcook04.github.io](https://wcook04.github.io/)** is a map of my websites,
+the films that explain them and the repositories that hold their code. Each
+website is its own project with its own repository; this page links to all of
+them, and each of them links back here.
 
-This repository keeps the root address `wcook04.github.io` forwarding to Plectis. It contains no portfolio, research snapshots, artwork or page-generation tools. Git history retains the removed source.
+| Website | What it is for | Source |
+|---|---|---|
+| [Plectis Mathematics](https://wcook04.github.io/practical-formal-verification/maths/) | Eight Erdős problems researched with AI: papers, computer-checked proofs of partial results and the approaches that failed. | [plectis-erdos](https://github.com/wcook04/plectis-erdos), [plectis-erdos-lean](https://github.com/wcook04/plectis-erdos-lean) |
+| [Lean Exposition](https://wcook04.github.io/lean-exposition-site/) | One result about the Sherrington–Kirkpatrick model of magnets, explained three ways and linked to a map of the argument. | [lean-exposition](https://github.com/wcook04/lean-exposition) |
+| [Plectis Atlas](https://wcook04.github.io/plectis-atlas/) | OpenAI's maths papers beside the reports that outside groups wrote about them. | [plectis-atlas](https://github.com/wcook04/plectis-atlas) |
+| [Practical Formal Verification](https://wcook04.github.io/practical-formal-verification/docs/) | 88 Python components; for twelve, proofs that particular calculations follow their written requirements. | [practical-formal-verification](https://github.com/wcook04/practical-formal-verification) |
+| [Zenith](https://wcook04.github.io/plectis-zenith/) | Experiments on whether records of past mistakes help AI models test and repair code. | [plectis-zenith](https://github.com/wcook04/plectis-zenith) |
 
-## Introduction
+## How the page is made
 
-| Film | Watch |
-|---|---|
-| Plectis introduction | [YouTube](https://www.youtube.com/watch?v=uO2lbstEH9M) |
+[`sites.json`](sites.json) is the one list of websites, tools, repositories
+and films. Each website and tool names its repositories by id from the
+top-level `repos` list, and the build refuses a repository that is unknown or
+on no website or tool. The page is static HTML built from it by
+`scripts/build_hub.py`; it needs no script to read and loads nothing from
+another host. Films open on YouTube in a new tab. A film that is not out yet
+shows a frame marked "In preparation" and has no link.
 
-## Read with an agent
+The map near the top has one row per project: its videos, its website or
+tool, its code on GitHub. Without a script the grid alone groups each row;
+[`assets/hub-map.js`](assets/hub-map.js) draws the lines between the columns
+and lights the row a reader points at or tabs into. It is adapted from the
+Plectis film map's cables (and through them from Magic UI's AnimatedBeam, MIT;
+the notice is in the file). Below the full map's width each row reads as a
+list: the website, then its videos, then its code. The Videos band under the
+map gives each film's description.
 
-Plectis is agent navigable. Its [plain-text entry](https://wcook04.github.io/practical-formal-verification/llms.txt) links papers, proof files, machine-readable maps and the records needed to follow their relationships.
+[`docs/family.md`](docs/family.md) describes what every website shares: the
+"Will Cook / site" ladder at the start of its header, the film slots, and the
+list of sister sites in its footer. The shared styles are
+[`assets/family/family.css`](assets/family/family.css), adapted from the
+Plectis site's film and header components. Each website keeps a copy of
+`sites.json` and that stylesheet beside its own source.
 
-```sh
-curl -fsSL https://wcook04.github.io/practical-formal-verification/llms.txt
-```
+## Add a released film
 
-The small [root entry](llms.txt) and [project pointers](agent-guide.md) preserve existing discovery addresses. They direct agents to the current websites.
+1. In `sites.json`, give the film its `youtube` address, `duration_seconds`
+   and `still` (for example `"assets/films/sk-no-gap"`), and its published
+   title and description.
+2. Make the still's two page-sized copies from the uploaded thumbnail:
+
+   ```sh
+   cwebp -q 80 -m 6 -resize 640 0 thumbnail.png -o assets/films/<id>-640.webp
+   cwebp -q 80 -m 6 -resize 1280 0 thumbnail.png -o assets/films/<id>-1280.webp
+   ```
+
+3. Rebuild and check, then commit and push `main`, which publishes the page:
+
+   ```sh
+   python3 scripts/build_hub.py
+   python3 -m unittest discover -s tests -p 'test_*.py'
+   python3 scripts/check_hub_site.py
+   ```
+
+4. Copy `sites.json` and the two stills to the website the film belongs to
+   (its `family.json`), rebuild that site and publish it, so its film slot
+   shows the film too.
 
 ## Repository map
 
 | Path | Purpose |
 |---|---|
-| `index.html` | Immediate static redirect, canonical URL and ordinary link to Plectis; no JavaScript required. |
-| `404.html` | Gives old or unknown root addresses the same route to Plectis. |
-| `llms.txt`, `agent-guide.md` | Text pointers to the current websites. |
-| `robots.txt`, `sitemap.xml` | Host-wide crawling rules and the current Plectis sitemap. |
-| `.nojekyll` | Serves static files and raw Markdown directly. |
-| `scripts/check_redirect_site.py` | Validates the redirects, discovery files and retired repository layout. |
-| `tests/test_redirect_site.py` | Tests missing routes, stale content and staged-file validation. |
-| `.github/workflows/public-site.yml` | Runs the validation in CI. |
+| `index.html`, `404.html` | Built from `sites.json`; do not edit by hand. The 404 page forwards old `/plectis/...` addresses to the same page under `/practical-formal-verification/`. |
+| `sites.json` | Websites, tools, repositories and films: the source for this page and for every site's film slots. |
+| `assets/hub.css`, `assets/hub.js`, `assets/theme-init.js` | The page's styles and its day and night switch. The theme script and the tokens are the Plectis site's. |
+| `assets/hub-map.js` | The map's lines between videos, websites and repositories, and the lit row. |
+| `assets/family/family.css`, `docs/family.md` | What every website shares, and how to use it. |
+| `assets/films/`, `assets/sites/` | Film stills (the uploaded thumbnails) and pictures of each website's first screen, in both schemes. |
+| `assets/fonts/` | Plectis Serif (STIX Two Text) and Plectis Sans (Source Sans 3) subsets, with their licences. |
+| `llms.txt`, `agent-guide.md`, `robots.txt`, `sitemap.xml`, `sitemap-home.xml` | Entries for agents and crawlers. |
+| `scripts/check_hub_site.py`, `tests/` | Checks run by `.github/workflows/public-site.yml`. |
 
-## Maintain the redirect
+Pushing `main` publishes the page through GitHub Pages. Keep Pages enabled.
+The project paths `/practical-formal-verification/`, `/plectis-atlas/`,
+`/plectis-zenith/` and `/lean-exposition-site/` are served by their own
+repositories; this repository must not create folders at those paths, and the
+check refuses them.
 
-Edit the redirect files directly. Do not restore the old homepage, its assets, its data snapshots or its generators. Make website changes in the owning project repository instead.
-
-```sh
-python3 -m unittest discover -s tests -p 'test_*.py'
-python3 scripts/check_redirect_site.py
-# Validate the files actually staged for a commit:
-python3 scripts/check_redirect_site.py --index
-```
-
-Pushing `main` publishes these static files through GitHub Pages. Keep Pages enabled. The project paths `/plectis/`, `/plectis-atlas/`, `/plectis-zenith/` and the historical `/microcosm-substrate/` are deployed by their own repositories. This repository must not create directories at those paths or add rules that block them.
-
-## Removed addresses
-
-`/` and `/index.html` now point to Plectis. The former site had no other authored HTML pages beyond its error page. Its `assets/`, `data/`, favicon and web manifest have been removed; they have no replacement snapshot at this root. The root sitemap no longer lists the retired homepage.
-
-The HTML uses an immediate meta refresh because GitHub Pages does not provide repository-level HTTP redirect rules. Its canonical URL and ordinary link also work for readers that do not follow the refresh. Both HTML pages request `noindex, follow`; the host-wide robots file continues to allow the project websites.
+Refresh a website's picture by capturing its first screen at 1440×900 in both
+schemes and converting it with `cwebp -q 80 -m 6 -resize 720 0` and
+`-resize 1440 0` into `assets/sites/<id>-<light|dark>-<720|1440>.webp`.
