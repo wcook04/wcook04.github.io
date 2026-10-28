@@ -1,8 +1,9 @@
 # Will Cook's home page
 
-**[wcook04.github.io](https://wcook04.github.io/)** lists my websites and the
-films that explain them. Each website is its own project with its own
-repository; this page links to all of them, and each of them links back here.
+**[wcook04.github.io](https://wcook04.github.io/)** is a map of my websites,
+the films that explain them and the repositories that hold their code. Each
+website is its own project with its own repository; this page links to all of
+them, and each of them links back here.
 
 | Website | What it is for | Source |
 |---|---|---|
@@ -14,11 +15,22 @@ repository; this page links to all of them, and each of them links back here.
 
 ## How the page is made
 
-[`sites.json`](sites.json) is the one list of websites, films and tools. The
-page is static HTML built from it by `scripts/build_hub.py`; it needs no script
-to read and loads nothing from another host. Films open on YouTube in a new
-tab. A film that is not out yet shows a frame marked "In preparation" and has
-no link.
+[`sites.json`](sites.json) is the one list of websites, tools, repositories
+and films. Each website and tool names its repositories by id from the
+top-level `repos` list, and the build refuses a repository that is unknown or
+on no website or tool. The page is static HTML built from it by
+`scripts/build_hub.py`; it needs no script to read and loads nothing from
+another host. Films open on YouTube in a new tab. A film that is not out yet
+shows a frame marked "In preparation" and has no link.
+
+The map near the top has one row per project: its videos, its website or
+tool, its code on GitHub. Without a script the grid alone groups each row;
+[`assets/hub-map.js`](assets/hub-map.js) draws the lines between the columns
+and lights the row a reader points at or tabs into. It is adapted from the
+Plectis film map's cables (and through them from Magic UI's AnimatedBeam, MIT;
+the notice is in the file). Below the full map's width each row reads as a
+list: the website, then its videos, then its code. The Videos band under the
+map gives each film's description.
 
 [`docs/family.md`](docs/family.md) describes what every website shares: the
 "Will Cook / site" ladder at the start of its header, the film slots, and the
@@ -56,8 +68,9 @@ Plectis site's film and header components. Each website keeps a copy of
 | Path | Purpose |
 |---|---|
 | `index.html`, `404.html` | Built from `sites.json`; do not edit by hand. The 404 page forwards old `/plectis/...` addresses to the same page under `/practical-formal-verification/`. |
-| `sites.json` | Websites, films and tools: the source for this page and for every site's film slots. |
-| `assets/hub.css`, `assets/hub.js`, `assets/theme-init.js` | The page's styles, its day and night switch and the picture beside the list of websites. The theme script and the tokens are the Plectis site's. |
+| `sites.json` | Websites, tools, repositories and films: the source for this page and for every site's film slots. |
+| `assets/hub.css`, `assets/hub.js`, `assets/theme-init.js` | The page's styles and its day and night switch. The theme script and the tokens are the Plectis site's. |
+| `assets/hub-map.js` | The map's lines between videos, websites and repositories, and the lit row. |
 | `assets/family/family.css`, `docs/family.md` | What every website shares, and how to use it. |
 | `assets/films/`, `assets/sites/` | Film stills (the uploaded thumbnails) and pictures of each website's first screen, in both schemes. |
 | `assets/fonts/` | Plectis Serif (STIX Two Text) and Plectis Sans (Source Sans 3) subsets, with their licences. |

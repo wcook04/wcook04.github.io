@@ -58,6 +58,36 @@ class HubTests(unittest.TestCase):
         self.files["index.html"] = self.files["index.html"].replace(b'href="' + url + b'"', b'href="#"')
         self.assertTrue(any("website not linked" in error for error in self.errors()))
 
+    def test_every_repository_is_linked(self):
+        href = json.loads(self.files["sites.json"])["repos"][1]["href"].encode()
+        self.files["index.html"] = self.files["index.html"].replace(b'href="' + href + b'"', b'href="#"')
+        self.assertTrue(any("repository not linked" in error for error in self.errors()))
+
+    def test_a_film_in_preparation_is_not_linked(self):
+        registry = json.loads(self.files["sites.json"])
+        pending = next(f for f in registry["films"] if not f["youtube"])
+        title = pending["title"].encode()
+        self.assertIn(title, self.files["index.html"])
+        self.files["index.html"] = self.files["index.html"].replace(
+            b'<p class="film-slot__title">' + title, b'<p class="film-slot__title"><a href="#">' + title + b'</a>', 1)
+        self.assertTrue(any("in preparation has no link" in error for error in self.errors()))
+
+    def test_map_script_is_same_origin(self):
+        self.files["index.html"] = self.files["index.html"].replace(
+            b'src="/assets/hub-map.js"', b'src="https://cdn.example.com/hub-map.js"')
+        errors = self.errors()
+        self.assertTrue(any("another host" in error for error in errors))
+        self.assertTrue(any("hub-map.js" in error for error in errors))
+
+    def test_every_repository_is_placed_and_known(self):
+        registry = json.loads(self.files["sites.json"])
+        registry["sites"][0]["repos"].append("no-such-repository")
+        registry["repos"].append({"id": "stray", "name": "stray", "href": "https://github.com/wcook04/stray",
+                                  "description": "Placed nowhere."})
+        problems = CHECK.BUILD.validate_registry(registry, exists=lambda rel: rel in self.files)
+        self.assertTrue(any("unknown repository no-such-repository" in p for p in problems))
+        self.assertTrue(any("on no website or tool: stray" in p for p in problems))
+
     def test_missing_page_forwards_old_plectis_addresses(self):
         self.files["404.html"] = self.files["404.html"].replace(b"/assets/redirect.js", b"/assets/other.js")
         self.assertTrue(any("redirect.js" in error for error in self.errors()))

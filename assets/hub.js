@@ -1,13 +1,9 @@
-/* The home page's two behaviours. Both are extras: without this script the
-   page shows the first website's picture and follows the system's scheme.
-
-   1. The day / night switch, adapted from the Plectis site's docs.js: it stamps
-      data-theme on <html>, remembers only a real choice (a choice equal to the
-      system's scheme clears the stored one) and flips without a smear. The
-      storage key is the Plectis sites' own, so a reader's choice carries
-      between the sites on this host that read it.
-   2. The website picture: pointing at a row, or tabbing into it, shows that
-      website's first screen beside the list. The last one shown stays. */
+/* The day / night switch, adapted from the Plectis site's docs.js. An extra:
+   without this script the page follows the system's scheme. It stamps
+   data-theme on <html>, remembers only a real choice (a choice equal to the
+   system's scheme clears the stored one) and flips without a smear. The
+   storage key is the Plectis sites' own, so a reader's choice carries between
+   the sites on this host that read it. The map's lines are hub-map.js. */
 (function () {
   var KEY = 'plectis-theme';
   var root = document.documentElement;
@@ -69,34 +65,7 @@
     bar.appendChild(btn);
   }
 
-  function mountPreview() {
-    var preview = document.querySelector('.site-preview');
-    var rows = document.querySelectorAll('.site-row[data-site]');
-    if (!preview || !rows.length) return;
-    var items = preview.querySelectorAll('.site-preview__item[data-site]');
-    function show(id) {
-      if (preview.getAttribute('data-active') === id && preview.querySelector('.is-active')) return;
-      preview.setAttribute('data-active', id);
-      for (var i = 0; i < items.length; i++) {
-        items[i].classList.toggle('is-active', items[i].getAttribute('data-site') === id);
-      }
-      for (var j = 0; j < rows.length; j++) {
-        rows[j].classList.toggle('is-active', rows[j].getAttribute('data-site') === id);
-      }
-    }
-    for (var k = 0; k < rows.length; k++) {
-      (function (row) {
-        var id = row.getAttribute('data-site');
-        row.addEventListener('pointerenter', function (event) {
-          if (event.pointerType === 'mouse' || event.pointerType === 'pen') show(id);
-        });
-        row.addEventListener('focusin', function () { show(id); });
-      })(rows[k]);
-    }
-    show(preview.getAttribute('data-active') || rows[0].getAttribute('data-site'));
-  }
-
-  function ready() { mountToggle(); mountPreview(); }
+  function ready() { mountToggle(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready);
   else ready();
 })();

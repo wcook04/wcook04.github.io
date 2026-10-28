@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """Build the home page of wcook04.github.io from sites.json.
 
-The home page lists every website and every film. It is static HTML: no
-script is needed to read it, and nothing is loaded from another host. Run
+The home page maps every website, film and repository: one row per project,
+its videos on the left, its website or tool in the middle and its code on
+GitHub on the right. It is static HTML: no script is needed to read it or to
+follow any link (assets/hub-map.js only draws the lines between the columns),
+and nothing is loaded from another host. Run
 with no arguments to write the pages, or with --check to fail when the
 committed pages differ from what sites.json now produces.
 """
@@ -17,6 +20,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 HOME = "https://wcook04.github.io/"
+GITHUB = "https://github.com/wcook04/"
 YOUTUBE = re.compile(r"^https://www\.youtube\.com/watch\?v=[A-Za-z0-9_-]{11}$")
 OLD_PLECTIS = "/plectis/"
 NEW_PLECTIS = "/practical-formal-verification/"
@@ -63,11 +67,27 @@ def validate_registry(registry: dict, root: Path = ROOT, exists=None) -> list[st
             if not still or not exists(f"{still}-{width}.webp"):
                 problems.append(f"{film['id']}: missing {still}-{width}.webp")
     placed: list[str] = []
+    repos = {repo["id"]: repo for repo in registry.get("repos", [])}
+    if len(repos) != len(registry.get("repos", [])):
+        problems.append("repository ids repeat")
+    for repo in registry.get("repos", []):
+        if not repo.get("name") or not repo.get("description"):
+            problems.append(f"{repo['id']}: a repository needs its name and a description")
+        if repo.get("href") != GITHUB + repo["id"]:
+            problems.append(f"{repo['id']}: href must be {GITHUB}{repo['id']}")
+    referenced: list[str] = []
     for owner in registry["sites"] + registry["projects"]:
         for film_id in owner.get("films", []):
             if film_id not in films:
                 problems.append(f"{owner['id']}: unknown film {film_id}")
             placed.append(film_id)
+        for repo_id in owner.get("repos", []):
+            if not isinstance(repo_id, str) or repo_id not in repos:
+                problems.append(f"{owner['id']}: unknown repository {repo_id}")
+            referenced.append(repo_id)
+    unplaced = set(repos) - set(referenced)
+    if unplaced:
+        problems.append("repositories on no website or tool: " + ", ".join(sorted(unplaced)))
     for site in registry["sites"]:
         if not site["url"].startswith(HOME):
             problems.append(f"{site['id']}: websites live under {HOME}")
@@ -113,6 +133,12 @@ def spoken(seconds: int) -> str:
     return " ".join(parts)
 
 
+def repos_of(registry: dict, owner: dict) -> list[dict]:
+    """The repositories a website or tool names, in its own order."""
+    repos = {repo["id"]: repo for repo in registry["repos"]}
+    return [repos[repo_id] for repo_id in owner.get("repos", [])]
+
+
 def film_groups(registry: dict) -> list[dict]:
     """Each group of the Videos band: its title, its site (if any) and its films."""
     films = {film["id"]: film for film in registry["films"]}
@@ -137,7 +163,8 @@ def still_img(still: str, *, sizes: str, loading: str = "lazy") -> str:
 
 
 def film_slot(film: dict, *, series: str, size: str = "", with_text: bool = True,
-              sizes: str = "(min-width: 1180px) 360px, (min-width: 720px) 45vw, 100vw") -> str:
+              sizes: str = "(min-width: 1180px) 360px, (min-width: 720px) 45vw, 100vw",
+              pending_meta: str = "Video in preparation") -> str:
     """The family's film slot (docs/family.md): a still that opens YouTube, or a held frame."""
     classes = "film-slot" + (f" film-slot--{size}" if size else "")
     title = e(film["title"])
@@ -160,43 +187,108 @@ def film_slot(film: dict, *, series: str, size: str = "", with_text: bool = True
             f'<span class="film-slot__status">In preparation</span></div>'
             f'<figcaption class="film-slot__caption">'
             f'<p class="film-slot__title">{title}</p>'
-            f'<p class="film-slot__meta">Video in preparation</p>'
+            f'<p class="film-slot__meta">{e(pending_meta)}</p>'
             f'{text}</figcaption></figure>')
 
 
-def capture_img(site: dict, scheme: str) -> str:
+def capture_img(site: dict, scheme: str, *, sizes: str) -> str:
     base = e(site["capture"])
     return (f'<img class="site-shot site-shot--{scheme}" src="{base}-{scheme}-720.webp" '
             f'srcset="{base}-{scheme}-720.webp 720w, {base}-{scheme}-1440.webp 1440w" '
-            f'sizes="(min-width: 1200px) 660px, (min-width: 960px) 52vw, 40vw" '
-            f'alt="" width="1440" height="790" loading="lazy" decoding="async">')
+            f'sizes="{e(sizes)}" alt="" width="1440" height="790" loading="lazy" decoding="async">')
 
 
-def site_row(site: dict, *, active: bool = False) -> str:
-    """One website in the index: its name, which opens it, and what it is for."""
-    row_class = "site-row is-active" if active else "site-row"
-    return (f'<li class="{row_class}" data-site="{e(site["id"])}">'
-            f'<span class="site-row__thumb" aria-hidden="true">{capture_img(site, "light")}{capture_img(site, "dark")}</span>'
-            f'<div class="site-row__body">'
-            f'<h3 class="site-row__name"><a href="{e(site["url"])}">{e(site["name"])}</a></h3>'
-            f'<p class="site-row__purpose">{e(site["purpose"])}</p>'
-            f'</div></li>')
+# ---------------------------------------------------------------- the map
+# One row per project. The middle cell names the row and comes first in the
+# markup, so a screen reader and a phone read each row as a website, then its
+# videos, then its code; at laptop widths the grid sets the videos to its left.
+
+MAP_STILL_SIZES = "(min-width: 900px) 160px, 120px"
+MAP_SHOT_SIZES = "(min-width: 900px) 152px, 104px"
+COLUMNS = ("Videos", "Websites and tools", "Code on GitHub")
 
 
-def preview(sites: list[dict]) -> str:
-    items = []
-    for index, site in enumerate(sites):
-        active = " is-active" if index == 0 else ""
-        items.append(f'<figure class="site-preview__item{active}" data-site="{e(site["id"])}">'
-                     f'<span class="site-preview__frame">{capture_img(site, "light")}{capture_img(site, "dark")}</span>'
-                     f'<figcaption class="site-preview__caption">{e(site["capture_caption"])}</figcaption>'
-                     f'</figure>')
-    return (f'<div class="site-preview" data-active="{e(sites[0]["id"])}" aria-hidden="true">'
-            + "".join(items) + '</div>')
+def map_films(films: list[dict], *, series: str) -> str:
+    count = "one" if len(films) == 1 else "many"
+    items = "".join(f'<li class="map-film">{film_slot(film, series=series, size="inline", with_text=False, sizes=MAP_STILL_SIZES, pending_meta="In preparation")}</li>'
+                    for film in films)
+    return (f'<div class="map-cell map-cell--videos"><p class="map-cell__label">{COLUMNS[0]}</p>'
+            f'<ul class="map-films map-films--{count}" role="list">{items}</ul></div>')
 
 
-def page_head(*, title: str, description: str, canonical: str | None, robots: str) -> str:
+def map_repo(name: str, href: str, text: str) -> str:
+    return (f'<li class="map-repo"><p class="map-repo__name"><a href="{e(href)}" rel="noopener">{e(name)}'
+            f'<span class="sr-only">, on GitHub</span></a></p>'
+            f'<p class="map-repo__text">{e(text)}</p></li>')
+
+
+def map_code(items: str) -> str:
+    return (f'<div class="map-cell map-cell--code"><p class="map-cell__label">{COLUMNS[2]}</p>'
+            f'{items}</div>')
+
+
+def map_site(site: dict) -> str:
+    """A website: a small picture of its first screen, its name and its purpose."""
+    url = e(site["url"])
+    return (f'<div class="map-cell map-cell--site"><div class="map-site">'
+            f'<a class="map-site__shot" href="{url}" aria-hidden="true" tabindex="-1">'
+            f'{capture_img(site, "light", sizes=MAP_SHOT_SIZES)}{capture_img(site, "dark", sizes=MAP_SHOT_SIZES)}</a>'
+            f'<div class="map-site__body"><h3 class="map-site__name"><a href="{url}">{e(site["name"])}</a></h3>'
+            f'<p class="map-site__purpose">{e(site["purpose"])}</p></div></div></div>')
+
+
+def map_tool(project: dict, repos: list[dict]) -> str:
+    """A tool without a website: its name opens its code, when its code is public."""
+    name = e(project["name"])
+    if repos:
+        name = f'<a href="{e(repos[0]["href"])}" rel="noopener">{name}<span class="sr-only">, code on GitHub</span></a>'
+    return (f'<div class="map-cell map-cell--site"><div class="map-site map-site--tool">'
+            f'<div class="map-site__body"><h3 class="map-site__name">{name}</h3>'
+            f'<p class="map-site__purpose">{e(project["purpose"])}</p></div></div></div>')
+
+
+def map_row(row_id: str, middle: str, videos: str, code: str, *, extra: str = "") -> str:
+    return (f'<li class="map-row{extra}" data-row="{e(row_id)}">{middle}{videos}{code}</li>')
+
+
+def render_map(registry: dict) -> str:
+    films = {film["id"]: film for film in registry["films"]}
+    profile = next(c["href"] for c in registry["owner"]["contact"] if c["href"].startswith("https://github.com/"))
+    overview = next(g for g in registry["film_groups"] if g.get("id") == "overview")
+    rows = [map_row(
+        "start",
+        '<div class="map-cell map-cell--site"><div class="map-site map-site--here">'
+        '<div class="map-site__body"><h3 class="map-site__name">This page</h3>'
+        '<p class="map-site__purpose">Every website, video and repository</p></div></div></div>',
+        map_films([films[f] for f in overview["films"]], series="Will Cook"),
+        map_code(f'<ul class="map-repos" role="list">{map_repo(profile.rsplit("/", 1)[1], profile, "All public repositories")}</ul>'),
+        extra=" map-row--start")]
+    for site in registry["sites"]:
+        repos = "".join(map_repo(r["name"], r["href"], r["description"]) for r in repos_of(registry, site))
+        rows.append(map_row(site["id"], map_site(site),
+                            map_films([films[f] for f in site["films"]], series=site["name"]),
+                            map_code(f'<ul class="map-repos" role="list">{repos}</ul>')))
+    tools = registry["projects"]
+    rows.append('<li class="map-rows__group"><h3 class="map-rows__group-title">Tools for working with AI agents</h3>'
+                '<p class="map-rows__group-text">These have no website of their own. Their code is on GitHub.</p></li>')
+    for project in tools:
+        repos = repos_of(registry, project)
+        if repos:
+            code = f'<ul class="map-repos" role="list">{"".join(map_repo(r["name"], r["href"], r["description"]) for r in repos)}</ul>'
+        else:
+            code = f'<p class="map-repo map-repo--none">No public repository. {e(project.get("status") or "")}</p>'
+        rows.append(map_row(project["id"], map_tool(project, repos),
+                            map_films([films[f] for f in project["films"]], series=project["name"]),
+                            map_code(code), extra=" map-row--tool"))
+    heads = "".join(f'<p class="map-cols__head map-cols__head--{i}">{e(c)}</p>' for i, c in enumerate(COLUMNS))
+    return (f'<div class="map" data-hub-map>'
+            f'<div class="map-cols" aria-hidden="true">{heads}</div>'
+            f'<ul class="map-rows" role="list">{"".join(rows)}</ul></div>')
+
+
+def page_head(*, title: str, description: str, canonical: str | None, robots: str, map_script: bool = False) -> str:
     canonical_link = f'\n  <link rel="canonical" href="{e(canonical)}">' if canonical else ""
+    map_tag = '\n  <script src="/assets/hub-map.js" defer></script>' if map_script else ""
     return f'''<!doctype html>
 <html lang="en">
 <head>
@@ -220,7 +312,7 @@ def page_head(*, title: str, description: str, canonical: str | None, robots: st
   <script src="/assets/theme-init.js"></script>
   <link rel="stylesheet" href="/assets/hub.css">
   <link rel="stylesheet" href="/assets/family/family.css">
-  <script src="/assets/hub.js" defer></script>'''
+  <script src="/assets/hub.js" defer></script>{map_tag}'''
 
 
 def header(*, current: bool) -> str:
@@ -257,14 +349,10 @@ def structured_data(registry: dict) -> str:
 
 def render_index(registry: dict) -> str:
     owner = registry["owner"]
-    sites = registry["sites"]
     films = {film["id"]: film for film in registry["films"]}
     released = [f for f in registry["films"] if f.get("youtube")]
     pending = [f for f in registry["films"] if not f.get("youtube")]
     intro = films["introduction"]
-    projects = registry["projects"]
-    tools = [p for p in projects if p["repos"]]
-    tool_links = " and ".join(f'<a href="{e(p["repos"][0]["href"])}" rel="noopener">{e(p["name"])}</a>' for p in tools)
 
     groups_html = []
     for group in film_groups(registry):
@@ -278,7 +366,8 @@ def render_index(registry: dict) -> str:
             item_class = "film-grid__item film-grid__item--lead" if size else "film-grid__item"
             slots.append(f'<li class="{item_class}">{film_slot(film, series=series, size=size, sizes=sizes)}</li>')
         if site:
-            repos = "".join(f'<a class="film-group__repo" href="{e(r["href"])}" rel="noopener">{e(r["label"])}</a>' for r in site["repos"])
+            repos = "".join(f'<a class="film-group__repo" href="{e(r["href"])}" rel="noopener">{e(r["name"])}<span class="sr-only"> on GitHub</span></a>'
+                            for r in repos_of(registry, site))
             head = (f'<div class="film-group__head"><h3 class="film-group__title" id="films-{e(group["id"])}-title">{e(group["title"])}</h3>'
                     f'<p class="film-group__links"><a class="film-group__site" href="{e(site["url"])}">Open the website</a>{repos}</p></div>')
         else:
@@ -296,7 +385,7 @@ def render_index(registry: dict) -> str:
     description = ("Will Cook’s websites and videos: research on Erdős problems and the SK model with AI, "
                    "Plectis Atlas, practical formal verification and Zenith.")
     head = page_head(title="Will Cook: websites and videos", description=description, canonical=HOME,
-                     robots="index, follow")
+                     robots="index, follow", map_script=True)
     return f'''{head}
   <meta property="og:title" content="Will Cook: websites and videos">
   <meta property="og:description" content="{e(description)}">
@@ -314,20 +403,20 @@ def render_index(registry: dict) -> str:
           <div class="hub-intro__copy">
             <h1 class="hub-title" id="hub-title">{e(owner["name"])}</h1>
             <p class="hub-lede">{e(owner["lede"])}</p>
-            <p class="hub-orient">Each project has its own website, listed below. New here? Start with the introduction, which explains how they fit together.</p>
+            <p class="hub-orient">Each project has its own website, and every one is on the map below with its videos and its code. New here? Start with the introduction, which explains how they fit together.</p>
           </div>
           <div class="hub-intro__film">{film_slot(intro, series="Will Cook", size="inline", with_text=False, sizes="(min-width: 1024px) 240px, 100vw")}</div>
         </div>
-        <div class="hub-sites">
-          <div class="hub-sites__list">
-            <h2 class="hub-section-title" id="websites">Websites</h2>
-            <ol class="site-index" role="list">
-              {"".join(site_row(site, active=(i == 0)) for i, site in enumerate(sites))}
-            </ol>
-            <p class="site-index__more">{tool_links} are tools without a website of their own. Their code is on GitHub, and their films are below.</p>
-          </div>
-          {preview(sites)}
+      </div>
+    </section>
+
+    <section class="hub-map" id="websites" aria-labelledby="map-title">
+      <div class="wrap">
+        <div class="hub-map__head">
+          <h2 class="hub-section-title" id="map-title">Websites, videos and code</h2>
+          <p class="hub-map__lede"><span class="hub-map__wide">Each line joins a video to the website it explains, and a website to its code on GitHub. Point at anything to see what it connects to.</span><span class="hub-map__narrow">Each website with its videos and its code on GitHub.</span></p>
         </div>
+        {render_map(registry)}
       </div>
     </section>
 
@@ -354,7 +443,7 @@ def render_index(registry: dict) -> str:
 
   <footer class="hub-footer">
     <div class="wrap hub-footer__inner">
-      <p>This page lists every website and film. Each website links back here from its header.</p>
+      <p>This page lists every website, film and repository. Each website links back here from its header.</p>
       <p><a href="https://github.com/wcook04/wcook04.github.io">Source of this page</a> <a href="/sites.json">The list as data</a></p>
     </div>
   </footer>
@@ -410,7 +499,7 @@ def render_agent_guide(registry: dict) -> str:
     lines = ["# Will Cook's websites", "",
              "Start at the [home page](https://wcook04.github.io/) or read [sites.json](https://wcook04.github.io/sites.json), which lists every website, film and repository.", ""]
     for site in registry["sites"]:
-        repos = ", ".join(f"[{r['label']}]({r['href']})" for r in site["repos"])
+        repos = ", ".join(f"[{r['name']}]({r['href']})" for r in repos_of(registry, site))
         lines.append(f"- [{site['name']}]({site['url']}). Source: {repos}.")
     lines += ["", "Use each site's own source links and stated limits when describing its findings.", ""]
     return "\n".join(lines)

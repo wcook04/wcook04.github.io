@@ -5,16 +5,17 @@ reader moving between them should always know where they are and how to get
 back. Every site carries the same three things, in its own stack:
 
 1. **The ladder** at the start of its header: `Will Cook / <site name>`. "Will
-   Cook" links to the home page, <https://wcook04.github.io/>, which lists every
-   website and every film.
+   Cook" links to the home page, <https://wcook04.github.io/>, which maps every
+   website, film and repository.
 2. **Film slots** for the films about that site: the still with its play chip
    and running time once a film is on YouTube, and a held frame marked "In
    preparation" until then.
 3. **Sister sites** in its footer: the other websites by name, and "All
    websites and films" back to the home page.
 
-The list of websites and films is [`sites.json`](../sites.json) in this
-repository. Each site keeps a copy beside its own source (`family.json`) and
+The list of websites, films and repositories is [`sites.json`](../sites.json)
+in this repository. A website's `repos` names repositories by id from its
+top-level `repos` list (name, address and a one-sentence description). Each site keeps a copy beside its own source (`family.json`) and
 renders from it at build time, so no page requests anything from another host
 or depends on JavaScript to show its films.
 

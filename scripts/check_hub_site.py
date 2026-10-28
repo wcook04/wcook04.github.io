@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Validate the home page repository, including the Git index when requested.
 
-The home page lists every website and film from sites.json. This check holds
-the promises the page makes: the committed pages are what sites.json produces,
-nothing loads from another host, no player is embedded, every website and
-released film is linked, a film in preparation has no link, and this
-repository never claims the paths the project websites are served from.
+The home page maps every website, film and repository from sites.json. This
+check holds the promises the page makes: the committed pages are what
+sites.json produces, nothing loads from another host (the map's script
+included), no player is embedded, every website, released film and repository
+is linked, a film in preparation has no link, and this repository never claims
+the paths the project websites are served from.
 """
 from __future__ import annotations
 
@@ -27,7 +28,7 @@ REQUIRED = {
     ".github/workflows/public-site.yml", ".gitignore", ".nojekyll", "README.md",
     "index.html", "404.html", "sites.json", "llms.txt", "agent-guide.md",
     "robots.txt", "sitemap.xml", "sitemap-home.xml", "favicon.ico",
-    "assets/hub.css", "assets/hub.js", "assets/theme-init.js", "assets/redirect.js",
+    "assets/hub.css", "assets/hub.js", "assets/hub-map.js", "assets/theme-init.js", "assets/redirect.js",
     "assets/family/family.css", "assets/favicon.svg", "assets/favicon-32.png",
     "assets/apple-touch-icon.png", "docs/family.md",
     "scripts/build_hub.py", "scripts/check_hub_site.py", "tests/test_hub_site.py",
@@ -59,11 +60,23 @@ class Page(HTMLParser):
         super().__init__()
         self.tags: list[str] = []
         self.attrs: list[tuple[str, dict]] = []
+        self.link_texts: list[str] = []
+        self._open: list[list[str]] = []
         self.feed(text)
 
     def handle_starttag(self, tag, attrs):
         self.tags.append(tag)
         self.attrs.append((tag, dict(attrs)))
+        if tag == "a":
+            self._open.append([])
+
+    def handle_endtag(self, tag):
+        if tag == "a" and self._open:
+            self.link_texts.append(" ".join("".join(self._open.pop()).split()))
+
+    def handle_data(self, data):
+        for parts in self._open:
+            parts.append(data)
 
     def all(self, tag: str) -> list[dict]:
         return [a for t, a in self.attrs if t == tag]
@@ -143,13 +156,24 @@ def validate(files: dict[str, bytes]) -> list[str]:
     if "index.html" in files:
         index = files["index.html"].decode()
         errors += validate_page("index.html", index, home=True)
-        hrefs = {a.get("href") for a in Page(index).all("a")}
+        page = Page(index)
+        hrefs = {a.get("href") for a in page.all("a")}
         for site in registry["sites"]:
             if site["url"] not in hrefs:
                 errors.append(f"index.html: website not linked: {site['name']}")
         for film in registry["films"]:
             if film.get("youtube") and film["youtube"] not in hrefs:
                 errors.append(f"index.html: released film not linked: {film['title']}")
+            if not film.get("youtube"):
+                names = {film["title"], film["short"]}
+                if any(name in text for text in page.link_texts for name in names):
+                    errors.append(f"index.html: a film in preparation has no link: {film['title']}")
+        for repo in registry["repos"]:
+            if repo["href"] not in hrefs:
+                errors.append(f"index.html: repository not linked: {repo['name']}")
+        scripts = [attrs for attrs in page.all("script") if attrs.get("src")]
+        if not any(attrs.get("src") == "/assets/hub-map.js" and "defer" in attrs for attrs in scripts):
+            errors.append("index.html: the map's lines come from the same-origin /assets/hub-map.js, deferred")
     if "404.html" in files:
         errors += validate_page("404.html", files["404.html"].decode(), home=False)
     if "robots.txt" in files:
@@ -180,7 +204,7 @@ def main() -> None:
     errors = validate(snapshot(ROOT, index=args.index))
     if errors:
         raise SystemExit("\n".join(errors))
-    print("Home page: pages match sites.json, same-origin assets, linked websites and films, project paths left free")
+    print("Home page: pages match sites.json, same-origin assets and map script, linked websites, films and repositories, project paths left free")
 
 
 if __name__ == "__main__":

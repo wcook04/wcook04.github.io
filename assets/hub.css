@@ -1,4 +1,5 @@
-/* The home page of wcook04.github.io: Will Cook's websites, then his films.
+/* The home page of wcook04.github.io: a map of Will Cook's websites, videos
+   and repositories, then his films with their descriptions.
 
    The page wears the Plectis sites' paper: their tokens, their two typefaces
    (STIX Two Text and Source Sans 3, subset and renamed by the Plectis site's
@@ -159,7 +160,7 @@ main#main:focus { outline: none; }
 .theme-toggle:focus-visible .theme-toggle__track { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 /* ---------------------------------------------------------------- introduction and websites */
-.hub-intro { padding-block: clamp(2rem, 4vw, 3.2rem) clamp(3rem, 6vw, 5rem); }
+.hub-intro { padding-block: clamp(2rem, 4vw, 3.2rem) clamp(2.2rem, 4vw, 3.2rem); }
 .hub-title {
   font-family: var(--font-serif); font-weight: 500; color: var(--ink);
   font-size: clamp(2.5rem, 1.7rem + 2.4vw, 3.6rem); line-height: 1.02; letter-spacing: -0.02em;
@@ -176,7 +177,6 @@ main#main:focus { outline: none; }
   font-family: var(--font-serif); font-weight: 400; color: var(--ink);
   font-size: clamp(1.6rem, 1.25rem + 1vw, 2.15rem); line-height: 1.12; letter-spacing: -0.012em;
 }
-.hub-sites { display: grid; gap: 2.5rem; margin-top: clamp(1.8rem, 3.2vw, 2.6rem); }
 /* The introduction film sits beside the opening words, so the top of the page
    has no empty half. */
 .hub-intro__top { display: grid; gap: 1.4rem; }
@@ -186,49 +186,6 @@ main#main:focus { outline: none; }
   .hub-intro__film .film-slot--inline { grid-template-columns: minmax(10rem, 15rem) minmax(0, 1fr); align-items: center; }
   .hub-intro__film .film-slot__title { font-size: 1.15rem; }
 }
-.site-index { list-style: none; margin: 1rem 0 0; padding: 0; border-bottom: 1px solid var(--rule); }
-.site-row {
-  display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.9rem;
-  padding: 0.85rem 0 0.95rem; border-top: 1px solid var(--rule);
-}
-.site-row__thumb { display: none; }
-.site-row__name { font-family: var(--font-serif); font-size: 1.32rem; line-height: 1.2; font-weight: 500; letter-spacing: -0.008em; }
-.site-row__name a { color: var(--ink); text-decoration: none; }
-/* Each name opens another website: the arrow says it leaves this page,
-   glued to the last word so it never wraps alone. */
-.site-row__name a::after { content: "\00a0\2197"; font-family: var(--font-sans); font-size: 0.62em; color: var(--faint); }
-.site-row__name a:hover { text-decoration: underline; text-decoration-color: var(--rule-control); }
-.site-row__purpose { margin-top: 0.3rem; max-width: 60ch; font-size: 0.98rem; line-height: 1.55; color: var(--ink-soft); }
-.site-index__more { margin-top: 1rem; max-width: 60ch; font-size: 0.92rem; color: var(--muted); }
-
-/* The picture beside the list: each website's real first screen, framed like a
-   proof pinned up for checking. Registration marks at two corners say the frame
-   is held for its picture, the family's mark for a place on the page. Pointing
-   at a row (or tabbing to it) shows that site; the last one shown stays. */
-.site-preview { display: none; }
-@media (min-width: 1024px) {
-  .hub-sites { grid-template-columns: minmax(0, 10fr) minmax(0, 12fr); gap: clamp(2.5rem, 4vw, 4rem); align-items: start; }
-  .site-preview {
-    display: grid; position: sticky; top: calc(var(--header-h) + 24px);
-    margin-top: 0.2rem; padding: 14px;
-  }
-  .site-preview::before, .site-preview::after {
-    content: ""; position: absolute; width: 14px; height: 14px; pointer-events: none;
-    border: 0 solid var(--faint);
-  }
-  .site-preview::before { left: 0; top: 0; border-width: 1px 0 0 1px; }
-  .site-preview::after { right: 0; bottom: 0; border-width: 0 1px 1px 0; }
-  .site-preview__item { grid-area: 1 / 1; margin: 0; opacity: 0; visibility: hidden; transition: opacity 200ms var(--ease-out), visibility 0s linear 200ms; }
-  .site-preview__item.is-active { opacity: 1; visibility: visible; transition: opacity 200ms var(--ease-out), visibility 0s; }
-  .site-preview__frame {
-    display: block; aspect-ratio: 1440 / 790; overflow: hidden; border-radius: 8px;
-    background: var(--surface); box-shadow: 0 0 0 1px var(--rule-strong), 0 18px 40px -28px rgba(var(--ink-rgb), 0.45);
-  }
-  .site-preview__caption { margin-top: 0.75rem; font-size: 0.88rem; line-height: 1.45; color: var(--muted); }
-  .site-row { padding-inline: 0.9rem; margin-inline: -0.9rem; border-radius: 0; transition: background-color var(--dur) var(--ease); }
-  .site-row.is-active { background: color-mix(in srgb, var(--surface) 70%, transparent); }
-  .site-row.is-active .site-row__name a { color: var(--ink); }
-}
 .site-shot { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
 .site-shot--dark { display: none; }
 :root[data-theme="dark"] .site-shot--light { display: none; }
@@ -237,18 +194,150 @@ main#main:focus { outline: none; }
   :root:not([data-theme]) .site-shot--light { display: none; }
   :root:not([data-theme]) .site-shot--dark { display: block; }
 }
-/* Below the two-column width each row carries its own small picture. */
-@media (max-width: 1023.98px) {
-  .site-row { grid-template-columns: 8.5rem minmax(0, 1fr); align-items: start; }
-  .site-row__thumb {
-    display: block; aspect-ratio: 1440 / 790; overflow: hidden; border-radius: 6px; margin-top: 0.3rem;
-    background: var(--surface); box-shadow: 0 0 0 1px var(--rule-strong);
-  }
+
+/* ---------------------------------------------------------------- the map
+   Every website, video and repository in one place, one row per project:
+   its videos, its website or tool, its code on GitHub. Without a script the
+   grid alone groups them and every link works; assets/hub-map.js draws the
+   lines between the columns (adapted from the Plectis film map's cables) and
+   lights the row a reader points at or tabs into. Below the three-column
+   width each row reads as a list: the website, then its videos, then its
+   code. */
+.hub-map { padding-block: clamp(2.4rem, 4.6vw, 3.6rem) clamp(2.8rem, 5vw, 4rem); border-top: 1px solid var(--rule); }
+.hub-map__head { display: grid; gap: 0.5rem; margin-bottom: clamp(1.2rem, 2.4vw, 1.8rem); }
+.hub-map__lede { max-width: 64ch; color: var(--muted); }
+.hub-map__wide { display: none; }
+.map {
+  position: relative;
+  --map-line: color-mix(in srgb, var(--rule-strong) 45%, var(--rule-control));
+  --map-gutter: clamp(3rem, 4.8vw, 4.25rem);
+}
+.map-cols { display: none; }
+.map-rows { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--rule); }
+.map-row {
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.9rem;
+  padding-block: 1.1rem 1.2rem; border-top: 1px solid var(--rule);
+}
+.map-cell { min-width: 0; }
+/* A cell's label says what the column holds. Beside the column heads it is
+   for screen readers only; in the stacked list it is printed. */
+.map-cell__label { margin: 0 0 0.45rem; font-size: 0.82rem; font-weight: 600; color: var(--faint); }
+.map-cell--site .map-cell__label { display: none; }
+
+/* A website or tool: the row's name. */
+.map-site { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 0 0.9rem; align-items: center; }
+.map-site--tool, .map-site--here { grid-template-columns: minmax(0, 1fr); }
+.map-site__shot {
+  display: block; aspect-ratio: 1440 / 790; overflow: hidden; border-radius: 6px;
+  background: var(--surface); box-shadow: 0 0 0 1px var(--rule-strong);
+  transition: box-shadow var(--dur) var(--ease);
+}
+.map-site__name { font-family: var(--font-serif); font-size: 1.25rem; line-height: 1.2; font-weight: 500; letter-spacing: -0.008em; color: var(--ink); }
+.map-site__name a { color: var(--ink); text-decoration: none; }
+/* Each name opens another website (or its code): the arrow says it leaves
+   this page, glued to the last word so it never wraps alone. */
+.map-site__name a::after, .map-repo__name a::after { content: "\00a0\2197"; font-family: var(--font-sans); font-size: 0.62em; font-weight: 400; color: var(--faint); }
+.map-site__name a:hover { text-decoration: underline; text-decoration-color: var(--rule-control); }
+.map-site__purpose { margin-top: 0.25rem; max-width: 62ch; font-size: 0.92rem; line-height: 1.48; color: var(--ink-soft); }
+.map-site--here .map-site__name { color: var(--ink-soft); }
+
+/* Videos: the family's inline film slot, held compact. */
+.map-films, .map-repos { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
+.map-film .film-slot--inline { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0 0.85rem; align-items: center; }
+.map-film .film-slot--inline .film-slot__frame { max-width: none; --play: 28px; border-radius: 6px; }
+.map-film .film-slot.film-slot--inline .film-slot__caption { margin-top: 0; gap: 0.1rem; }
+.map-film .film-slot.film-slot--inline .film-slot__title { font-size: 0.97rem; line-height: 1.26; }
+.map-film .film-slot.film-slot--inline .film-slot__name { font-size: 0.8rem; }
+.map-film .film-slot .film-slot__meta { font-size: 0.82rem; }
+
+/* Code: each repository's name, which opens it, and what it holds. */
+.map-repo { margin: 0; }
+.map-repo__name { font-size: 0.98rem; line-height: 1.3; font-weight: 600; overflow-wrap: anywhere; }
+.map-repo__name a { color: var(--ink); text-decoration: none; }
+.map-repo__name a:hover { text-decoration: underline; text-decoration-color: var(--rule-control); }
+.map-repo__text { margin-top: 0.12rem; font-size: 0.87rem; line-height: 1.42; color: var(--muted); }
+.map-repo--none { font-size: 0.87rem; line-height: 1.42; color: var(--muted); }
+
+/* The tools stand under their own name: they have no website. */
+.map-rows__group { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 1rem; padding-block: 1.5rem 0.55rem; border-top: 1px solid var(--rule); }
+.map-rows__group-title { font-family: var(--font-serif); font-size: 1.12rem; line-height: 1.25; font-weight: 500; color: var(--ink); }
+.map-rows__group-text { font-size: 0.9rem; color: var(--muted); }
+
+/* The stacked list: the website first, its videos and code under it, set
+   in from the name so they read as its own. */
+@media (max-width: 959.98px) {
+  .map-row > .map-cell--videos, .map-row > .map-cell--code { padding-left: 0.95rem; margin-left: 0.15rem; border-left: 1px solid var(--rule-strong); }
+  .map-site { align-items: start; }
+  .map-site__shot { margin-top: 0.3rem; }
+  .map-row { gap: 0.75rem; }
+  .map-cell__label { margin-bottom: 0.3rem; }
 }
 @media (max-width: 560px) {
-  .site-row { grid-template-columns: 6.25rem minmax(0, 1fr); gap: 0.75rem; }
-  .site-row__name { font-size: 1.18rem; }
-  .site-row__purpose { font-size: 0.94rem; }
+  .map-site { grid-template-columns: 5.6rem minmax(0, 1fr); gap: 0 0.75rem; }
+  .map-site--tool, .map-site--here { grid-template-columns: minmax(0, 1fr); }
+  .map-site__name { font-size: 1.16rem; }
+  .map-site__purpose { font-size: 0.9rem; }
+  .map-film .film-slot--inline { grid-template-columns: 6.5rem minmax(0, 1fr); gap: 0 0.75rem; }
+}
+
+/* Three columns: videos | websites and tools | code, with an open gutter
+   between them for the lines. Each cell's nodes sit at the middle of their
+   row, so a single video beside a website and two repositories leaves no
+   tall empty column; a single video takes a larger still. */
+@media (min-width: 960px) {
+  html.scripting .hub-map__wide { display: inline; }
+  html.scripting .hub-map__narrow { display: none; }
+  .map-cols, .map-row {
+    grid-template-columns: minmax(0, 30fr) minmax(0, 42fr) minmax(0, 28fr);
+    grid-template-areas: "videos site code"; column-gap: var(--map-gutter);
+  }
+  .map-cols { display: grid; padding-bottom: 0.55rem; }
+  .map-cols__head { font-size: 0.84rem; font-weight: 600; color: var(--faint); }
+  .map-cols__head--0 { grid-area: videos; }
+  .map-cols__head--1 { grid-area: site; }
+  .map-cols__head--2 { grid-area: code; }
+  .map-row { align-items: center; row-gap: 0; padding-block: 1rem; }
+  .map-cell--videos { grid-area: videos; }
+  .map-cell--site { grid-area: site; }
+  .map-cell--code { grid-area: code; }
+  .map-cell__label {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+  .map-site { grid-template-columns: clamp(6rem, 10vw - 1rem, 9rem) minmax(0, 1fr); gap: 0 1rem; }
+  .map-site--tool, .map-site--here { grid-template-columns: minmax(0, 1fr); }
+  .map-films--one .film-slot--inline { grid-template-columns: clamp(7.5rem, 11vw - 1rem, 9.5rem) minmax(0, 1fr); }
+  .map-films--one .film-slot--inline .film-slot__frame { --play: 32px; }
+  .map-rows__group { padding-block: 1.6rem 0.6rem; }
+  .map-rows__group-title { grid-column: auto; }
+}
+
+/* The lines (assets/hub-map.js). At rest a quiet rule; the row a reader
+   points at or tabs into comes up to the accent ink with its end dots, and
+   the other rows step back. */
+.map__lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
+.map__line { transition: opacity var(--dur) var(--ease); }
+.map__line path { fill: none; stroke: var(--map-line); stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
+.map__line circle { fill: var(--page); stroke: var(--accent); stroke-width: 1.25; opacity: 0; transition: opacity var(--dur) var(--ease); }
+.map__line.is-lit path { stroke: var(--accent); stroke-width: 2; }
+.map__line.is-lit circle { opacity: 1; }
+.map.is-tracing .map__line:not(.is-lit) { opacity: 0.45; }
+.map-row { transition: opacity var(--dur) var(--ease); }
+.map.is-tracing .map-row:not(.is-lit), .map.is-tracing .map-rows__group { opacity: 0.45; }
+.map-row.is-lit .map-site__name a, .map-row.is-lit .map-repo__name a, .map-row.is-lit .film-slot__title a { color: var(--accent); }
+.map-row.is-lit .map-site__shot, .map-row.is-lit .film-slot__frame { box-shadow: 0 0 0 1px var(--accent); }
+/* The light that runs once along a pointed row: a bead with three fading
+   dots behind it, the film map's mark. */
+.map__bead circle { fill: var(--accent); }
+.map__bead circle:first-child { fill: var(--ink); stroke: var(--accent); stroke-width: 1.5; }
+.map__bead circle:nth-child(2) { opacity: 0.55; }
+.map__bead circle:nth-child(3) { opacity: 0.36; }
+.map__bead circle:nth-child(4) { opacity: 0.2; }
+@media (max-width: 959.98px) { .map__lines { display: none; } }
+@media (forced-colors: active) {
+  .map__line path { stroke: GrayText; }
+  .map__line.is-lit path { stroke: Highlight; }
+  .map__bead { display: none; }
 }
 
 /* ---------------------------------------------------------------- videos */
@@ -311,7 +400,7 @@ main#main:focus { outline: none; }
 .hub-missing__list { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: 0.4rem; font-family: var(--font-serif); font-size: 1.2rem; }
 
 @media (prefers-reduced-motion: reduce) {
-  .site-preview__item, .site-preview__item.is-active, .site-row, .theme-toggle__knob, .theme-toggle__track, .theme-toggle__ico,
+  .map-row, .map__line, .map__line circle, .theme-toggle__knob, .theme-toggle__track, .theme-toggle__ico,
   .hub-contact__links a { transition: none; }
 }
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
