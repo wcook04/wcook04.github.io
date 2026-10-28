@@ -1,6 +1,7 @@
 """Regression checks for the home page and the repository that serves it."""
 import importlib.util
 import json
+import re
 from pathlib import Path
 import subprocess
 import tempfile
@@ -45,9 +46,15 @@ class HubTests(unittest.TestCase):
         self.assertTrue(any("embedded player" in error for error in self.errors()))
 
     def test_nothing_loads_from_another_host(self):
-        self.files["index.html"] = self.files["index.html"].replace(
-            b'src="/assets/theme-init.js"', b'src="https://cdn.example.com/theme.js"')
+        self.files["index.html"] = re.sub(
+            rb'src="/assets/theme-init\.js(\?v=[0-9a-f]+)?"', b'src="https://cdn.example.com/theme.js"',
+            self.files["index.html"])
         self.assertTrue(any("another host" in error for error in self.errors()))
+
+    def test_assets_carry_their_content_hash(self):
+        index = self.files["index.html"].decode()
+        for asset in ("/assets/hub.css", "/assets/family/family.css", "/assets/hub.js", "/assets/hub-map.js"):
+            self.assertRegex(index, re.escape(asset) + r"\?v=[0-9a-f]{12}")
 
     def test_project_paths_stay_free(self):
         self.files["plectis-atlas/index.html"] = b"<!doctype html>"
@@ -73,8 +80,9 @@ class HubTests(unittest.TestCase):
         self.assertTrue(any("in preparation has no link" in error for error in self.errors()))
 
     def test_map_script_is_same_origin(self):
-        self.files["index.html"] = self.files["index.html"].replace(
-            b'src="/assets/hub-map.js"', b'src="https://cdn.example.com/hub-map.js"')
+        self.files["index.html"] = re.sub(
+            rb'src="/assets/hub-map\.js(\?v=[0-9a-f]+)?"', b'src="https://cdn.example.com/hub-map.js"',
+            self.files["index.html"])
         errors = self.errors()
         self.assertTrue(any("another host" in error for error in errors))
         self.assertTrue(any("hub-map.js" in error for error in errors))

@@ -121,7 +121,7 @@ def validate_page(name: str, text: str, *, home: bool) -> list[str]:
         if canonical != [HOME]:
             errors.append(f"{name}: canonical must be {HOME}")
     else:
-        if "/assets/redirect.js" not in [s.get("src") for s in page.all("script")]:
+        if "/assets/redirect.js" not in [(s.get("src") or "").split("?")[0] for s in page.all("script")]:
             errors.append(f"{name}: old Plectis addresses must forward through /assets/redirect.js")
         if "/" not in [a.get("href") for a in anchors]:
             errors.append(f"{name}: a missing page links home")
@@ -150,7 +150,12 @@ def validate(files: dict[str, bytes]) -> list[str]:
     errors += ["sites.json: " + p for p in problems]
     if problems:
         return errors
-    for name, text in BUILD.outputs(registry).items():
+    BUILD.ASSET_READER = lambda rel: files.get(rel, b"")
+    try:
+        rendered = BUILD.outputs(registry)
+    finally:
+        BUILD.ASSET_READER = BUILD.read_asset
+    for name, text in rendered.items():
         if files.get(name, b"").decode() != text:
             errors.append(f"{name}: out of date with sites.json (run python3 scripts/build_hub.py)")
     if "index.html" in files:
@@ -172,7 +177,7 @@ def validate(files: dict[str, bytes]) -> list[str]:
             if repo["href"] not in hrefs:
                 errors.append(f"index.html: repository not linked: {repo['name']}")
         scripts = [attrs for attrs in page.all("script") if attrs.get("src")]
-        if not any(attrs.get("src") == "/assets/hub-map.js" and "defer" in attrs for attrs in scripts):
+        if not any((attrs.get("src") or "").split("?")[0] == "/assets/hub-map.js" and "defer" in attrs for attrs in scripts):
             errors.append("index.html: the map's lines come from the same-origin /assets/hub-map.js, deferred")
     if "404.html" in files:
         errors += validate_page("404.html", files["404.html"].decode(), home=False)

@@ -12,6 +12,7 @@ committed pages differ from what sites.json now produces.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
 import json
 import re
@@ -119,6 +120,22 @@ def count_words(n: int, singular: str, plural: str, *, capital: bool = False) ->
     word = NUMBER_WORDS[n] if n < len(NUMBER_WORDS) else str(n)
     text = f"{word} {singular if n == 1 else plural}"
     return text[0].upper() + text[1:] if capital else text
+
+
+def read_asset(rel: str) -> bytes:
+    return (ROOT / rel).read_bytes()
+
+
+# The repository check swaps this for a reader over the files it is checking
+# (the staged files with --index), so hashes come from what is committed.
+ASSET_READER = read_asset
+
+
+def versioned(path: str) -> str:
+    """A same-origin asset with its content's hash, so a new build is never paired
+    with a stylesheet or script a browser kept from the last one."""
+    data = ASSET_READER(path.lstrip("/"))
+    return f"{path}?v={hashlib.sha256(data).hexdigest()[:12]}"
 
 
 def clock(seconds: int) -> str:
@@ -288,7 +305,7 @@ def render_map(registry: dict) -> str:
 
 def page_head(*, title: str, description: str, canonical: str | None, robots: str, map_script: bool = False) -> str:
     canonical_link = f'\n  <link rel="canonical" href="{e(canonical)}">' if canonical else ""
-    map_tag = '\n  <script src="/assets/hub-map.js" defer></script>' if map_script else ""
+    map_tag = f'\n  <script src="{versioned("/assets/hub-map.js")}" defer></script>' if map_script else ""
     return f'''<!doctype html>
 <html lang="en">
 <head>
@@ -309,10 +326,10 @@ def page_head(*, title: str, description: str, canonical: str | None, robots: st
   <link rel="preload" href="/assets/fonts/plectis-serif.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/plectis-sans.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="help" href="/llms.txt" type="text/plain" title="Guide for agents">
-  <script src="/assets/theme-init.js"></script>
-  <link rel="stylesheet" href="/assets/hub.css">
-  <link rel="stylesheet" href="/assets/family/family.css">
-  <script src="/assets/hub.js" defer></script>{map_tag}'''
+  <script src="{versioned("/assets/theme-init.js")}"></script>
+  <link rel="stylesheet" href="{versioned("/assets/hub.css")}">
+  <link rel="stylesheet" href="{versioned("/assets/family/family.css")}">
+  <script src="{versioned("/assets/hub.js")}" defer></script>{map_tag}'''
 
 
 def header(*, current: bool) -> str:
@@ -457,7 +474,7 @@ def render_404(registry: dict) -> str:
     head = page_head(title="Page not found: Will Cook", description="This address has no page.",
                      canonical=None, robots="noindex, follow")
     return f'''{head}
-  <script src="/assets/redirect.js"></script>
+  <script src="{versioned("/assets/redirect.js")}"></script>
 </head>
 <body class="hub hub--missing">
   {header(current=False)}
