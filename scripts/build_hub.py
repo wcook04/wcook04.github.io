@@ -238,7 +238,7 @@ def capture_img(site: dict, scheme: str, *, sizes: str) -> str:
 # row as the website, then its videos, then its code.
 
 MAP_STILL_SIZES = "(min-width: 960px) 144px, 112px"
-THUMB_SIZES = "(min-width: 720px) 176px, 104px"
+THUMB_SIZES = "(min-width: 720px) 300px, 180px"
 COLUMNS = ("Videos", "On the website", "Code on GitHub")
 CHEVRON = ('<svg class="proj__chevron" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">'
            '<path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
@@ -424,7 +424,7 @@ def render_videos(registry: dict) -> str:
     released = [f for f in order if f.get("youtube")]
     pending = [f for f in order if not f.get("youtube")]
     cards = "".join(
-        f'<li class="vid">{film_slot(film, series=names[film["id"]], size="small", with_text=False, meta=names[film["id"]], sizes="(min-width: 1100px) 280px, (min-width: 520px) 45vw, 100vw")}</li>'
+        f'<li class="vid">{film_slot(film, series=names[film["id"]], size="small", with_text=False, meta=names[film["id"]], sizes="(min-width: 1180px) 380px, (min-width: 820px) 31vw, (min-width: 520px) 48vw, 100vw")}</li>'
         for film in released)
     waiting = "".join(f'<li><span class="vid-pending__name">{e(film["title"])}</span>'
                       f'<span class="vid-pending__for">{e(names[film["id"]])}</span></li>' for film in pending)

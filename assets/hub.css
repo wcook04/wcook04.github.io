@@ -253,6 +253,10 @@ html.scripting .proj__head { cursor: pointer; }
 .proj__thumb .film-slot__time { right: 0.3rem; bottom: 0.3rem; padding: 0.02rem 0.3rem; font-size: 0.66rem; }
 .proj__thumb--empty { background: var(--surface-sunk); }
 .proj__thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* A website's first screen at this size is too small to read whole, so the
+   thumb shows its top left at reading scale: the site's own heading. A film
+   still is shown whole. */
+.proj__thumb .site-shot { transform: scale(var(--shot-zoom, 1.7)); transform-origin: var(--shot-focus, 0 0); }
 .proj__name { font-family: var(--font-serif); font-size: 1.24rem; line-height: 1.2; font-weight: 500; letter-spacing: -0.008em; color: var(--ink); }
 .proj__name a { color: var(--ink); text-decoration: none; }
 .proj__name a::after { content: "\00a0\2197"; font-family: var(--font-sans); font-size: 0.6em; font-weight: 400; color: var(--faint); }
@@ -413,7 +417,6 @@ html.scripting .proj.is-open .proj__more, html.scripting .proj:target:not(.is-sh
 .vid-wall { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.8rem 1.4rem; grid-template-columns: minmax(0, 1fr); }
 @media (min-width: 520px) { .vid-wall { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (min-width: 820px) { .vid-wall { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-@media (min-width: 1100px) { .vid-wall { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .vid { min-width: 0; }
 .vid .film-slot .film-slot__caption { margin-top: 0.6rem; gap: 0.15rem; }
 .vid .film-slot .film-slot__title { font-size: 1rem; line-height: 1.28; }
