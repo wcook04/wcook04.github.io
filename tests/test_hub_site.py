@@ -102,6 +102,18 @@ class HubTests(unittest.TestCase):
         self.assertTrue(any("unknown repository no-such-repository" in p for p in problems))
         self.assertTrue(any("on no website or tool: stray" in p for p in problems))
 
+    def test_old_plectis_pages_answer_and_forward(self):
+        self.assertIn("plectis/docs/contact.html", self.files)
+        page = self.files["plectis/docs/contact.html"].decode()
+        self.assertIn('url=/practical-formal-verification/docs/contact.html"', page)
+        self.assertIn('url=/"', self.files["plectis/index.html"].decode())
+        self.files["plectis/docs/contact.html"] = page.replace("/assets/redirect.js", "/assets/other.js").encode()
+        self.assertTrue(any("plectis/docs/contact.html" in error for error in self.errors()))
+
+    def test_plectis_holds_only_listed_forwarding_pages(self):
+        self.files["plectis/unlisted.html"] = b"<!doctype html>"
+        self.assertTrue(any("plectis/unlisted.html" in error for error in self.errors()))
+
     def test_missing_page_forwards_old_plectis_addresses(self):
         self.files["404.html"] = self.files["404.html"].replace(b"/assets/redirect.js", b"/assets/other.js")
         self.assertTrue(any("redirect.js" in error for error in self.errors()))

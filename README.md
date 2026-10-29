@@ -13,6 +13,20 @@ them, and each of them links back here.
 | [Practical Formal Verification](https://wcook04.github.io/practical-formal-verification/docs/) | 88 Python components; for twelve, proofs that particular calculations follow their written requirements. | [practical-formal-verification](https://github.com/wcook04/practical-formal-verification) |
 | [Zenith](https://wcook04.github.io/plectis-zenith/) | Experiments on whether records of past mistakes help AI models test and repair code. | [plectis-zenith](https://github.com/wcook04/plectis-zenith) |
 
+## Old Plectis addresses
+
+The Plectis website moved from `/plectis/` to `/practical-formal-verification/`
+when its repository was renamed, and GitHub Pages does not forward a renamed
+repository's pages. This repository answers the old addresses instead. Every
+page listed in [`plectis-paths.txt`](plectis-paths.txt) has a small page at its
+old address under `plectis/` that forwards to the same page at the new address
+(the old front door, `/plectis/`, opens this home page). They answer 200, so
+links already sent in emails and film descriptions keep working without a
+script; [`assets/redirect.js`](assets/redirect.js) keeps the query and
+fragment. Any other old address, such as a PDF, gets the 404 page, whose same
+script forwards it. After the Plectis website adds pages, run
+`python3 scripts/build_hub.py --refresh-plectis-paths`.
+
 ## How the page is made
 
 [`sites.json`](sites.json) is the one list of websites, tools, repositories

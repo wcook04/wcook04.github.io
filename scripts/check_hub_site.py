@@ -6,7 +6,9 @@ check holds the promises the page makes: the committed pages are what
 sites.json produces, nothing loads from another host (the map's script
 included), no player is embedded, every website, released film and repository
 is linked, a film in preparation has no link, and this repository never claims
-the paths the project websites are served from.
+the paths the project websites are served from. The old Plectis address,
+/plectis/, is no project's any more: it holds only the forwarding pages that
+plectis-paths.txt lists.
 """
 from __future__ import annotations
 
@@ -26,7 +28,7 @@ SPEC.loader.exec_module(BUILD)
 
 REQUIRED = {
     ".github/workflows/public-site.yml", ".gitignore", ".nojekyll", "README.md",
-    "index.html", "404.html", "sites.json", "llms.txt", "agent-guide.md",
+    "index.html", "404.html", "sites.json", "llms.txt", "agent-guide.md", "plectis-paths.txt",
     "robots.txt", "sitemap.xml", "sitemap-home.xml", "favicon.ico",
     "assets/hub.css", "assets/hub.js", "assets/hub-map.js", "assets/theme-init.js", "assets/redirect.js",
     "assets/family/family.css", "assets/favicon.svg", "assets/favicon-32.png",
@@ -37,7 +39,7 @@ REQUIRED = {
 # stills and website pictures. Anything else outside REQUIRED is unexpected.
 ASSET_DIRS = ("assets/fonts/", "assets/films/", "assets/sites/", "assets/family/marks/")
 # Project websites are served from these paths by their own repositories.
-PROJECT_PATHS = ("plectis/", "plectis-atlas/", "plectis-zenith/", "practical-formal-verification/",
+PROJECT_PATHS = ("plectis-atlas/", "plectis-zenith/", "practical-formal-verification/",
                  "lean-exposition-site/", "microcosm-substrate/")
 
 
@@ -137,7 +139,8 @@ def validate(files: dict[str, bytes]) -> list[str]:
     missing = REQUIRED - files.keys()
     if missing:
         errors.append("missing maintained files: " + ", ".join(sorted(missing)))
-    extra = sorted(p for p in files.keys() - REQUIRED if not p.startswith(ASSET_DIRS))
+    forwards = {"plectis/" + path for path in BUILD.plectis_paths_from(files.get("plectis-paths.txt", b""))}
+    extra = sorted(p for p in files.keys() - REQUIRED - forwards if not p.startswith(ASSET_DIRS))
     if extra:
         errors.append("files outside the home page's roles: " + ", ".join(extra))
     claimed = sorted(p for p in files if p.startswith(PROJECT_PATHS))
@@ -185,6 +188,12 @@ def validate(files: dict[str, bytes]) -> list[str]:
             errors.append("index.html: the map's lines come from the same-origin /assets/hub-map.js, deferred")
     if "404.html" in files:
         errors += validate_page("404.html", files["404.html"].decode(), home=False)
+    for name in sorted(forwards & files.keys()):
+        page = Page(files[name].decode())
+        refresh = [m.get("content", "") for m in page.all("meta") if m.get("http-equiv", "").lower() == "refresh"]
+        scripts = [(s.get("src") or "").split("?")[0] for s in page.all("script")]
+        if len(refresh) != 1 or "/assets/redirect.js" not in scripts:
+            errors.append(f"{name}: an old Plectis address forwards by refresh and through /assets/redirect.js")
     if "robots.txt" in files:
         lines = [line.strip().lower() for line in files["robots.txt"].decode().splitlines()
                  if line.strip() and not line.lstrip().startswith("#")]

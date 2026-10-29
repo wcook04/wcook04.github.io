@@ -17,6 +17,7 @@ import html
 import json
 import re
 import sys
+import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,6 +26,13 @@ GITHUB = "https://github.com/wcook04/"
 YOUTUBE = re.compile(r"^https://www\.youtube\.com/watch\?v=[A-Za-z0-9_-]{11}$")
 OLD_PLECTIS = "/plectis/"
 NEW_PLECTIS = "/practical-formal-verification/"
+# Pages the Plectis website serves at its new address. Each gets a forwarding
+# page at its old address, so links already sent (emails, film descriptions)
+# answer 200 and forward, even where no script runs. Refresh the list with
+# --refresh-plectis-paths after the website adds pages.
+PLECTIS_PATHS = "plectis-paths.txt"
+PLECTIS_TREE = "https://api.github.com/repos/wcook04/practical-formal-verification/git/trees/gh-pages?recursive=1"
+PLECTIS_SKIP = ("404.html", "google")
 
 e = html.escape
 
@@ -670,8 +678,48 @@ def render_sitemap_home(registry: dict) -> str:
 '''
 
 
+def plectis_paths_from(data: bytes) -> list[str]:
+    return [line for line in data.decode("utf-8").splitlines() if line and not line.startswith("#")]
+
+
+def plectis_paths() -> list[str]:
+    return plectis_paths_from(ASSET_READER(PLECTIS_PATHS))
+
+
+def render_plectis_forward(path: str) -> str:
+    """A page at an old /plectis/ address that forwards to its new address.
+
+    The old front door opens the home page, as assets/redirect.js does; every
+    other page opens the same page under /practical-formal-verification/. The
+    script keeps the query and fragment; the refresh works without it."""
+    if path == "index.html":
+        target = "/"
+    elif path.endswith("/index.html"):
+        target = NEW_PLECTIS + path[: -len("index.html")]
+    else:
+        target = NEW_PLECTIS + path
+    url = HOME.rstrip("/") + target
+    return f'''<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; child-src 'none'">
+  <meta name="robots" content="noindex, follow">
+  <meta http-equiv="refresh" content="0; url={e(target)}">
+  <link rel="canonical" href="{e(url)}">
+  <title>This page moved</title>
+  <script src="{versioned("/assets/redirect.js")}"></script>
+</head>
+<body>
+  <h1>This page moved</h1>
+  <p>The Plectis website moved from <code>/plectis/</code> to <code>/practical-formal-verification/</code>. This page is now at <a href="{e(target)}">{e(url)}</a>.</p>
+</body>
+</html>
+'''
+
+
 def outputs(registry: dict) -> dict[str, str]:
-    return {
+    pages = {
         "index.html": render_index(registry),
         "404.html": render_404(registry),
         "llms.txt": render_llms(registry),
@@ -679,12 +727,32 @@ def outputs(registry: dict) -> dict[str, str]:
         "sitemap.xml": render_sitemap(),
         "sitemap-home.xml": render_sitemap_home(registry),
     }
+    for path in plectis_paths():
+        pages["plectis/" + path] = render_plectis_forward(path)
+    return pages
+
+
+def refresh_plectis_paths() -> None:
+    with urllib.request.urlopen(PLECTIS_TREE, timeout=60) as response:
+        tree = json.load(response)
+    if tree.get("truncated"):
+        raise SystemExit("the Plectis website tree came back truncated; list its pages another way")
+    paths = sorted(item["path"] for item in tree["tree"]
+                   if item["type"] == "blob" and item["path"].endswith(".html")
+                   and not item["path"].split("/")[-1].startswith(PLECTIS_SKIP))
+    header = ("# Pages of https://wcook04.github.io/practical-formal-verification/ that get a forwarding page\n"
+              "# at their old /plectis/ address. Written by scripts/build_hub.py --refresh-plectis-paths.\n")
+    (ROOT / PLECTIS_PATHS).write_text(header + "\n".join(paths) + "\n", encoding="utf-8")
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="fail if the committed pages are out of date")
+    parser.add_argument("--refresh-plectis-paths", action="store_true",
+                        help=f"rewrite {PLECTIS_PATHS} from the Plectis website's published pages first")
     args = parser.parse_args(argv)
+    if args.refresh_plectis_paths:
+        refresh_plectis_paths()
     registry = load_registry()
     stale = []
     for name, text in outputs(registry).items():
@@ -693,6 +761,7 @@ def main(argv: list[str] | None = None) -> int:
             if not path.is_file() or path.read_text(encoding="utf-8") != text:
                 stale.append(name)
         else:
+            path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(text, encoding="utf-8")
     if stale:
         print("out of date (run python3 scripts/build_hub.py): " + ", ".join(stale), file=sys.stderr)
