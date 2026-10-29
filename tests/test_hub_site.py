@@ -24,6 +24,14 @@ class HubTests(unittest.TestCase):
     def errors(self):
         return CHECK.validate(self.files)
 
+    def pending_film(self):
+        registry = json.loads(self.files["sites.json"])
+        pending = registry["films"][0]
+        pending.update(youtube=None, still=None, duration_seconds=None)
+        self.files["sites.json"] = json.dumps(registry).encode()
+        self.files.update({name: text.encode() for name, text in CHECK.BUILD.outputs(registry).items()})
+        return registry, pending
+
     def test_current_site_contract(self):
         self.assertEqual(self.errors(), [])
 
@@ -34,8 +42,7 @@ class HubTests(unittest.TestCase):
         self.assertTrue(any("out of date" in error for error in self.errors()))
 
     def test_a_film_in_preparation_gets_no_invented_link(self):
-        registry = json.loads(self.files["sites.json"])
-        pending = next(f for f in registry["films"] if not f["youtube"])
+        registry, pending = self.pending_film()
         pending["youtube"] = "https://www.youtube.com/watch?v=AAAAAAAAAAA"
         self.files["sites.json"] = json.dumps(registry).encode()
         self.assertTrue(any("running time" in error or "missing" in error for error in self.errors()))
@@ -71,8 +78,7 @@ class HubTests(unittest.TestCase):
         self.assertTrue(any("repository not linked" in error for error in self.errors()))
 
     def test_a_film_in_preparation_is_not_linked(self):
-        registry = json.loads(self.files["sites.json"])
-        pending = next(f for f in registry["films"] if not f["youtube"])
+        _, pending = self.pending_film()
         title = pending["title"].encode()
         self.assertIn(title, self.files["index.html"])
         self.files["index.html"] = self.files["index.html"].replace(
