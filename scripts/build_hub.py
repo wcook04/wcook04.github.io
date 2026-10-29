@@ -512,8 +512,10 @@ def render_index(registry: dict) -> str:
         f'<li><a class="{"hub-contact__primary" if c["href"].startswith("mailto:") else ""}" href="{e(c["href"])}"'
         f'{"" if c["href"].startswith("mailto:") else " rel=\"me noopener\""}>{e(c["label"])}</a></li>'
         for c in owner["contact"]).replace(' class=""', "")
-    count_line = (f"{count_words(len(released), 'film is', 'films are', capital=True)} on YouTube and "
-                  f"{count_words(len(pending), 'is', 'are')} in preparation. Each opens on YouTube in a new tab.")
+    count_line = f"{count_words(len(released), 'video is', 'videos are', capital=True)} on YouTube"
+    if pending:
+        count_line += f" and {count_words(len(pending), 'is', 'are')} in preparation"
+    count_line += ". Each opens on YouTube in a new tab."
     rows = sum(len(g["items"]) for g in registry["index_groups"])
     description = ("Will Cook’s websites and videos: research on Erdős problems and the SK model with AI, "
                    "Plectis Atlas, practical formal verification and Zenith.")
