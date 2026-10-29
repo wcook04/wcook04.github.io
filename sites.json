@@ -147,6 +147,7 @@
     },
     {
       "id": "zenith",
+      "way_in": "code",
       "name": "Zenith",
       "short": "Zenith",
       "url": "https://wcook04.github.io/plectis-zenith/",

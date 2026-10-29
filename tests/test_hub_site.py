@@ -76,7 +76,7 @@ class HubTests(unittest.TestCase):
         title = pending["title"].encode()
         self.assertIn(title, self.files["index.html"])
         self.files["index.html"] = self.files["index.html"].replace(
-            b'<p class="film-slot__title">' + title, b'<p class="film-slot__title"><a href="#">' + title + b'</a>', 1)
+            b'<p class="film-words__title">' + title, b'<p class="film-words__title"><a href="#">' + title + b'</a>', 1)
         self.assertTrue(any("in preparation has no link" in error for error in self.errors()))
 
     def test_map_script_is_same_origin(self):
