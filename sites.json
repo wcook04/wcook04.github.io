@@ -119,19 +119,19 @@
       "id": "formal-verification",
       "name": "Practical Formal Verification",
       "short": "Formal verification",
-      "url": "https://wcook04.github.io/practical-formal-verification/docs/",
+      "url": "https://wcook04.github.io/practical-formal-verification/explorer/",
       "routes": [
         {
-          "label": "System map",
-          "href": "https://wcook04.github.io/practical-formal-verification/docs/system-map.html"
+          "label": "All 88 components",
+          "href": "https://wcook04.github.io/practical-formal-verification/explorer/catalogue"
         },
         {
-          "label": "The 88 components",
-          "href": "https://wcook04.github.io/practical-formal-verification/docs/components.html"
+          "label": "What each one is checked by",
+          "href": "https://wcook04.github.io/practical-formal-verification/explorer/coverage"
         },
         {
-          "label": "Quickstart",
-          "href": "https://wcook04.github.io/practical-formal-verification/docs/quickstart.html"
+          "label": "Documentation",
+          "href": "https://wcook04.github.io/practical-formal-verification/docs/"
         }
       ],
       "purpose": "88 Python components from my research system. For twelve, mathematical proofs show that particular calculations follow precise written requirements.",
@@ -143,7 +143,9 @@
       ],
       "repos": [
         "practical-formal-verification"
-      ]
+      ],
+      "thumb_focus": "map",
+      "front_label": "The component map"
     },
     {
       "id": "zenith",
