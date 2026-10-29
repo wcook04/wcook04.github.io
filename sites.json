@@ -202,6 +202,28 @@
       "repos": []
     }
   ],
+  "index_groups": [
+    {
+      "id": "mathematics",
+      "title": "Mathematics",
+      "items": [
+        "maths",
+        "lean-exposition",
+        "atlas"
+      ]
+    },
+    {
+      "id": "software",
+      "title": "Software and experiments with AI agents",
+      "items": [
+        "formal-verification",
+        "zenith",
+        "safety-core",
+        "one-checkout",
+        "codemap"
+      ]
+    }
+  ],
   "repos": [
     {
       "id": "plectis-erdos",

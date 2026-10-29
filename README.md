@@ -23,14 +23,19 @@ on no website or tool. The page is static HTML built from it by
 another host. Films open on YouTube in a new tab. A film that is not out yet
 shows a frame marked "In preparation" and has no link.
 
-The map near the top has one row per project: its videos, its website or
-tool, its code on GitHub. Without a script the grid alone groups each row;
-[`assets/hub-map.js`](assets/hub-map.js) draws the lines between the columns
-and lights the row a reader points at or tabs into. It is adapted from the
-Plectis film map's cables (and through them from Magic UI's AnimatedBeam, MIT;
-the notice is in the file). Below the full map's width each row reads as a
-list: the website, then its videos, then its code. The Videos band under the
-map gives each film's description.
+The page opens with the introduction film, then lists the projects in two
+groups (`index_groups` in `sites.json`): one line each, with a picture, its
+name, one sentence and the way in (the website, or the code). Each line opens
+beneath itself into that project's own small map: its videos, the website's
+main places, its code on GitHub. "Show all videos and code" opens every line,
+which is the whole map. Without a script every line is open.
+[`assets/hub-map.js`](assets/hub-map.js) draws the lines inside an open
+project and lights the one a reader points at or tabs into. It is adapted from
+the Plectis film map's cables (and through them from Magic UI's AnimatedBeam,
+MIT; the notice is in the file). Below the map's width an open project reads
+as a list. A link to `/#zenith` (any project's id) arrives with that project
+open. The Videos band is every released film on one wall, labelled with its
+project; films still being made are listed by title under it.
 
 [`docs/family.md`](docs/family.md) describes what every website shares: the
 "Will Cook / site" ladder at the start of its header, the film slots, and the
@@ -70,7 +75,7 @@ Plectis site's film and header components. Each website keeps a copy of
 | `index.html`, `404.html` | Built from `sites.json`; do not edit by hand. The 404 page forwards old `/plectis/...` addresses to the same page under `/practical-formal-verification/`. |
 | `sites.json` | Websites, tools, repositories and films: the source for this page and for every site's film slots. |
 | `assets/hub.css`, `assets/hub.js`, `assets/theme-init.js` | The page's styles and its day and night switch. The theme script and the tokens are the Plectis site's. |
-| `assets/hub-map.js` | The map's lines between videos, websites and repositories, and the lit row. |
+| `assets/hub-map.js` | The lines inside an open project between its videos, website and repositories, and the lit row. |
 | `assets/family/family.css`, `docs/family.md` | What every website shares, and how to use it. |
 | `assets/films/`, `assets/sites/` | Film stills (the uploaded thumbnails) and pictures of each website's first screen, in both schemes. |
 | `assets/fonts/` | Plectis Serif (STIX Two Text) and Plectis Sans (Source Sans 3) subsets, with their licences. |
