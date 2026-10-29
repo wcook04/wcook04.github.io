@@ -418,19 +418,26 @@ def video_owner_names(registry: dict) -> dict[str, str]:
 
 
 def render_videos(registry: dict) -> str:
-    """Every released film as one wall of stills, then the films still being made, as text."""
+    """Current videos first, with earlier introductions in their own section below."""
     names = video_owner_names(registry)
-    order = [film for group in film_groups(registry) for film in group["films"]]
+    groups = film_groups(registry)
+    order = [film for group in groups if group["id"] != "earlier-introductions" for film in group["films"]]
+    earlier = [film for group in groups if group["id"] == "earlier-introductions" for film in group["films"]]
     released = [f for f in order if f.get("youtube")]
     pending = [f for f in order if not f.get("youtube")]
-    cards = "".join(
+    def cards(items):
+        return "".join(
         f'<li class="vid">{film_slot(film, series=names[film["id"]], size="small", with_text=False, meta=names[film["id"]], sizes="(min-width: 1180px) 380px, (min-width: 820px) 31vw, (min-width: 520px) 48vw, 100vw")}</li>'
-        for film in released)
+        for film in items)
     waiting = "".join(f'<li><span class="vid-pending__name">{e(film["title"])}</span>'
                       f'<span class="vid-pending__for">{e(names[film["id"]])}</span></li>' for film in pending)
     later = (f'<div class="vid-pending"><h3 class="vid-pending__title">In preparation</h3>'
              f'<ul class="vid-pending__list" role="list">{waiting}</ul></div>') if pending else ""
-    return f'<ul class="vid-wall" role="list">{cards}</ul>{later}'
+    archive = (f'<section class="vid-pending" aria-labelledby="earlier-introductions">'
+               f'<div class="hub-films__head"><h3 class="hub-section-title" id="earlier-introductions">Earlier introductions</h3>'
+               f'<p class="hub-films__lede">Older versions, kept for reference. Start with Introduction (V3) above.</p></div>'
+               f'<ul class="vid-wall" role="list">{cards(earlier)}</ul></section>') if earlier else ""
+    return f'<ul class="vid-wall" role="list">{cards(released)}</ul>{later}{archive}'
 
 
 def page_head(*, title: str, description: str, canonical: str | None, robots: str, map_script: bool = False) -> str:
