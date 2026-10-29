@@ -264,34 +264,26 @@ html.scripting .proj__head { cursor: pointer; }
 .proj__go:hover { text-decoration: underline; }
 .proj__head:hover .proj__thumb { box-shadow: 0 0 0 1px var(--rule-control); }
 
-/* What the line holds, and the control that opens it. */
+/* The control that opens the line: what it does in the ink of a link's
+   words, what the details hold a step quieter under it. One target, so the
+   verb and the count are read as one thing. */
 .proj__toggle {
-  display: none; grid-column: 1 / -1; align-items: center; gap: 0.75rem; width: 100%;
-  min-height: 2.75rem; padding: 0.45rem 0.7rem; margin: 0;
-  font: inherit; font-size: 0.87rem; line-height: 1.3; color: var(--ink-soft); text-align: left; cursor: pointer;
-  background: var(--surface); border: 1px solid var(--rule); border-radius: 8px;
+  display: none; grid-column: 1 / -1; justify-self: start; flex-direction: column; align-items: flex-start; gap: 0.12rem;
+  min-height: 2.75rem; padding: 0.5rem 0.85rem 0.55rem; margin: 0.15rem 0 0;
+  font: inherit; line-height: 1.3; text-align: left; cursor: pointer;
+  background: transparent; border: 1px solid var(--rule-control); border-radius: 8px;
   transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
 }
 html.scripting .proj__toggle { display: flex; }
-.proj__head:hover .proj__toggle, .proj__toggle:hover { border-color: var(--rule-control); }
+.proj__act { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.92rem; font-weight: 600; color: var(--ink); }
+.proj__holds { font-size: 0.82rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+@media (hover: hover) and (pointer: fine) {
+  .proj__head:hover .proj__toggle, .proj__toggle:hover { border-color: var(--ink-soft); background: var(--surface); }
+}
 .proj__toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
-.proj__tinies { display: flex; flex: none; gap: 0.3rem; }
-.proj__tiny {
-  position: relative; display: block; width: 3.9rem; aspect-ratio: 16 / 9; overflow: hidden;
-  border-radius: 3px; background: var(--surface-sunk); box-shadow: 0 0 0 1px var(--rule-strong);
-}
-.proj__tiny img { display: block; width: 100%; height: 100%; object-fit: cover; }
-/* A film not out yet: the held frame's registration marks, small. */
-.proj__tiny--pending::before, .proj__tiny--pending::after {
-  content: ""; position: absolute; width: 5px; height: 5px; border: 0 solid var(--faint);
-}
-.proj__tiny--pending::before { right: 3px; top: 3px; border-width: 1px 1px 0 0; }
-.proj__tiny--pending::after { left: 3px; bottom: 3px; border-width: 0 0 1px 1px; }
-.proj__holds { display: grid; flex: 1; min-width: 0; }
-.proj__holds-line { display: block; }
-.proj__chevron { flex: none; margin-left: auto; color: var(--faint); transition: transform var(--dur-slow) var(--ease-out); }
+.proj__chevron { flex: none; color: var(--muted); transition: transform var(--dur-slow) var(--ease-out); }
 .proj.is-open .proj__chevron { transform: rotate(180deg); }
-.proj.is-open .proj__toggle { background: var(--surface-sunk); }
+.proj.is-open .proj__toggle { background: var(--surface-sunk); border-color: var(--rule-strong); }
 
 /* The open line: the project's own map. */
 html.scripting .proj__more { display: none; }
@@ -304,7 +296,7 @@ html.scripting .proj.is-open .proj__more, html.scripting .proj:target:not(.is-sh
 
 @media (min-width: 720px) {
   .proj__head { grid-template-columns: 11rem minmax(0, 1fr) auto; gap: 0 1.5rem; padding-block: 1.1rem; }
-  .proj__toggle { width: 17.5rem; }
+  .proj__toggle { width: 15.5rem; justify-self: end; margin: 0; }
   .proj__thumb { align-self: center; }
   .proj__thumb.film-slot__frame { --play: 30px; }
   .proj__toggle { grid-column: auto; align-self: center; }
@@ -329,15 +321,30 @@ html.scripting .proj.is-open .proj__more, html.scripting .proj:target:not(.is-sh
 .map-node__note { margin-top: 0.45rem; font-size: 0.85rem; line-height: 1.42; color: var(--muted); }
 .map-node__label + .map-node__note { margin-top: 0; }
 
-/* Videos: the family's inline film slot with its description. */
-.map-films, .map-repos { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.9rem; }
-.map-film .film-slot--inline { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 0 0.85rem; align-items: start; }
-.map-film .film-slot--inline .film-slot__frame { max-width: none; --play: 26px; border-radius: 6px; }
-.map-film .film-slot.film-slot--inline .film-slot__caption { margin-top: 0; gap: 0.15rem; }
-.map-film .film-slot.film-slot--inline .film-slot__title { font-size: 0.97rem; line-height: 1.26; }
-.map-film .film-slot.film-slot--inline .film-slot__name { font-size: 0.74rem; }
-.map-film .film-slot .film-slot__meta { font-size: 0.82rem; }
-.map-film .film-slot .film-slot__text { font-size: 0.86rem; line-height: 1.45; color: var(--muted); }
+/* Videos. A released film: its still beside its title and running time, its
+   description under both at the lane's full width, so the explanation reads
+   as a paragraph, not a strip. A film not out yet, or one whose still the
+   line above already shows, is words only: title, status, description. */
+.map-films, .map-repos { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.15rem; }
+.map-film .film-slot--inline {
+  display: grid; grid-template-columns: 7rem minmax(0, 1fr); grid-template-rows: auto auto 1fr;
+  column-gap: 0.9rem; align-items: start;
+}
+.map-film .film-slot--inline .film-slot__caption { display: contents; }
+.map-film .film-slot--inline .film-slot__frame { grid-column: 1; grid-row: 1 / 4; max-width: none; --play: 26px; border-radius: 6px; }
+.map-film .film-slot.film-slot--inline .film-slot__title { grid-column: 2; grid-row: 1; font-size: 1rem; line-height: 1.28; }
+.map-film .film-slot .film-slot__text {
+  grid-column: 1 / -1; grid-row: 4; margin-top: 0.55rem; max-width: 64ch;
+  font-size: 0.95rem; line-height: 1.52; color: var(--ink-soft);
+}
+.film-words { display: grid; gap: 0.1rem; }
+.film-words__title { font-family: var(--font-serif); font-size: 1.04rem; line-height: 1.28; color: var(--ink); }
+.film-words__title a { color: var(--ink); text-decoration: none; }
+.film-words__title a::after { content: "\00a0\2197"; font-family: var(--font-sans); font-size: 0.72em; color: var(--faint); }
+.film-words__title a:hover { text-decoration: underline; text-decoration-color: var(--rule-control); }
+.film-words__meta { font-size: 0.82rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.film-words__meta--pending { color: var(--ink-soft); font-weight: 600; }
+.film-words__text { margin-top: 0.4rem; max-width: 64ch; font-size: 0.95rem; line-height: 1.52; color: var(--ink-soft); }
 
 /* Code: each repository's name, which opens it, and what it holds. */
 .map-repo { margin: 0; }
@@ -345,8 +352,8 @@ html.scripting .proj.is-open .proj__more, html.scripting .proj:target:not(.is-sh
 .map-repo__name a { color: var(--ink); text-decoration: none; }
 .map-repo__name a::after { content: "\00a0\2197"; font-weight: 400; font-size: 0.8em; color: var(--faint); }
 .map-repo__name a:hover { text-decoration: underline; text-decoration-color: var(--rule-control); }
-.map-repo__text { margin-top: 0.12rem; font-size: 0.86rem; line-height: 1.42; color: var(--muted); }
-.map-repo--none { font-size: 0.86rem; line-height: 1.42; color: var(--muted); }
+.map-repo__text { margin-top: 0.15rem; font-size: 0.9rem; line-height: 1.45; color: var(--muted); }
+.map-repo--none { max-width: 40ch; font-size: 0.92rem; line-height: 1.48; color: var(--ink-soft); }
 
 /* Narrow: the open line reads as a list, set in under its name. */
 @media (max-width: 959.98px) {
@@ -365,6 +372,13 @@ html.scripting .proj.is-open .proj__more, html.scripting .proj:target:not(.is-sh
   .map-cell--code { grid-area: code; }
   .map-film .film-slot--inline { grid-template-columns: 9rem minmax(0, 1fr); }
   .map-film .film-slot--inline .film-slot__frame { --play: 30px; }
+  /* A tool: no website, so no middle and no lines. Its film and its code
+     hang from the line's name, two columns under the words they explain. */
+  .map-row--tool {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); grid-template-areas: "videos code";
+    column-gap: clamp(2rem, 4vw, 3.5rem); align-items: start;
+    margin-left: calc(11rem + 1.5rem); padding: 0.1rem 0 0.4rem;
+  }
 }
 
 /* The lines (assets/hub-map.js). At rest a quiet rule; the row a reader

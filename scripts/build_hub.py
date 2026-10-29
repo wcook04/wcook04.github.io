@@ -229,7 +229,9 @@ def capture_img(site: dict, scheme: str, *, sizes: str) -> str:
 # the way in (the website, or the code), with a summary of what it holds. It
 # opens beneath itself into a small map of that project alone: its videos, the
 # website's main places, its code on GitHub, joined by lines that
-# assets/hub-map.js draws. "Show all" opens every row, which is the whole map.
+# assets/hub-map.js draws. "Show all details" opens every row, which is the
+# whole map. A tool has no website, so its open row is its films and its code,
+# with no middle node and no lines.
 # html.scripting (set in the head) keeps rows closed from the first paint;
 # without scripting every row is open and every link works. The middle cell
 # comes first in the markup, so a screen reader and a phone read each open
@@ -237,7 +239,6 @@ def capture_img(site: dict, scheme: str, *, sizes: str) -> str:
 
 MAP_STILL_SIZES = "(min-width: 960px) 144px, 112px"
 THUMB_SIZES = "(min-width: 720px) 176px, 104px"
-TINY_SIZES = "64px"
 COLUMNS = ("Videos", "On the website", "Code on GitHub")
 CHEVRON = ('<svg class="proj__chevron" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">'
            '<path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
@@ -274,12 +275,31 @@ def holds(films: list[dict], repos: list[dict]) -> list[str]:
         parts.append(plural(pending, "video", "videos") + " in preparation")
     if repos:
         parts.append(plural(len(repos), "repository", "repositories"))
+    elif films:
+        parts.append("code not public")
     return parts
 
 
-def map_films(films: list[dict], *, series: str) -> str:
-    items = "".join(f'<li class="map-film">{film_slot(film, series=series, size="inline", sizes=MAP_STILL_SIZES, pending_meta="In preparation")}</li>'
-                    for film in films)
+def film_words(film: dict) -> str:
+    """A film as words: its title (the link, when it is out), when or how long, what it shows."""
+    title = e(film["title"])
+    if film.get("youtube"):
+        seconds = film["duration_seconds"]
+        head = (f'<p class="film-words__title"><a href="{e(film["youtube"])}" target="_blank" rel="noopener noreferrer">{title}'
+                f'<span class="sr-only">, video on YouTube, {spoken(seconds)}</span></a></p>'
+                f'<p class="film-words__meta">Video, {clock(seconds)}</p>')
+    else:
+        head = (f'<p class="film-words__title">{title}</p>'
+                f'<p class="film-words__meta film-words__meta--pending">In preparation</p>')
+    return f'<div class="film-words">{head}<p class="film-words__text">{e(film["description"])}</p></div>'
+
+
+def map_films(films: list[dict], *, series: str, pictures: bool = True) -> str:
+    def one(film: dict) -> str:
+        if pictures and film.get("youtube"):
+            return film_slot(film, series=series, size="inline", sizes=MAP_STILL_SIZES)
+        return film_words(film)
+    items = "".join(f'<li class="map-film">{one(film)}</li>' for film in films)
     return (f'<div class="map-cell map-cell--videos"><p class="map-cell__label">{COLUMNS[0]}</p>'
             f'<ul class="map-films" role="list">{items}</ul></div>')
 
@@ -294,22 +314,22 @@ def map_code(repos: list[dict], note: str = "") -> str:
     if repos:
         body = f'<ul class="map-repos" role="list">{"".join(map_repo(r["name"], r["href"], r["description"]) for r in repos)}</ul>'
     else:
-        body = f'<p class="map-repo map-repo--none">No public repository. {e(note)}</p>'
+        return (f'<div class="map-cell map-cell--code"><p class="map-cell__label">Code</p>'
+                f'<p class="map-repo map-repo--none">No public repository. {e(note)}</p></div>')
     return f'<div class="map-cell map-cell--code"><p class="map-cell__label">{COLUMNS[2]}</p>{body}</div>'
 
 
 def map_middle(row: dict) -> str:
-    """The row's middle node: a website's main places, or what a tool has instead."""
+    """A website's main places, the node its videos and code join. A tool has
+    no website, so it has no middle: its open line is its films and its code."""
     item = row["item"]
-    if row["kind"] == "site":
-        links = [{"label": "Front page", "href": item["url"]}] + item.get("routes", [])
-        routes = "".join(f'<li><a href="{e(r["href"])}">{e(r["label"])}<span class="sr-only">, on {e(item["name"])}</span></a></li>'
-                         for r in links)
-        note = f'<p class="map-node__note">{e(item["status"])}</p>' if item.get("status") else ""
-        body = f'<p class="map-node__label">{COLUMNS[1]}</p><ul class="map-node__routes" role="list">{routes}</ul>{note}'
-    else:
-        note = "It runs from its code on GitHub." if row["repos"] else (item.get("status") or "")
-        body = f'<p class="map-node__label">No website</p><p class="map-node__note">{e(note)}</p>'
+    if row["kind"] != "site":
+        return ""
+    links = [{"label": "Front page", "href": item["url"]}] + item.get("routes", [])
+    routes = "".join(f'<li><a href="{e(r["href"])}">{e(r["label"])}<span class="sr-only">, on {e(item["name"])}</span></a></li>'
+                     for r in links)
+    note = f'<p class="map-node__note">{e(item["status"])}</p>' if item.get("status") else ""
+    body = f'<p class="map-node__label">{COLUMNS[1]}</p><ul class="map-node__routes" role="list">{routes}</ul>{note}'
     return f'<div class="map-cell map-cell--site"><div class="map-site map-node">{body}</div></div>'
 
 
@@ -317,7 +337,8 @@ def row_thumb(row: dict) -> str:
     """A website shows its first screen; a tool shows its film's still."""
     item = row["item"]
     if row["kind"] == "site":
-        return (f'<a class="proj__thumb" href="{e(item["url"])}" aria-hidden="true" tabindex="-1">'
+        href, _ = row_way_in(row)
+        return (f'<a class="proj__thumb" href="{e(href)}"{link_attrs(href)} aria-hidden="true" tabindex="-1">'
                 f'{capture_img(item, "light", sizes=THUMB_SIZES)}{capture_img(item, "dark", sizes=THUMB_SIZES)}</a>')
     film = next((f for f in row["films"] if f.get("youtube")), None)
     if not film:
@@ -330,7 +351,7 @@ def row_thumb(row: dict) -> str:
 def row_way_in(row: dict) -> tuple[str, str]:
     """The row's main link: the website, else the code, else the film. (href, label)"""
     item = row["item"]
-    if row["kind"] == "site":
+    if row["kind"] == "site" and item.get("way_in") != "code":
         return item["url"], "Open the website"
     if row["repos"]:
         return row["repos"][0]["href"], "Code on GitHub"
@@ -345,17 +366,10 @@ def link_attrs(href: str) -> str:
 
 
 def row_summary(row: dict) -> str:
-    """The toggle: the row's films as small stills (a held frame for one not out yet),
-    and what it holds in words."""
-    pictures = []
-    for film in row["films"][:3]:
-        if film.get("youtube"):
-            pictures.append(f'<span class="proj__tiny">{still_img(film["still"], sizes=TINY_SIZES)}</span>')
-        else:
-            pictures.append('<span class="proj__tiny proj__tiny--pending"></span>')
-    lines = '<span class="sr-only">, </span>'.join(f'<span class="proj__holds-line">{e(part)}</span>' for part in holds(row["films"], row["repos"]))
-    return (f'<span class="proj__tinies" aria-hidden="true">{"".join(pictures)}</span>'
-            f'<span class="proj__holds">{lines}</span>{CHEVRON}')
+    """The toggle: what it does (Show details, Hide details once open), then what
+    the details hold, in words a step quieter."""
+    return (f'<span class="proj__act"><span><span class="proj__verb">Show</span> details</span>{CHEVRON}</span>'
+            f'<span class="proj__holds"><span class="sr-only">: </span>{e(", ".join(holds(row["films"], row["repos"])))}</span>')
 
 
 def project_row(row: dict) -> str:
@@ -366,15 +380,17 @@ def project_row(row: dict) -> str:
     name = f'<a href="{e(href)}"{attrs}>{e(item["name"])}</a>'
     way_in = f'<a class="proj__go" href="{e(href)}"{attrs}>{e(label)}<span class="sr-only">: {e(item["name"])}</span></a>'
     series = item["name"]
+    # A tool's line already shows its film's still, so its open line gives the film as words.
+    films = map_films(row["films"], series=series, pictures=row["kind"] == "site")
     more = (f'<div class="proj__more" id="more-{pid}">'
-            f'<div class="map-row" data-row="{pid}">{map_middle(row)}{map_films(row["films"], series=series)}'
+            f'<div class="map-row map-row--{row["kind"]}" data-row="{pid}">{map_middle(row)}{films}'
             f'{map_code(row["repos"], item.get("status") or "")}</div></div>')
     return (f'<li class="proj proj--{row["kind"]}" id="{pid}">'
             f'<div class="proj__head">{row_thumb(row)}'
             f'<div class="proj__main"><h4 class="proj__name">{name}</h4>'
             f'<p class="proj__purpose">{e(item["purpose"])}</p><p class="proj__ways">{way_in}</p></div>'
             f'<button class="proj__toggle" type="button" aria-expanded="false" aria-controls="more-{pid}">'
-            f'<span class="sr-only">{e(item["name"])}<span class="proj__verb">: show </span></span>{row_summary(row)}</button>'
+            f'<span class="sr-only">{e(item["name"])}: </span>{row_summary(row)}</button>'
             f'</div>{more}</li>')
 
 
@@ -525,9 +541,9 @@ def render_index(registry: dict) -> str:
         <div class="hub-projects__head">
           <div>
             <h2 class="hub-section-title" id="projects-title">Projects</h2>
-            <p class="hub-projects__lede"><span class="hub-when-script">Open a project to see its videos and its code on GitHub.</span><span class="hub-when-plain">Each project with its videos and its code on GitHub.</span></p>
+            <p class="hub-projects__lede"><span class="hub-when-script">Visit a project directly, or choose Show details to see its videos and code here.</span><span class="hub-when-plain">Each project with its videos and its code on GitHub.</span></p>
           </div>
-          <button class="hub-projects__all" type="button" data-proj-all aria-expanded="false">Show all videos and code</button>
+          <button class="hub-projects__all" type="button" data-proj-all aria-expanded="false">Show all details</button>
         </div>
         {render_projects(registry)}
       </div>

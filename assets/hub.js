@@ -71,7 +71,7 @@
 })();
 
 /* The project index (index.html, "Projects"). Each project's line opens
-   beneath itself to show its videos and code; "Show all" opens every line,
+   beneath itself to show its videos and code; "Show all details" opens every line,
    which is the whole map. The head script stamps html.scripting, so the
    stylesheet keeps lines closed from the first paint; without scripting every
    line is open. A line named in the address (/#zenith) opens on arrival, by
@@ -81,7 +81,7 @@
   if (!map) return;
   var rows = Array.prototype.slice.call(map.querySelectorAll('.proj'));
   var all = document.querySelector('[data-proj-all]');
-  var LABEL_OPEN = 'Show all videos and code', LABEL_CLOSE = 'Hide all videos and code';
+  var LABEL_OPEN = 'Show all details', LABEL_CLOSE = 'Hide all details';
 
   function isOpen(row) { return row.classList.contains('is-open'); }
   function set(row, open) {
@@ -91,7 +91,7 @@
     if (button) {
       button.setAttribute('aria-expanded', open ? 'true' : 'false');
       var verb = button.querySelector('.proj__verb');
-      if (verb) verb.textContent = open ? ': hide ' : ': show ';
+      if (verb) verb.textContent = open ? 'Hide' : 'Show';
     }
   }
   function sync() {
