@@ -34,11 +34,15 @@
       "id": "maths",
       "name": "Plectis Mathematics",
       "short": "Mathematics",
-      "url": "https://wcook04.github.io/practical-formal-verification/maths/",
+      "url": "https://wcook04.github.io/practical-formal-verification/map/",
       "routes": [
         {
           "label": "Maths map",
-          "href": "https://wcook04.github.io/practical-formal-verification/maths/universe.html"
+          "href": "https://wcook04.github.io/practical-formal-verification/map/#mathematics"
+        },
+        {
+          "label": "The eight problems",
+          "href": "https://wcook04.github.io/practical-formal-verification/maths/"
         },
         {
           "label": "The papers",
