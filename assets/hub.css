@@ -1,5 +1,6 @@
-/* The home page of wcook04.github.io: a map of Will Cook's websites, videos
-   and repositories, then his films with their descriptions.
+/* The home page of wcook04.github.io: Will Cook's projects as a short index
+   that opens one project at a time into its own map of videos, website and
+   code, then every film on one wall.
 
    The page wears the Plectis sites' paper: their tokens, their two typefaces
    (STIX Two Text and Source Sans 3, subset and renamed by the Plectis site's
@@ -78,7 +79,7 @@ a { color: var(--accent); text-underline-offset: 0.16em; text-decoration-thickne
 a:hover { color: var(--accent-strong); }
 :where(a, button):where(:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
 p { margin: 0; }
-h1, h2, h3 { margin: 0; font-weight: 400; text-wrap: balance; }
+h1, h2, h3, h4 { margin: 0; font-weight: 400; text-wrap: balance; }
 p { text-wrap: pretty; }
 code { font-size: 0.92em; }
 .wrap { width: min(var(--max), 100% - 2 * var(--gutter)); margin-inline: auto; }
@@ -159,32 +160,36 @@ main#main:focus { outline: none; }
 .theme-toggle:focus-visible { outline: none; }
 .theme-toggle:focus-visible .theme-toggle__track { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-/* ---------------------------------------------------------------- introduction and websites */
-.hub-intro { padding-block: clamp(2rem, 4vw, 3.2rem) clamp(2.2rem, 4vw, 3.2rem); }
+/* ---------------------------------------------------------------- introduction
+   Will's name and two sentences on the left; the introduction film, large
+   enough to read, on the right. It is the page's one invitation to watch. */
+.hub-intro { padding-block: clamp(2.2rem, 5vw, 4rem) clamp(2.4rem, 5vw, 4rem); }
 .hub-title {
   font-family: var(--font-serif); font-weight: 500; color: var(--ink);
   font-size: clamp(2.5rem, 1.7rem + 2.4vw, 3.6rem); line-height: 1.02; letter-spacing: -0.02em;
 }
 .hub-title--small { font-size: clamp(2rem, 1.5rem + 1.6vw, 2.8rem); }
 .hub-lede {
-  margin-top: 0.9rem; max-width: 38em;
+  margin-top: 0.9rem; max-width: 34em;
   font-family: var(--font-serif); font-size: clamp(1.12rem, 1.02rem + 0.3vw, 1.27rem); line-height: 1.5;
   color: var(--ink-soft);
 }
-.hub-orient { margin-top: 0.7rem; max-width: 46em; font-size: 0.98rem; color: var(--muted); }
+.hub-orient { margin-top: 0.8rem; max-width: 44em; font-size: 0.98rem; color: var(--muted); }
 .hub-orient a { font-weight: 600; }
+.hub-intro__next { margin-top: 1.1rem; font-size: 0.98rem; }
+.hub-intro__next a { font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; min-height: 32px; }
+.hub-intro__next a::after { content: "\00a0\2193"; font-weight: 400; }
+.hub-intro__next a:hover { text-decoration: underline; }
 .hub-section-title {
   font-family: var(--font-serif); font-weight: 400; color: var(--ink);
   font-size: clamp(1.6rem, 1.25rem + 1vw, 2.15rem); line-height: 1.12; letter-spacing: -0.012em;
 }
-/* The introduction film sits beside the opening words, so the top of the page
-   has no empty half. */
-.hub-intro__top { display: grid; gap: 1.4rem; }
-.hub-intro__film .film-slot { max-width: 34rem; }
+.hub-intro__top { display: grid; gap: 1.8rem; }
+.hub-intro__film .film-slot { max-width: 40rem; }
+.hub-intro__film .film-slot__title { font-size: clamp(1.15rem, 1.02rem + 0.4vw, 1.32rem); }
 @media (min-width: 1024px) {
-  .hub-intro__top { grid-template-columns: minmax(0, 10fr) minmax(0, 12fr); gap: clamp(2.5rem, 4vw, 4rem); align-items: end; }
-  .hub-intro__film .film-slot--inline { grid-template-columns: minmax(10rem, 15rem) minmax(0, 1fr); align-items: center; }
-  .hub-intro__film .film-slot__title { font-size: 1.15rem; }
+  .hub-intro__top { grid-template-columns: minmax(0, 11fr) minmax(0, 12fr); gap: clamp(2.5rem, 5vw, 4.5rem); align-items: center; }
+  .hub-intro__film .film-slot { max-width: none; }
 }
 .site-shot { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
 .site-shot--dark { display: none; }
@@ -194,147 +199,184 @@ main#main:focus { outline: none; }
   :root:not([data-theme]) .site-shot--light { display: none; }
   :root:not([data-theme]) .site-shot--dark { display: block; }
 }
+.hub-when-script { display: none; }
+html.scripting .hub-when-script { display: inline; }
+html.scripting .hub-when-plain { display: none; }
 
-/* ---------------------------------------------------------------- the map
-   Every website, video and repository in one place, one row per project:
-   its videos, its website or tool, its code on GitHub. Without a script the
-   grid alone groups them and every link works; assets/hub-map.js draws the
-   lines between the columns (adapted from the Plectis film map's cables) and
-   lights the row a reader points at or tabs into. Below the three-column
-   width each row reads as a list: the website, then its videos, then its
-   code. */
-.hub-map { padding-block: clamp(2.4rem, 4.6vw, 3.6rem) clamp(2.8rem, 5vw, 4rem); border-top: 1px solid var(--rule); }
-.hub-map__head { display: grid; gap: 0.5rem; margin-bottom: clamp(1.2rem, 2.4vw, 1.8rem); }
-.hub-map__lede { max-width: 64ch; color: var(--muted); }
-.hub-map__wide { display: none; }
+/* ---------------------------------------------------------------- projects
+   The work as a short index: one line per website or tool, in two groups.
+   A line shows a picture (a website's first screen, a tool's film), the name,
+   one sentence and the way in. On the right, what it holds: its films as
+   small stills and a count. The whole line opens it (hub.js), and the open
+   line shows that project's own small map: its videos, the website's main
+   places, its code, joined by lines (hub-map.js, adapted from the Plectis
+   film map's cables). Without scripting every line is open. */
+.hub-projects { padding-block: clamp(2.4rem, 4.6vw, 3.6rem) clamp(2.8rem, 5vw, 4rem); border-top: 1px solid var(--rule); scroll-margin-top: var(--header-h); }
+.hub-alias { position: absolute; }
+.hub-projects__head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 0.8rem 2rem; margin-bottom: clamp(0.6rem, 1.6vw, 1rem); }
+.hub-projects__lede { margin-top: 0.45rem; max-width: 64ch; color: var(--muted); }
+.hub-projects__all {
+  display: none; align-items: center; min-height: 2.25rem; padding: 0.35rem 0.9rem;
+  font: inherit; font-size: 0.92rem; font-weight: 600; color: var(--ink-soft); cursor: pointer;
+  background: transparent; border: 1px solid var(--rule-control); border-radius: var(--r-pill);
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+html.scripting .hub-projects__all { display: inline-flex; }
+.hub-projects__all:hover { border-color: var(--ink-soft); color: var(--ink); }
+.hub-projects__all:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-pill); }
+
 .map {
   position: relative;
   --map-line: color-mix(in srgb, var(--rule-strong) 45%, var(--rule-control));
-  --map-gutter: clamp(3rem, 4.8vw, 4.25rem);
+  --map-gutter: clamp(2.6rem, 4.2vw, 3.6rem);
 }
-.map-cols { display: none; }
-.map-rows { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--rule); }
-.map-row {
-  position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.9rem;
-  padding-block: 1.1rem 1.2rem; border-top: 1px solid var(--rule);
+.proj-group + .proj-group { margin-top: clamp(1.6rem, 3vw, 2.4rem); }
+.proj-group__title {
+  padding-block: 1rem 0.6rem;
+  font-family: var(--font-sans); font-size: 0.95rem; font-weight: 600; letter-spacing: 0.005em; color: var(--muted);
 }
-.map-cell { min-width: 0; }
-/* A cell's label says what the column holds. Beside the column heads it is
-   for screen readers only; in the stacked list it is printed. */
-.map-cell__label { margin: 0 0 0.45rem; font-size: 0.82rem; font-weight: 600; color: var(--faint); }
-.map-cell--site .map-cell__label { display: none; }
+.proj-list { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--rule); }
+.proj { border-top: 1px solid var(--rule); scroll-margin-top: calc(var(--header-h) + 12px); }
 
-/* A website or tool: the row's name. */
-.map-site { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 0 0.9rem; align-items: center; }
-.map-site--tool, .map-site--here { grid-template-columns: minmax(0, 1fr); }
-.map-site__shot {
-  display: block; aspect-ratio: 1440 / 790; overflow: hidden; border-radius: 6px;
+/* The closed line. */
+.proj__head {
+  display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 0.8rem 1rem; align-items: center;
+  padding-block: 1rem;
+}
+html.scripting .proj__head { cursor: pointer; }
+.proj__thumb {
+  position: relative; display: block; align-self: start; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 6px;
   background: var(--surface); box-shadow: 0 0 0 1px var(--rule-strong);
   transition: box-shadow var(--dur) var(--ease);
 }
-.map-site__name { font-family: var(--font-serif); font-size: 1.25rem; line-height: 1.2; font-weight: 500; letter-spacing: -0.008em; color: var(--ink); }
-.map-site__name a { color: var(--ink); text-decoration: none; }
-/* Each name opens another website (or its code): the arrow says it leaves
-   this page, glued to the last word so it never wraps alone. */
-.map-site__name a::after, .map-repo__name a::after { content: "\00a0\2197"; font-family: var(--font-sans); font-size: 0.62em; font-weight: 400; color: var(--faint); }
-.map-site__name a:hover { text-decoration: underline; text-decoration-color: var(--rule-control); }
-.map-site__purpose { margin-top: 0.25rem; max-width: 62ch; font-size: 0.92rem; line-height: 1.48; color: var(--ink-soft); }
-/* A website's main places, one step away: the full-screen maths map, the
-   SK argument map, a paper's PDF. They leave this page, so each carries the
-   outbound arrow. */
-.map-site__routes { margin-top: 0.45rem; display: flex; flex-wrap: wrap; gap: 0.15rem 1.1rem; font-size: 0.9rem; line-height: 1.45; }
-.map-site__routes a { font-weight: 600; color: var(--accent); text-decoration: none; min-height: 24px; display: inline-flex; align-items: center; }
-.map-site__routes a::after { content: "\00a0\2197"; font-weight: 400; font-size: 0.8em; }
-.map-site__routes a:hover { text-decoration: underline; text-underline-offset: 0.16em; }
-.map-site--here .map-site__name { color: var(--ink-soft); }
+.proj__thumb.film-slot__frame { --play: 26px; }
+.proj__thumb .film-slot__time { right: 0.3rem; bottom: 0.3rem; padding: 0.02rem 0.3rem; font-size: 0.66rem; }
+.proj__thumb--empty { background: var(--surface-sunk); }
+.proj__thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.proj__name { font-family: var(--font-serif); font-size: 1.24rem; line-height: 1.2; font-weight: 500; letter-spacing: -0.008em; color: var(--ink); }
+.proj__name a { color: var(--ink); text-decoration: none; }
+.proj__name a::after { content: "\00a0\2197"; font-family: var(--font-sans); font-size: 0.6em; font-weight: 400; color: var(--faint); }
+.proj__name a:hover { text-decoration: underline; text-decoration-color: var(--rule-control); }
+.proj__purpose { margin-top: 0.25rem; max-width: 62ch; font-size: 0.93rem; line-height: 1.48; color: var(--ink-soft); }
+.proj__ways { margin-top: 0.4rem; font-size: 0.9rem; }
+.proj__go { display: inline-flex; align-items: center; min-height: 24px; font-weight: 600; text-decoration: none; }
+.proj__go::after { content: "\00a0\2197"; font-weight: 400; font-size: 0.85em; }
+.proj__go:hover { text-decoration: underline; }
+.proj__head:hover .proj__thumb { box-shadow: 0 0 0 1px var(--rule-control); }
 
-/* Videos: the family's inline film slot, held compact. */
-.map-films, .map-repos { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
-.map-film .film-slot--inline { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0 0.85rem; align-items: center; }
-.map-film .film-slot--inline .film-slot__frame { max-width: none; --play: 28px; border-radius: 6px; }
-.map-film .film-slot.film-slot--inline .film-slot__caption { margin-top: 0; gap: 0.1rem; }
+/* What the line holds, and the control that opens it. */
+.proj__toggle {
+  display: none; grid-column: 1 / -1; align-items: center; gap: 0.75rem; width: 100%;
+  min-height: 2.75rem; padding: 0.45rem 0.7rem; margin: 0;
+  font: inherit; font-size: 0.87rem; line-height: 1.3; color: var(--ink-soft); text-align: left; cursor: pointer;
+  background: var(--surface); border: 1px solid var(--rule); border-radius: 8px;
+  transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
+}
+html.scripting .proj__toggle { display: flex; }
+.proj__head:hover .proj__toggle, .proj__toggle:hover { border-color: var(--rule-control); }
+.proj__toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+.proj__tinies { display: flex; flex: none; gap: 0.3rem; }
+.proj__tiny {
+  position: relative; display: block; width: 3.9rem; aspect-ratio: 16 / 9; overflow: hidden;
+  border-radius: 3px; background: var(--surface-sunk); box-shadow: 0 0 0 1px var(--rule-strong);
+}
+.proj__tiny img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* A film not out yet: the held frame's registration marks, small. */
+.proj__tiny--pending::before, .proj__tiny--pending::after {
+  content: ""; position: absolute; width: 5px; height: 5px; border: 0 solid var(--faint);
+}
+.proj__tiny--pending::before { right: 3px; top: 3px; border-width: 1px 1px 0 0; }
+.proj__tiny--pending::after { left: 3px; bottom: 3px; border-width: 0 0 1px 1px; }
+.proj__holds { display: grid; flex: 1; min-width: 0; }
+.proj__holds-line { display: block; }
+.proj__chevron { flex: none; margin-left: auto; color: var(--faint); transition: transform var(--dur-slow) var(--ease-out); }
+.proj.is-open .proj__chevron { transform: rotate(180deg); }
+.proj.is-open .proj__toggle { background: var(--surface-sunk); }
+
+/* The open line: the project's own map. */
+html.scripting .proj__more { display: none; }
+html.scripting .proj.is-open .proj__more, html.scripting .proj:target:not(.is-shut) .proj__more { display: block; }
+.proj__more { padding-bottom: 1.4rem; }
+@media (prefers-reduced-motion: no-preference) {
+  .proj.is-open .proj__more { animation: proj-open 0.22s var(--ease-out) backwards; }
+}
+@keyframes proj-open { from { opacity: 0; transform: translateY(-6px); } }
+
+@media (min-width: 720px) {
+  .proj__head { grid-template-columns: 11rem minmax(0, 1fr) auto; gap: 0 1.5rem; padding-block: 1.1rem; }
+  .proj__toggle { width: 17.5rem; }
+  .proj__thumb { align-self: center; }
+  .proj__thumb.film-slot__frame { --play: 30px; }
+  .proj__toggle { grid-column: auto; align-self: center; }
+  .proj__name { font-size: 1.36rem; }
+}
+
+.map-row { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+.map-cell { min-width: 0; }
+.map-cell__label, .map-node__label { margin: 0 0 0.45rem; font-size: 0.8rem; font-weight: 600; color: var(--faint); }
+.map-cell--site .map-cell__label { display: none; }
+
+/* The middle node: the website's main places, or what a tool has instead. */
+.map-node {
+  padding: 0.8rem 1rem 0.9rem; border-radius: 8px;
+  background: var(--surface); box-shadow: 0 0 0 1px var(--rule-strong);
+  transition: box-shadow var(--dur) var(--ease);
+}
+.map-node__routes { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.1rem; font-size: 0.93rem; line-height: 1.35; }
+.map-node__routes a { display: inline-flex; align-items: center; min-height: 26px; font-weight: 600; text-decoration: none; }
+.map-node__routes a::after { content: "\00a0\2197"; font-weight: 400; font-size: 0.82em; }
+.map-node__routes a:hover { text-decoration: underline; }
+.map-node__note { margin-top: 0.45rem; font-size: 0.85rem; line-height: 1.42; color: var(--muted); }
+.map-node__label + .map-node__note { margin-top: 0; }
+
+/* Videos: the family's inline film slot with its description. */
+.map-films, .map-repos { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.9rem; }
+.map-film .film-slot--inline { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 0 0.85rem; align-items: start; }
+.map-film .film-slot--inline .film-slot__frame { max-width: none; --play: 26px; border-radius: 6px; }
+.map-film .film-slot.film-slot--inline .film-slot__caption { margin-top: 0; gap: 0.15rem; }
 .map-film .film-slot.film-slot--inline .film-slot__title { font-size: 0.97rem; line-height: 1.26; }
-.map-film .film-slot.film-slot--inline .film-slot__name { font-size: 0.8rem; }
+.map-film .film-slot.film-slot--inline .film-slot__name { font-size: 0.74rem; }
 .map-film .film-slot .film-slot__meta { font-size: 0.82rem; }
+.map-film .film-slot .film-slot__text { font-size: 0.86rem; line-height: 1.45; color: var(--muted); }
 
 /* Code: each repository's name, which opens it, and what it holds. */
 .map-repo { margin: 0; }
-.map-repo__name { font-size: 0.98rem; line-height: 1.3; font-weight: 600; overflow-wrap: anywhere; }
+.map-repo__name { font-size: 0.97rem; line-height: 1.3; font-weight: 600; overflow-wrap: anywhere; }
 .map-repo__name a { color: var(--ink); text-decoration: none; }
+.map-repo__name a::after { content: "\00a0\2197"; font-weight: 400; font-size: 0.8em; color: var(--faint); }
 .map-repo__name a:hover { text-decoration: underline; text-decoration-color: var(--rule-control); }
-.map-repo__text { margin-top: 0.12rem; font-size: 0.87rem; line-height: 1.42; color: var(--muted); }
-.map-repo--none { font-size: 0.87rem; line-height: 1.42; color: var(--muted); }
+.map-repo__text { margin-top: 0.12rem; font-size: 0.86rem; line-height: 1.42; color: var(--muted); }
+.map-repo--none { font-size: 0.86rem; line-height: 1.42; color: var(--muted); }
 
-/* The tools stand under their own name: they have no website. */
-.map-rows__group { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 1rem; padding-block: 1.5rem 0.55rem; border-top: 1px solid var(--rule); }
-.map-rows__group-title { font-family: var(--font-serif); font-size: 1.12rem; line-height: 1.25; font-weight: 500; color: var(--ink); }
-.map-rows__group-text { font-size: 0.9rem; color: var(--muted); }
-
-/* The stacked list: the website first, its videos and code under it, set
-   in from the name so they read as its own. */
+/* Narrow: the open line reads as a list, set in under its name. */
 @media (max-width: 959.98px) {
-  .map-row > .map-cell--videos, .map-row > .map-cell--code { padding-left: 0.95rem; margin-left: 0.15rem; border-left: 1px solid var(--rule-strong); }
-  .map-site { align-items: start; }
-  .map-site__shot { margin-top: 0.3rem; }
-  .map-row { gap: 0.75rem; }
-  .map-cell__label { margin-bottom: 0.3rem; }
+  .map-row { padding-left: 0.95rem; margin-left: 0.15rem; border-left: 1px solid var(--rule-strong); }
 }
-@media (max-width: 560px) {
-  .map-site { grid-template-columns: 5.6rem minmax(0, 1fr); gap: 0 0.75rem; }
-  .map-site--tool, .map-site--here { grid-template-columns: minmax(0, 1fr); }
-  .map-site__name { font-size: 1.16rem; }
-  .map-site__purpose { font-size: 0.9rem; }
-  .map-film .film-slot--inline { grid-template-columns: 6.5rem minmax(0, 1fr); gap: 0 0.75rem; }
-}
-
-/* Three columns: videos | websites and tools | code, with an open gutter
-   between them for the lines. Each cell's nodes sit at the middle of their
-   row, so a single video beside a website and two repositories leaves no
-   tall empty column; a single video takes a larger still. */
+/* Wide: videos | the website | code, with an open gutter for the lines. Each
+   cell's nodes sit at the middle of the row, so the lines run level. */
 @media (min-width: 960px) {
-  html.scripting .hub-map__wide { display: inline; }
-  html.scripting .hub-map__narrow { display: none; }
-  .map-cols, .map-row {
-    grid-template-columns: minmax(0, 30fr) minmax(0, 42fr) minmax(0, 28fr);
-    grid-template-areas: "videos site code"; column-gap: var(--map-gutter);
+  .map-row {
+    grid-template-columns: minmax(0, 40fr) minmax(0, 22fr) minmax(0, 34fr);
+    grid-template-areas: "videos site code"; column-gap: var(--map-gutter); align-items: center;
+    padding: 0.4rem 0 0.2rem;
   }
-  .map-cols { display: grid; padding-bottom: 0.55rem; }
-  .map-cols__head { font-size: 0.84rem; font-weight: 600; color: var(--faint); }
-  .map-cols__head--0 { grid-area: videos; }
-  .map-cols__head--1 { grid-area: site; }
-  .map-cols__head--2 { grid-area: code; }
-  .map-row { align-items: center; row-gap: 0; padding-block: 1rem; }
   .map-cell--videos { grid-area: videos; }
   .map-cell--site { grid-area: site; }
   .map-cell--code { grid-area: code; }
-  .map-cell__label {
-    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
-  }
-  .map-site { grid-template-columns: clamp(6rem, 10vw - 1rem, 9rem) minmax(0, 1fr); gap: 0 1rem; }
-  .map-site--tool, .map-site--here { grid-template-columns: minmax(0, 1fr); }
-  .map-films--one .film-slot--inline { grid-template-columns: clamp(7.5rem, 11vw - 1rem, 9.5rem) minmax(0, 1fr); }
-  .map-films--one .film-slot--inline .film-slot__frame { --play: 32px; }
-  .map-rows__group { padding-block: 1.6rem 0.6rem; }
-  .map-rows__group-title { grid-column: auto; }
+  .map-film .film-slot--inline { grid-template-columns: 9rem minmax(0, 1fr); }
+  .map-film .film-slot--inline .film-slot__frame { --play: 30px; }
 }
 
 /* The lines (assets/hub-map.js). At rest a quiet rule; the row a reader
-   points at or tabs into comes up to the accent ink with its end dots, and
-   the other rows step back. */
+   points at or tabs into comes up to the accent ink with its end dots. */
 .map__lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
 .map__line { transition: opacity var(--dur) var(--ease); }
 .map__line path { fill: none; stroke: var(--map-line); stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
 .map__line circle { fill: var(--page); stroke: var(--accent); stroke-width: 1.25; opacity: 0; transition: opacity var(--dur) var(--ease); }
 .map__line.is-lit path { stroke: var(--accent); stroke-width: 2; }
 .map__line.is-lit circle { opacity: 1; }
-.map.is-tracing .map__line:not(.is-lit) { opacity: 0.45; }
-.map-row { transition: opacity var(--dur) var(--ease); }
-.map.is-tracing .map-row:not(.is-lit), .map.is-tracing .map-rows__group { opacity: 0.45; }
-.map-row.is-lit .map-site__name a, .map-row.is-lit .map-repo__name a, .map-row.is-lit .film-slot__title a { color: var(--accent); }
-.map-row.is-lit .map-site__shot, .map-row.is-lit .film-slot__frame { box-shadow: 0 0 0 1px var(--accent); }
-/* The light that runs once along a pointed row: a bead with three fading
-   dots behind it, the film map's mark. */
+.map-row.is-lit .map-node { box-shadow: 0 0 0 1px var(--accent); }
+.map-row.is-lit .film-slot__frame { box-shadow: 0 0 0 1px var(--accent); }
 .map__bead circle { fill: var(--accent); }
 .map__bead circle:first-child { fill: var(--ink); stroke: var(--accent); stroke-width: 1.5; }
 .map__bead circle:nth-child(2) { opacity: 0.55; }
@@ -347,39 +389,28 @@ main#main:focus { outline: none; }
   .map__bead { display: none; }
 }
 
-/* ---------------------------------------------------------------- videos */
-.hub-films { padding-block: clamp(3rem, 6vw, 5rem); border-top: 1px solid var(--rule); }
-.hub-films__head { display: grid; gap: 0.5rem; margin-bottom: clamp(1.6rem, 3vw, 2.4rem); }
+/* ---------------------------------------------------------------- videos
+   Every released film on one wall of equal stills, each labelled with its
+   project; films still being made are a short list of titles under it, not
+   empty frames. */
+.hub-films { padding-block: clamp(2.8rem, 5vw, 4.4rem); border-top: 1px solid var(--rule); }
+.hub-films__head { display: grid; gap: 0.5rem; margin-bottom: clamp(1.4rem, 2.6vw, 2rem); }
 .hub-films__lede { max-width: 60ch; color: var(--muted); }
-.film-group + .film-group { padding-top: clamp(1.6rem, 3vw, 2.2rem); }
-.film-group + .film-group { margin-top: clamp(1.2rem, 2.4vw, 1.8rem); border-top: 1px solid var(--rule); }
-.film-group__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.3rem 1.5rem; margin-bottom: 1.2rem; }
-.film-group__title { font-family: var(--font-serif); font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem); line-height: 1.2; font-weight: 500; color: var(--ink); }
-.film-group__links { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 1.3rem; font-size: 0.94rem; }
-.film-group__site { font-weight: 600; text-decoration: none; }
-.film-group__site::after { content: "\00a0\2197"; font-weight: 400; }
-.film-group__site:hover { text-decoration: underline; }
-.film-group__repo { color: var(--muted); text-decoration: underline; text-decoration-color: var(--rule-strong); }
-.film-group__repo:hover { color: var(--accent); text-decoration-color: var(--accent); }
-.film-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 2.2rem 1.6rem; grid-template-columns: minmax(0, 1fr); }
-/* One film: a wide card, the still beside its title and description. The
-   introduction's group is two such rows: the introduction with the larger
-   still, then its first version, so neither leaves a gap beside the other. */
-@media (min-width: 640px) {
-  .film-grid--count-1 .film-slot, .film-grid--lead .film-slot {
-    display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 0 clamp(1.2rem, 3vw, 2.4rem); align-items: center;
-  }
-  .film-grid--lead .film-grid__item--lead .film-slot { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
-  .film-grid--lead .film-grid__item:not(.film-grid__item--lead) .film-slot { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
-  .film-grid--count-1 .film-slot .film-slot__caption, .film-grid--lead .film-slot .film-slot__caption { margin-top: 0; }
-  .film-grid--count-1 .film-slot .film-slot__title { font-size: clamp(1.2rem, 1.05rem + 0.5vw, 1.45rem); }
-  .film-grid--count-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (min-width: 760px) {
-  .film-grid--count-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
-.film-grid__item { min-width: 0; }
-.film-grid .film-slot__text { font-size: 0.93rem; }
+.vid-wall { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.8rem 1.4rem; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 520px) { .vid-wall { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 820px) { .vid-wall { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .vid-wall { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.vid { min-width: 0; }
+.vid .film-slot .film-slot__caption { margin-top: 0.6rem; gap: 0.15rem; }
+.vid .film-slot .film-slot__title { font-size: 1rem; line-height: 1.28; }
+.vid .film-slot .film-slot__meta { font-size: 0.84rem; color: var(--muted); }
+.vid-pending { margin-top: clamp(1.8rem, 3vw, 2.4rem); padding-top: 1.2rem; border-top: 1px solid var(--rule); }
+.vid-pending__title { font-family: var(--font-sans); font-size: 0.95rem; font-weight: 600; color: var(--muted); }
+.vid-pending__list { list-style: none; margin: 0.6rem 0 0; padding: 0; display: grid; gap: 0.6rem 1.4rem; }
+@media (min-width: 820px) { .vid-pending__list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.vid-pending__list li { display: grid; gap: 0.05rem; }
+.vid-pending__name { font-family: var(--font-serif); font-size: 1rem; line-height: 1.3; color: var(--ink-soft); }
+.vid-pending__for { font-size: 0.84rem; color: var(--faint); }
 
 /* ---------------------------------------------------------------- contact and footer */
 .hub-contact { padding-block: clamp(3rem, 6vw, 5rem); border-top: 1px solid var(--rule); }
@@ -394,6 +425,9 @@ main#main:focus { outline: none; }
   transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
 .hub-contact__links a:hover { border-color: var(--ink-soft); color: var(--ink); }
+/* Email is what the invitation asks for: the one filled action, in ink. */
+.hub-contact__links a.hub-contact__primary { background: var(--ink); border-color: var(--ink); color: var(--page); font-weight: 600; padding-inline: 1.3rem; }
+.hub-contact__links a.hub-contact__primary:hover { background: var(--ink-soft); border-color: var(--ink-soft); color: var(--page); }
 @media (hover: hover) and (pointer: fine) { .hub-contact__links a:hover { transform: translateY(-1px); } }
 .hub-contact__links a:active { transform: translateY(1px); }
 .hub-footer { border-top: 1px solid var(--rule); padding-block: 1.6rem 2.4rem; font-size: 0.88rem; color: var(--muted); }
@@ -407,18 +441,9 @@ main#main:focus { outline: none; }
 .hub-missing__list { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: 0.4rem; font-family: var(--font-serif); font-size: 1.2rem; }
 
 @media (prefers-reduced-motion: reduce) {
-  .map-row, .map__line, .map__line circle, .theme-toggle__knob, .theme-toggle__track, .theme-toggle__ico,
-  .hub-contact__links a { transition: none; }
+  .map__line, .map__line circle, .map-node, .proj__thumb, .proj__toggle, .proj__chevron, .hub-projects__all,
+  .theme-toggle__knob, .theme-toggle__track, .theme-toggle__ico, .hub-contact__links a { transition: none; }
 }
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   .hub-header { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--page); }
 }
-
-/* In the gallery a film that is not out yet holds a shorter place: its name in
-   the family's held frame, without a screen-sized empty box beside the films
-   that can be watched now. */
-.hub-films .film-slot__frame--pending { aspect-ratio: 16 / 7; }
-/* The caption under a held frame already says "Video in preparation", so the
-   frame carries the film's name alone (the house rule for a held frame). */
-.hub-films .film-slot__frame--pending { justify-content: center; }
-.hub-films .film-slot__series, .hub-films .film-slot__status { display: none; }

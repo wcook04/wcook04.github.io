@@ -69,3 +69,60 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready);
   else ready();
 })();
+
+/* The project index (index.html, "Projects"). Each project's line opens
+   beneath itself to show its videos and code; "Show all" opens every line,
+   which is the whole map. The head script stamps html.scripting, so the
+   stylesheet keeps lines closed from the first paint; without scripting every
+   line is open. A line named in the address (/#zenith) opens on arrival, by
+   CSS (:target) before this runs and by this after. Nothing is stored. */
+(function () {
+  var map = document.querySelector('[data-hub-map]');
+  if (!map) return;
+  var rows = Array.prototype.slice.call(map.querySelectorAll('.proj'));
+  var all = document.querySelector('[data-proj-all]');
+  var LABEL_OPEN = 'Show all videos and code', LABEL_CLOSE = 'Hide all videos and code';
+
+  function isOpen(row) { return row.classList.contains('is-open'); }
+  function set(row, open) {
+    var button = row.querySelector('.proj__toggle');
+    row.classList.toggle('is-open', open);
+    row.classList.toggle('is-shut', !open);
+    if (button) {
+      button.setAttribute('aria-expanded', open ? 'true' : 'false');
+      var verb = button.querySelector('.proj__verb');
+      if (verb) verb.textContent = open ? ': hide ' : ': show ';
+    }
+  }
+  function sync() {
+    if (!all) return;
+    var every = rows.every(isOpen);
+    all.setAttribute('aria-expanded', every ? 'true' : 'false');
+    all.textContent = every ? LABEL_CLOSE : LABEL_OPEN;
+  }
+  function fromAddress() {
+    var id = '';
+    try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) {}
+    var row = id ? document.getElementById(id) : null;
+    if (row && row.classList.contains('proj')) { set(row, true); sync(); }
+  }
+
+  rows.forEach(function (row) {
+    var button = row.querySelector('.proj__toggle');
+    var head = row.querySelector('.proj__head');
+    if (button) button.addEventListener('click', function () { set(row, !isOpen(row)); sync(); });
+    // The whole line opens it, except its links, and except a reader selecting its words.
+    if (head) head.addEventListener('click', function (event) {
+      if (event.target.closest && event.target.closest('a, button')) return;
+      try { if (String(window.getSelection())) return; } catch (e) {}
+      set(row, !isOpen(row)); sync();
+    });
+  });
+  if (all) all.addEventListener('click', function () {
+    var open = !rows.every(isOpen);
+    rows.forEach(function (row) { set(row, open); });
+    sync();
+  });
+  window.addEventListener('hashchange', fromAddress);
+  fromAddress();
+})();

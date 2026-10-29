@@ -1,7 +1,8 @@
 /* The home page's map: the lines between its columns (28 October 2026).
 
-   Each row of the map is one project: its videos, its website or tool, its
-   code on GitHub. This script draws a line from each video to the website it
+   Each row of the map is one opened project: its videos, its website or
+   tool, its code on GitHub. A project opens beneath its line in the index
+   (hub.js), and only open rows are drawn. This script draws a line from each video to the website it
    explains and from the website to each of its repositories, and lights the
    row a reader points at or tabs into while the other rows step back. Without
    it the grid alone groups each row and every link works; nothing here is
@@ -32,8 +33,9 @@
   var doc = document;
   var map = doc.querySelector && doc.querySelector('[data-hub-map]');
   if (!map || !doc.createElementNS || !window.matchMedia) return;
-  var list = map.querySelector('.map-rows');
-  if (!list) return;
+  // The rows are the open projects' maps (index.html, "Projects"); a closed
+  // project's row is not displayed, so it has no box and draws no line.
+  var list = map;
 
   var NS = 'http://www.w3.org/2000/svg';
   var R = 10;             // the radius of a turn
@@ -298,6 +300,7 @@
   // Measured again when the map resizes, when the fonts arrive, when the
   // layout crosses the three-column width and when the theme switches.
   if ('ResizeObserver' in window) {
+    // Opening or closing a project changes the map's height, so this hears it.
     try { new ResizeObserver(function () { draw(false); }).observe(list); } catch (e) {}
   } else {
     window.addEventListener('resize', function () { draw(false); });
