@@ -34,8 +34,9 @@ project and lights the one a reader points at or tabs into. It is adapted from
 the Plectis film map's cables (and through them from Magic UI's AnimatedBeam,
 MIT; the notice is in the file). Below the map's width an open project reads
 as a list. A link to `/#zenith` (any project's id) arrives with that project
-open. The Videos band is every released film on one wall, labelled with its
-project; films still being made are listed by title under it.
+open. The Videos band shows the current videos first, labelled with their
+projects. Earlier introductions have their own section below; videos still
+being made are listed by title.
 
 [`docs/family.md`](docs/family.md) describes what every website shares: the
 "Will Cook / site" ladder at the start of its header, the film slots, and the
