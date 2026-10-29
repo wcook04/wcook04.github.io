@@ -19,6 +19,11 @@ top-level `repos` list (name, address and a one-sentence description). Each site
 renders from it at build time, so no page requests anything from another host
 or depends on JavaScript to show its films.
 
+The home page features the current introduction. Earlier introductions stay in
+the final `earlier-introductions` group, below the current videos, with the
+version and "older version" near the start of each title so they remain clear
+when a title is shortened on screen.
+
 The shared styles are [`assets/family/family.css`](../assets/family/family.css).
 Copy the file unchanged and map the site's tokens onto its `--fam-*` names:
 
@@ -116,6 +121,10 @@ title is in the Tab order, and it says the running time in words:
 ```
 
 A film in preparation. It has no link, because there is nothing to open yet:
+
+Tests for this state must create a fixture with `youtube`, `still` and
+`duration_seconds` set to `null`. The real registry may have no videos left in
+preparation after a release.
 
 ```html
 <figure class="film-slot film-slot--pending">
