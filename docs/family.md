@@ -4,8 +4,8 @@ Will Cook's websites are separate projects with separate repositories, but a
 reader moving between them should always know where they are and how to get
 back. Every site carries the same three things, in its own stack:
 
-1. **The ladder** at the start of its header: `Will Cook / <site name>`. "Will
-   Cook" links to the home page, <https://wcook04.github.io/>, which maps every
+1. **The lockup** at the start of its header (below): the Plectis plait, which
+   links to the home page, <https://wcook04.github.io/>, which maps every
    website, film and repository.
 2. **Film slots** for the films about that site: the still with its play chip
    and running time once a film is on YouTube, and a held frame marked "In
@@ -37,6 +37,48 @@ Copy the file unchanged and map the site's tokens onto its `--fam-*` names:
   --fam-sans: var(--font-sans);
 }
 ```
+
+## The lockup (29 October 2026)
+
+The start of every site's header is the **lockup**, which replaces the older
+"Will Cook / site" ladder:
+
+    [Plectis plait] | [site mark] Site name
+
+- The **Plectis plait** links to the home page, <https://wcook04.github.io/>,
+  which lists every website and film. Its accessible name is "Will Cook: all
+  websites and films". Copy [`assets/family/marks/plectis.svg`](../assets/family/marks/plectis.svg)
+  beside the site and show it as an `<img>`; it carries its own day and night
+  palettes.
+- A short upright **rule** separates the two links.
+- The **site mark and name** link to that site's own front page. The mark is
+  inline SVG drawn from the site's inks, so it follows the theme switch.
+
+Marks: Lean Exposition keeps its rising graph with its dot, Plectis Atlas its
+tiles. New marks, in [`assets/family/marks/`](../assets/family/marks/):
+`zenith.svg` (the sun at its highest point on its arc), `mathematics.svg`
+(dots closing on a limit, for Plectis Mathematics) and `verification.svg`
+(the explorer's proof flower, for Practical Formal Verification). Paste their
+`<svg>` inline. [`assets/family/marks/preview.html`](../assets/family/marks/preview.html)
+previews every mark and lockup in both themes.
+
+```html
+<span class="fam-lockup">
+  <a class="fam-lockup__home" href="https://wcook04.github.io/" rel="author" title="All of Will Cook's websites and films">
+    <img src="assets/plectis.svg" alt="Will Cook: all websites and films" width="26" height="26">
+  </a>
+  <span class="fam-lockup__rule" aria-hidden="true"></span>
+  <a class="fam-lockup__site" href="./">
+    <!-- the site mark, inline, aria-hidden="true" -->
+    <span class="fam-lockup__name" translate="no">Zenith</span>
+  </a>
+</span>
+```
+
+Map two more tokens for the marks: `--fam-mark-warm` (the Plectis brick red:
+`#9a322c` by day, `#e67b6d` by night) and `--fam-mark-cool` (the steel azure:
+`#2a5982` by day, `#93c5e6` by night), and `--fam-page` for the flower's
+centre ring.
 
 ## Markup
 

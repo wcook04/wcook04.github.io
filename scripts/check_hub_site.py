@@ -35,7 +35,7 @@ REQUIRED = {
 }
 # Folders whose files are part of the page: fonts with their licences, film
 # stills and website pictures. Anything else outside REQUIRED is unexpected.
-ASSET_DIRS = ("assets/fonts/", "assets/films/", "assets/sites/")
+ASSET_DIRS = ("assets/fonts/", "assets/films/", "assets/sites/", "assets/family/marks/")
 # Project websites are served from these paths by their own repositories.
 PROJECT_PATHS = ("plectis/", "plectis-atlas/", "plectis-zenith/", "practical-formal-verification/",
                  "lean-exposition-site/", "microcosm-substrate/")
