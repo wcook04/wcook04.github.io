@@ -220,7 +220,7 @@ def capture_img(site: dict, scheme: str, *, sizes: str) -> str:
     base = e(site["capture"])
     return (f'<img class="site-shot site-shot--{scheme}" src="{base}-{scheme}-720.webp" '
             f'srcset="{base}-{scheme}-720.webp 720w, {base}-{scheme}-1440.webp 1440w" '
-            f'sizes="{e(sizes)}" alt="" width="1440" height="790" loading="lazy" decoding="async">')
+            f'sizes="{e(sizes)}" alt="" width="1440" height="810" loading="lazy" decoding="async">')
 
 
 # ---------------------------------------------------------------- the projects
@@ -238,7 +238,7 @@ def capture_img(site: dict, scheme: str, *, sizes: str) -> str:
 # row as the website, then its videos, then its code.
 
 MAP_STILL_SIZES = "(min-width: 960px) 144px, 112px"
-THUMB_SIZES = "(min-width: 720px) 300px, 180px"
+THUMB_SIZES = "(min-width: 720px) 176px, 104px"
 COLUMNS = ("Videos", "On the website", "Code on GitHub")
 CHEVRON = ('<svg class="proj__chevron" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">'
            '<path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
@@ -338,8 +338,7 @@ def row_thumb(row: dict) -> str:
     item = row["item"]
     if row["kind"] == "site":
         href, _ = row_way_in(row)
-        focus = " proj__thumb--map" if item.get("thumb_focus") == "map" else ""
-        return (f'<a class="proj__thumb{focus}" href="{e(href)}"{link_attrs(href)} aria-hidden="true" tabindex="-1">'
+        return (f'<a class="proj__thumb" href="{e(href)}"{link_attrs(href)} aria-hidden="true" tabindex="-1">'
                 f'{capture_img(item, "light", sizes=THUMB_SIZES)}{capture_img(item, "dark", sizes=THUMB_SIZES)}</a>')
     film = next((f for f in row["films"] if f.get("youtube")), None)
     if not film:

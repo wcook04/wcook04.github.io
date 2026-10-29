@@ -31,7 +31,7 @@ REQUIRED = {
     "assets/hub.css", "assets/hub.js", "assets/hub-map.js", "assets/theme-init.js", "assets/redirect.js",
     "assets/family/family.css", "assets/favicon.svg", "assets/favicon-32.png",
     "assets/apple-touch-icon.png", "docs/family.md",
-    "scripts/build_hub.py", "scripts/check_hub_site.py", "tests/test_hub_site.py",
+    "scripts/build_hub.py", "scripts/check_hub_site.py", "scripts/capture_cards.py", "tests/test_hub_site.py",
 }
 # Folders whose files are part of the page: fonts with their licences, film
 # stills and website pictures. Anything else outside REQUIRED is unexpected.
