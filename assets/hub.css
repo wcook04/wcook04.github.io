@@ -257,6 +257,8 @@ html.scripting .proj__head { cursor: pointer; }
    thumb shows its top left at reading scale: the site's own heading. A film
    still is shown whole. */
 .proj__thumb .site-shot { transform: scale(var(--shot-zoom, 1.7)); transform-origin: var(--shot-focus, 0 0); }
+/* A site whose first screen is a drawing shows the drawing, not its side panel. */
+.proj__thumb--map .site-shot { --shot-zoom: 1.55; --shot-focus: 63% 47%; }
 .proj__name { font-family: var(--font-serif); font-size: 1.24rem; line-height: 1.2; font-weight: 500; letter-spacing: -0.008em; color: var(--ink); }
 .proj__name a { color: var(--ink); text-decoration: none; }
 .proj__name a::after { content: "\00a0\2197"; font-family: var(--font-sans); font-size: 0.6em; font-weight: 400; color: var(--faint); }

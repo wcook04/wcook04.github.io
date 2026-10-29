@@ -325,7 +325,7 @@ def map_middle(row: dict) -> str:
     item = row["item"]
     if row["kind"] != "site":
         return ""
-    links = [{"label": "Front page", "href": item["url"]}] + item.get("routes", [])
+    links = [{"label": item.get("front_label", "Front page"), "href": item["url"]}] + item.get("routes", [])
     routes = "".join(f'<li><a href="{e(r["href"])}">{e(r["label"])}<span class="sr-only">, on {e(item["name"])}</span></a></li>'
                      for r in links)
     note = f'<p class="map-node__note">{e(item["status"])}</p>' if item.get("status") else ""
@@ -338,7 +338,8 @@ def row_thumb(row: dict) -> str:
     item = row["item"]
     if row["kind"] == "site":
         href, _ = row_way_in(row)
-        return (f'<a class="proj__thumb" href="{e(href)}"{link_attrs(href)} aria-hidden="true" tabindex="-1">'
+        focus = " proj__thumb--map" if item.get("thumb_focus") == "map" else ""
+        return (f'<a class="proj__thumb{focus}" href="{e(href)}"{link_attrs(href)} aria-hidden="true" tabindex="-1">'
                 f'{capture_img(item, "light", sizes=THUMB_SIZES)}{capture_img(item, "dark", sizes=THUMB_SIZES)}</a>')
     film = next((f for f in row["films"] if f.get("youtube")), None)
     if not film:
