@@ -527,8 +527,8 @@ def render_index(registry: dict) -> str:
         count_line += f" and {count_words(len(pending), 'is', 'are')} in preparation"
     count_line += ". Each opens on YouTube in a new tab."
     rows = sum(len(g["items"]) for g in registry["index_groups"])
-    description = ("Will Cook’s websites and videos: research on Erdős problems and the SK model with AI, "
-                   "Plectis Atlas, practical formal verification and Zenith.")
+    description = ("Will Cook’s AI-assisted mathematics and software: Erdős research, papers linked to Lean proofs, "
+                   "agent tools, practical formal verification and videos.")
     head = page_head(title="Will Cook: websites and videos", description=description, canonical=HOME,
                      robots="index, follow", map_script=True)
     return f'''{head}
@@ -536,6 +536,12 @@ def render_index(registry: dict) -> str:
   <meta property="og:description" content="{e(description)}">
   <meta property="og:type" content="website">
   <meta property="og:url" content="{HOME}">
+  <meta property="og:image" content="{HOME}assets/sites/home-light-1440.webp">
+  <meta property="og:image:width" content="1440">
+  <meta property="og:image:height" content="790">
+  <meta property="og:image:alt" content="Will Cook’s home page, with the introduction video and routes into his projects.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{HOME}assets/sites/home-light-1440.webp">
   <script type="application/ld+json">{structured_data(registry)}</script>
 </head>
 <body class="hub">
