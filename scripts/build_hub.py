@@ -567,6 +567,7 @@ def render_index(registry: dict) -> str:
           <div>
             <h2 class="hub-section-title" id="projects-title">Projects</h2>
             <p class="hub-projects__lede"><span class="hub-when-script">Visit a project directly, or choose Show details to see its videos and code here.</span><span class="hub-when-plain">Each project with its videos and its code on GitHub.</span></p>
+            <p class="hub-projects__lede">Some projects use Lean, a language for writing mathematical statements and proofs that a computer can check.</p>
           </div>
           <button class="hub-projects__all" type="button" data-proj-all aria-expanded="false">Show all details</button>
         </div>

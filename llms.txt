@@ -3,10 +3,10 @@
 This host's root page lists Will Cook's websites and films. Each website is its own project with its own source and its own agent entry where one exists.
 
 - [Plectis Mathematics](https://wcook04.github.io/practical-formal-verification/map/): Eight Erdős problems I researched with AI, with the papers, computer-checked proofs of partial results and the approaches that failed. Agent entry: https://wcook04.github.io/practical-formal-verification/llms.txt
-- [Lean Exposition](https://wcook04.github.io/lean-exposition-site/): Three papers on one result about the Sherrington–Kirkpatrick model of magnets. A graph of the argument moves as you read, and clicking a statement opens its Lean.
-- [Proof Reader](https://wcook04.github.io/proof-reader/): A paper whose proof is public in Lean, set to read like any paper. A graph of the proof moves as you scroll, and clicking a statement opens the authors’ Lean at the exact lines.
+- [Lean Exposition](https://wcook04.github.io/lean-exposition-site/): Read three explanations of one theorem about the Sherrington–Kirkpatrick model of interacting spins. Click a linked statement to see its Lean code beside the paper.
+- [Proof Reader](https://wcook04.github.io/proof-reader/): Read a research paper beside its authors’ Lean proof. Click a linked statement to open the corresponding code, or explore the diagram of proof steps.
 - [Plectis Atlas](https://wcook04.github.io/plectis-atlas/): Read OpenAI’s maths papers alongside the reports that outside groups wrote about their claims and proofs. Agent entry: https://wcook04.github.io/plectis-atlas/llms.txt
-- [Practical Formal Verification](https://wcook04.github.io/practical-formal-verification/explorer/): 88 Python components from my research system. For twelve, mathematical proofs show that particular calculations follow precise written requirements. Agent entry: https://wcook04.github.io/practical-formal-verification/llms.txt
+- [Practical Formal Verification](https://wcook04.github.io/practical-formal-verification/explorer/): 88 small Python programs and groups of programs from my research system. Twelve have mathematical proofs for particular calculations, with stated assumptions. Agent entry: https://wcook04.github.io/practical-formal-verification/llms.txt
 - [Zenith](https://wcook04.github.io/plectis-zenith/): Experiments on whether records of past mistakes help AI models test and repair code. Agent entry: https://wcook04.github.io/plectis-zenith/llms.txt
 
 Films, with their YouTube addresses and the website each belongs to, are listed in https://wcook04.github.io/sites.json.
