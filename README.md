@@ -1,21 +1,30 @@
 # Will Cook's home page
 
 **[wcook04.github.io](https://wcook04.github.io/)** is a map of my websites,
-the films that explain them and the repositories that hold their code. Each
+the videos that explain them and the repositories that hold their code. Each
 website is its own project with its own repository; this page links to all of
-them, and each of them links back here. Start with the introduction film or
+them, and each of them links back here. Start with the introduction video or
 open a project directly; its details link to the papers, maps, videos and code.
 
-[![Will Cook’s home page: an introduction film and routes into the projects](assets/sites/home-light-1440.webp)](https://wcook04.github.io/)
+[![Will Cook’s home page: an introduction video and routes into the projects](assets/sites/home-light-1440.webp)](https://wcook04.github.io/)
 
-| Website | What it is for | Source |
-|---|---|---|
-| [Plectis Mathematics](https://wcook04.github.io/practical-formal-verification/map/) | Eight Erdős problems researched with AI: papers, computer-checked proofs of partial results and the approaches that failed. | [plectis-erdos](https://github.com/wcook04/plectis-erdos), [plectis-erdos-lean](https://github.com/wcook04/plectis-erdos-lean) |
-| [Lean Exposition](https://wcook04.github.io/lean-exposition-site/) | One result about the Sherrington–Kirkpatrick model of magnets, explained three ways and linked to a map of the argument. | [lean-exposition](https://github.com/wcook04/lean-exposition) |
-| [Proof Reader](https://wcook04.github.io/proof-reader/) | Any paper with public Lean, read as a paper with its proof beside it. | [proof-reader](https://github.com/wcook04/proof-reader) |
-| [Plectis Atlas](https://wcook04.github.io/plectis-atlas/) | OpenAI's maths papers beside the reports that outside groups wrote about them. | [plectis-atlas](https://github.com/wcook04/plectis-atlas) |
-| [Practical Formal Verification](https://wcook04.github.io/practical-formal-verification/explorer/) | 88 Python components; for twelve, proofs that particular calculations follow their written requirements. | [practical-formal-verification](https://github.com/wcook04/practical-formal-verification) |
-| [Zenith](https://wcook04.github.io/plectis-zenith/) | Experiments on whether records of past mistakes help AI models test and repair code. | [plectis-zenith](https://github.com/wcook04/plectis-zenith) |
+- **[Plectis Mathematics](https://wcook04.github.io/practical-formal-verification/map/)**. Eight Erdős problems researched with AI: papers, computer-checked proofs of partial results and the approaches that failed.
+  Source: [plectis-erdos](https://github.com/wcook04/plectis-erdos), [plectis-erdos-lean](https://github.com/wcook04/plectis-erdos-lean).
+
+- **[Lean Exposition](https://wcook04.github.io/lean-exposition-site/)**. One result about the Sherrington–Kirkpatrick model of magnets, explained three ways and linked to a map of the argument.
+  Source: [lean-exposition](https://github.com/wcook04/lean-exposition).
+
+- **[Proof Reader](https://wcook04.github.io/proof-reader/)**. A published paper with its Lean proof beside it.
+  Source: [proof-reader](https://github.com/wcook04/proof-reader).
+
+- **[Plectis Atlas](https://wcook04.github.io/plectis-atlas/)**. OpenAI's maths papers beside the reports that outside groups wrote about them.
+  Source: [plectis-atlas](https://github.com/wcook04/plectis-atlas).
+
+- **[Practical Formal Verification](https://wcook04.github.io/practical-formal-verification/explorer/)**. 88 Python components; for twelve, proofs that particular calculations follow their written requirements.
+  Source: [practical-formal-verification](https://github.com/wcook04/practical-formal-verification).
+
+- **[Zenith](https://wcook04.github.io/plectis-zenith/)**. Experiments on whether records of past mistakes help AI models test and repair code.
+  Source: [plectis-zenith](https://github.com/wcook04/plectis-zenith).
 
 The page also links to [Safety Core](https://github.com/wcook04/safety-core)
 and [One Checkout](https://github.com/wcook04/one-checkout), two tools for
@@ -65,7 +74,7 @@ The page opens with the introduction film, then lists the projects in two
 groups (`index_groups` in `sites.json`): one line each, with a picture, its
 name, one sentence and the way in (the website, or the code). Each line opens
 beneath itself into that project's own small map: its videos, the website's
-main places, its code on GitHub. "Show all videos and code" opens every line,
+main places, its code on GitHub. "Show all details" opens every line,
 which is the whole map. Without a script every line is open.
 [`assets/hub-map.js`](assets/hub-map.js) draws the lines inside an open
 project and lights the one a reader points at or tabs into. It is adapted from

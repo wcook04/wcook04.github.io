@@ -539,7 +539,7 @@ def render_index(registry: dict) -> str:
   <meta property="og:image" content="{HOME}assets/sites/home-light-1440.webp">
   <meta property="og:image:width" content="1440">
   <meta property="og:image:height" content="790">
-  <meta property="og:image:alt" content="Will Cook’s home page, with the introduction film and routes into his projects.">
+  <meta property="og:image:alt" content="Will Cook’s home page, with the introduction video and routes into his projects.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="{HOME}assets/sites/home-light-1440.webp">
   <script type="application/ld+json">{structured_data(registry)}</script>
