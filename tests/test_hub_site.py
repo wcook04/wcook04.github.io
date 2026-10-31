@@ -4,6 +4,7 @@ import json
 import re
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -34,6 +35,28 @@ class HubTests(unittest.TestCase):
 
     def test_current_site_contract(self):
         self.assertEqual(self.errors(), [])
+
+    def test_capture_cli_help_needs_no_optional_packages(self):
+        result = subprocess.run([sys.executable, "-I", "-S", str(ROOT / "scripts/capture_cards.py"), "--help"],
+                                capture_output=True, text=True, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("proof-reader", result.stdout)
+        self.assertIn("--browser", result.stdout)
+
+    def test_capture_cli_reports_unknown_sites_before_loading_browser(self):
+        result = subprocess.run([sys.executable, "-I", "-S", str(ROOT / "scripts/capture_cards.py"), "not-a-site"],
+                                capture_output=True, text=True, timeout=10)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("unknown site(s): not-a-site", result.stderr)
+
+    def test_obsolete_thumbnail_copies_are_rejected(self):
+        self.files["assets/films/unplaced-old-640.webp"] = b"old thumbnail"
+        self.assertTrue(any("unreferenced media" in error for error in self.errors()))
+
+    def test_retained_introductions_are_not_orphaned(self):
+        self.assertIn("assets/films/introduction-640.webp", self.files)
+        self.assertIn("assets/films/introduction-alternate-640.webp", self.files)
+        self.assertFalse(any("unreferenced media" in error for error in self.errors()))
 
     def test_pages_must_match_the_registry(self):
         registry = json.loads(self.files["sites.json"])

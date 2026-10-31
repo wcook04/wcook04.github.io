@@ -48,6 +48,10 @@ open the published websites. Edit `sites.json` and rebuild to change the list;
 
 ## Old Plectis addresses
 
+The nested `plectis/` tree contains generated forwarding pages, not another
+copy of the project or its source. `plectis-paths.txt` owns that tree; edit or
+refresh the list and run the builder rather than editing individual pages.
+
 The Plectis website moved from `/plectis/` to `/practical-formal-verification/`
 when its repository was renamed, and GitHub Pages does not forward a renamed
 repository's pages. This repository answers the old addresses instead. Every
@@ -116,6 +120,11 @@ Plectis site's film and header components. Each website keeps a copy of
    (its `family.json`), rebuild that site and publish it, so its film slot
    shows the film too.
 
+When replacing a thumbnail, remove its old pair after changing `still` and
+rebuilding. The check rejects images in `assets/films/` or `assets/sites/`
+that the page no longer uses. Keep the images for videos listed under earlier
+introductions; those are still part of the page.
+
 ## Repository map
 
 | Path | Purpose |
@@ -136,6 +145,12 @@ The project paths `/practical-formal-verification/`, `/plectis-atlas/`,
 repositories; this repository must not create folders at those paths, and the
 check refuses them.
 
-Refresh a website's picture by capturing its first screen at 1440×900 in both
-schemes and converting it with `cwebp -q 80 -m 6 -resize 720 0` and
-`-resize 1440 0` into `assets/sites/<id>-<light|dark>-<720|1440>.webp`.
+For the project pictures, [`scripts/capture_cards.py`](scripts/capture_cards.py)
+reuses the site's map or reading view and writes the existing light/dark image
+pairs. `python3 scripts/capture_cards.py --help` lists the site names and browser
+option without loading any optional packages. Capturing requires Playwright,
+Pillow and a browser: install those in a separate Python environment, then run
+`python3 scripts/capture_cards.py maths` (or another listed site). The tool uses
+installed macOS Chrome when available, or Playwright's Chromium; `--browser`
+selects an executable explicitly. Use `--out /tmp/homepage-cards` to review new
+pictures separately before replacing the published ones.
