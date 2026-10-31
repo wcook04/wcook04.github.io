@@ -81,10 +81,10 @@
           "href": "https://wcook04.github.io/lean-exposition-site/#papers"
         }
       ],
-      "purpose": "One result about the Sherrington–Kirkpatrick model of magnets, explained three ways and linked to a map of the argument and its Lean statements.",
-      "status": "The three accounts are drafts. The site shows their reviews and what each check covers.",
+      "purpose": "Three papers on one result about the Sherrington–Kirkpatrick model of magnets. Read any of them with a graph of the argument beside it, and open the Lean behind a statement.",
+      "status": "The three accounts are drafts, and AI agents linked them to the Lean. The site shows what each check covers.",
       "capture": "assets/sites/lean-exposition",
-      "capture_caption": "The front page of the SK exposition, with its main theorem.",
+      "capture_caption": "The short paper at Theorem 1, beside the graph of its argument.",
       "films": [
         "interfaces",
         "sk-no-gap"

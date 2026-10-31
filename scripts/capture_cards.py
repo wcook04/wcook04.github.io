@@ -85,15 +85,10 @@ SITES = {
         "ring": True,
     },
     "lean-exposition": {
-        # The paper and its argument map side by side, the view Will chose: the
-        # exposition's opening beside the map at its main result. The map pane
-        # draws once the passage has scrolled, and zooms out on ctrl and wheel.
-        "url": BASE + "lean-exposition-site/read/expository/",
-        "viewport": (2000, 1125), "dpr": 1, "fill": 1.0,
-        "prepare": lambda page: lean_prepare(page),
-        # From the passage's left edge to the window's right, under the header.
-        "box": "(() => { const h = document.querySelector('header').getBoundingClientRect().bottom;"
-               " return {x: 230, y: h, w: 1770, h: 1125 - h}; })()",
+        # The short paper at Theorem 1 beside the graph of the argument, following it.
+        "url": BASE + "lean-exposition-site/read/short/?l=b5970-6319#main-result",
+        "viewport": (1600, 900), "dpr": 2, "fill": 1.0,
+        "box": "({x: 0, y: 0, w: 1600, h: 900})",
     },
     "proof-reader": {
         # A sentence in the paper beside the graph and the exact Lean lines it
