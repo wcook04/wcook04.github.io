@@ -3,16 +3,39 @@
 **[wcook04.github.io](https://wcook04.github.io/)** is a map of my websites,
 the films that explain them and the repositories that hold their code. Each
 website is its own project with its own repository; this page links to all of
-them, and each of them links back here.
+them, and each of them links back here. Start with the introduction film or
+open a project directly; its details link to the papers, maps, videos and code.
+
+[![Will Cook’s home page: an introduction film and routes into the projects](assets/sites/home-light-1440.webp)](https://wcook04.github.io/)
 
 | Website | What it is for | Source |
 |---|---|---|
-| [Plectis Mathematics](https://wcook04.github.io/practical-formal-verification/maths/) | Eight Erdős problems researched with AI: papers, computer-checked proofs of partial results and the approaches that failed. | [plectis-erdos](https://github.com/wcook04/plectis-erdos), [plectis-erdos-lean](https://github.com/wcook04/plectis-erdos-lean) |
+| [Plectis Mathematics](https://wcook04.github.io/practical-formal-verification/map/) | Eight Erdős problems researched with AI: papers, computer-checked proofs of partial results and the approaches that failed. | [plectis-erdos](https://github.com/wcook04/plectis-erdos), [plectis-erdos-lean](https://github.com/wcook04/plectis-erdos-lean) |
 | [Lean Exposition](https://wcook04.github.io/lean-exposition-site/) | One result about the Sherrington–Kirkpatrick model of magnets, explained three ways and linked to a map of the argument. | [lean-exposition](https://github.com/wcook04/lean-exposition) |
 | [Proof Reader](https://wcook04.github.io/proof-reader/) | Any paper with public Lean, read as a paper with its proof beside it. | [proof-reader](https://github.com/wcook04/proof-reader) |
 | [Plectis Atlas](https://wcook04.github.io/plectis-atlas/) | OpenAI's maths papers beside the reports that outside groups wrote about them. | [plectis-atlas](https://github.com/wcook04/plectis-atlas) |
-| [Practical Formal Verification](https://wcook04.github.io/practical-formal-verification/docs/) | 88 Python components; for twelve, proofs that particular calculations follow their written requirements. | [practical-formal-verification](https://github.com/wcook04/practical-formal-verification) |
+| [Practical Formal Verification](https://wcook04.github.io/practical-formal-verification/explorer/) | 88 Python components; for twelve, proofs that particular calculations follow their written requirements. | [practical-formal-verification](https://github.com/wcook04/practical-formal-verification) |
 | [Zenith](https://wcook04.github.io/plectis-zenith/) | Experiments on whether records of past mistakes help AI models test and repair code. | [plectis-zenith](https://github.com/wcook04/plectis-zenith) |
+
+The page also links to [Safety Core](https://github.com/wcook04/safety-core)
+and [One Checkout](https://github.com/wcook04/one-checkout), two tools for
+working with coding agents. Code Map has a demonstration video; its source is
+private.
+
+## Preview and check locally
+
+The build and checks need Python 3 and use only its standard library:
+
+```sh
+python3 scripts/build_hub.py
+python3 -m unittest discover -s tests -p 'test_*.py'
+python3 scripts/check_hub_site.py
+python3 -m http.server 8000 --bind 127.0.0.1
+```
+
+Open [localhost:8000](http://127.0.0.1:8000/) to browse the page. Project links
+open the published websites. Edit `sites.json` and rebuild to change the list;
+`index.html` is generated.
 
 ## Old Plectis addresses
 
@@ -54,8 +77,8 @@ projects. Earlier introductions have their own section below; videos still
 being made are listed by title.
 
 [`docs/family.md`](docs/family.md) describes what every website shares: the
-"Will Cook / site" ladder at the start of its header, the film slots, and the
-list of sister sites in its footer. The shared styles are
+linked Plectis mark and site name in its header, the film slots, and the list
+of sister sites in its footer. The shared styles are
 [`assets/family/family.css`](assets/family/family.css), adapted from the
 Plectis site's film and header components. Each website keeps a copy of
 `sites.json` and that stylesheet beside its own source.
@@ -88,15 +111,15 @@ Plectis site's film and header components. Each website keeps a copy of
 
 | Path | Purpose |
 |---|---|
-| `index.html`, `404.html` | Built from `sites.json`; do not edit by hand. The 404 page forwards old `/plectis/...` addresses to the same page under `/practical-formal-verification/`. |
-| `sites.json` | Websites, tools, repositories and films: the source for this page and for every site's film slots. |
-| `assets/hub.css`, `assets/hub.js`, `assets/theme-init.js` | The page's styles and its day and night switch. The theme script and the tokens are the Plectis site's. |
-| `assets/hub-map.js` | The lines inside an open project between its videos, website and repositories, and the lit row. |
-| `assets/family/family.css`, `docs/family.md` | What every website shares, and how to use it. |
-| `assets/films/`, `assets/sites/` | Film stills (the uploaded thumbnails) and pictures of each website's first screen, in both schemes. |
-| `assets/fonts/` | Plectis Serif (STIX Two Text) and Plectis Sans (Source Sans 3) subsets, with their licences. |
-| `llms.txt`, `agent-guide.md`, `robots.txt`, `sitemap.xml`, `sitemap-home.xml` | Entries for agents and crawlers. |
-| `scripts/check_hub_site.py`, `tests/` | Checks run by `.github/workflows/public-site.yml`. |
+| [`index.html`](index.html), [`404.html`](404.html) | Built from `sites.json`; do not edit by hand. The 404 page forwards old `/plectis/...` addresses to the same page under `/practical-formal-verification/`. |
+| [`sites.json`](sites.json) | Websites, tools, repositories and films: the source for this page and for every site's film slots. |
+| [`assets/hub.css`](assets/hub.css), [`assets/hub.js`](assets/hub.js), [`assets/theme-init.js`](assets/theme-init.js) | The page's styles and its day and night switch. The theme script and the tokens are the Plectis site's. |
+| [`assets/hub-map.js`](assets/hub-map.js) | The lines inside an open project between its videos, website and repositories, and the lit row. |
+| [`assets/family/family.css`](assets/family/family.css), [`docs/family.md`](docs/family.md) | What every website shares, and how to use it. |
+| [`assets/films/`](assets/films/), [`assets/sites/`](assets/sites/) | Film stills and pictures of each website's first screen. `home-light-1440.webp` is the home page's README and sharing preview. |
+| [`assets/fonts/`](assets/fonts/) | Plectis Serif (STIX Two Text) and Plectis Sans (Source Sans 3) subsets, with their licences. |
+| [`llms.txt`](llms.txt), [`agent-guide.md`](agent-guide.md), [`robots.txt`](robots.txt), [`sitemap.xml`](sitemap.xml), [`sitemap-home.xml`](sitemap-home.xml) | Entries for agents and crawlers. |
+| [`scripts/check_hub_site.py`](scripts/check_hub_site.py), [`tests/`](tests/) | Checks run by `.github/workflows/public-site.yml`. |
 
 Pushing `main` publishes the page through GitHub Pages. Keep Pages enabled.
 The project paths `/practical-formal-verification/`, `/plectis-atlas/`,
