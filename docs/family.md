@@ -104,8 +104,8 @@ title is in the Tab order, and it says the running time in words:
 <figure class="film-slot">
   <a class="film-slot__frame" href="https://www.youtube.com/watch?v=ID" target="_blank"
      rel="noopener noreferrer" aria-hidden="true" tabindex="-1">
-    <img src="assets/films/atlas-640.webp"
-         srcset="assets/films/atlas-640.webp 640w, assets/films/atlas-1280.webp 1280w"
+    <img src="assets/films/atlas-v3-640.webp"
+         srcset="assets/films/atlas-v3-640.webp 640w, assets/films/atlas-v3-1280.webp 1280w"
          sizes="(min-width: 960px) 480px, 100vw"
          alt="" width="1280" height="720" loading="lazy" decoding="async">
     <span class="film-slot__play"></span>
@@ -185,13 +185,8 @@ shown, not removed, so the list reads the same everywhere.
 
 ## Add a released film
 
-1. In `sites.json`, set the film's `youtube`, `duration_seconds` and `still`
-   (for example `assets/films/sk-no-gap`), and update its title and
-   description to the published ones.
-2. Make the still's two copies from the uploaded thumbnail:
-   `cwebp -q 80 -m 6 -resize 640 0 thumb.png -o assets/films/<id>-640.webp`
-   and the same with 1280.
-3. Run `python3 scripts/build_hub.py` and commit. The home page now shows it.
-4. Copy `sites.json` to each site that shows the film (its `family.json`)
-   with the two stills, rebuild that site and publish it. The film's site
-   lists where it appears.
+Follow the [home page’s release steps](../README.md#add-a-released-film) to
+update the registry and thumbnail pair, run the checks, and publish the page.
+That procedure also covers copying the registry and stills to the sites that
+show the video. Keep one set of release instructions there; this document owns
+the shared components and their markup.

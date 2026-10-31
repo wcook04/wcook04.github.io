@@ -165,6 +165,25 @@ def validate(files: dict[str, bytes]) -> list[str]:
         index = files["index.html"].decode()
         errors += validate_page("index.html", index, home=True)
         page = Page(index)
+        # Media belongs to the current page, including the explicitly retained
+        # earlier introductions. Regenerating the page must not leave obsolete
+        # thumbnail versions in the served tree.
+        media = set()
+        for tag in ("img", "source"):
+            for attrs in page.all(tag):
+                candidates = [attrs.get("src", "")]
+                candidates += [part.strip().split(" ")[0]
+                               for part in attrs.get("srcset", "").split(",")]
+                media.update(url.removeprefix(HOME).lstrip("/") for url in candidates if url)
+        for attrs in page.all("meta"):
+            if attrs.get("property") == "og:image":
+                media.add(attrs.get("content", "").removeprefix(HOME).lstrip("/"))
+        orphaned = sorted(path for path in files
+                          if path.startswith(("assets/films/", "assets/sites/"))
+                          and path.endswith(".webp") and path not in media)
+        if orphaned:
+            errors.append("unreferenced media: remove obsolete copies or place them in sites.json: "
+                          + ", ".join(orphaned))
         hrefs = {a.get("href") for a in page.all("a")}
         for site in registry["sites"]:
             if site["url"] not in hrefs:

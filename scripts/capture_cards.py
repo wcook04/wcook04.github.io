@@ -8,19 +8,20 @@ it), prepares the view (selects, hides a panel, fits the map), measures the
 figure, widens that box to 16:9 around its centre, screenshots it and writes
 assets/sites/<id>-<scheme>-{1440,720}.webp, the files the cards already use.
 
-Needs Playwright and Pillow (ai_workflow's .venv has both) and the installed
-Google Chrome; Playwright's bundled browsers hang on Will's machine.
+The optional capture operation needs Playwright and Pillow. The help command
+uses only Python's standard library. Use installed Google Chrome when present
+on macOS, Playwright's Chromium otherwise, or --browser for another executable.
 
-    ~/src/ai_workflow/.venv/bin/python scripts/capture_cards.py [site ...]
+    python3 scripts/capture_cards.py --help
+    python3 scripts/capture_cards.py maths atlas
+    python3 scripts/capture_cards.py --browser /path/to/chrome maths
 """
 from __future__ import annotations
 
+import argparse
 import io
 import sys
 from pathlib import Path
-
-from PIL import Image
-from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "assets" / "sites"
@@ -137,6 +138,8 @@ def frame(box: dict, viewport: tuple[int, int], fill: float, ring: bool) -> dict
 def pad_to_card(image: Image.Image, margin: float = 0.06) -> Image.Image:
     """Set a figure captured on its own in the middle of a 16:9 card of its
     own background (a pixel just inside its left edge), with a margin round it."""
+    from PIL import Image
+
     w, h = image.size
     cw = max(w * (1 + 2 * margin), h * (1 + 2 * margin) * 16 / 9)
     ch = cw * 9 / 16
@@ -145,8 +148,10 @@ def pad_to_card(image: Image.Image, margin: float = 0.06) -> Image.Image:
     return card
 
 
-def capture(pw, site_id: str, spec: dict, scheme: str) -> None:
-    browser = pw.chromium.launch(executable_path=CHROME, headless=True)
+def capture(pw, site_id: str, spec: dict, scheme: str, browser_path: str | None = None, output: Path = OUT) -> None:
+    from PIL import Image
+
+    browser = pw.chromium.launch(executable_path=browser_path, headless=True)
     try:
         context = browser.new_context(viewport={"width": spec["viewport"][0], "height": spec["viewport"][1]},
                                       device_scale_factor=spec["dpr"], color_scheme=scheme,
@@ -170,17 +175,30 @@ def capture(pw, site_id: str, spec: dict, scheme: str) -> None:
         image = pad_to_card(image)
     for width in (1440, 720):
         resized = image.resize((width, round(width * 9 / 16)), Image.LANCZOS)
-        resized.save(OUT / f"{site_id}-{scheme}-{width}.webp", "WEBP", quality=86, method=6)
+        resized.save(output / f"{site_id}-{scheme}-{width}.webp", "WEBP", quality=86, method=6)
     print(f"{site_id} {scheme}: box {[round(v) for v in box.values()]} -> clip "
           f"{[round(v) for v in clip.values()]}")
 
 
 def main(argv: list[str]) -> int:
-    wanted = argv or list(SITES)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("sites", nargs="*", metavar="SITE",
+                        help="sites to capture (default: all): " + ", ".join(SITES))
+    parser.add_argument("--browser", default=CHROME if Path(CHROME).is_file() else None,
+                        help="browser executable (default: installed macOS Chrome, otherwise Playwright Chromium)")
+    parser.add_argument("--out", type=Path, default=OUT,
+                        help="output directory (default: this repository's assets/sites)")
+    args = parser.parse_args(argv)
+    unknown = sorted(set(args.sites) - SITES.keys())
+    if unknown:
+        parser.error("unknown site(s): " + ", ".join(unknown))
+    from playwright.sync_api import sync_playwright
+
+    args.out.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as pw:
-        for site_id in wanted:
+        for site_id in args.sites or SITES:
             for scheme in ("light", "dark"):
-                capture(pw, site_id, SITES[site_id], scheme)
+                capture(pw, site_id, SITES[site_id], scheme, args.browser, args.out)
     return 0
 
 
