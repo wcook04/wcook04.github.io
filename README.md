@@ -149,18 +149,16 @@ images for the earlier introductions, which are still listed on the page.
 
 ## Repository map
 
-| Path | What it contains |
-|---|---|
-| [`sites.json`](sites.json) | The list to edit when a project, code link or video changes. |
-| [`scripts/build_hub.py`](scripts/build_hub.py) | Builds the home page, forwarding pages and other generated files. |
-| [`index.html`](index.html), [`404.html`](404.html), [`plectis/`](plectis/) | Generated pages; the latter two keep old project addresses working. |
-| [`assets/hub.css`](assets/hub.css), [`assets/hub.js`](assets/hub.js), [`assets/theme-init.js`](assets/theme-init.js), [`assets/hub-map.js`](assets/hub-map.js) | Page appearance, light/dark switch, expandable details and connecting lines. |
-| [`assets/family/family.css`](assets/family/family.css), [`docs/family.md`](docs/family.md) | Shared website styles and instructions for using them. |
-| [`assets/films/`](assets/films/), [`assets/sites/`](assets/sites/) | Video thumbnails and website pictures, including this README's home page preview. |
-| [`assets/fonts/`](assets/fonts/) | Fonts and their licences. |
-| [`llms.txt`](llms.txt), [`agent-guide.md`](agent-guide.md), [`robots.txt`](robots.txt), [`sitemap.xml`](sitemap.xml), [`sitemap-home.xml`](sitemap-home.xml) | Guides for AI assistants and files that help search engines find the pages. |
-| [`scripts/check_hub_site.py`](scripts/check_hub_site.py), [`tests/`](tests/) | Checks run locally and by GitHub Actions. |
-| [`scripts/capture_cards.py`](scripts/capture_cards.py) | Takes the website pictures used on the home page. |
+- [`sites.json`](sites.json): The list to edit when a project, code link or video changes.
+- [`scripts/build_hub.py`](scripts/build_hub.py): Builds the home page, forwarding pages and other generated files.
+- [`index.html`](index.html), [`404.html`](404.html), [`plectis/`](plectis/): Generated pages; the latter two keep old project addresses working.
+- [`assets/hub.css`](assets/hub.css), [`assets/hub.js`](assets/hub.js), [`assets/theme-init.js`](assets/theme-init.js), [`assets/hub-map.js`](assets/hub-map.js): Page appearance, light/dark switch, expandable details and connecting lines.
+- [`assets/family/family.css`](assets/family/family.css), [`docs/family.md`](docs/family.md): Shared website styles and instructions for using them.
+- [`assets/films/`](assets/films/), [`assets/sites/`](assets/sites/): Video thumbnails and website pictures, including this README's home page preview.
+- [`assets/fonts/`](assets/fonts/): Fonts and their licences.
+- [`llms.txt`](llms.txt), [`agent-guide.md`](agent-guide.md), [`robots.txt`](robots.txt), [`sitemap.xml`](sitemap.xml), [`sitemap-home.xml`](sitemap-home.xml): Guides for AI assistants and files that help search engines find the pages.
+- [`scripts/check_hub_site.py`](scripts/check_hub_site.py), [`tests/`](tests/): Checks run locally and by GitHub Actions.
+- [`scripts/capture_cards.py`](scripts/capture_cards.py): Takes the website pictures used on the home page.
 
 GitHub Pages publishes the `main` branch. The project websites have their own
 repositories, so this repository must leave their address folders free:
