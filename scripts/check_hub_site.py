@@ -40,7 +40,7 @@ REQUIRED = {
 ASSET_DIRS = ("assets/fonts/", "assets/films/", "assets/sites/", "assets/family/marks/")
 # Project websites are served from these paths by their own repositories.
 PROJECT_PATHS = ("plectis-atlas/", "plectis-zenith/", "practical-formal-verification/",
-                 "lean-exposition-site/", "microcosm-substrate/")
+                 "lean-exposition-site/", "proof-reader/", "microcosm-substrate/")
 
 
 def git(root: Path, *args: str) -> bytes:

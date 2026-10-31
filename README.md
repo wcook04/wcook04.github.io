@@ -9,6 +9,7 @@ them, and each of them links back here.
 |---|---|---|
 | [Plectis Mathematics](https://wcook04.github.io/practical-formal-verification/maths/) | Eight Erdős problems researched with AI: papers, computer-checked proofs of partial results and the approaches that failed. | [plectis-erdos](https://github.com/wcook04/plectis-erdos), [plectis-erdos-lean](https://github.com/wcook04/plectis-erdos-lean) |
 | [Lean Exposition](https://wcook04.github.io/lean-exposition-site/) | One result about the Sherrington–Kirkpatrick model of magnets, explained three ways and linked to a map of the argument. | [lean-exposition](https://github.com/wcook04/lean-exposition) |
+| [Proof Reader](https://wcook04.github.io/proof-reader/) | Any paper with public Lean, read as a paper with its proof beside it. | [proof-reader](https://github.com/wcook04/proof-reader) |
 | [Plectis Atlas](https://wcook04.github.io/plectis-atlas/) | OpenAI's maths papers beside the reports that outside groups wrote about them. | [plectis-atlas](https://github.com/wcook04/plectis-atlas) |
 | [Practical Formal Verification](https://wcook04.github.io/practical-formal-verification/docs/) | 88 Python components; for twelve, proofs that particular calculations follow their written requirements. | [practical-formal-verification](https://github.com/wcook04/practical-formal-verification) |
 | [Zenith](https://wcook04.github.io/plectis-zenith/) | Experiments on whether records of past mistakes help AI models test and repair code. | [plectis-zenith](https://github.com/wcook04/plectis-zenith) |
@@ -99,7 +100,7 @@ Plectis site's film and header components. Each website keeps a copy of
 
 Pushing `main` publishes the page through GitHub Pages. Keep Pages enabled.
 The project paths `/practical-formal-verification/`, `/plectis-atlas/`,
-`/plectis-zenith/` and `/lean-exposition-site/` are served by their own
+`/plectis-zenith/`, `/lean-exposition-site/` and `/proof-reader/` are served by their own
 repositories; this repository must not create folders at those paths, and the
 check refuses them.
 

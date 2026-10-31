@@ -307,6 +307,8 @@ def map_films(films: list[dict], *, series: str, pictures: bool = True) -> str:
         if pictures and film.get("youtube"):
             return film_slot(film, series=series, size="inline", sizes=MAP_STILL_SIZES)
         return film_words(film)
+    if not films:  # The empty cell keeps the columns in their places.
+        return '<div class="map-cell map-cell--videos"></div>'
     items = "".join(f'<li class="map-film">{one(film)}</li>' for film in films)
     return (f'<div class="map-cell map-cell--videos"><p class="map-cell__label">{COLUMNS[0]}</p>'
             f'<ul class="map-films" role="list">{items}</ul></div>')

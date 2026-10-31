@@ -95,6 +95,13 @@ SITES = {
         "box": "(() => { const h = document.querySelector('header').getBoundingClientRect().bottom;"
                " return {x: 230, y: h, w: 1770, h: 1125 - h}; })()",
     },
+    "proof-reader": {
+        # A sentence in the paper beside the graph and the exact Lean lines it
+        # describes, the same view as the picture in that repository's README.
+        "url": BASE + "proof-reader/#/contextual-embeddings/@closed-world",
+        "viewport": (1600, 900), "dpr": 2, "fill": 1.0,
+        "box": "({x: 0, y: 0, w: 1600, h: 900})",
+    },
     "zenith": {
         "url": BASE + "plectis-zenith/",
         "viewport": (1600, 1000), "dpr": 3, "fill": 1.0, "pad": True,
