@@ -623,7 +623,7 @@ def render_404(registry: dict) -> str:
         <h1 class="hub-title hub-title--small">This address has no page</h1>
         <p class="hub-lede">The Plectis website moved from <code>/plectis/</code> to <a href="{HOME}practical-formal-verification/">/practical-formal-verification/</a>. Old addresses that start with <code>/plectis/</code> forward there by themselves.</p>
         <p class="hub-orient">Or go to one of the websites:</p>
-        <ul class="hub-missing__list" role="list">{rows}<li><a href="/">All websites and films</a></li></ul>
+        <ul class="hub-missing__list" role="list">{rows}<li><a href="/">All projects and videos</a></li></ul>
       </div>
     </section>
   </main>
