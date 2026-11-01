@@ -2,22 +2,22 @@
 
 Will Cook's websites are separate projects with separate repositories, but a
 reader moving between them should always know where they are and how to get
-back. Every site carries the same three things, in its own stack:
+back. Every site carries the same three elements, implemented in its own code:
 
-1. **The lockup** at the start of its header (below): the Plectis plait, which
-   links to the home page, <https://wcook04.github.io/>, which maps every
-   website, film and repository.
-2. **Film slots** for the films about that site: the still with its play chip
-   and running time once a film is on YouTube, and a held frame marked "In
+1. **A shared header**: the woven logo links to Will's home page,
+   <https://wcook04.github.io/>, which lists his projects and videos. Next to
+   it, the site's own name and symbol link to that site's front page.
+2. **Video cards** for recordings about that site: a thumbnail, play symbol
+   and running time once the video is on YouTube, and a card marked "In
    preparation" until then.
-3. **Sister sites** in its footer: the other websites by name, and "All
-   websites and films" back to the home page.
+3. **Links to the other sites** in its footer: the websites by name, and
+   "All projects and videos" back to the home page.
 
-The list of websites, films and repositories is [`sites.json`](../sites.json)
+The list of websites, videos and repositories is [`sites.json`](../sites.json)
 in this repository. A website's `repos` names repositories by id from its
 top-level `repos` list (name, address and a one-sentence description). Each site keeps a copy beside its own source (`family.json`) and
 renders from it at build time, so no page requests anything from another host
-or depends on JavaScript to show its films.
+or depends on JavaScript to show its videos.
 
 The home page features the current introduction. Earlier introductions stay in
 the final `earlier-introductions` group, below the current videos, with the
@@ -51,8 +51,8 @@ The start of every site's header is the **lockup**, which replaces the older
     [Plectis plait] | [site mark] Site name
 
 - The **Plectis plait** links to the home page, <https://wcook04.github.io/>,
-  which lists every website and film. Its accessible name is "Will Cook: all
-  websites and films". Copy [`assets/family/marks/plectis.svg`](../assets/family/marks/plectis.svg)
+  which lists every project and video. Its accessible name is "Will Cook: all
+  projects and videos". Copy [`assets/family/marks/plectis.svg`](../assets/family/marks/plectis.svg)
   beside the site and show it as an `<img>`; it carries its own day and night
   palettes.
 - A short upright **rule** separates the two links.
@@ -69,8 +69,8 @@ previews every mark and lockup in both themes.
 
 ```html
 <span class="fam-lockup">
-  <a class="fam-lockup__home" href="https://wcook04.github.io/" rel="author" title="All of Will Cook's websites and films">
-    <img src="assets/plectis.svg" alt="Will Cook: all websites and films" width="26" height="26">
+  <a class="fam-lockup__home" href="https://wcook04.github.io/" rel="author" title="All of Will Cook's projects and videos">
+    <img src="assets/plectis.svg" alt="Will Cook: all projects and videos" width="26" height="26">
   </a>
   <span class="fam-lockup__rule" aria-hidden="true"></span>
   <a class="fam-lockup__site" href="./">
@@ -87,7 +87,7 @@ centre ring.
 
 ## Markup
 
-The ladder:
+Older headers used the markup below. New pages use the shared header shown above:
 
 ```html
 <span class="fam-ladder">
@@ -97,7 +97,7 @@ The ladder:
 </span>
 ```
 
-A released film. The still and the title open the same video, so only the
+A published video. The thumbnail and the title open the same video, so only the
 title is in the Tab order, and it says the running time in words:
 
 ```html
@@ -115,12 +115,12 @@ title is in the Tab order, and it says the running time in words:
     <p class="film-slot__title"><a href="https://www.youtube.com/watch?v=ID" target="_blank"
        rel="noopener noreferrer">Plectis Atlas: compare maths papers with the reports that check them<span
        class="sr-only">, video on YouTube, 5 minutes 27 seconds</span></a></p>
-    <p class="film-slot__text">One or two sentences from the film's description.</p>
+    <p class="film-slot__text">One or two sentences from the video's description.</p>
   </figcaption>
 </figure>
 ```
 
-A film in preparation. It has no link, because there is nothing to open yet:
+A video in preparation. It has no link, because there is nothing to open yet:
 
 Tests for this state must create a fixture with `youtube`, `still` and
 `duration_seconds` set to `null`. The real registry may have no videos left in
@@ -136,18 +136,18 @@ preparation after a release.
   <figcaption class="film-slot__caption">
     <p class="film-slot__title">SK reading interface</p>
     <p class="film-slot__meta">Video in preparation</p>
-    <p class="film-slot__text">One sentence on what the film will show.</p>
+    <p class="film-slot__text">One sentence on what the video will show.</p>
   </figcaption>
 </figure>
 ```
 
 On the Plectis pages the figure also carries `data-term-auto="off"`, so the
-glossary linker leaves a film's title and description as written.
+glossary linker leaves a video's title and description as written.
 
 `film-slot--small` and `film-slot--large` change only the play chip and the
 title size. `film-slot--inline` sets a small still beside its title, for a
-film about the apparatus on a page whose subject is something else (the Maths
-Map film beside the map of results). The sister sites:
+video about a tool on a page whose main subject is something else (the Maths
+Map video beside the map of results). The sister sites:
 
 ```html
 <nav class="fam-sites" aria-label="Will Cook's websites">
@@ -156,7 +156,7 @@ Map film beside the map of results). The sister sites:
     <li><a href="https://wcook04.github.io/practical-formal-verification/maths/">Mathematics</a></li>
     <li><a href="https://wcook04.github.io/lean-exposition-site/" aria-current="page">SK exposition</a></li>
     <!-- … every site in sites.json order, then: -->
-    <li><a href="https://wcook04.github.io/">All websites and films</a></li>
+    <li><a href="https://wcook04.github.io/">All projects and videos</a></li>
   </ul>
 </nav>
 ```
@@ -166,10 +166,10 @@ shown, not removed, so the list reads the same everywhere.
 
 ## Rules
 
-- **No embedded players.** A film opens on YouTube in a new tab. Pages load
+- **No embedded players.** A video opens on YouTube in a new tab. Pages load
   nothing from YouTube or any other host, and a site's content security
   policy needs no change.
-- **Never invent a link.** A film without a `youtube` value is shown in
+- **Never invent a link.** A video without a `youtube` value is shown in
   preparation. Its title is the working title, and its description says what
   it will show, taken from its script.
 - **Stills are the uploaded thumbnails**, served as 640 and 1280 px WebP
@@ -177,15 +177,17 @@ shown, not removed, so the list reads the same everywhere.
   Plectis site's `plectis_thumbnail_cards.py web`. They live in this
   repository's `assets/films/`; a site copies the ones it shows.
 - **Words.** British spelling, sentence case, no em dashes. Name things by
-  what they are: "PDF, 26 pages", not "Download".
+  what they are: "PDF, 26 pages", not "Download". Call the recordings videos
+  or walkthroughs. Keep technical names such as the `films` registry key,
+  `film-slot` CSS class and existing asset paths unchanged.
 - **Colour.** The family's ground is the warm paper of the Plectis sites
   (`#f8f0e2` by day, `#1c1526` at night) with ink `#191520` / `#f2e6d4`. A
   site keeps its own meaning-carrying colours (a map's categories, a check's
   outcome) on that ground.
 
-## Add a released film
+## Add a published video
 
-Follow the [home page’s release steps](../README.md#add-a-released-film) to
+Follow the [home page’s release steps](../README.md#add-a-published-video) to
 update the registry and thumbnail pair, run the checks, and publish the page.
 That procedure also covers copying the registry and stills to the sites that
 show the video. Keep one set of release instructions there; this document owns
