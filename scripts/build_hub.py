@@ -86,6 +86,9 @@ def validate_registry(registry: dict, root: Path = ROOT, exists=None) -> list[st
             problems.append(f"{repo['id']}: href must be {GITHUB}{repo['id']}")
     referenced: list[str] = []
     for owner in registry["sites"] + registry["projects"]:
+        thumbnail = owner.get("thumbnail")
+        if thumbnail and (not thumbnail.startswith("assets/") or ".." in Path(thumbnail).parts or not exists(thumbnail)):
+            problems.append(f"{owner['id']}: thumbnail must name an existing local asset")
         for film_id in owner.get("films", []):
             if film_id not in films:
                 problems.append(f"{owner['id']}: unknown film {film_id}")
@@ -344,8 +347,12 @@ def map_middle(row: dict) -> str:
 
 
 def row_thumb(row: dict) -> str:
-    """A website shows its first screen; a tool shows its film's still."""
+    """Show a supplied screenshot, a website capture or a film still."""
     item = row["item"]
+    if item.get("thumbnail"):
+        href, _ = row_way_in(row)
+        return (f'<a class="proj__thumb" href="{e(href)}"{link_attrs(href)} aria-hidden="true" tabindex="-1">'
+                f'<img src="{e(item["thumbnail"])}" alt="" loading="lazy" decoding="async"></a>')
     if row["kind"] == "site":
         href, _ = row_way_in(row)
         return (f'<a class="proj__thumb" href="{e(href)}"{link_attrs(href)} aria-hidden="true" tabindex="-1">'

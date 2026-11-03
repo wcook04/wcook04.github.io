@@ -45,6 +45,11 @@ and proofs that a computer can check.
   code errors when given records of earlier mistakes.
   Code: [plectis-zenith](https://github.com/wcook04/plectis-zenith).
 
+- **[Agent Trace](https://github.com/wcook04/agent-trace-mechanism)**.
+  Let a coding agent read earlier Codex and Claude Code chats, including
+  messages, commands and their results. Runs locally as a history reader
+  and MCP server.
+
 The page also links to [Safety Core](https://github.com/wcook04/safety-core),
 which supplies rules and command checks for AI programs that edit code, and
 [One Checkout](https://github.com/wcook04/one-checkout), which saves a selected
@@ -73,7 +78,8 @@ in a browser, and press Ctrl+C in the terminal to stop the server. Links to
 projects open their published websites.
 
 Change [`sites.json`](sites.json) to update a project, code link or video,
-then run the build, tests and checker again. Do not edit the generated
+A tool can supply a `thumbnail` path under `assets/` to use a screenshot instead of a video still.
+Then run the build, tests and checker again. Do not edit the generated
 `index.html` by hand.
 
 ## How the page is made

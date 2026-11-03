@@ -33,6 +33,16 @@ class HubTests(unittest.TestCase):
         self.files.update({name: text.encode() for name, text in CHECK.BUILD.outputs(registry).items()})
         return registry, pending
 
+    def test_project_thumbnail_requires_a_local_file(self):
+        registry = json.loads(self.files["sites.json"])
+        project = registry["projects"][0]
+        project["thumbnail"] = "https://example.com/image.png"
+        errors = CHECK.BUILD.validate_registry(registry, ROOT)
+        self.assertTrue(any("thumbnail" in error for error in errors))
+        project["thumbnail"] = "assets/missing.png"
+        errors = CHECK.BUILD.validate_registry(registry, ROOT)
+        self.assertTrue(any("thumbnail" in error for error in errors))
+
     def test_current_site_contract(self):
         self.assertEqual(self.errors(), [])
 

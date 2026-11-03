@@ -1,7 +1,7 @@
 {
   "schema": "will_cook_site_family_v1",
   "about": "The one list of Will Cook's websites, films and repositories. The home page at wcook04.github.io is built from it, and each website keeps a copy for its own header, footer and film slots. Edit this file, then follow README.md, 'Add a released film'.",
-  "updated": "2026-10-31",
+  "updated": "2026-11-03",
   "owner": {
     "name": "Will Cook",
     "home": "https://wcook04.github.io/",
@@ -196,6 +196,16 @@
   ],
   "projects": [
     {
+      "id": "agent-trace",
+      "name": "Agent Trace",
+      "purpose": "Let a coding agent read earlier Codex and Claude Code chats, including messages, commands and their results.",
+      "films": [],
+      "repos": [
+        "agent-trace-mechanism"
+      ],
+      "thumbnail": "assets/sites/agent-trace.png"
+    },
+    {
       "id": "safety-core",
       "name": "Safety Core",
       "purpose": "Keep agent rules in one file and see which are written instructions and which have a program checking commands.",
@@ -243,6 +253,7 @@
       "id": "software",
       "title": "Software and experiments with AI agents",
       "items": [
+        "agent-trace",
         "formal-verification",
         "zenith",
         "safety-core",
@@ -305,6 +316,12 @@
       "name": "one-checkout",
       "href": "https://github.com/wcook04/one-checkout",
       "description": "Commit one agent’s fix without including another agent’s unfinished edits."
+    },
+    {
+      "id": "agent-trace-mechanism",
+      "name": "agent-trace-mechanism",
+      "href": "https://github.com/wcook04/agent-trace-mechanism",
+      "description": "A local history reader and MCP server for Codex and Claude Code. Choose which chats an agent can read, then retrieve a compact transcript or detailed tool activity."
     }
   ],
   "film_groups": [
