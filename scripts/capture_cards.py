@@ -98,6 +98,19 @@ SITES = {
         "viewport": (1600, 900), "dpr": 2, "fill": 1.0,
         "box": "({x: 0, y: 0, w: 1600, h: 900})",
     },
+    "code-ontology-bridge": {
+        # The caller graph: calls followed backwards from the resolver, the scheduler's callback dashed.
+        "url": BASE + "code-ontology-bridge/#/walkthrough/graph",
+        "viewport": (1200, 1000), "dpr": 2, "fill": 0.96,
+        "prepare": lambda page: (page.wait_for_selector(".graph svg"), page.evaluate(
+            "document.querySelector('.topbar').style.visibility = 'hidden';"
+            " document.querySelector('.graph-below').style.visibility = 'hidden';"
+            " document.querySelector('#h-graph').scrollIntoView({block: 'start'}); window.scrollBy(0, -60)")),
+        # The section's title, the direct/callback switch, the sentence it changes and the graph.
+        "box": "(() => { const t = document.querySelector('#h-graph').getBoundingClientRect();"
+               " const g = document.querySelector('.graph svg').getBoundingClientRect();"
+               " return {x: g.left, y: t.top, w: g.width, h: g.bottom - t.top}; })()",
+    },
     "zenith": {
         "url": BASE + "plectis-zenith/",
         "viewport": (1600, 1000), "dpr": 3, "fill": 1.0, "pad": True,

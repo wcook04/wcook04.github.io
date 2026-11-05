@@ -8,6 +8,7 @@ This host's root page lists Will Cook's websites and films. Each website is its 
 - [Plectis Atlas](https://wcook04.github.io/plectis-atlas/): Read OpenAI’s maths papers alongside the reports that outside groups wrote about their claims and proofs. Agent entry: https://wcook04.github.io/plectis-atlas/llms.txt
 - [Practical Formal Verification](https://wcook04.github.io/practical-formal-verification/explorer/): 88 small Python programs and groups of programs from my research system. Twelve have mathematical proofs for particular calculations, with stated assumptions. Agent entry: https://wcook04.github.io/practical-formal-verification/llms.txt
 - [Zenith](https://wcook04.github.io/plectis-zenith/): Experiments on whether records of past mistakes help AI models test and repair code. Agent entry: https://wcook04.github.io/plectis-zenith/llms.txt
+- [Code Ontology Bridge](https://wcook04.github.io/code-ontology-bridge/): Turns a Python repository into a database and semantic model that NVIDIA Auto Ontology’s SQL agent can query, and measures how much that model helps on questions written without seeing it.
 
 Films, with their YouTube addresses and the website each belongs to, are listed in https://wcook04.github.io/sites.json.
 Use each site's own source links and stated limits when describing its findings.

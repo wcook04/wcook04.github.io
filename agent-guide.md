@@ -8,5 +8,6 @@ Start at the [home page](https://wcook04.github.io/) or read [sites.json](https:
 - [Plectis Atlas](https://wcook04.github.io/plectis-atlas/). Source: [plectis-atlas](https://github.com/wcook04/plectis-atlas).
 - [Practical Formal Verification](https://wcook04.github.io/practical-formal-verification/explorer/). Source: [practical-formal-verification](https://github.com/wcook04/practical-formal-verification).
 - [Zenith](https://wcook04.github.io/plectis-zenith/). Source: [plectis-zenith](https://github.com/wcook04/plectis-zenith).
+- [Code Ontology Bridge](https://wcook04.github.io/code-ontology-bridge/). Source: [code-ontology-bridge](https://github.com/wcook04/code-ontology-bridge).
 
 Use each site's own source links and stated limits when describing its findings.

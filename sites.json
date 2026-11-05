@@ -1,7 +1,7 @@
 {
   "schema": "will_cook_site_family_v1",
   "about": "The one list of Will Cook's websites, films and repositories. The home page at wcook04.github.io is built from it, and each website keeps a copy for its own header, footer and film slots. Edit this file, then follow README.md, 'Add a released film'.",
-  "updated": "2026-11-03",
+  "updated": "2026-11-05",
   "owner": {
     "name": "Will Cook",
     "home": "https://wcook04.github.io/",
@@ -192,6 +192,26 @@
       "repos": [
         "plectis-zenith"
       ]
+    },
+    {
+      "id": "code-ontology-bridge",
+      "name": "Code Ontology Bridge",
+      "short": "Code Ontology Bridge",
+      "url": "https://wcook04.github.io/code-ontology-bridge/",
+      "routes": [
+        {
+          "label": "Caller example",
+          "href": "https://wcook04.github.io/code-ontology-bridge/#/walkthrough/graph"
+        }
+      ],
+      "purpose": "Turns a Python repository into a database and semantic model that NVIDIA Auto Ontology’s SQL agent can query, and measures how much that model helps on questions written without seeing it.",
+      "status": "A study on four repositories and 48 questions, with every question, answer and failed run published.",
+      "capture": "assets/sites/code-ontology-bridge",
+      "capture_caption": "Calls followed backwards from a function, with a callback reference shown dashed.",
+      "films": [],
+      "repos": [
+        "code-ontology-bridge"
+      ]
     }
   ],
   "projects": [
@@ -253,6 +273,7 @@
       "id": "software",
       "title": "Software and experiments with AI agents",
       "items": [
+        "code-ontology-bridge",
         "agent-trace",
         "formal-verification",
         "zenith",
@@ -322,6 +343,12 @@
       "name": "agent-trace-mechanism",
       "href": "https://github.com/wcook04/agent-trace-mechanism",
       "description": "A local history reader and MCP server for Codex and Claude Code. Choose which chats an agent can read, then retrieve a compact transcript or detailed tool activity."
+    },
+    {
+      "id": "code-ontology-bridge",
+      "name": "code-ontology-bridge",
+      "href": "https://github.com/wcook04/code-ontology-bridge",
+      "description": "Exports a Python repository’s files, functions, calls, imports and docstrings to DuckDB with a native Auto Ontology semantic model."
     }
   ],
   "film_groups": [
