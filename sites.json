@@ -200,6 +200,10 @@
       "url": "https://wcook04.github.io/code-ontology-bridge/",
       "routes": [
         {
+          "label": "The study",
+          "href": "https://wcook04.github.io/code-ontology-bridge/#/study"
+        },
+        {
           "label": "Caller example",
           "href": "https://wcook04.github.io/code-ontology-bridge/#/walkthrough/graph"
         }
