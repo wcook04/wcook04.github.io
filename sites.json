@@ -138,7 +138,9 @@
       "status": "Comparator accepted each proof bundle in local runs on my computer and rejected five deliberately wrong solutions. The Forrelation lower bound, which the preprint imports, is proved here by a shorter route in a weaker form.",
       "capture": "assets/sites/quartic",
       "capture_caption": "The general reader beside the graph of the Lean proof, following the paragraph being read.",
-      "films": [],
+      "films": [
+        "quartic-query"
+      ],
       "repos": [
         "quartic-query-lean"
       ],
@@ -448,6 +450,9 @@
       "site": "maths"
     },
     {
+      "site": "quartic"
+    },
+    {
       "site": "lean-exposition"
     },
     {
@@ -594,6 +599,15 @@
       "youtube": "https://www.youtube.com/watch?v=U1z2-XaLe_w",
       "duration_seconds": 344,
       "still": "assets/films/introduction"
+    },
+    {
+      "id": "quartic-query",
+      "title": "How much faster can a quantum computer be? OpenAI's fourth-power result",
+      "short": "Quantum query complexity",
+      "description": "I compare how many times quantum and classical computers must look at the same data, then explain why four is the best possible power for total yes-or-no questions.",
+      "youtube": "https://www.youtube.com/watch?v=3hZaKK0-leY",
+      "duration_seconds": 1633,
+      "still": "assets/films/quartic-query"
     }
   ]
 }

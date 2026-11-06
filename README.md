@@ -35,6 +35,7 @@ and proofs that a computer can check.
   query complexity, with two explanations of its proof. A Lean proof beside
   the text follows each paragraph as you read.
   Code: [quartic-query-lean](https://github.com/wcook04/quartic-query-lean).
+  Video: [How much faster can a quantum computer be?](https://www.youtube.com/watch?v=3hZaKK0-leY) (27:13).
 
 - **[Plectis Atlas](https://wcook04.github.io/plectis-atlas/)**.
   Read OpenAI's mathematics papers beside reports written about them by other
