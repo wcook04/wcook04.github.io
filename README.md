@@ -62,7 +62,9 @@ and proofs that a computer can check.
   and a visual specification. The IR adds source-grounded metadata about what
   the words mean, what viewers need to understand and when visual events should
   happen, giving an animation agent context for generating visuals. Includes a
-  worked example and optional Python tools.
+  worked example and optional Python tools. The workflow grew out of the
+  [Quartic film](https://www.youtube.com/watch?v=3hZaKK0-leY); its
+  [final section](https://www.youtube.com/watch?v=3hZaKK0-leY&t=1431s) explains how it was made.
 
 The page also links to [Safety Core](https://github.com/wcook04/safety-core),
 which supplies rules and command checks for AI programs that edit code, and
