@@ -1,7 +1,7 @@
 {
   "schema": "will_cook_site_family_v1",
   "about": "The one list of Will Cook's websites, films and repositories. The home page at wcook04.github.io is built from it, and each website keeps a copy for its own header, footer and film slots. Edit this file, then follow README.md, 'Add a released film'.",
-  "updated": "2026-11-05",
+  "updated": "2026-11-06",
   "owner": {
     "name": "Will Cook",
     "home": "https://wcook04.github.io/",
@@ -111,6 +111,30 @@
       "films": [],
       "repos": [
         "proof-reader"
+      ]
+    },
+    {
+      "id": "quartic",
+      "name": "Quartic Reader",
+      "short": "Quartic Reader",
+      "url": "https://wcook04.github.io/quartic-query-lean/",
+      "routes": [
+        {
+          "label": "Read OpenAI’s paper",
+          "href": "https://wcook04.github.io/quartic-query-lean/#/read/original"
+        },
+        {
+          "label": "General reader",
+          "href": "https://wcook04.github.io/quartic-query-lean/#/read/exposition"
+        }
+      ],
+      "purpose": "Read OpenAI’s paper on a nearly quartic gap between randomized and quantum query complexity, with two explanations of its proof, beside a Lean proof that follows each paragraph as you read.",
+      "status": "The theorem and construction are OpenAI’s. The explanations and the Lean proof are mine, made with AI, and checked by Lean; the links between paragraphs and Lean were reviewed by AI only.",
+      "capture": "assets/sites/quartic",
+      "capture_caption": "The general reader beside the graph of the Lean proof, following the paragraph being read.",
+      "films": [],
+      "repos": [
+        "quartic-query-lean"
       ]
     },
     {
@@ -270,6 +294,7 @@
         "maths",
         "lean-exposition",
         "proof-reader",
+        "quartic",
         "atlas"
       ]
     },
@@ -353,6 +378,12 @@
       "name": "code-ontology-bridge",
       "href": "https://github.com/wcook04/code-ontology-bridge",
       "description": "Exports a Python repository’s files, functions, calls, imports and docstrings to DuckDB with a native Auto Ontology semantic model."
+    },
+    {
+      "id": "quartic-query-lean",
+      "name": "quartic-query-lean",
+      "href": "https://github.com/wcook04/quartic-query-lean",
+      "description": "The Lean proof of OpenAI’s nearly quartic separation, three accounts of the argument, and the reader website built from them."
     }
   ],
   "film_groups": [

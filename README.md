@@ -30,6 +30,12 @@ and proofs that a computer can check.
   to open the corresponding lines of the proof.
   Code: [proof-reader](https://github.com/wcook04/proof-reader).
 
+- **[Quartic Reader](https://wcook04.github.io/quartic-query-lean/)**.
+  OpenAI's paper on a nearly quartic gap between randomized and quantum
+  query complexity, with two explanations of its proof. A Lean proof beside
+  the text follows each paragraph as you read.
+  Code: [quartic-query-lean](https://github.com/wcook04/quartic-query-lean).
+
 - **[Plectis Atlas](https://wcook04.github.io/plectis-atlas/)**.
   Read OpenAI's mathematics papers beside reports written about them by other
   groups.

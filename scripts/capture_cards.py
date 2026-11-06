@@ -98,6 +98,18 @@ SITES = {
         "viewport": (1600, 900), "dpr": 2, "fill": 1.0,
         "box": "({x: 0, y: 0, w: 1600, h: 900})",
     },
+    "quartic": {
+        # The general reader at the address-prediction paragraph, with the graph
+        # of the Lean proof following it. The site is night by default; the
+        # light capture switches it to day as a reader with a light system would.
+        "url": BASE + "quartic-query-lean/#/read/exposition?s=exposition%2Faddress%2F0",
+        "viewport": (1600, 900), "dpr": 2, "fill": 1.0,
+        "prepare": lambda page: (page.evaluate(
+            "if (matchMedia('(prefers-color-scheme: light)').matches)"
+            " document.documentElement.setAttribute('data-theme', 'light')"),
+            click_text(page, "Graph"), page.wait_for_timeout(2500)),
+        "box": "({x: 0, y: 0, w: 1600, h: 900})",
+    },
     "code-ontology-bridge": {
         # The caller graph: calls followed backwards from the resolver, the scheduler's callback dashed.
         "url": BASE + "code-ontology-bridge/#/walkthrough/graph",
