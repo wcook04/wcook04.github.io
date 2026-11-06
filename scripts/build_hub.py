@@ -102,8 +102,10 @@ def validate_registry(registry: dict, root: Path = ROOT, exists=None) -> list[st
         problems.append("repositories on no website or tool: " + ", ".join(sorted(unplaced)))
     for site in registry["sites"]:
         hrefs = [r["href"] for r in site.get("routes", [])]
-        if len(hrefs) != len(set(hrefs)) or any(not h.startswith(HOME) or not r.get("label") for h, r in zip(hrefs, site.get("routes", []))):
-            problems.append(f"{site['id']}: each route needs a label and an address on {HOME}, once")
+        # Evidence may live at a fixed revision in this project's repository.
+        route_roots = (HOME,) + tuple(GITHUB + rid + "/" for rid in site.get("repos", []) if rid in repos)
+        if len(hrefs) != len(set(hrefs)) or any(not h.startswith(route_roots) or not r.get("label") for h, r in zip(hrefs, site.get("routes", []))):
+            problems.append(f"{site['id']}: each route needs a label and a unique address on the home host or an attached repository")
         if not site["url"].startswith(HOME):
             problems.append(f"{site['id']}: websites live under {HOME}")
         for scheme in ("light", "dark"):
@@ -267,7 +269,7 @@ def index_entries(registry: dict) -> list[dict]:
             kind, item = owners[item_id]
             rows.append({"kind": kind, "item": item, "films": [films[f] for f in item.get("films", [])],
                          "repos": repos_of(registry, item)})
-        groups.append({"id": group["id"], "title": group["title"], "rows": rows})
+        groups.append({"id": group["id"], "title": group["title"], "lede": group.get("lede"), "rows": rows})
     return groups
 
 
@@ -338,7 +340,7 @@ def map_middle(row: dict) -> str:
     item = row["item"]
     if row["kind"] != "site":
         return ""
-    links = [{"label": item.get("front_label", "Front page"), "href": item["url"]}] + item.get("routes", [])
+    links = ([{"label": item["front_label"], "href": item["url"]}] if item.get("front_label") else []) + item.get("routes", [])
     routes = "".join(f'<li><a href="{e(r["href"])}">{e(r["label"])}<span class="sr-only">, on {e(item["name"])}</span></a></li>'
                      for r in links)
     note = f'<p class="map-node__note">{e(item["status"])}</p>' if item.get("status") else ""
@@ -385,7 +387,7 @@ def link_attrs(href: str) -> str:
 def row_summary(row: dict) -> str:
     """The toggle: what it does (Show details, Hide details once open), then what
     the details hold, in words a step quieter."""
-    return (f'<span class="proj__act"><span><span class="proj__verb">Show</span> details</span>{CHEVRON}</span>'
+    return (f'<span class="proj__act"><span><span class="proj__verb">Show</span> videos and code</span>{CHEVRON}</span>'
             f'<span class="proj__holds"><span class="sr-only">: </span>{e(", ".join(holds(row["films"], row["repos"])))}</span>')
 
 
@@ -402,19 +404,26 @@ def project_row(row: dict) -> str:
     more = (f'<div class="proj__more" id="more-{pid}">'
             f'<div class="map-row map-row--{row["kind"]}" data-row="{pid}">{map_middle(row)}{films}'
             f'{map_code(row["repos"], item.get("status") or "")}</div></div>')
+    kind = f'<p class="proj__kind">{e(item["kind"])}</p>' if item.get("kind") else ""
+    tags = "".join(f'<li>{e(t)}</li>' for t in item.get("tags", []))
+    tags = f'<ul class="proj__tags" role="list" aria-label="Tools and fields">{tags}</ul>' if tags else ""
+    credit = f'<p class="proj__credit">{e(item["credit"])}</p>' if item.get("credit") else ""
     return (f'<li class="proj proj--{row["kind"]}" id="{pid}">'
             f'<div class="proj__head">{row_thumb(row)}'
-            f'<div class="proj__main"><h4 class="proj__name">{name}</h4>'
-            f'<p class="proj__purpose">{e(item["purpose"])}</p><p class="proj__ways">{way_in}</p></div>'
+            f'<div class="proj__main"><h4 class="proj__name">{name}</h4>{kind}'
+            f'<p class="proj__purpose">{e(item["purpose"])}</p>{credit}</div>'
+            f'<div class="proj__side"><div class="proj__ways">{way_in}'
             f'<button class="proj__toggle" type="button" aria-expanded="false" aria-controls="more-{pid}">'
-            f'<span class="sr-only">{e(item["name"])}: </span>{row_summary(row)}</button>'
+            f'<span class="sr-only">{e(item["name"])}: </span>{row_summary(row)}</button></div>{tags}</div>'
             f'</div>{more}</li>')
 
 
 def render_projects(registry: dict) -> str:
     groups = "".join(
-        f'<div class="proj-group" aria-labelledby="group-{e(g["id"])}">'
+        f'<div class="proj-group" aria-labelledby="group-{e(g["id"])}">' +
+        ('<span id="group-software" class="hub-alias"></span>' if g["id"] == "agents" else "") +
         f'<h3 class="proj-group__title" id="group-{e(g["id"])}">{e(g["title"])}</h3>'
+        f'{f"<p class=\"proj-group__lede\">{e(g["lede"])}</p>" if g.get("lede") else ""}'
         f'<ul class="proj-list" role="list">{"".join(project_row(r) for r in g["rows"])}</ul></div>'
         for g in index_entries(registry))
     return f'<div class="map" data-hub-map>{groups}</div>'
@@ -533,7 +542,10 @@ def render_index(registry: dict) -> str:
     if pending:
         count_line += f" and {count_words(len(pending), 'is', 'are')} in preparation"
     count_line += ". Each opens on YouTube in a new tab."
-    rows = sum(len(g["items"]) for g in registry["index_groups"])
+    routes = "".join(
+        f'<li><a href="#group-{e(g["id"])}"><span class="hub-routes__title">{e(g["title"])}</span>'
+        f'<span class="hub-routes__count">{e(count_words(len(g["items"]), "project", "projects", capital=True))}</span></a></li>'
+        for g in registry["index_groups"])
     description = ("Will Cook’s AI-assisted mathematics and software: Erdős research, papers linked to Lean proofs, "
                    "agent tools, practical formal verification and videos.")
     head = page_head(title="Will Cook: websites and videos", description=description, canonical=HOME,
@@ -560,8 +572,9 @@ def render_index(registry: dict) -> str:
         <div class="hub-intro__copy">
           <h1 class="hub-title" id="hub-title">{e(owner["name"])}</h1>
           <p class="hub-lede">{e(owner["lede"])}</p>
-          <p class="hub-orient">Each project has its own website or code, and its videos. New here? Start with the introduction, which explains how they fit together.</p>
-          <p class="hub-intro__next"><a href="#projects">See the {count_words(rows, "project", "projects")}</a></p>
+          <p class="hub-orient">{e(owner["orient"])}</p>
+          <ul class="hub-routes" role="list" aria-label="Projects by field">{routes}</ul>
+          <p class="hub-avail">{e(owner["availability"])} <a href="#contact">How to reach me</a></p>
         </div>
         <div class="hub-intro__film">{film_slot(intro, series="Will Cook", size="large", with_text=False, sizes="(min-width: 1024px) 600px, 100vw", loading="eager")}</div>
       </div>
@@ -573,10 +586,9 @@ def render_index(registry: dict) -> str:
         <div class="hub-projects__head">
           <div>
             <h2 class="hub-section-title" id="projects-title">Projects</h2>
-            <p class="hub-projects__lede"><span class="hub-when-script">Visit a project directly, or choose Show details to see its videos and code here.</span><span class="hub-when-plain">Each project with its videos and its code on GitHub.</span></p>
-            <p class="hub-projects__lede">Some projects use Lean, a language for writing mathematical statements and proofs that a computer can check.</p>
+            <p class="hub-projects__lede">{e(registry["projects_lede"])}</p>
           </div>
-          <button class="hub-projects__all" type="button" data-proj-all aria-expanded="false">Show all details</button>
+          <button class="hub-projects__all" type="button" data-proj-all aria-expanded="false">Show all videos and code</button>
         </div>
         {render_projects(registry)}
       </div>
@@ -651,7 +663,10 @@ def render_llms(registry: dict) -> str:
     for site in registry["sites"]:
         entry = entries.get(site["id"])
         tail = f" Agent entry: {entry}" if entry else ""
-        lines.append(f"- [{site['name']}]({site['url']}): {site['purpose']}{tail}")
+        credit = f" {site['credit']}" if site.get("credit") else ""
+        evidence = "".join(f" [{route['label']}]({route['href']})."
+                           for route in site.get("routes", []) if route["href"].startswith(GITHUB))
+        lines.append(f"- [{site['name']}]({site['url']}): {site['purpose']}{credit}{evidence}{tail}")
     lines += ["", "Films, with their YouTube addresses and the website each belongs to, are listed in https://wcook04.github.io/sites.json.",
               "Use each site's own source links and stated limits when describing its findings.", ""]
     return "\n".join(lines)

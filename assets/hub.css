@@ -174,7 +174,7 @@ main#main:focus { outline: none; }
   font-family: var(--font-serif); font-size: clamp(1.12rem, 1.02rem + 0.3vw, 1.27rem); line-height: 1.5;
   color: var(--ink-soft);
 }
-.hub-orient { margin-top: 0.8rem; max-width: 44em; font-size: 0.98rem; color: var(--muted); }
+.hub-orient { margin-top: 0.8rem; max-width: 62ch; font-size: 0.98rem; color: var(--muted); }
 .hub-orient a { font-weight: 600; }
 .hub-intro__next { margin-top: 1.1rem; font-size: 0.98rem; }
 .hub-intro__next a { font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; min-height: 32px; }
@@ -184,6 +184,18 @@ main#main:focus { outline: none; }
   font-family: var(--font-serif); font-weight: 400; color: var(--ink);
   font-size: clamp(1.6rem, 1.25rem + 1vw, 2.15rem); line-height: 1.12; letter-spacing: -0.012em;
 }
+.hub-routes { list-style: none; margin: 1.3rem 0 0; padding: 0; display: grid; gap: 0.45rem; max-width: 30rem; }
+.hub-routes a {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; min-height: 2.6rem;
+  padding: 0.55rem 0.9rem; border: 1px solid var(--rule-strong); border-radius: var(--r-control); background: var(--surface);
+  color: var(--ink); text-decoration: none; transition: border-color var(--dur) var(--ease);
+}
+.hub-routes a:hover { border-color: var(--rule-control); color: var(--ink); }
+.hub-routes a::after { content: "\2193"; order: 3; color: var(--faint); }
+.hub-routes__title { font-weight: 600; margin-right: auto; }
+.hub-routes__count { font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.hub-avail { margin-top: 1.2rem; max-width: 44em; font-size: 0.95rem; color: var(--ink-soft); }
+.hub-avail a { font-weight: 600; white-space: nowrap; }
 .hub-intro__top { display: grid; gap: 1.8rem; }
 .hub-intro__film .film-slot { max-width: 40rem; }
 .hub-intro__film .film-slot__title { font-size: clamp(1.15rem, 1.02rem + 0.4vw, 1.32rem); }
@@ -230,18 +242,21 @@ html.scripting .hub-projects__all { display: inline-flex; }
   --map-line: color-mix(in srgb, var(--rule-strong) 45%, var(--rule-control));
   --map-gutter: clamp(2.6rem, 4.2vw, 3.6rem);
 }
-.proj-group + .proj-group { margin-top: clamp(1.6rem, 3vw, 2.4rem); }
+.proj-group + .proj-group { margin-top: clamp(2.2rem, 4vw, 3.2rem); }
 .proj-group__title {
-  padding-block: 1rem 0.6rem;
-  font-family: var(--font-sans); font-size: 0.95rem; font-weight: 600; letter-spacing: 0.005em; color: var(--muted);
+  padding-top: 1.2rem; scroll-margin-top: calc(var(--header-h) + 20px);
+  font-family: var(--font-serif); font-size: clamp(1.35rem, 1.2rem + 0.5vw, 1.6rem); font-weight: 500; line-height: 1.2; letter-spacing: -0.01em; color: var(--ink);
 }
+.proj-group__lede { margin: 0.35rem 0 0.9rem; max-width: 70ch; font-size: 0.97rem; line-height: 1.5; color: var(--muted); }
 .proj-list { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--rule); }
 .proj { border-top: 1px solid var(--rule); scroll-margin-top: calc(var(--header-h) + 12px); }
 
-/* The closed line. */
+/* The closed line: picture, then the name, what kind of work it is in the
+   field's own words, one sentence, who did what, the field's standard tools
+   as quiet labels, and the two actions on one line. */
 .proj__head {
-  display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 0.8rem 1rem; align-items: center;
-  padding-block: 1rem;
+  display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 0.8rem 1rem; align-items: start;
+  padding-block: 1.15rem;
 }
 html.scripting .proj__head { cursor: pointer; }
 .proj__thumb {
@@ -255,37 +270,43 @@ html.scripting .proj__head { cursor: pointer; }
 .proj__thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
 /* A website's card is its most telling view (usually its map), captured
    already framed at 16:9 by scripts/capture_cards.py, so it is shown whole. */
+.proj__main { min-width: 0; }
 .proj__name { font-family: var(--font-serif); font-size: 1.24rem; line-height: 1.2; font-weight: 500; letter-spacing: -0.008em; color: var(--ink); }
 .proj__name a { color: var(--ink); text-decoration: none; }
 .proj__name a::after { content: "\00a0\2197"; font-family: var(--font-sans); font-size: 0.6em; font-weight: 400; color: var(--faint); }
 .proj__name a:hover { text-decoration: underline; text-decoration-color: var(--rule-control); }
-.proj__purpose { margin-top: 0.25rem; max-width: 62ch; font-size: 0.93rem; line-height: 1.48; color: var(--ink-soft); }
-.proj__ways { margin-top: 0.4rem; font-size: 0.9rem; }
-.proj__go { display: inline-flex; align-items: center; min-height: 24px; font-weight: 600; text-decoration: none; }
+.proj__kind { margin-top: 0.2rem; font-size: 0.86rem; font-weight: 600; line-height: 1.35; color: var(--accent); }
+.proj__purpose { margin-top: 0.35rem; max-width: 68ch; font-size: 0.95rem; line-height: 1.5; color: var(--ink-soft); }
+.proj__credit { margin-top: 0.3rem; max-width: 68ch; font-size: 0.86rem; line-height: 1.45; color: var(--muted); }
+.proj__tags { list-style: none; margin: 0.55rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.proj__tags li {
+  padding: 0.05rem 0.5rem; border-radius: 4px; border: 1px solid var(--rule-strong); background: var(--surface);
+  font-size: 0.78rem; line-height: 1.5; color: var(--ink-soft); white-space: nowrap;
+}
+.proj__ways { margin-top: 0.65rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1.4rem; font-size: 0.92rem; }
+.proj__go { display: inline-flex; align-items: center; min-height: 32px; font-weight: 600; text-decoration: none; }
 .proj__go::after { content: "\00a0\2197"; font-weight: 400; font-size: 0.85em; }
 .proj__go:hover { text-decoration: underline; }
 .proj__head:hover .proj__thumb { box-shadow: 0 0 0 1px var(--rule-control); }
 
-/* The control that opens the line: what it does in the ink of a link's
-   words, what the details hold a step quieter under it. One target, so the
-   verb and the count are read as one thing. */
+/* The control that opens the line: a quiet text button beside the way in,
+   its verb in ink and what it holds a step quieter. */
 .proj__toggle {
-  display: none; grid-column: 1 / -1; justify-self: start; flex-direction: column; align-items: flex-start; gap: 0.12rem;
-  min-height: 2.75rem; padding: 0.5rem 0.85rem 0.55rem; margin: 0.15rem 0 0;
+  display: none; align-items: center; gap: 0.5rem; min-height: 32px; padding: 0.15rem 0.65rem 0.15rem 0.6rem; margin: 0;
   font: inherit; line-height: 1.3; text-align: left; cursor: pointer;
-  background: transparent; border: 1px solid var(--rule-control); border-radius: 8px;
+  background: transparent; border: 1px solid var(--rule-strong); border-radius: var(--r-control);
   transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
 }
-html.scripting .proj__toggle { display: flex; }
-.proj__act { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.92rem; font-weight: 600; color: var(--ink); }
+html.scripting .proj__toggle { display: inline-flex; }
+.proj__act { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.9rem; font-weight: 600; color: var(--ink); }
 .proj__holds { font-size: 0.82rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 @media (hover: hover) and (pointer: fine) {
-  .proj__head:hover .proj__toggle, .proj__toggle:hover { border-color: var(--ink-soft); background: var(--surface); }
+  .proj__head:hover .proj__toggle, .proj__toggle:hover { border-color: var(--rule-control); background: var(--surface); }
 }
-.proj__toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+.proj__toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-control); }
 .proj__chevron { flex: none; color: var(--muted); transition: transform var(--dur-slow) var(--ease-out); }
 .proj.is-open .proj__chevron { transform: rotate(180deg); }
-.proj.is-open .proj__toggle { background: var(--surface-sunk); border-color: var(--rule-strong); }
+.proj.is-open .proj__toggle { background: var(--surface-sunk); border-color: var(--rule-control); }
 
 /* The open line: the project's own map. */
 html.scripting .proj__more { display: none; }
@@ -296,13 +317,37 @@ html.scripting .proj.is-open .proj__more, html.scripting .proj:target:not(.is-sh
 }
 @keyframes proj-open { from { opacity: 0; transform: translateY(-6px); } }
 
+/* Narrow: the picture sits beside the name and its kind; the sentences
+   below run the full width, so no blank strip forms under the picture. */
+@media (max-width: 719.98px) {
+  .proj__head { row-gap: 0; align-items: center; }
+  .proj__main { display: contents; }
+  .proj__thumb { grid-row: 1; align-self: center; }
+  .proj__name { grid-column: 2; align-self: center; }
+  .proj__kind { grid-column: 2; align-self: start; }
+  .proj__purpose, .proj__credit { grid-column: 1 / -1; }
+  .proj__purpose { margin-top: 0.75rem; }
+  .proj__side { margin-top: 0.1rem; }
+}
+.proj__side { grid-column: 1 / -1; min-width: 0; }
+.proj__side .proj__tags { margin-top: 0.6rem; }
 @media (min-width: 720px) {
-  .proj__head { grid-template-columns: 11rem minmax(0, 1fr) auto; gap: 0 1.5rem; padding-block: 1.1rem; }
-  .proj__toggle { width: 15.5rem; justify-self: end; margin: 0; }
-  .proj__thumb { align-self: center; }
+  .proj__side { grid-column: 2; }
+}
+@media (min-width: 720px) {
+  .proj__head { grid-template-columns: 13rem minmax(0, 1fr); gap: 0 1.75rem; padding-block: 1.35rem; }
   .proj__thumb.film-slot__frame { --play: 30px; }
-  .proj__toggle { grid-column: auto; align-self: center; }
-  .proj__name { font-size: 1.36rem; }
+  .proj__name { font-size: 1.4rem; }
+}
+/* Wide: the actions and the field labels take the right column, so a row
+   is as tall as its picture and its words. */
+@media (min-width: 1180px) {
+  .proj__head { grid-template-columns: 13rem minmax(0, 1fr) 15.5rem; }
+  .proj__side { grid-column: 3; grid-row: 1; display: grid; align-content: start; gap: 0.7rem; padding-top: 0.2rem; }
+  .proj__ways { margin-top: 0; flex-direction: column; align-items: stretch; gap: 0.5rem; }
+  .proj__go { justify-content: flex-start; }
+  .proj__toggle { width: 100%; flex-wrap: wrap; row-gap: 0; }
+  .proj__side .proj__tags { margin-top: 0; }
 }
 
 .map-row { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
@@ -383,7 +428,7 @@ html.scripting .proj.is-open .proj__more, html.scripting .proj:target:not(.is-sh
   .map-row--tool {
     grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); grid-template-areas: "videos code";
     column-gap: clamp(2rem, 4vw, 3.5rem); align-items: start;
-    margin-left: calc(11rem + 1.5rem); padding: 0.1rem 0 0.4rem;
+    margin-left: calc(13rem + 1.75rem); padding: 0.1rem 0 0.4rem;
   }
 }
 

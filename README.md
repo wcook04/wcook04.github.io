@@ -4,7 +4,7 @@ This repository contains the code for [Will Cook's home page](https://wcook04.gi
 The page links his mathematics research, software and videos. The projects
 have their own repositories, listed below.
 
-Open the website to watch the introduction or choose a project. **Show details**
+Open the website to watch the introduction or choose a project. **Show videos and code**
 opens that project's papers, videos and code links beneath its description.
 
 [![The home page, with an introduction video and links to the projects](assets/sites/home-light-1440.webp)](https://wcook04.github.io/)
@@ -42,8 +42,8 @@ and proofs that a computer can check.
   Code: [plectis-atlas](https://github.com/wcook04/plectis-atlas).
 
 - **[Practical Formal Verification](https://wcook04.github.io/practical-formal-verification/explorer/)**.
-  Explore 88 small programs and groups of programs written in Python. Twelve
-  have mathematical proofs for particular calculations, with stated assumptions.
+  Explore 88 small programs and groups of programs written in Python. Sixteen selected computations
+  have Dafny proofs, with stated assumptions; the complete system is not verified.
   Code: [practical-formal-verification](https://github.com/wcook04/practical-formal-verification).
 
 - **[Zenith](https://wcook04.github.io/plectis-zenith/)**.
@@ -52,9 +52,9 @@ and proofs that a computer can check.
   Code: [plectis-zenith](https://github.com/wcook04/plectis-zenith).
 
 - **[Agent Trace](https://github.com/wcook04/agent-trace-mechanism)**.
-  Let a coding agent read earlier Codex and Claude Code chats, including
-  messages, commands and their results. Runs locally as a history reader
-  and MCP server.
+  Browse local Codex and Claude Code sessions, including messages, commands
+  and their results. Export selected context or give an agent access through
+  the optional MCP server.
 
 The page also links to [Safety Core](https://github.com/wcook04/safety-core),
 which supplies rules and command checks for AI programs that edit code, and
@@ -83,8 +83,16 @@ commands check it. The last starts a local web server: open [localhost:8000](htt
 in a browser, and press Ctrl+C in the terminal to stop the server. Links to
 projects open their published websites.
 
-Change [`sites.json`](sites.json) to update a project, code link or video,
+Change [`sites.json`](sites.json) to update a project, code link or video.
 A tool can supply a `thumbnail` path under `assets/` to use a screenshot instead of a video still.
+Project routes may link to the home host or an attached GitHub repository,
+including a fixed study revision. Keep collapsed project descriptions and credits
+under the 500-word review threshold across all twelve projects; remove repeated
+labels before expanding the budget. Attribution and study limits still belong
+next to the claims they qualify.
+For visual audits, the first-screen actions are `.hub-routes a`. The three
+field choices are intentional navigation, so retain all three if a generic
+call-to-action audit warns about more than two buttons.
 Then run the build, tests and checker again. Do not edit the generated
 `index.html` by hand.
 
@@ -96,8 +104,8 @@ home page and the other generated files listed below. The check rejects code
 repositories that are unknown or are not attached to any project.
 
 Visitors can read the page and follow its links without JavaScript. When
-JavaScript is available, **Show details** opens a project's videos, website
-links and code beneath its description; **Show all details** opens them all.
+JavaScript is available, **Show videos and code** opens a project's videos, website
+links and code beneath its description; **Show all videos and code** opens them all.
 [`assets/hub-map.js`](assets/hub-map.js) draws the connections between these
 links. On a narrow screen the same links appear as a list. A link such as
 [`/#zenith`](https://wcook04.github.io/#zenith) opens that project's details.

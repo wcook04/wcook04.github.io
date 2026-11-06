@@ -5,7 +5,7 @@
   "owner": {
     "name": "Will Cook",
     "home": "https://wcook04.github.io/",
-    "lede": "I’ve been using AI to do maths research and build software. As it produces more complicated work, I also want to make that work easier for other people to understand.",
+    "lede": "I do mathematics research and build software with AI agents. I also build ways to inspect what the agents produce.",
     "contact": [
       {
         "label": "Email",
@@ -25,10 +25,13 @@
       }
     ],
     "invitation": [
-      "These videos show what I’ve learned to build. I’d love to put those skills to use on other problems. I’m looking for work, an internship, fellowship or funding, and I’m very open to working together. If there’s a problem you think I should try, please let me know.",
-      "If something doesn’t make sense, or you spot a mistake, please let me know. If your feedback leads to a change, I’d be happy to credit you, with your permission."
-    ]
+      "I’m looking for a job, internship, fellowship or funding, and I’m open to working with other people on their problems. If there’s a problem you think I should work on, please email me.",
+      "If something on these pages is unclear or wrong, please tell me. If your feedback leads to a change, I’d be happy to credit you, with your permission."
+    ],
+    "orient": "That means Lean proofs of AI-written mathematics, websites that display a paper beside its Lean code, and tools for running several coding agents in one repository. The introduction video explains how the projects fit together.",
+    "availability": "I’m looking for a job, internship, fellowship or research collaboration."
   },
+  "projects_lede": "Several projects use Lean, a proof assistant: software that accepts a proof only after verifying every step.",
   "sites": [
     {
       "id": "maths",
@@ -49,8 +52,8 @@
           "href": "https://wcook04.github.io/practical-formal-verification/docs/papers.html"
         }
       ],
-      "purpose": "Research with AI on eight Erdős problems: papers, Lean proofs of partial results, and the approaches that failed.",
-      "status": "Each problem page says whether the original question is still open.",
+      "purpose": "AI-assisted research on eight Erdős problems, with papers, records of failed approaches and Lean 4 proofs of partial results.",
+      "status": "Each problem page states whether the original question is still open and which statements the Lean proofs cover.",
       "capture": "assets/sites/maths",
       "capture_caption": "The front page of Plectis Mathematics, open at problem #68.",
       "films": [
@@ -60,7 +63,8 @@
       "repos": [
         "plectis-erdos",
         "plectis-erdos-lean"
-      ]
+      ],
+      "credit": "Seven original questions remain open. The #1041 formal-statement counterexample is due to ani. The papers are not peer reviewed."
     },
     {
       "id": "lean-exposition",
@@ -81,8 +85,8 @@
           "href": "https://wcook04.github.io/lean-exposition-site/#papers"
         }
       ],
-      "purpose": "Three explanations of one theorem about the Sherrington–Kirkpatrick model of interacting spins. Click a linked statement to see its Lean code beside the text.",
-      "status": "The three papers are drafts. AI agents made the links to the Lean, and the site lists each Lean run and the statements it covers.",
+      "purpose": "Three explanations of OpenAI’s full-support theorem for the Sherrington–Kirkpatrick spin glass, linked to Lean declarations and an argument map.",
+      "status": "The site lists each Lean build and the statements it covers. Comparator gave no verdict on either theorem.",
       "capture": "assets/sites/lean-exposition",
       "capture_caption": "The short paper at Theorem 1, beside the graph of its argument.",
       "films": [
@@ -91,7 +95,8 @@
       ],
       "repos": [
         "lean-exposition"
-      ]
+      ],
+      "credit": "The theorem and Lean proof are OpenAI’s. I made the explanations and links with AI; no mathematician has reviewed them."
     },
     {
       "id": "proof-reader",
@@ -104,14 +109,15 @@
           "href": "https://wcook04.github.io/proof-reader/#/contextual-embeddings"
         }
       ],
-      "purpose": "Read a research paper beside its authors’ Lean proof. Click a linked statement to open the corresponding code, or explore the diagram of proof steps.",
-      "status": "The first paper is Contextual Embeddings by Frohlich, Foster, Kavvos and Wang. AI agents made the links to the Lean; the authors have not reviewed them.",
+      "purpose": "Read Contextual Embeddings (PLDI 2026) beside its authors’ Lean proof, with statement-to-code links and a graph of proof dependencies.",
+      "status": null,
       "capture": "assets/sites/proof-reader",
       "capture_caption": "Contextual Embeddings on the left page, with the graph of its Lean proof and the exact lines on the right.",
       "films": [],
       "repos": [
         "proof-reader"
-      ]
+      ],
+      "credit": "Paper and proof by Frohlich, Foster, Kavvos and Wang. I made the reader and links with AI; the authors have not reviewed the links."
     },
     {
       "id": "quartic",
@@ -128,14 +134,15 @@
           "href": "https://wcook04.github.io/quartic-query-lean/#/read/exposition"
         }
       ],
-      "purpose": "Read OpenAI’s paper on a nearly quartic gap between randomized and quantum query complexity, and two explanations of its proof. As you scroll, a panel beside the text shows the Lean declarations linked to the paragraph you are reading.",
-      "status": "The theorem and construction are OpenAI’s. I made the explanations and the Lean proof with AI. Lean accepts the proof; only AI has reviewed the links between paragraphs and Lean.",
+      "purpose": "Lean 4 formalisation of OpenAI’s nearly quartic randomized–quantum query-complexity separation, with mathematical expositions and a paragraph-linked proof reader.",
+      "status": "Comparator accepted each proof bundle in local runs on my computer and rejected five deliberately wrong solutions. The Forrelation lower bound, which the preprint imports, is proved here by a shorter route in a weaker form.",
       "capture": "assets/sites/quartic",
       "capture_caption": "The general reader beside the graph of the Lean proof, following the paragraph being read.",
       "films": [],
       "repos": [
         "quartic-query-lean"
-      ]
+      ],
+      "credit": "Original theorem by OpenAI; formalisation and explanations made with AI. No human has reviewed whether the Lean statements match the paper."
     },
     {
       "id": "atlas",
@@ -143,6 +150,10 @@
       "short": "Atlas",
       "url": "https://wcook04.github.io/plectis-atlas/",
       "routes": [
+        {
+          "label": "Example: two reports on a paper about π",
+          "href": "https://wcook04.github.io/plectis-atlas/families/017.html"
+        },
         {
           "label": "Lean statements",
           "href": "https://wcook04.github.io/plectis-atlas/statements.html"
@@ -152,8 +163,8 @@
           "href": "https://wcook04.github.io/plectis-atlas/help.html"
         }
       ],
-      "purpose": "Read OpenAI’s maths papers alongside the reports that outside groups wrote about their claims and proofs.",
-      "status": null,
+      "purpose": "An index of OpenAI’s mathematics manuscripts, Lean statement files and published assessments, grouped into 372 paper families.",
+      "status": "I drafted the matches between each Lean statement and its paper with AI; no person has reviewed them.",
       "capture": "assets/sites/atlas",
       "capture_caption": "The Atlas map: each circle is a subject and each dot a family of papers.",
       "films": [
@@ -161,7 +172,8 @@
       ],
       "repos": [
         "plectis-atlas"
-      ]
+      ],
+      "credit": "Reports credited to MathVet, Carlos Toledo’s cert-machine and Neal McBurnett. I assembled the index and statement links with AI."
     },
     {
       "id": "formal-verification",
@@ -182,7 +194,7 @@
           "href": "https://wcook04.github.io/practical-formal-verification/docs/"
         }
       ],
-      "purpose": "88 Python components from my research system. In twelve of them, Dafny proves that a small computation follows its written rules, and the running code matches the proved code.",
+      "purpose": "Dafny proofs for 16 selected computations in an 88-component research-workflow prototype, with generated Python and proof-coverage maps.",
       "status": null,
       "capture": "assets/sites/formal-verification",
       "capture_caption": "The system map: the 88 components in their seven families.",
@@ -192,7 +204,8 @@
       "repos": [
         "practical-formal-verification"
       ],
-      "front_label": "The component map"
+      "front_label": "The component map",
+      "credit": "The proofs cover those computations, not the complete system."
     },
     {
       "id": "zenith",
@@ -202,12 +215,20 @@
       "url": "https://wcook04.github.io/plectis-zenith/",
       "routes": [
         {
-          "label": "The paper (PDF)",
+          "label": "Held-out study (unmerged revision)",
+          "href": "https://github.com/wcook04/plectis-zenith/blob/def1d26160c840397c00b247b2f74266f97a4cee/docs/studies/kept-experience/README.md"
+        },
+        {
+          "label": "Study pull request #13",
+          "href": "https://github.com/wcook04/plectis-zenith/pull/13"
+        },
+        {
+          "label": "Earlier paper on program repair (PDF)",
           "href": "https://wcook04.github.io/plectis-zenith/assets/paper.pdf"
         }
       ],
-      "purpose": "Experiments testing whether an AI code tester finds more bugs after it is shown the bugs it missed, and whether records of missed bugs help AI models repair code.",
-      "status": "Small studies. The repository states the limits of each one.",
+      "purpose": "Experiments on whether records of earlier mistakes help language models test and repair code. A held-out study found 77.0% versus 69.2% fault-class detection.",
+      "status": "The held-out study used DeepSeek V4.1 Flash. The earlier website and PDF describe separate studies, including program repairs rising from 259 to 365 of 576 tasks.",
       "capture": "assets/sites/zenith",
       "capture_caption": "The opening of the Zenith paper.",
       "films": [
@@ -215,7 +236,9 @@
       ],
       "repos": [
         "plectis-zenith"
-      ]
+      ],
+      "credit": "One model on 58 HumanEval problems; about half the gain came from timeouts. Study available in an unmerged branch.",
+      "front_label": "Website for the earlier studies"
     },
     {
       "id": "code-ontology-bridge",
@@ -232,42 +255,45 @@
           "href": "https://wcook04.github.io/code-ontology-bridge/#/walkthrough/graph"
         }
       ],
-      "purpose": "Exports a Python repository’s files, functions, calls and imports to a database, with a semantic model that NVIDIA Auto Ontology’s SQL agent can query.",
-      "status": "A study compares the agent’s answers with and without the model on 48 questions about four repositories. The questions were written without reference to the model, and every question, answer and failed run is published.",
+      "purpose": "Exports Python code structure to DuckDB, with semantic descriptions and recursive SQL views for NVIDIA Auto Ontology’s text-to-SQL agent.",
+      "status": "AI models wrote the questions and answer keys; 21 answer keys were corrected after the runs. Every question, answer and failed run is published.",
       "capture": "assets/sites/code-ontology-bridge",
       "capture_caption": "Calls followed backwards from a function, with a callback reference shown dashed.",
       "films": [],
       "repos": [
         "code-ontology-bridge"
-      ]
+      ],
+      "credit": "Independent of NVIDIA. Descriptions helped DeepSeek in a 48-question direct-prompt study; no clear improvement in the 12-question Auto Ontology study."
     }
   ],
   "projects": [
     {
       "id": "agent-trace",
       "name": "Agent Trace",
-      "purpose": "Lets a coding agent read earlier Codex and Claude Code chats, including messages, commands and command output. It runs on your computer as an MCP server.",
+      "purpose": "Local Codex and Claude Code session viewer with tool traces, selective context export and optional MCP access.",
       "films": [],
       "repos": [
         "agent-trace-mechanism"
       ],
-      "thumbnail": "assets/sites/agent-trace.png"
+      "thumbnail": "assets/sites/agent-trace.png",
+      "credit": "Technical preview; browser app or native Mac window."
     },
     {
       "id": "safety-core",
       "name": "Safety Core",
-      "purpose": "Keeps a coding agent’s rules in one file and marks which rules are only written instructions and which also have a hook that blocks commands the rule forbids.",
+      "purpose": "Generates AGENTS.md, CLAUDE.md and command-enforcement hooks from one rulebook, distinguishing written instructions from rules enforced by hooks.",
       "films": [
         "safety-core"
       ],
       "repos": [
         "safety-core"
-      ]
+      ],
+      "credit": "Tested in one small Claude Haiku study; the enforcement rule was written after observing the failure."
     },
     {
       "id": "one-checkout",
       "name": "One Checkout",
-      "purpose": "Commits one agent’s change in Git while another agent’s unfinished edits in the same files stay uncommitted.",
+      "purpose": "Commits a reviewed Git patch while preserving another agent’s unfinished staged and working-tree edits, including changes in the same files.",
       "films": [
         "one-checkout"
       ],
@@ -278,37 +304,44 @@
     {
       "id": "codemap",
       "name": "Code Map",
-      "purpose": "A map of my code: open a file to read its saved description, then follow the function calls between files.",
+      "purpose": "A code browser with docstring descriptions and function-call links, available to both the human reader and coding agents.",
       "status": "Not released; the video shows it in use.",
       "films": [
         "codemap"
       ],
-      "repos": []
+      "repos": [],
+      "credit": "Private software; the video shows it in use."
     }
   ],
   "index_groups": [
     {
       "id": "mathematics",
-      "title": "Mathematics",
+      "title": "Mathematics and Lean",
       "items": [
         "maths",
+        "quartic",
         "lean-exposition",
         "proof-reader",
-        "quartic",
         "atlas"
       ]
     },
     {
-      "id": "software",
-      "title": "Software and experiments with AI agents",
+      "id": "agents",
+      "title": "Tools for AI coding agents",
       "items": [
-        "code-ontology-bridge",
         "agent-trace",
-        "formal-verification",
-        "zenith",
-        "safety-core",
         "one-checkout",
+        "safety-core",
+        "code-ontology-bridge",
         "codemap"
+      ]
+    },
+    {
+      "id": "verification",
+      "title": "Verification and evaluation",
+      "items": [
+        "formal-verification",
+        "zenith"
       ]
     }
   ],
@@ -347,7 +380,7 @@
       "id": "practical-formal-verification",
       "name": "practical-formal-verification",
       "href": "https://github.com/wcook04/practical-formal-verification",
-      "description": "The 88 Python components, their Dafny proofs and saved results, and worked examples."
+      "description": "The components, their Dafny proofs, the Python compiled from them and worked examples."
     },
     {
       "id": "plectis-zenith",
@@ -371,13 +404,13 @@
       "id": "agent-trace-mechanism",
       "name": "agent-trace-mechanism",
       "href": "https://github.com/wcook04/agent-trace-mechanism",
-      "description": "A history reader and MCP server for Codex and Claude Code that runs on your computer. You choose which chats an agent can read, and the agent gets a compact transcript or the full tool activity."
+      "description": "The session viewer and the optional MCP server for Codex and Claude Code logs. Install it with pip and run agent-trace-app."
     },
     {
       "id": "code-ontology-bridge",
       "name": "code-ontology-bridge",
       "href": "https://github.com/wcook04/code-ontology-bridge",
-      "description": "Exports a Python repository’s files, functions, calls, imports and docstrings to DuckDB with a native Auto Ontology semantic model."
+      "description": "The exporter, the DuckDB schema, the Auto Ontology table descriptions and the 48-question study with every answer."
     },
     {
       "id": "quartic-query-lean",
@@ -486,7 +519,7 @@
       "id": "atlas",
       "title": "Atlas: why two people gave one OpenAI maths paper different verdicts on its completeness",
       "short": "Plectis Atlas",
-      "description": "I compare two reports on an OpenAI maths paper about pi that disagree on whether its proof is complete.",
+      "description": "In two reports on an OpenAI paper about π, both groups say Comparator accepted the Lean proof, but they label the Lean statement’s coverage differently. I go through what each label means.",
       "youtube": "https://www.youtube.com/watch?v=ga5_wfSStdk",
       "duration_seconds": 335,
       "still": "assets/films/atlas-v3"

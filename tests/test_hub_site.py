@@ -43,6 +43,33 @@ class HubTests(unittest.TestCase):
         errors = CHECK.BUILD.validate_registry(registry, ROOT)
         self.assertTrue(any("thumbnail" in error for error in errors))
 
+    def test_evidence_routes_are_scoped_to_attached_repositories(self):
+        registry = json.loads(self.files["sites.json"])
+        site = next(site for site in registry["sites"] if site["id"] == "zenith")
+        self.assertEqual(CHECK.BUILD.validate_registry(registry, ROOT), [])
+        for href in ("https://example.com/study", "https://github.com/wcook04/plectis-zenith-other/study",
+                     "https://github.com/wcook04/one-checkout/blob/main/README.md", "javascript:alert(1)"):
+            site["routes"][0]["href"] = href
+            self.assertTrue(any("each route" in error for error in CHECK.BUILD.validate_registry(registry, ROOT)))
+
+    def test_collapsed_project_copy_stays_compact(self):
+        registry = json.loads(self.files["sites.json"])
+        words = sum(len(" ".join((item.get("purpose", ""), item.get("kind", ""),
+                                  item.get("credit", ""), " ".join(item.get("tags", [])))).split())
+                    for item in registry["sites"] + registry["projects"])
+        # Editorial review threshold, with room beyond the 406-word revision.
+        self.assertLessEqual(words, 500, "Review repeated card metadata before increasing this budget")
+
+    def test_agent_summary_retains_attribution_and_study_evidence(self):
+        registry = json.loads(self.files["sites.json"])
+        summary = self.files["llms.txt"].decode()
+        for site in registry["sites"]:
+            if site.get("credit"):
+                self.assertIn(site["credit"], summary)
+            for route in site.get("routes", []):
+                if route["href"].startswith("https://github.com/"):
+                    self.assertIn(route["href"], summary)
+
     def test_current_site_contract(self):
         self.assertEqual(self.errors(), [])
 
