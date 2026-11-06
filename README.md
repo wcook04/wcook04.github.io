@@ -56,6 +56,13 @@ and proofs that a computer can check.
   and their results. Export selected context or give an agent access through
   the optional MCP server.
 
+- **[Narration IR](https://github.com/wcook04/narration-ir)**.
+  A skill for building an intermediate representation (IR) between a transcript
+  and a visual specification. The IR adds source-grounded metadata about what
+  the words mean, what viewers need to understand and when visual events should
+  happen, giving an animation agent context for generating visuals. Includes a
+  worked example and optional Python tools.
+
 The page also links to [Safety Core](https://github.com/wcook04/safety-core),
 which supplies rules and command checks for AI programs that edit code, and
 [One Checkout](https://github.com/wcook04/one-checkout), which saves a selected
@@ -87,7 +94,7 @@ Change [`sites.json`](sites.json) to update a project, code link or video.
 A tool can supply a `thumbnail` path under `assets/` to use a screenshot instead of a video still.
 Project routes may link to the home host or an attached GitHub repository,
 including a fixed study revision. Keep collapsed project descriptions and credits
-under the 500-word review threshold across all twelve projects; remove repeated
+under the 500-word review threshold across all projects; remove repeated
 labels before expanding the budget. Attribution and study limits still belong
 next to the claims they qualify.
 For visual audits, the first-screen actions are `.hub-routes a`. The three

@@ -279,6 +279,16 @@
       "credit": "Technical preview; browser app or native Mac window."
     },
     {
+      "id": "narration-ir",
+      "name": "Narration IR",
+      "purpose": "A skill for building an intermediate representation (IR) between a transcript and a visual specification. The IR adds source-grounded metadata about what the words mean, what viewers need to understand and when visual events should happen, giving an animation agent context for generating visuals.",
+      "films": [],
+      "repos": [
+        "narration-ir"
+      ],
+      "thumbnail": "assets/sites/narration-ir.webp"
+    },
+    {
       "id": "safety-core",
       "name": "Safety Core",
       "purpose": "Generates AGENTS.md, CLAUDE.md and command-enforcement hooks from one rulebook, distinguishing written instructions from rules enforced by hooks.",
@@ -330,6 +340,7 @@
       "title": "Tools for AI coding agents",
       "items": [
         "agent-trace",
+        "narration-ir",
         "one-checkout",
         "safety-core",
         "code-ontology-bridge",
@@ -417,6 +428,12 @@
       "name": "quartic-query-lean",
       "href": "https://github.com/wcook04/quartic-query-lean",
       "description": "The Lean proof of OpenAI’s nearly quartic separation, three written explanations of the argument, and the reader website’s source."
+    },
+    {
+      "id": "narration-ir",
+      "name": "narration-ir",
+      "href": "https://github.com/wcook04/narration-ir",
+      "description": "The portable skill, references, worked example and optional Python tools for validation and scene briefs."
     }
   ],
   "film_groups": [
