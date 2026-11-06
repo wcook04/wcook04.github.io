@@ -2,14 +2,14 @@
 
 This host's root page lists Will Cook's websites and films. Each website is its own project with its own source and its own agent entry where one exists.
 
-- [Plectis Mathematics](https://wcook04.github.io/practical-formal-verification/map/): Eight Erdős problems I researched with AI, with the papers, computer-checked proofs of partial results and the approaches that failed. Agent entry: https://wcook04.github.io/practical-formal-verification/llms.txt
-- [Lean Exposition](https://wcook04.github.io/lean-exposition-site/): Read three explanations of one theorem about the Sherrington–Kirkpatrick model of interacting spins. Click a linked statement to see its Lean code beside the paper.
+- [Plectis Mathematics](https://wcook04.github.io/practical-formal-verification/map/): Research with AI on eight Erdős problems: papers, Lean proofs of partial results, and the approaches that failed. Agent entry: https://wcook04.github.io/practical-formal-verification/llms.txt
+- [Lean Exposition](https://wcook04.github.io/lean-exposition-site/): Three explanations of one theorem about the Sherrington–Kirkpatrick model of interacting spins. Click a linked statement to see its Lean code beside the text.
 - [Proof Reader](https://wcook04.github.io/proof-reader/): Read a research paper beside its authors’ Lean proof. Click a linked statement to open the corresponding code, or explore the diagram of proof steps.
-- [Quartic Reader](https://wcook04.github.io/quartic-query-lean/): Read OpenAI’s paper on a nearly quartic gap between randomized and quantum query complexity, with two explanations of its proof, beside a Lean proof that follows each paragraph as you read.
+- [Quartic Reader](https://wcook04.github.io/quartic-query-lean/): Read OpenAI’s paper on a nearly quartic gap between randomized and quantum query complexity, and two explanations of its proof. As you scroll, a panel beside the text shows the Lean declarations linked to the paragraph you are reading.
 - [Plectis Atlas](https://wcook04.github.io/plectis-atlas/): Read OpenAI’s maths papers alongside the reports that outside groups wrote about their claims and proofs. Agent entry: https://wcook04.github.io/plectis-atlas/llms.txt
-- [Practical Formal Verification](https://wcook04.github.io/practical-formal-verification/explorer/): 88 small Python programs and groups of programs from my research system. Twelve have mathematical proofs for particular calculations, with stated assumptions. Agent entry: https://wcook04.github.io/practical-formal-verification/llms.txt
-- [Zenith](https://wcook04.github.io/plectis-zenith/): Experiments on whether records of past mistakes help AI models test and repair code. Agent entry: https://wcook04.github.io/plectis-zenith/llms.txt
-- [Code Ontology Bridge](https://wcook04.github.io/code-ontology-bridge/): Turns a Python repository into a database and semantic model that NVIDIA Auto Ontology’s SQL agent can query, and measures how much that model helps on questions written without seeing it.
+- [Practical Formal Verification](https://wcook04.github.io/practical-formal-verification/explorer/): 88 Python components from my research system. In twelve of them, Dafny proves that a small computation follows its written rules, and the running code matches the proved code. Agent entry: https://wcook04.github.io/practical-formal-verification/llms.txt
+- [Zenith](https://wcook04.github.io/plectis-zenith/): Experiments testing whether an AI code tester finds more bugs after it is shown the bugs it missed, and whether records of missed bugs help AI models repair code. Agent entry: https://wcook04.github.io/plectis-zenith/llms.txt
+- [Code Ontology Bridge](https://wcook04.github.io/code-ontology-bridge/): Exports a Python repository’s files, functions, calls and imports to a database, with a semantic model that NVIDIA Auto Ontology’s SQL agent can query.
 
 Films, with their YouTube addresses and the website each belongs to, are listed in https://wcook04.github.io/sites.json.
 Use each site's own source links and stated limits when describing its findings.

@@ -320,8 +320,8 @@ html.scripting .proj.is-open .proj__more, html.scripting .proj:target:not(.is-sh
 .map-node__routes a { display: inline-flex; align-items: center; min-height: 26px; font-weight: 600; text-decoration: none; }
 .map-node__routes a::after { content: "\00a0\2197"; font-weight: 400; font-size: 0.82em; }
 .map-node__routes a:hover { text-decoration: underline; }
-.map-node__note { margin-top: 0.45rem; font-size: 0.85rem; line-height: 1.42; color: var(--muted); }
-.map-node__label + .map-node__note { margin-top: 0; }
+.map-node__note { margin-top: 0.7rem; padding-top: 0.6rem; border-top: 1px solid var(--rule); font-size: 0.85rem; line-height: 1.45; color: var(--muted); }
+.map-node__label + .map-node__note { margin-top: 0; padding-top: 0; border-top: 0; }
 
 /* Videos. A released film: its still beside its title and running time, its
    description under both at the lane's full width, so the explanation reads
@@ -337,7 +337,11 @@ html.scripting .proj.is-open .proj__more, html.scripting .proj:target:not(.is-sh
 .map-film .film-slot.film-slot--inline .film-slot__title { grid-column: 2; grid-row: 1; font-size: 1rem; line-height: 1.28; }
 .map-film .film-slot .film-slot__text {
   grid-column: 1 / -1; grid-row: 4; margin-top: 0.55rem; max-width: 64ch;
-  font-size: 0.95rem; line-height: 1.52; color: var(--ink-soft);
+  font-size: 0.9rem; line-height: 1.5; color: var(--muted);
+}
+/* Wide: the description sits beside the still, under the title. */
+@media (min-width: 960px) {
+  .map-film .film-slot .film-slot__text { grid-column: 2; grid-row: 3; margin-top: 0.35rem; max-width: 52ch; }
 }
 .film-words { display: grid; gap: 0.1rem; }
 .film-words__title { font-family: var(--font-serif); font-size: 1.04rem; line-height: 1.28; color: var(--ink); }
@@ -354,7 +358,7 @@ html.scripting .proj.is-open .proj__more, html.scripting .proj:target:not(.is-sh
 .map-repo__name a { color: var(--ink); text-decoration: none; }
 .map-repo__name a::after { content: "\00a0\2197"; font-weight: 400; font-size: 0.8em; color: var(--faint); }
 .map-repo__name a:hover { text-decoration: underline; text-decoration-color: var(--rule-control); }
-.map-repo__text { margin-top: 0.15rem; font-size: 0.9rem; line-height: 1.45; color: var(--muted); }
+.map-repo__text { margin-top: 0.2rem; max-width: 46ch; font-size: 0.9rem; line-height: 1.5; color: var(--muted); }
 .map-repo--none { max-width: 40ch; font-size: 0.92rem; line-height: 1.48; color: var(--ink-soft); }
 
 /* Narrow: the open line reads as a list, set in under its name. */

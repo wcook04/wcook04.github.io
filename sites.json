@@ -49,8 +49,8 @@
           "href": "https://wcook04.github.io/practical-formal-verification/docs/papers.html"
         }
       ],
-      "purpose": "Eight Erdős problems I researched with AI, with the papers, computer-checked proofs of partial results and the approaches that failed.",
-      "status": "The original questions remain open where the problem pages say so.",
+      "purpose": "Research with AI on eight Erdős problems: papers, Lean proofs of partial results, and the approaches that failed.",
+      "status": "Each problem page says whether the original question is still open.",
       "capture": "assets/sites/maths",
       "capture_caption": "The front page of Plectis Mathematics, open at problem #68.",
       "films": [
@@ -81,8 +81,8 @@
           "href": "https://wcook04.github.io/lean-exposition-site/#papers"
         }
       ],
-      "purpose": "Read three explanations of one theorem about the Sherrington–Kirkpatrick model of interacting spins. Click a linked statement to see its Lean code beside the paper.",
-      "status": "The three papers are drafts, and AI agents linked them to the Lean. The site lists what ran and what each run covers.",
+      "purpose": "Three explanations of one theorem about the Sherrington–Kirkpatrick model of interacting spins. Click a linked statement to see its Lean code beside the text.",
+      "status": "The three papers are drafts. AI agents made the links to the Lean, and the site lists each Lean run and the statements it covers.",
       "capture": "assets/sites/lean-exposition",
       "capture_caption": "The short paper at Theorem 1, beside the graph of its argument.",
       "films": [
@@ -105,7 +105,7 @@
         }
       ],
       "purpose": "Read a research paper beside its authors’ Lean proof. Click a linked statement to open the corresponding code, or explore the diagram of proof steps.",
-      "status": "The first paper is Contextual Embeddings by Frohlich, Foster, Kavvos and Wang. The links were made with AI and have not been reviewed by the authors.",
+      "status": "The first paper is Contextual Embeddings by Frohlich, Foster, Kavvos and Wang. AI agents made the links to the Lean; the authors have not reviewed them.",
       "capture": "assets/sites/proof-reader",
       "capture_caption": "Contextual Embeddings on the left page, with the graph of its Lean proof and the exact lines on the right.",
       "films": [],
@@ -128,8 +128,8 @@
           "href": "https://wcook04.github.io/quartic-query-lean/#/read/exposition"
         }
       ],
-      "purpose": "Read OpenAI’s paper on a nearly quartic gap between randomized and quantum query complexity, with two explanations of its proof, beside a Lean proof that follows each paragraph as you read.",
-      "status": "The theorem and construction are OpenAI’s. The explanations and the Lean proof are mine, made with AI, and checked by Lean; the links between paragraphs and Lean were reviewed by AI only.",
+      "purpose": "Read OpenAI’s paper on a nearly quartic gap between randomized and quantum query complexity, and two explanations of its proof. As you scroll, a panel beside the text shows the Lean declarations linked to the paragraph you are reading.",
+      "status": "The theorem and construction are OpenAI’s. I made the explanations and the Lean proof with AI. Lean accepts the proof; only AI has reviewed the links between paragraphs and Lean.",
       "capture": "assets/sites/quartic",
       "capture_caption": "The general reader beside the graph of the Lean proof, following the paragraph being read.",
       "films": [],
@@ -174,7 +174,7 @@
           "href": "https://wcook04.github.io/practical-formal-verification/explorer/catalogue"
         },
         {
-          "label": "What each one is checked by",
+          "label": "Which proofs and tests cover each one",
           "href": "https://wcook04.github.io/practical-formal-verification/explorer/coverage"
         },
         {
@@ -182,7 +182,7 @@
           "href": "https://wcook04.github.io/practical-formal-verification/docs/"
         }
       ],
-      "purpose": "88 small Python programs and groups of programs from my research system. Twelve have mathematical proofs for particular calculations, with stated assumptions.",
+      "purpose": "88 Python components from my research system. In twelve of them, Dafny proves that a small computation follows its written rules, and the running code matches the proved code.",
       "status": null,
       "capture": "assets/sites/formal-verification",
       "capture_caption": "The system map: the 88 components in their seven families.",
@@ -206,8 +206,8 @@
           "href": "https://wcook04.github.io/plectis-zenith/assets/paper.pdf"
         }
       ],
-      "purpose": "Experiments on whether records of past mistakes help AI models test and repair code.",
-      "status": "Small research studies, with their limits described in the repository.",
+      "purpose": "Experiments testing whether an AI code tester finds more bugs after it is shown the bugs it missed, and whether records of missed bugs help AI models repair code.",
+      "status": "Small studies. The repository states the limits of each one.",
       "capture": "assets/sites/zenith",
       "capture_caption": "The opening of the Zenith paper.",
       "films": [
@@ -232,8 +232,8 @@
           "href": "https://wcook04.github.io/code-ontology-bridge/#/walkthrough/graph"
         }
       ],
-      "purpose": "Turns a Python repository into a database and semantic model that NVIDIA Auto Ontology’s SQL agent can query, and measures how much that model helps on questions written without seeing it.",
-      "status": "A study on four repositories and 48 questions, with every question, answer and failed run published.",
+      "purpose": "Exports a Python repository’s files, functions, calls and imports to a database, with a semantic model that NVIDIA Auto Ontology’s SQL agent can query.",
+      "status": "A study compares the agent’s answers with and without the model on 48 questions about four repositories. The questions were written without reference to the model, and every question, answer and failed run is published.",
       "capture": "assets/sites/code-ontology-bridge",
       "capture_caption": "Calls followed backwards from a function, with a callback reference shown dashed.",
       "films": [],
@@ -246,7 +246,7 @@
     {
       "id": "agent-trace",
       "name": "Agent Trace",
-      "purpose": "Let a coding agent read earlier Codex and Claude Code chats, including messages, commands and their results.",
+      "purpose": "Lets a coding agent read earlier Codex and Claude Code chats, including messages, commands and command output. It runs on your computer as an MCP server.",
       "films": [],
       "repos": [
         "agent-trace-mechanism"
@@ -256,7 +256,7 @@
     {
       "id": "safety-core",
       "name": "Safety Core",
-      "purpose": "Keep agent rules in one file and see which are written instructions and which have a program checking commands.",
+      "purpose": "Keeps a coding agent’s rules in one file and marks which rules are only written instructions and which also have a hook that blocks commands the rule forbids.",
       "films": [
         "safety-core"
       ],
@@ -267,7 +267,7 @@
     {
       "id": "one-checkout",
       "name": "One Checkout",
-      "purpose": "Commit a selected change while other agents’ unfinished edits stay in the same files.",
+      "purpose": "Commits one agent’s change in Git while another agent’s unfinished edits in the same files stay uncommitted.",
       "films": [
         "one-checkout"
       ],
@@ -278,8 +278,8 @@
     {
       "id": "codemap",
       "name": "Code Map",
-      "purpose": "Read saved descriptions of files and follow their recorded code connections in a map.",
-      "status": "Still in my private system; the film shows it working.",
+      "purpose": "A map of my code: open a file to read its saved description, then follow the function calls between files.",
+      "status": "Not released; the video shows it in use.",
       "films": [
         "codemap"
       ],
@@ -317,49 +317,49 @@
       "id": "plectis-erdos",
       "name": "plectis-erdos",
       "href": "https://github.com/wcook04/plectis-erdos",
-      "description": "Research on eight Erdős problems and the system behind it: Lean proofs, papers on research and writing, experiments and open questions."
+      "description": "Papers, Lean proofs, experiments and open questions from the research on eight Erdős problems, and papers on how the research was done."
     },
     {
       "id": "plectis-erdos-lean",
       "name": "plectis-erdos-lean",
       "href": "https://github.com/wcook04/plectis-erdos-lean",
-      "description": "Lean 4 source for the eight Erdős problem programmes, with selected Comparator and Palomar checks."
+      "description": "Lean 4 source for the eight problems. Comparator accepted selected proofs against separately written statements, and Palomar, an online proof registry, reran some of them."
     },
     {
       "id": "lean-exposition",
       "name": "lean-exposition",
       "href": "https://github.com/wcook04/lean-exposition",
-      "description": "Pinned Lean evidence and traceable mathematical exposition, with an interactive reading website."
+      "description": "The three papers, the Lean they link to at a fixed version, and the source of the reading website."
     },
     {
       "id": "proof-reader",
       "name": "proof-reader",
       "href": "https://github.com/wcook04/proof-reader",
-      "description": "Add a paper with public Lean as a folder. A program compares the text with the PDF word for word, and the Lean is the authors’ own."
+      "description": "Each paper is one folder, and any paper with public Lean can be added. A program compares the site’s text with the PDF word for word."
     },
     {
       "id": "plectis-atlas",
       "name": "plectis-atlas",
       "href": "https://github.com/wcook04/plectis-atlas",
-      "description": "An independent reader for OpenAI’s mathematics release: papers, Lean statements and attributed outside readings."
+      "description": "The Atlas website’s source: OpenAI’s maths papers, their Lean statements, and outside groups’ reports credited to their authors."
     },
     {
       "id": "practical-formal-verification",
       "name": "practical-formal-verification",
       "href": "https://github.com/wcook04/practical-formal-verification",
-      "description": "88 Python components and worked examples for inspecting AI-assisted research."
+      "description": "The 88 Python components, their Dafny proofs and saved results, and worked examples."
     },
     {
       "id": "plectis-zenith",
       "name": "plectis-zenith",
       "href": "https://github.com/wcook04/plectis-zenith",
-      "description": "Experiments on whether an AI tester finds more bugs after seeing its earlier misses, with studies of code repair."
+      "description": "Code, data and paper for the experiments on showing an AI tester the bugs it missed, and the code-repair studies."
     },
     {
       "id": "safety-core",
       "name": "safety-core",
       "href": "https://github.com/wcook04/safety-core",
-      "description": "An editable rulebook and practical checks for coding agents."
+      "description": "A rule file for coding agents and the hooks that block commands a rule forbids."
     },
     {
       "id": "one-checkout",
@@ -371,7 +371,7 @@
       "id": "agent-trace-mechanism",
       "name": "agent-trace-mechanism",
       "href": "https://github.com/wcook04/agent-trace-mechanism",
-      "description": "A local history reader and MCP server for Codex and Claude Code. Choose which chats an agent can read, then retrieve a compact transcript or detailed tool activity."
+      "description": "A history reader and MCP server for Codex and Claude Code that runs on your computer. You choose which chats an agent can read, and the agent gets a compact transcript or the full tool activity."
     },
     {
       "id": "code-ontology-bridge",
@@ -383,7 +383,7 @@
       "id": "quartic-query-lean",
       "name": "quartic-query-lean",
       "href": "https://github.com/wcook04/quartic-query-lean",
-      "description": "The Lean proof of OpenAI’s nearly quartic separation, three accounts of the argument, and the reader website built from them."
+      "description": "The Lean proof of OpenAI’s nearly quartic separation, three written explanations of the argument, and the reader website’s source."
     }
   ],
   "film_groups": [
@@ -450,7 +450,7 @@
       "id": "mathematics-overview",
       "title": "Maths Map: eight Erdős problems on one map",
       "short": "Maths Map",
-      "description": "I use Erdős #257 to show how to find a proof, its papers and an explanation video through the Maths Map.",
+      "description": "I use one problem, Erdős #257, to show where its proof, papers and explanation video are on the Maths Map.",
       "youtube": "https://www.youtube.com/watch?v=u4f-fk1o13k",
       "duration_seconds": 380,
       "still": "assets/films/mathematics-overview-v3"
@@ -486,7 +486,7 @@
       "id": "atlas",
       "title": "Atlas: why two people gave one OpenAI maths paper different verdicts on its completeness",
       "short": "Plectis Atlas",
-      "description": "I compare two checking reports for an OpenAI maths paper about pi, using Plectis Atlas.",
+      "description": "I compare two reports on an OpenAI maths paper about pi that disagree on whether its proof is complete.",
       "youtube": "https://www.youtube.com/watch?v=ga5_wfSStdk",
       "duration_seconds": 335,
       "still": "assets/films/atlas-v3"
@@ -495,7 +495,7 @@
       "id": "plectis-verification",
       "title": "Formal verification: what does this check actually prove?",
       "short": "Practical formal verification",
-      "description": "I show what the proofs and saved checks cover in a map of 88 Python components.",
+      "description": "On a map of the 88 Python components, I show what each Dafny proof and saved result covers.",
       "youtube": "https://www.youtube.com/watch?v=u3dad1v-o8c",
       "duration_seconds": 312,
       "still": "assets/films/plectis-verification-v3"
@@ -513,7 +513,7 @@
       "id": "safety-core",
       "title": "Safety Core: my AI agent made up a setting to pass a test",
       "short": "Safety Core",
-      "description": "I test written rules and command checks on a coding agent that tries to get past a failing test.",
+      "description": "I give a coding agent written rules and command-blocking hooks, then record what it does to get past a failing test.",
       "youtube": "https://www.youtube.com/watch?v=ayl3sOCwaHQ",
       "duration_seconds": 536,
       "still": "assets/films/safety-core-v3"
