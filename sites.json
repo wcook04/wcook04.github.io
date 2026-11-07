@@ -605,8 +605,8 @@
       "title": "How much faster can a quantum computer be? OpenAI's fourth-power result",
       "short": "Quantum query complexity",
       "description": "I compare how many times quantum and classical computers must look at the same data, then explain why four is the best possible power for total yes-or-no questions.",
-      "youtube": "https://www.youtube.com/watch?v=3hZaKK0-leY",
-      "duration_seconds": 1633,
+      "youtube": "https://www.youtube.com/watch?v=CBHPBKcx2ck",
+      "duration_seconds": 2042,
       "still": "assets/films/quartic-query"
     }
   ]
