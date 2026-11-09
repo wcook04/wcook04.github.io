@@ -26,8 +26,11 @@
     spans.forEach(function(s){if(s.start<end)return;out+=esc(text.slice(end,s.start))+'<button class="term-trigger" type="button" data-term="'+esc(s.id)+'" aria-expanded="false" aria-controls="glossary-card">'+esc(text.slice(s.start,s.end))+'</button>';end=s.end;});
     return out+esc(text.slice(end));
   }
-  function filmAction(f,label,cls){return f.youtube?external(f.youtube,esc(label),cls):'<button type="button" class="'+(cls||'text-button')+'" data-film="'+esc(f.id)+'">'+esc(label)+'</button>';}
+  function watchRoute(f){var owner=Object.keys(data.projects).find(function(pid){return data.projects[pid].films.indexOf(f.id)>=0;});return owner?projectRoute(owner,null,f.id):/introduction/.test(f.id)?'intro':null;}
+  function player(f){var id=(f.youtube.split('v=')[1]||'').split('&')[0];return '<div class="film-player"><iframe src="https://www.youtube.com/embed/'+esc(id)+'?rel=0" title="'+esc(f.title)+'" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>';}
+  function filmAction(f,label,cls){var r=f.youtube&&watchRoute(f);if(r)return routeLink(r,esc(label),cls);return f.youtube?external(f.youtube,esc(label),cls):'<button type="button" class="'+(cls||'text-button')+'" data-film="'+esc(f.id)+'">'+esc(label)+'</button>';}
   function filmVisual(f,compact){
+    if(f.youtube)return player(f);
     var stem=f.still||f.poster,image=stem?'<img src="'+esc(asset(stem+'-640.webp'))+'" width="1280" height="720" alt="" loading="'+(compact?'lazy':'eager')+'" decoding="async">':'<span class="film-blank">'+esc(f.short||f.title)+'</span>';
     var inner=image+'<span class="film-visual__shade"></span><span class="film-visual__action">'+(f.youtube?'<span aria-hidden="true">▶</span> Watch on YouTube':'Video in preparation · read the transcript')+'</span><span class="film-time">'+clock(f)+'</span>';
     if(f.youtube)return '<a class="film-visual" href="'+esc(f.youtube)+'" target="_blank" rel="noopener" aria-label="Watch '+esc(f.title)+'">'+inner+'</a>';
@@ -35,19 +38,19 @@
   }
   function projectRoute(pid,via,film){return M.hashFor({view:'project',id:pid,via:via||M.parentOf(data,pid),film:film||null});}
   function connectionLinks(door){var others=[];data.config.bridges.forEach(function(b){var to=b.from===door?b.to:b.to===door?b.from:null;if(to)others.push(routeLink('d='+to,'<span>'+esc(b.label)+'</span> <span aria-hidden="true">→</span>','related-route'));});return others.length?'<span class="eyebrow">Connected ideas</span>'+others.join(''):'';}
-  function filmKnot(f,label,now){var t=esc(label)+' <span class="knot-time">'+clock(f)+'</span>'+(now?' <span class="knot-now">shown here</span>':'');if(f.youtube)return '<a class="knot-link" href="'+esc(f.youtube)+'" target="_blank" rel="noopener"><span class="knot" aria-hidden="true"></span><span class="knot-text">'+t+'</span><span class="knot-go" aria-hidden="true">▶</span></a>';return '<button type="button" class="knot-link is-coming" data-film="'+esc(f.id)+'"><span class="knot" aria-hidden="true"></span><span class="knot-text">'+t+'<small>In preparation. Read the transcript.</small></span></button>';}
+  function filmKnot(f,label,now,route){var t=esc(label)+' <span class="knot-time">'+clock(f)+'</span>'+(now?' <span class="knot-now">playing here</span>':'');if(f.youtube&&route)return '<a class="knot-link" href="#'+esc(route)+'" data-route="'+esc(route)+'"><span class="knot" aria-hidden="true"></span><span class="knot-text">'+t+'</span><span class="knot-go" aria-hidden="true">▶</span></a>';if(f.youtube)return '<a class="knot-link" href="'+esc(f.youtube)+'" target="_blank" rel="noopener"><span class="knot" aria-hidden="true"></span><span class="knot-text">'+t+'</span><span class="knot-go" aria-hidden="true">▶</span></a>';return '<button type="button" class="knot-link is-coming" data-film="'+esc(f.id)+'"><span class="knot" aria-hidden="true"></span><span class="knot-text">'+t+'<small>In preparation. Read the transcript.</small></span></button>';}
   function linkKnot(url,label,note){return '<a class="knot-link" href="'+esc(url)+'" target="_blank" rel="noopener"><span class="knot" aria-hidden="true"></span><span class="knot-text">'+esc(label)+(note?'<small>'+esc(note)+'</small>':'')+'</span><span class="knot-go" aria-hidden="true">↗</span></a>';}
-  function strand(p,f){
+  function strand(p,f,via){
     var items=[];
-    if(f)items.push(['short',filmKnot(f,'Short video')]);
-    M.onward(data,f).forEach(function(n){items.push(['long',filmKnot(n,n.id==='long-lean-readers'?'Full video, three readers':'Full video')]);});
+    if(f)items.push(['short',filmKnot(f,'Short video',false,projectRoute(p.id,via,f.id))]);
+    M.onward(data,f).forEach(function(n){items.push(['long',filmKnot(n,n.id==='long-lean-readers'?'Full video, three readers':'Full video',false,projectRoute(p.id,via,n.id))]);});
     if(p.url)items.push(['site',linkKnot(p.url,'Website')]);
     if(p.repo_records.length)items.push(['code',linkKnot(p.repo_records[0].href,'Code')]);
     return '<ol class="strand" aria-label="'+esc(p.name)+': videos, website and code">'+items.map(function(x){return '<li class="strand__item strand__item--'+x[0]+'">'+x[1]+'</li>';}).join('')+'</ol>';
   }
   function strandCard(pid,via){
     var p=data.projects[pid],f=M.lead(data,{view:'project',id:pid,via:via});
-    return '<article class="strand-card ink-'+p.area+'">'+(f?filmVisual(f,true):'')+'<div class="strand-card__body">'+routeLink(projectRoute(pid,via,f&&f.id),'<span>'+esc(p.name)+'</span> <span aria-hidden="true">→</span>','strand-card__name',via)+'<h2>'+esc(f?f.title:p.plain)+'</h2><p class="strand-card__take">'+(f?termMarkup(f,'takeaway'):esc(p.plain))+'</p>'+strand(p,f)+'</div></article>';
+    return '<article class="strand-card ink-'+p.area+'">'+(f?filmVisual(f,true):'')+'<div class="strand-card__body">'+routeLink(projectRoute(pid,via,f&&f.id),'<span>'+esc(p.name)+'</span> <span aria-hidden="true">→</span>','strand-card__name',via)+'<h2>'+esc(f?f.title:p.plain)+'</h2><p class="strand-card__take">'+(f?termMarkup(f,'takeaway'):esc(p.plain))+'</p>'+strand(p,f,via)+'</div></article>';
   }
   function doorView(d){
     function grid(ids){return '<div class="strand-grid strand-grid--'+Math.min(ids.length,3)+'">'+ids.map(function(p){return strandCard(p,d.id);}).join('')+'</div>';}
@@ -63,15 +66,15 @@
     if(p.id==='zenith'&&p.routes&&p.routes[0]){label='Read this study';url=p.routes[0].href;}
     return external(url,esc(label),'resource-action');
   }
-  function everything(p,f){
+  function everything(p,f,via){
     var films=p.films.map(function(id){return data.films[id];}).filter(Boolean),now=films.filter(function(x){return !M.earlier(data,x);}),old=films.filter(function(x){return M.earlier(data,x);});
     now.sort(function(a,b){return (a.format==='short'?0:1)-(b.format==='short'?0:1);});
     function li(cls,html){return '<li class="strand__item '+cls+'">'+html+'</li>';}
-    var out=now.map(function(x){return li('strand__item--'+(x.format==='short'?'short':'long')+(f&&x.id===f.id?' is-current':''),filmKnot(x,(x.format==='short'?'Short video: ':'Full video: ')+x.title,f&&x.id===f.id));}).join('');
+    var out=now.map(function(x){return li('strand__item--'+(x.format==='short'?'short':'long')+(f&&x.id===f.id?' is-current':''),filmKnot(x,(x.format==='short'?'Short video: ':'Full video: ')+x.title,f&&x.id===f.id&&!!x.youtube,projectRoute(p.id,via,x.id)));}).join('');
     if(p.url)out+=li('strand__item--site',linkKnot(p.url,'Website: '+p.name));
     (p.routes||[]).forEach(function(r){out+=li('strand__item--site strand__item--sub',linkKnot(r.href,r.label));});
     p.repo_records.forEach(function(r){out+=li('strand__item--code',linkKnot(r.href,'Code: '+r.name,r.description||''));});
-    old.forEach(function(x){out+=li('strand__item--long strand__item--earlier',filmKnot(x,'Earlier edition: '+x.title));});
+    old.forEach(function(x){out+=li('strand__item--long strand__item--earlier',filmKnot(x,'Earlier edition: '+x.title,f&&x.id===f.id&&!!x.youtube,projectRoute(p.id,via,x.id)));});
     return '<div class="everything"><p class="eyebrow">Everything in '+esc(p.name)+'</p><ol class="strand strand--vertical">'+out+'</ol></div>';
   }
   function resourceDetails(p){
@@ -87,15 +90,18 @@
     return result.length?'<span class="eyebrow">Connected work</span>'+result.slice(0,3).join(''):'';
   }
   function projectView(s){
-    var p=data.projects[s.id],d=byDoor(s.via),f=M.lead(data,s),shorts=M.tasters(data,p.id);
-    var reader=!!(f&&/reader|sk-website/.test(f.id)&&['quartic','lean-exposition'].indexOf(p.id)>=0);
+    var p=data.projects[s.id],d=byDoor(s.via),shorts=M.tasters(data,p.id),chosen=s.film&&data.films[s.film];
+    var entry=chosen&&chosen.format==='short'?chosen:(chosen&&shorts.find(function(t){return (t.leads_to||[]).indexOf(chosen.id)>=0;}))||M.lead(data,{view:'project',id:s.id,via:s.via});
+    // The player shows the chosen video; otherwise the short video if it is published, else a published full video.
+    var f=chosen||(M.published(entry)?entry:M.onward(data,entry).concat(p.films.map(function(id){return data.films[id];})).find(function(x){return x&&M.published(x)&&!M.earlier(data,x);})||entry);
+    var reader=!!(entry&&/reader|sk-website/.test(entry.id)&&['quartic','lean-exposition'].indexOf(p.id)>=0);
     var question=reader?(p.id==='quartic'?'Read OpenAI’s quantum query paper beside its Lean proof.':'Read OpenAI’s spin-glass paper beside its Lean proof.'):p.question;
     var tabs=shorts.length>1?'<div class="taster-tabs" aria-label="Choose a short video">'+shorts.map(function(t){return '<button type="button" data-taster="'+t.id+'" aria-pressed="'+(f&&t.id===f.id)+'">'+esc(M.filmLabel(t))+'</button>';}).join('')+'</div>':'';
     var kind=reader?'proof-reader':p.id,set=(data.demo||{})[kind]||[],initial=set.length?set[0][0]:'';
     var drawing='<div class="interactive-specimen" data-shape="'+s.via+'">'+object(kind)+'</div>'+smallInteraction(kind);
     var media='<div class="project-media">'+(f?tabs+filmVisual(f,false)+'<div class="film-caption"><p class="eyebrow">'+(f.format==='short'?'Short video':'Full video')+' · '+clock(f)+(f.youtube?'':' · in preparation')+'</p><p>'+termMarkup(f,'takeaway')+'</p></div>':'')+drawing+'</div>';
     var parent=d&&d.projects.length>1?'d='+s.via:'home',parentLabel=d&&d.projects.length>1?d.question:'All questions';
-    return '<section class="project-view ink-'+p.area+'" data-project="'+p.id+'" data-demo-state="'+esc(initial)+'">'+crumb(parent,parentLabel)+'<div class="project-layout"><div class="project-story"><p class="eyebrow">'+esc(p.name)+'</p><h1 tabindex="-1">'+esc(question)+'</h1><p class="project-answer">'+(reader?esc(p.plain):termMarkup(p,'line'))+'</p><div class="resource-actions">'+websiteAction(p)+'</div>'+everything(p,f)+'</div>'+media+'</div>'+resourceDetails(p)+'<div class="local-connections">'+projectConnections(p,s.via)+'</div></section>';
+    return '<section class="project-view ink-'+p.area+'" data-project="'+p.id+'" data-demo-state="'+esc(initial)+'">'+crumb(parent,parentLabel)+'<div class="project-layout"><div class="project-story"><p class="eyebrow">'+esc(p.name)+'</p><h1 tabindex="-1">'+esc(question)+'</h1><p class="project-answer">'+(reader?esc(p.plain):termMarkup(p,'line'))+'</p><div class="resource-actions">'+websiteAction(p)+'</div>'+everything(p,f,s.via)+'</div>'+media+'</div>'+resourceDetails(p)+'<div class="local-connections">'+projectConnections(p,s.via)+'</div></section>';
   }
   function searchRows(){
     var results=M.search(data,projectQuery);if(!results.length)return '<div class="empty-result"><h2>No matching project.</h2><p>Try a subject or a tool name.</p><button type="button" data-clear-search>Show all projects</button></div>';
@@ -109,8 +115,8 @@
   function filmRows(){return M.filmList(data,filmFilters.status,filmFilters.history,filmFilters.format).map(filmRow).join('')||'<p class="empty-result">No videos match those filters.</p>';}
   function filmsView(){return '<section class="films-view">'+crumb('home','All questions')+'<div class="index-heading"><h1 tabindex="-1">Every video.</h1><p>Each short video of about two minutes leads to a full video.</p></div><div class="film-filters"><label>Show<select id="film-status"><option value="all"'+(filmFilters.status==='all'?' selected':'')+'>Published & forthcoming</option><option value="published"'+(filmFilters.status==='published'?' selected':'')+'>Published only</option></select></label><label>Length<select id="film-format"><option value="all"'+(filmFilters.format==='all'?' selected':'')+'>All videos</option><option value="short"'+(filmFilters.format==='short'?' selected':'')+'>Short videos</option><option value="long"'+(filmFilters.format==='long'?' selected':'')+'>Full videos</option></select></label><label class="check-label"><input type="checkbox" id="film-history"'+(filmFilters.history?' checked':'')+'> Include earlier editions</label><span id="film-count"></span></div><div id="film-results">'+filmRows()+'</div></section>';}
   function introView(){
-    var f=data.films['short-introduction'],n=data.films['long-introduction'];var existing=Object.values(data.films).filter(function(x){return /introduction/.test(x.id)&&x.youtube&&!M.earlier(data,x);}).slice(-1)[0];
-    return '<section class="intro-view">'+crumb('home','All questions')+'<div class="intro-heading"><p class="eyebrow">Will Cook</p><h1 tabindex="-1">The work, and how it fits together.</h1><p>'+esc(data.owner.lede)+'</p></div><div class="intro-films"><article><h2>A short introduction</h2>'+filmVisual(f,false)+'<p>'+esc(f.takeaway)+'</p></article><article><h2>The full tour</h2>'+filmVisual(n,false)+'<p>'+esc(n.takeaway)+'</p></article></div>'+(existing?'<p class="published-intro">Already available: '+filmAction(existing,existing.title+' · '+clock(existing),'inline-action')+'</p>':'')+'</section>';
+    var f=data.films['short-introduction'],n=data.films['long-introduction'];var existing=Object.values(data.films).filter(function(x){return /introduction/.test(x.id)&&x.youtube&&!M.earlier(data,x);}).slice(-1)[0],tour=M.published(n)?n:(existing||n);
+    return '<section class="intro-view">'+crumb('home','All questions')+'<div class="intro-heading"><p class="eyebrow">Will Cook</p><h1 tabindex="-1">The work, and how it fits together.</h1><p>'+esc(data.owner.lede)+'</p></div><div class="intro-films"><article><h2>A short introduction</h2>'+filmVisual(f,false)+'<p>'+esc(f.takeaway)+'</p></article><article><h2>The full tour</h2>'+filmVisual(tour,false)+'<p>'+esc(tour===n?n.takeaway:tour.title)+'</p></article></div>'+(existing&&tour!==existing?'<p class="published-intro">Already available: '+filmAction(existing,existing.title+' · '+clock(existing),'inline-action')+'</p>':'')+'</section>';
   }
   function aboutView(){return '<section class="about-view">'+crumb('home','All questions')+'<div class="about-heading"><p class="eyebrow">About Will Cook</p><h1 tabindex="-1">Making the work understandable.</h1><p>'+esc(data.owner.lede)+'</p><p>'+esc(data.owner.availability)+'</p><div class="contact-links">'+data.owner.contact.map(function(c){return external(c.href,esc(c.label),'resource-action');}).join('')+'</div></div><details class="contributions-details"><summary>Contributions to other projects <span>+</span></summary><ul>'+data.contributions.map(function(c){return '<li><strong>'+external('https://github.com/wcook04/'+c.repo,esc(c.upstream))+'</strong><p>'+esc(c.what)+'</p>'+(c.evidence?external(c.evidence.href,esc(c.evidence.label)):'')+'</li>';}).join('')+'</ul></details><details class="contributions-details"><summary>Earlier work <span>+</span></summary><ul>'+data.earlier.map(function(x){return '<li>'+external(x.href,esc(x.name))+'<p>'+esc(x.note)+'</p></li>';}).join('')+'</ul></details></section>';}
   function termRows(query){return data.terms.filter(function(t){return M.fold([t.term,...(t.aliases||[])].join(' ')).includes(M.fold(query));}).sort(function(a,b){return a.term.localeCompare(b.term);}).map(function(t){return '<details class="term-definition" id="term-'+esc(t.id)+'"><summary>'+esc(t.term)+' <span aria-hidden="true">+</span></summary><p>'+esc(t.preview)+'</p><p>'+esc(t.detail)+'</p></details>';}).join('');}

@@ -452,3 +452,21 @@
 @media (prefers-reduced-motion: reduce) { .vtile__thumb,.vtile__play { transition:none; } }
 @media (max-width:1100px) { .vgrid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
 @media (max-width:640px) { .vgrid { grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 14px; } .vtile--intro { grid-row:auto; } }
+
+/* YouTube's player, embedded where a published video appears */
+.film-player { position:relative;aspect-ratio:16/9;width:100%;overflow:hidden;background:#15191b;border-radius:6px; }
+.film-player iframe { position:absolute;inset:0;width:100%;height:100%;border:0;display:block; }
+.strand-card .film-player { box-shadow:0 1px 0 var(--hairline),0 18px 36px -26px rgba(20,22,20,.55); }
+.film-row .film-player { max-width:520px; }
+
+/* "my name" beside the name in the header */
+.name-tag { font-family:var(--font-sans, system-ui, sans-serif);font-size:11px;font-weight:500;letter-spacing:.02em;line-height:1;padding:4px 7px;border-radius:999px;border:1px solid var(--hairline);color:var(--muted, #6b6f6c);margin-left:-2px;align-self:center; }
+
+/* One column: heading, then the player, then everything in the project */
+@media (max-width:800px) {
+  .project-layout { display:flex;flex-direction:column;gap:0; }
+  .project-story { display:contents; }
+  .project-story > * { order:0; }
+  .project-media { order:1;width:100%;margin:22px 0 30px; }
+  .project-story > .everything { order:2; }
+}

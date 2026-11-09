@@ -135,12 +135,15 @@ def door_videos(view: dict, door: dict) -> str:
     return f"{n} short video{'s' if n != 1 else ''}{span}"
 
 
-def _thumb_film(f: dict) -> str:
+def _thumb_film(f: dict, route: str = "") -> str:
+    """A video thumbnail. A published video opens the page that plays it here."""
     stem = f.get("still") or f.get("poster")
     img = f'<img src="{e(stem)}-640.webp" width="1280" height="720" alt="" loading="lazy" decoding="async">' if stem else ""
     secs = f.get("duration_seconds") or f.get("cut_seconds") or 0
     time = f'<span class="thumb__time">{secs // 60}:{secs % 60:02d}</span>' if secs else ""
     label = e(f["title"]) + ("" if f.get("youtube") else " (in preparation: opens the transcript)")
+    if f.get("youtube") and route:
+        return f'<a class="thumb" href="#{e(route)}" data-route="{e(route)}" title="{e(f["title"])}" aria-label="Watch {label}">{img}{time}<span class="thumb__play" aria-hidden="true">▶</span></a>'
     if f.get("youtube"):
         return f'<a class="thumb" href="{e(f["youtube"])}" target="_blank" rel="noopener" title="{e(f["title"])}" aria-label="Watch {label}">{img}{time}<span class="thumb__play" aria-hidden="true">▶</span></a>'
     return f'<a class="thumb is-coming" href="all.html#film-{e(f["id"])}" data-film="{e(f["id"])}" title="{e(f["title"])}" aria-label="{label}">{img}{time}</a>'
@@ -178,8 +181,8 @@ def index_markup(view: dict) -> str:
             rows.append(f'''<article class="index-row ink-{e(p['area'])}" id="index-{e(pid)}">
             <div class="index-row__name"><a href="all.html#project-{e(pid)}" data-route="p={e(pid)}" data-parent="{e(d['id'])}">{e(p['name'])}</a><p>{e(p.get('plain') or '')}</p></div>
             <ol class="index-row__strand">
-            <li class="cell cell--short"><span class="cell__label">Short</span><div class="cell__items">{''.join(_thumb_film(f) for f in shorts)}</div></li>
-            <li class="cell cell--long"><span class="cell__label">Full</span><div class="cell__items">{''.join(_thumb_film(f) for f in longs) or '<span class="cell-empty">None yet</span>'}</div></li>
+            <li class="cell cell--short"><span class="cell__label">Short</span><div class="cell__items">{''.join(_thumb_film(f, f"p={pid}&via={d['id']}&film={f['id']}") for f in shorts)}</div></li>
+            <li class="cell cell--long"><span class="cell__label">Full</span><div class="cell__items">{''.join(_thumb_film(f, f"p={pid}&via={d['id']}&film={f['id']}") for f in longs) or '<span class="cell-empty">None yet</span>'}</div></li>
             <li class="cell cell--site"><span class="cell__label">Website</span><div class="cell__items">{_thumb_site(p)}</div></li>
             <li class="cell cell--code"><span class="cell__label">Code</span><div class="cell__items cell__items--code">{code}</div></li>
             </ol></article>''')
@@ -191,8 +194,8 @@ def index_markup(view: dict) -> str:
         longs = [f for f in intro if f.get("format") != "short"]
         groups.insert(0, f'''<section class="index-group ink-explain"><h3><a href="all.html#introductions" data-route="intro">Start here: how the projects fit together</a></h3>
         <article class="index-row ink-explain" id="index-introduction"><div class="index-row__name"><a href="all.html#introductions" data-route="intro">Introduction</a><p>The two ideas, and every project in turn</p></div>
-        <ol class="index-row__strand"><li class="cell cell--short"><span class="cell__label">Short</span><div class="cell__items">{''.join(_thumb_film(f) for f in shorts)}</div></li>
-        <li class="cell cell--long"><span class="cell__label">Full</span><div class="cell__items">{''.join(_thumb_film(f) for f in longs)}</div></li>
+        <ol class="index-row__strand"><li class="cell cell--short"><span class="cell__label">Short</span><div class="cell__items">{''.join(_thumb_film(f, "intro") for f in shorts)}</div></li>
+        <li class="cell cell--long"><span class="cell__label">Full</span><div class="cell__items">{''.join(_thumb_film(f, "intro") for f in longs)}</div></li>
         <li class="cell cell--site"><span class="cell__label">Website</span><div class="cell__items"><span class="cell-empty">This page</span></div></li>
         <li class="cell cell--code"><span class="cell__label">Code</span><div class="cell__items cell__items--code"><a href="https://github.com/wcook04/wcook04.github.io" target="_blank" rel="noopener">wcook04.github.io <span aria-hidden="true">↗</span></a></div></li></ol></article></section>''')
     n_sites = sum(1 for p in projects.values() if p.get("url"))
@@ -267,14 +270,14 @@ def render_page(registry: dict, glossary: dict, root: Path, structured: str) -> 
     data=json.dumps(v,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c')
     return f'''<!doctype html>
 <html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src https://www.youtube.com">
 <title>Will Cook — follow the work</title><meta name="description" content="Explore AI-assisted mathematics, tools for coding assistants, and ways to make the work understandable.">
 <link rel="canonical" href="https://wcook04.github.io/"><meta name="robots" content="index, follow">
 <meta name="color-scheme" content="light dark"><link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/hub.css"><link rel="stylesheet" href="assets/explorer.css"><link rel="stylesheet" href="assets/door-art.css"><script src="assets/explore-model.js" defer></script><script src="assets/explore.js" defer></script>
 <script type="application/ld+json">{structured}</script></head>
 <body class="question-studio"><a class="studio-skip" href="#main">Skip to the questions</a>
-<header class="studio-header"><a class="studio-brand" href="index.html" data-route="home"><img src="assets/favicon.svg" width="27" height="27" alt=""><span>Will Cook</span></a>
+<header class="studio-header"><a class="studio-brand" href="index.html" data-route="home"><img src="assets/favicon.svg" width="27" height="27" alt=""><span>Will Cook</span><span class="name-tag">my name</span></a>
 <nav aria-label="Main"><a href="index.html" data-route="home" data-nav="home" aria-current="page">Explore</a><a href="all.html" data-route="all" data-nav="all">All work</a><a href="all.html#films" data-route="films" data-nav="films">Videos</a><a href="all.html#about" data-route="about" data-nav="about">About & contact</a></nav>
 <button class="theme-button" type="button" aria-label="Switch to dark theme" title="Switch theme"><span aria-hidden="true">◐</span></button></header>
 <main id="main" class="studio-main">{home_markup(v)}</main>

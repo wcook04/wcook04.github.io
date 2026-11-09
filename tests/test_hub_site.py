@@ -123,6 +123,16 @@ class HubTests(unittest.TestCase):
         self.assertTrue(any("embedded player" in error for error in errors))
         self.assertTrue(any("another host" in error for error in errors))
 
+    def test_home_page_frames_only_the_youtube_player(self):
+        page = self.files["index.html"].decode()
+        self.assertEqual(CHECK.validate_page("index.html", page, prototype=True), [])
+        other = page.replace("frame-src https://www.youtube.com", "frame-src https://example.org")
+        self.assertTrue(any("frame-src https://www.youtube.com" in error
+                            for error in CHECK.validate_page("index.html", other, prototype=True)))
+        catalogue = self.files["all.html"].decode().replace("frame-src 'none'", "frame-src https://www.youtube.com")
+        self.assertTrue(any("frame-src 'none'" in error
+                            for error in CHECK.validate_page("all.html", catalogue, prototype=True)))
+
     def test_host_wide_crawling_and_project_ownership_are_preserved(self):
         files = dict(self.files)
         files["robots.txt"] += b"Disallow: /plectis-atlas/\n"

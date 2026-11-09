@@ -169,9 +169,12 @@ shown, not removed, so the list reads the same everywhere.
 
 ## Rules
 
-- **No embedded players.** A video opens on YouTube in a new tab. Pages load
-  nothing from YouTube or any other host, and a site's content security
-  policy needs no change.
+- **Players.** The home page plays a published video in YouTube's embedded
+  player on its project page; its content security policy allows frames from
+  `https://www.youtube.com` and nothing else. A play started with the player's
+  own button counts as a YouTube view; an autoplayed embed does not, so the
+  player never autoplays. The project websites link to YouTube in a new tab
+  and embed no player.
 - **Never invent a link.** A video without a `youtube` value is shown in
   preparation. Its title is the working title, and its description says what
   it will show, taken from its script.

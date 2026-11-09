@@ -130,8 +130,11 @@ def validate_page(name: str, text: str, *, prototype: bool = False, redirect: bo
             url = part.strip().split(" ")[0]
             if url and not same_origin(url): errors.append(f"{name}: image source loads from another host: {url}")
     csp = [m.get("content", "") for m in page.all("meta") if m.get("http-equiv", "").lower() == "content-security-policy"]
-    if len(csp) != 1 or any(rule not in csp[0] for rule in ("frame-src 'none'", "connect-src 'none'", "script-src 'self'")):
-        errors.append(f"{name}: preserve the same-origin/no-player content security policy")
+    # The explorer page (index.html) may frame YouTube's player and nothing else; every other page frames nothing.
+    frames = "frame-src https://www.youtube.com" if name == "index.html" else "frame-src 'none'"
+    rules = [r.strip() for r in csp[0].split(";")] if len(csp) == 1 else []
+    if any(rule not in rules for rule in (frames, "connect-src 'none'", "script-src 'self'")):
+        errors.append(f"{name}: preserve the same-origin content security policy ({frames})")
     if page.tags.count("h1") != 1: errors.append(f"{name}: exactly one h1 is required")
     if len(page.ids) != len(set(page.ids)): errors.append(f"{name}: HTML ids must be unique")
     anchors = page.all("a")
