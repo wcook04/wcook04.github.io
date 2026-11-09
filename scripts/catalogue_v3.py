@@ -642,7 +642,10 @@ def validate(data, glossary, *, schema_path=None, glossary_schema_path=None, ass
     try:
         from jsonschema import Draft202012Validator, FormatChecker
     except ImportError:
-        return ["Install jsonschema 4.x to validate the bundled Draft 2020-12 schema"]
+        # The cross-record checks below need only the standard library. The
+        # shape check runs wherever jsonschema 4.x is installed.
+        print("note: jsonschema 4.x is not installed; skipped the JSON Schema shape check", file=sys.stderr)
+        return semantic_errors(data, glossary, asset_root)
     for value, path in [(data, schema_path or HERE / "sites.schema.json"),
                         (glossary, glossary_schema_path or HERE / "glossary.schema.json")]:
         schema = read_json(path)

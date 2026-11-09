@@ -80,8 +80,9 @@ private.
 
 To edit the page locally, you need Git and Python 3. These commands copy the
 repository to your computer, build the page, check it and start a local server.
-The build needs only Python. The checks also need the JSON Schema validator:
-`python3 -m pip install 'jsonschema>=4.18,<5'`.
+The build and checks need only Python. With the JSON Schema validator
+installed (`python3 -m pip install 'jsonschema>=4.18,<5'`), the checker also
+validates `sites.json` and `glossary.json` against their schemas.
 
 ```sh
 git clone https://github.com/wcook04/wcook04.github.io.git
