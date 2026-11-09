@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "title": "Where would you like to start?",
-  "subtitle": "I use AI to do maths, build tools and make the work understandable.",
+  "title": "Use AI to make what AI produces easier to understand, at every level of detail. Build things that get better as AI models get better.",
+  "subtitle": "Each question below opens with a short video of about two minutes, then leads to the full video, the website and the code.",
   "doors": [
     {
       "id": "research",
-      "question": "What can AI help prove?",
-      "caption": "Eight old problems. Quantum computers. Disordered magnets.",
+      "question": "What has AI proved that Lean has checked?",
+      "caption": "A case of an Erdős problem from 1968, OpenAI's quantum query bound and a spin-glass theorem, each with a Lean proof.",
       "object": "research",
       "ink": "maths",
       "projects": [
@@ -21,18 +21,18 @@
         },
         {
           "project": "quartic",
-          "label": "Quantum computers"
+          "label": "Quantum query complexity"
         },
         {
           "project": "lean-exposition",
-          "label": "Magnets"
+          "label": "Spin glasses"
         }
       ]
     },
     {
       "id": "proofs",
-      "question": "How do you follow a proof?",
-      "caption": "A sentence in a paper. The proof behind it.",
+      "question": "Which sentences in a paper does its Lean proof cover?",
+      "caption": "Click a sentence to open the Lean lines it describes, and see which statements each proof covers in full.",
       "object": "proofs",
       "ink": "maths",
       "projects": [
@@ -45,9 +45,9 @@
     },
     {
       "id": "assistants",
-      "question": "What did the AI actually do?",
-      "caption": "Follow its commands. Keep control of the changes.",
-      "object": "trace",
+      "question": "What did the coding agent run, change and commit?",
+      "caption": "Claude Code and Codex sessions: each command beside its output, one agent's commit beside another's edits, a hook that blocks a commit.",
+      "object": "assistants",
       "ink": "code",
       "projects": [
         "agent-trace",
@@ -57,9 +57,9 @@
     },
     {
       "id": "explaining",
-      "question": "How does a proof become a film?",
-      "caption": "Follow the same result through different explanations.",
-      "object": "funnel",
+      "question": "How does one Lean proof become papers and a video?",
+      "caption": "One proof becomes a 152-page research record, a 26-page paper, a 16-page exposition and a video, each picture timed to a spoken word.",
+      "object": "explaining",
       "ink": "explain",
       "projects": [
         "funnel",
@@ -68,8 +68,8 @@
     },
     {
       "id": "code",
-      "question": "How does this code fit together?",
-      "caption": "See the connections. Ask a precise question.",
+      "question": "Which function calls this one, and what does each file do?",
+      "caption": "A map of the descriptions agents write in each file, and a database of calls that NVIDIA Auto Ontology queries in SQL.",
       "object": "code",
       "ink": "code",
       "projects": [
@@ -79,9 +79,9 @@
     },
     {
       "id": "testing",
-      "question": "Can AI find more bugs?",
-      "caption": "Show it the bugs it missed last time.",
-      "object": "bugs",
+      "question": "Do a model's tests catch more bugs when its prompt lists the bugs it missed?",
+      "caption": "On 58 new problems, DeepSeek V4.1 Flash caught 77% of bugs instead of 69%.",
+      "object": "testing",
       "ink": "code",
       "projects": [
         "zenith"
@@ -92,17 +92,17 @@
     {
       "from": "research",
       "to": "proofs",
-      "label": "Read the same results beside their proofs"
+      "label": "The same results, read beside their Lean proofs"
     },
     {
       "from": "research",
       "to": "explaining",
-      "label": "The results become worked examples"
+      "label": "The results are the worked examples"
     },
     {
       "from": "proofs",
       "to": "explaining",
-      "label": "Readers are one of the outputs"
+      "label": "The readers are one of the outputs"
     }
   ],
   "topic_aliases": {
@@ -123,20 +123,20 @@
     "testing": "zenith"
   },
   "project_questions": {
-    "maths": "What can AI help prove about eight old problems?",
-    "quartic": "How much faster can a quantum computer be?",
-    "lean-exposition": "Can very different arrangements be almost as good?",
-    "proof-reader": "Can you follow a paper into its proof?",
-    "atlas": "How have OpenAI’s maths papers been checked?",
-    "formal-verification": "Which parts of this software have proofs?",
-    "agent-trace": "What did the coding assistant actually run?",
-    "one-checkout": "How do you save one fix while work continues?",
-    "safety-core": "Can a rule stop a bad command?",
-    "codemap": "How does this codebase fit together?",
-    "code-ontology-bridge": "Can you ask a codebase a question?",
-    "zenith": "Can AI find more bugs?",
-    "funnel": "How does one proof become several explanations?",
-    "narration-ir": "How do the words become the pictures?"
+    "maths": "Which statements from eight Erdős problems has Lean accepted?",
+    "quartic": "How many more queries can a randomized algorithm need than a quantum one?",
+    "lean-exposition": "How different can two near-best states of a spin glass be?",
+    "proof-reader": "Which Lean lines does this sentence of the paper describe?",
+    "atlas": "How much of each OpenAI maths paper does its Lean statement cover?",
+    "formal-verification": "Which calculations in this toolkit have Dafny proofs?",
+    "agent-trace": "Which commands did the coding agent run, and what did each output?",
+    "one-checkout": "How do you commit one agent's fix while another agent is still editing the file?",
+    "safety-core": "How often did an agent commit with a made-up setting, with and without rules?",
+    "codemap": "What does each file do, from the descriptions agents write in it?",
+    "code-ontology-bridge": "How many code questions can NVIDIA Auto Ontology answer from a database of calls?",
+    "zenith": "Do a model's tests catch more bugs when its prompt lists the bugs it missed?",
+    "funnel": "How does one Lean proof become papers and a video?",
+    "narration-ir": "Which spoken word times each change in the picture?"
   },
   "project_objects": {
     "maths": "research",
@@ -169,5 +169,10 @@
     "zenith": "Follow a code-testing experiment",
     "funnel": "Follow one result into papers and a film",
     "narration-ir": "Plan pictures from the spoken words"
-  }
+  },
+  "eyebrow": "Will Cook · the two ideas behind everything here",
+  "principles": [
+    "Use AI to make what AI produces easier to understand, at every level of detail.",
+    "Build things that get better as AI models get better."
+  ]
 }

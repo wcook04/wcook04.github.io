@@ -1,7 +1,7 @@
 {
   "schema": "will_cook_site_family_v3",
   "updated": "2026-11-09",
-  "about": "The one list of Will Cook's websites, films, repositories and how they connect. The home page at wcook04.github.io, its catalogue.json graph and its llms.txt are built from it and from glossary.json. Each website keeps a copy for its own header, footer and film slots. Edit this file, then follow README.md, 'Add a released film'.",
+  "about": "The one list of Will Cook's websites, films, repositories and how they connect. The home page at wcook04.github.io, its catalogue.json graph and its llms.txt are built from it and from glossary.json. The build also writes family.json, the same list in the older v2 shape; each website keeps a copy of family.json for its own header, footer and video slots. Edit this file, then follow README.md, 'Add a released film'.",
   "owner": {
     "id": "person:will-cook",
     "name": "Will Cook",

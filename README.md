@@ -4,8 +4,11 @@ This repository contains the code for [Will Cook's home page](https://wcook04.gi
 The page links his mathematics research, software and videos. The projects
 have their own repositories, listed below.
 
-Open the website to watch the introduction or choose a project. **Show videos and code**
-opens that project's papers, videos and code links beneath its description.
+The page opens on the two ideas from Will's introduction video and six
+questions about the work. Each question opens on its projects' short videos of
+about two minutes; each short video leads to its full video, the project's
+website and its code. Below the questions, the index lists every project in one
+row: short videos, full videos, website and code.
 
 [![The home page, with an introduction video and links to the projects](assets/sites/home-light-1440.webp)](https://wcook04.github.io/)
 
@@ -77,7 +80,8 @@ private.
 
 To edit the page locally, you need Git and Python 3. These commands copy the
 repository to your computer, build the page, check it and start a local server.
-The build and checks need no additional Python packages.
+The build needs only Python. The checks also need the JSON Schema validator:
+`python3 -m pip install 'jsonschema>=4.18,<5'`.
 
 ```sh
 git clone https://github.com/wcook04/wcook04.github.io.git
@@ -100,25 +104,34 @@ including a fixed study revision. Keep collapsed project descriptions and credit
 under the 500-word review threshold across all projects; remove repeated
 labels before expanding the budget. Attribution and study limits still belong
 next to the claims they qualify.
-For visual audits, the first-screen actions are `.hub-routes a`. The three
-field choices are intentional navigation, so retain all three if a generic
+For visual audits, the first-screen choices are the six `.door-open` links.
+They are intentional navigation, so retain all six if a generic
 call-to-action audit warns about more than two buttons.
 Then run the build, tests and checker again. Do not edit the generated
 `index.html` by hand.
 
 ## How the page is made
 
-[`sites.json`](sites.json) lists the websites, tools, code repositories and
-videos. [`scripts/build_hub.py`](scripts/build_hub.py) turns that list into the
-home page and the other generated files listed below. The check rejects code
-repositories that are unknown or are not attached to any project.
+[`sites.json`](sites.json) (schema v3, described by
+[`scripts/sites.schema.json`](scripts/sites.schema.json)) lists the projects and
+their resources: websites, videos, papers and code repositories, each with its
+publication records, and the typed relationships between them, such as which
+full video a short video leads to. [`glossary.json`](glossary.json) defines the
+technical terms and [`explorer.json`](explorer.json) the six questions on the
+first screen. [`scripts/build_hub.py`](scripts/build_hub.py) and
+[`scripts/explorer_v3.py`](scripts/explorer_v3.py) turn them into the home page,
+the static catalogue [`all.html`](all.html), the typed graph
+[`catalogue.json`](catalogue.json), [`structured-data.jsonld`](structured-data.jsonld)
+and [`family.json`](family.json), the same list in the older v2 shape for the
+project websites. [`scripts/door_art.py`](scripts/door_art.py) draws the
+pictures for each question and project.
 
-Visitors can read the page and follow its links without JavaScript. When
-JavaScript is available, **Show videos and code** opens a project's videos, website
-links and code beneath its description; **Show all videos and code** opens them all.
-[`assets/hub-map.js`](assets/hub-map.js) draws the connections between these
-links. On a narrow screen the same links appear as a list. A link such as
-[`/#zenith`](https://wcook04.github.io/#zenith) opens that project's details.
+Visitors can read the page, the index and every link without JavaScript. With
+JavaScript, [`assets/explore.js`](assets/explore.js) opens a question or project
+in place: [`/#d=proofs`](https://wcook04.github.io/#d=proofs) opens a question,
+[`/#p=zenith`](https://wcook04.github.io/#p=zenith) a project. Transcripts of
+videos still in preparation are in [`content/transcripts/`](content/transcripts/)
+and open from their video slots.
 
 Videos open on YouTube in a new tab. The home page loads its images, fonts and
 scripts from this repository, without embedding a YouTube player. Earlier
@@ -126,10 +139,9 @@ introductions appear separately from the current videos. A video still being
 made shows “In preparation” and has no link.
 
 [`docs/family.md`](docs/family.md) describes the shared header, video cards
-and links between the websites. Each website keeps its own copy of the list
-and shared stylesheet, so those parts can be built without contacting another
-website. The drawing of connections is adapted from the Plectis website and
-Magic UI's AnimatedBeam; the MIT licence notice for that code is in `assets/hub-map.js`.
+and links between the websites. Each website keeps its own copy of
+`family.json` and the shared stylesheet, so those parts can be built without
+contacting another website.
 
 ## Old Plectis addresses
 
@@ -155,10 +167,11 @@ forwarding pages.
 
 ## Add a published video
 
-1. In `sites.json`, set the video's `youtube` address, `duration_seconds`
-   (length in seconds), `still` (thumbnail filename prefix), title and
-   description. For example, the existing SK video uses
-   `"assets/films/sk-no-gap-v3"` as its prefix.
+1. In `sites.json`, find the video's resource (`"id": "film:<id>"`). In its
+   YouTube publication record set `state` to `published`, `url` to the watch
+   address, `duration_seconds` to its length in seconds and `thumbnail_stem` to
+   the thumbnail filename prefix. For example, the published introduction uses
+   `"assets/films/introduction-v3"`. Keep the video's id and relationships.
 2. Make the two thumbnail sizes from the image uploaded to YouTube. These
    commands need the `cwebp` image converter:
 
@@ -169,9 +182,8 @@ forwarding pages.
 
 3. Run the build, tests and repository check shown above. Review the result,
    then commit and push the change to `main` to publish the home page.
-4. Copy `sites.json` and the two thumbnails to the website that shows the
-   video. That website calls its copy of the list `family.json`; rebuild and
-   publish it so its video card updates too.
+4. Copy the generated `family.json` and the two thumbnails to the website
+   that shows the video; rebuild and publish it so its video card updates too.
 
 When replacing a thumbnail, remove the old pair after changing `still` and
 rebuilding. The check rejects images that the page no longer uses. Keep the
@@ -179,10 +191,12 @@ images for the earlier introductions, which are still listed on the page.
 
 ## Repository map
 
-- [`sites.json`](sites.json): The list to edit when a project, code link or video changes.
-- [`scripts/build_hub.py`](scripts/build_hub.py): Builds the home page, forwarding pages and other generated files.
+- [`sites.json`](sites.json), [`glossary.json`](glossary.json), [`explorer.json`](explorer.json): The lists to edit when a project, video, term or question changes.
+- [`scripts/build_hub.py`](scripts/build_hub.py), [`scripts/explorer_v3.py`](scripts/explorer_v3.py), [`scripts/catalogue_v3.py`](scripts/catalogue_v3.py), [`scripts/door_art.py`](scripts/door_art.py): Build the home page, its pictures, the catalogue graph, forwarding pages and other generated files.
+- [`all.html`](all.html), [`catalogue.json`](catalogue.json), [`structured-data.jsonld`](structured-data.jsonld), [`family.json`](family.json): Generated catalogue, graph, search metadata and the list the project websites copy.
+- [`content/transcripts/`](content/transcripts/): Transcripts of the videos still in preparation.
 - [`index.html`](index.html), [`404.html`](404.html), [`plectis/`](plectis/): Generated pages; the latter two keep old project addresses working.
-- [`assets/hub.css`](assets/hub.css), [`assets/hub.js`](assets/hub.js), [`assets/theme-init.js`](assets/theme-init.js), [`assets/hub-map.js`](assets/hub-map.js): Page appearance, light/dark switch, expandable details and connecting lines.
+- [`assets/hub.css`](assets/hub.css), [`assets/explorer.css`](assets/explorer.css), [`assets/door-art.css`](assets/door-art.css), [`assets/explore.js`](assets/explore.js), [`assets/explore-model.js`](assets/explore-model.js), [`assets/theme-init.js`](assets/theme-init.js): Page appearance, pictures, the question explorer and the light/dark switch.
 - [`assets/family/family.css`](assets/family/family.css), [`docs/family.md`](docs/family.md): Shared website styles and instructions for using them.
 - [`assets/films/`](assets/films/), [`assets/sites/`](assets/sites/): Video thumbnails and website pictures, including this README's home page preview.
 - [`assets/fonts/`](assets/fonts/): Fonts and their licences.

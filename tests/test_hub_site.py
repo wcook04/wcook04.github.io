@@ -69,6 +69,32 @@ class HubTests(unittest.TestCase):
         bad["config"]["doors"][0]["projects"].append("missing-project")
         self.assertTrue(any("unknown project" in error for error in CHECK.validate_projection(bad, self.canonical)))
 
+    def test_every_video_website_and_repository_is_reached_from_a_question(self):
+        # A question page links each project; a project page lists every video,
+        # website route and repository the project has (explore.js everything()).
+        doors = self.view["config"]["doors"]
+        reached = {pid for d in doors for pid in d["projects"]}
+        self.assertEqual(reached, set(self.view["projects"]))
+        films = {fid for pid in reached for fid in self.view["projects"][pid]["films"]}
+        intro = set(self.registry["intro"]["films"])
+        self.assertEqual(films | intro, set(self.view["films"]))
+        repos = {r["id"] for pid in reached for r in self.view["projects"][pid]["repo_records"]}
+        contributed = {c["repo"] for c in self.registry["contributions"]}
+        listed = {r["id"] for r in self.registry["repos"]}
+        self.assertEqual(listed - repos - contributed, set())
+        for pid in reached:
+            p = self.view["projects"][pid]
+            if pid in {"agent-trace", "one-checkout", "safety-core", "codemap", "funnel", "narration-ir"}:
+                continue
+            self.assertTrue(p.get("url"), pid + " has no website address")
+        # Each card's short video comes first and leads to a full video.
+        for d in doors:
+            for pid in d["projects"]:
+                shorts = [self.view["films"][f] for f in self.view["projects"][pid]["films"]
+                          if self.view["films"][f]["format"] == "short"]
+                self.assertTrue(shorts, pid + " has no short video")
+                self.assertTrue(any(s.get("leads_to") for s in shorts), pid + ": no short video leads to a full video")
+
     def test_a_planned_video_cannot_gain_a_fake_playable_url_in_the_view(self):
         bad = deepcopy(self.view)
         planned = next(f for f in bad["films"].values() if not f.get("youtube"))

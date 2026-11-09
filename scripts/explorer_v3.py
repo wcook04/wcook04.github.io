@@ -63,6 +63,25 @@ def object_svg(kind: str) -> str:
     return f'<svg class="specimen specimen--{e(kind)}" {common}><g {line}>{body}</g></svg>'
 
 
+def drawings() -> dict:
+    """Door and project drawings from door_art.py, over the earlier set."""
+    out = {k: object_svg(k) for k in ['research','proofs','trace','code','bugs','funnel','quantum','magnets']}
+    try:
+        import door_art
+    except ImportError:
+        return out
+    out.update({k: door_art.art_svg(k) for k in [*door_art.DOOR_KINDS, *door_art.PROJECT_KINDS]})
+    return out
+
+
+def demo_states() -> dict:
+    try:
+        import door_art
+    except ImportError:
+        return {}
+    return {k: [list(x) for x in v] for k, v in door_art.DEMO_STATES.items()}
+
+
 def build_view(registry: dict, glossary: dict, root: Path) -> dict:
     config=json.loads((root/'explorer.json').read_text())
     owners={p['id']:p for p in registry['sites']+registry['projects']}
@@ -86,7 +105,107 @@ def build_view(registry: dict, glossary: dict, root: Path) -> dict:
         'terms':glossary['terms'],'owner':registry['owner'],'links':registry.get('links',[]),
         'collections':registry.get('collections',[]),'contributions':registry.get('contributions',[]),
         'earlier':registry.get('earlier',[]),
-        'objects':{k:object_svg(k) for k in ['research','proofs','trace','code','bugs','funnel','quantum','magnets']}}
+        'objects':drawings(),'demo':demo_states()}
+
+
+def door_videos(view: dict, door: dict) -> str:
+    """'3 short videos, 1:38 to 1:50' from the short videos of a door's projects."""
+    # The same choice as ExplorerModel.lead: the short video each project's card shows.
+    import re
+    secs = []
+    for pid in door["projects"]:
+        shorts = [view["films"][fid] for fid in view["projects"][pid]["films"]
+                  if view["films"].get(fid, {}).get("format") == "short" and view["films"][fid].get("edition") != "earlier"]
+        lead = None
+        if door["id"] == "proofs":
+            lead = next((f for f in shorts if re.search(r"reader|sk-website", f["id"])), None)
+        if lead is None and pid == "maths":
+            lead = next((f for f in shorts if f["id"] == "short-mathematics-overview"), None)
+        lead = lead or (shorts[0] if shorts else None)
+        if lead:
+            secs.append(lead.get("duration_seconds") or lead.get("cut_seconds") or 0)
+    n = len(secs)
+
+    def clock(s: int) -> str:
+        return f"{s // 60}:{s % 60:02d}"
+    if n > 1 and min(secs) != max(secs):
+        span = f", {clock(min(secs))} to {clock(max(secs))}"
+    else:
+        span = f", {clock(secs[0])}" if secs else ""
+    return f"{n} short video{'s' if n != 1 else ''}{span}"
+
+
+def _thumb_film(f: dict) -> str:
+    stem = f.get("still") or f.get("poster")
+    img = f'<img src="{e(stem)}-640.webp" width="1280" height="720" alt="" loading="lazy" decoding="async">' if stem else ""
+    secs = f.get("duration_seconds") or f.get("cut_seconds") or 0
+    time = f'<span class="thumb__time">{secs // 60}:{secs % 60:02d}</span>' if secs else ""
+    label = e(f["title"]) + ("" if f.get("youtube") else " (in preparation: opens the transcript)")
+    if f.get("youtube"):
+        return f'<a class="thumb" href="{e(f["youtube"])}" target="_blank" rel="noopener" title="{e(f["title"])}" aria-label="Watch {label}">{img}{time}<span class="thumb__play" aria-hidden="true">▶</span></a>'
+    return f'<a class="thumb is-coming" href="all.html#film-{e(f["id"])}" data-film="{e(f["id"])}" title="{e(f["title"])}" aria-label="{label}">{img}{time}</a>'
+
+
+def _thumb_site(p: dict) -> str:
+    if not p.get("url"):
+        note = "Not released" if p["id"] == "codemap" else "No website"
+        return f'<span class="cell-empty">{note}</span>'
+    cap = p.get("capture")
+    pics = (f'<img class="when-light" src="{e(cap)}-light-720.webp" width="720" height="405" alt="" loading="lazy" decoding="async">'
+            f'<img class="when-dark" src="{e(cap)}-dark-720.webp" width="720" height="405" alt="" loading="lazy" decoding="async">') if cap else ""
+    return f'<a class="thumb thumb--site" href="{e(p["url"])}" target="_blank" rel="noopener" title="{e(p["name"])}" aria-label="Open the {e(p["name"])} website">{pics}<span class="thumb__site">{e(p["name"])} ↗</span></a>'
+
+
+def index_markup(view: dict) -> str:
+    """Every project as one row: short videos, full videos, website, code.
+    Built from the same view data as the explorer, so it needs no JavaScript."""
+    films, projects = view["films"], view["projects"]
+    seen, groups = set(), []
+    repos = set()
+    for d in view["config"]["doors"]:
+        rows = []
+        for pid in d["projects"]:
+            if pid in seen:
+                continue
+            seen.add(pid)
+            p = projects[pid]
+            now = [films[f] for f in p["films"] if f in films and films[f].get("edition") != "earlier"
+                   and not (films[f].get("superseded_by") and films.get(films[f]["superseded_by"], {}).get("youtube"))]
+            shorts = [f for f in now if f.get("format") == "short"]
+            longs = [f for f in now if f.get("format") != "short"]
+            code = "".join(f'<a href="{e(r["href"])}" target="_blank" rel="noopener">{e(r["name"])} <span aria-hidden="true">↗</span></a>' for r in p["repo_records"]) or '<span class="cell-empty">Private</span>'
+            repos.update(r["id"] for r in p["repo_records"])
+            rows.append(f'''<article class="index-row ink-{e(p['area'])}" id="index-{e(pid)}">
+            <div class="index-row__name"><a href="all.html#project-{e(pid)}" data-route="p={e(pid)}" data-parent="{e(d['id'])}">{e(p['name'])}</a><p>{e(p.get('plain') or '')}</p></div>
+            <ol class="index-row__strand">
+            <li class="cell cell--short"><span class="cell__label">Short</span><div class="cell__items">{''.join(_thumb_film(f) for f in shorts)}</div></li>
+            <li class="cell cell--long"><span class="cell__label">Full</span><div class="cell__items">{''.join(_thumb_film(f) for f in longs) or '<span class="cell-empty">None yet</span>'}</div></li>
+            <li class="cell cell--site"><span class="cell__label">Website</span><div class="cell__items">{_thumb_site(p)}</div></li>
+            <li class="cell cell--code"><span class="cell__label">Code</span><div class="cell__items cell__items--code">{code}</div></li>
+            </ol></article>''')
+        if rows:
+            groups.append(f'<section class="index-group ink-{e(d["ink"])}"><h3><a href="all.html#topic-{e(d["id"])}" data-route="d={e(d["id"])}">{e(d["question"])}</a></h3>{"".join(rows)}</section>')
+    intro = [films[i] for i in ("short-introduction", "long-introduction", "introduction") if i in films]
+    if intro:
+        shorts = [f for f in intro if f.get("format") == "short"]
+        longs = [f for f in intro if f.get("format") != "short"]
+        groups.insert(0, f'''<section class="index-group ink-explain"><h3><a href="all.html#introductions" data-route="intro">Start here: how the projects fit together</a></h3>
+        <article class="index-row ink-explain" id="index-introduction"><div class="index-row__name"><a href="all.html#introductions" data-route="intro">Introduction</a><p>The two ideas, and every project in turn</p></div>
+        <ol class="index-row__strand"><li class="cell cell--short"><span class="cell__label">Short</span><div class="cell__items">{''.join(_thumb_film(f) for f in shorts)}</div></li>
+        <li class="cell cell--long"><span class="cell__label">Full</span><div class="cell__items">{''.join(_thumb_film(f) for f in longs)}</div></li>
+        <li class="cell cell--site"><span class="cell__label">Website</span><div class="cell__items"><span class="cell-empty">This page</span></div></li>
+        <li class="cell cell--code"><span class="cell__label">Code</span><div class="cell__items cell__items--code"><a href="https://github.com/wcook04/wcook04.github.io" target="_blank" rel="noopener">wcook04.github.io <span aria-hidden="true">↗</span></a></div></li></ol></article></section>''')
+    n_sites = sum(1 for p in projects.values() if p.get("url"))
+    n_films = sum(1 for f in films.values() if f.get("edition") != "earlier")
+    return f'''<section class="work-index" id="index" aria-labelledby="index-heading">
+    <div class="index-intro"><p class="eyebrow">The index</p><h2 id="index-heading">Every project, from its short video to its code.</h2>
+    <p>{len(projects)} projects, {n_films} current videos, {n_sites} websites and {len(repos)} repositories. A short video leads to its full video; the same data is in <a href="catalogue.json">catalogue.json</a> for programs.</p></div>
+    <div class="index-cols" aria-hidden="true"><span>Project</span><span>Short videos</span><span>Full videos</span><span>Website</span><span>Code</span></div>
+    {"".join(groups)}
+    <p class="index-more"><a href="all.html#films" data-route="films">Every video, including earlier editions →</a><a href="all.html" data-route="all">Search all the work →</a><a href="all.html#terms" data-route="terms">Glossary of terms →</a></p>
+    </section>'''
+
+
 
 
 def home_markup(view: dict) -> str:
@@ -99,13 +218,13 @@ def home_markup(view: dict) -> str:
         <a class="door-open" href="all.html#topic-{e(d['id'])}" data-route="d={e(d['id'])}" aria-describedby="hint-{e(d['id'])}">
         <div class="door-object" data-shape="{e(d['id'])}">{view['objects'][d['object']]}</div>
         <h2>{e(d['question'])}<span class="open-arrow" aria-hidden="true">↗</span></h2>
-        </a><p class="door-caption" id="hint-{e(d['id'])}">{e(d['caption'])}</p>{shortcuts}</article>''')
+        </a><p class="door-videos"><span class="knot" aria-hidden="true"></span>{door_videos(view, d)}</p><p class="door-caption" id="hint-{e(d['id'])}">{e(d['caption'])}</p>{shortcuts}</article>''')
     return f'''<section class="home-view" aria-labelledby="home-heading">
-    <div class="scene-heading"><div><p class="eyebrow">Will Cook · research & tools</p><h1 id="home-heading" tabindex="-1">{e(view['config']['title'])}</h1></div>
-    <p class="scene-intro">{e(view['config']['subtitle'])}<a href="all.html#introductions" data-route="intro">Watch the introduction <span aria-hidden="true">↗</span></a></p></div>
+    <div class="scene-heading"><div class="principles"><p class="eyebrow">{e(view['config']['eyebrow'])}</p><h1 id="home-heading" tabindex="-1">{''.join(f'<span class="principle"><span class="principle__n" aria-hidden="true">{i}</span>{e(t)}</span>' for i, t in enumerate(view['config']['principles'], 1))}</h1>
+    <p class="scene-intro">{e(view['config']['subtitle'])} <a href="all.html#introductions" data-route="intro">Watch the introduction <span aria-hidden="true">↗</span></a></p></div></div>
     <div class="question-scene"><svg class="scene-threads" aria-hidden="true"><g></g></svg>{''.join(doors)}</div>
-    <div class="scene-footer"><span>Choose a question. Follow the work.</span><a href="all.html" data-route="all">All projects & resources <span aria-hidden="true">→</span></a></div>
-    </section>'''
+    <div class="scene-footer"><a href="#index" data-scroll="index">The index of all {len(view['projects'])} projects <span aria-hidden="true">↓</span></a><a href="all.html" data-route="all">Search all the work <span aria-hidden="true">→</span></a></div>
+    </section>{index_markup(view)}'''
 
 
 def render_page(registry: dict, glossary: dict, root: Path, structured: str) -> str:
@@ -117,11 +236,11 @@ def render_page(registry: dict, glossary: dict, root: Path, structured: str) -> 
 <title>Will Cook — follow the work</title><meta name="description" content="Explore AI-assisted mathematics, tools for coding assistants, and ways to make the work understandable.">
 <link rel="canonical" href="https://wcook04.github.io/"><meta name="robots" content="index, follow">
 <meta name="color-scheme" content="light dark"><link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/hub.css"><link rel="stylesheet" href="assets/explorer.css"><script src="assets/explore-model.js" defer></script><script src="assets/explore.js" defer></script>
+<link rel="stylesheet" href="assets/hub.css"><link rel="stylesheet" href="assets/explorer.css"><link rel="stylesheet" href="assets/door-art.css"><script src="assets/explore-model.js" defer></script><script src="assets/explore.js" defer></script>
 <script type="application/ld+json">{structured}</script></head>
 <body class="question-studio"><a class="studio-skip" href="#main">Skip to the questions</a>
 <header class="studio-header"><a class="studio-brand" href="index.html" data-route="home"><img src="assets/favicon.svg" width="27" height="27" alt=""><span>Will Cook</span></a>
-<nav aria-label="Main"><a href="index.html" data-route="home" data-nav="home" aria-current="page">Explore</a><a href="all.html" data-route="all" data-nav="all">All work</a><a href="all.html#films" data-route="films" data-nav="films">Films</a><a href="all.html#about" data-route="about" data-nav="about">About & contact</a></nav>
+<nav aria-label="Main"><a href="index.html" data-route="home" data-nav="home" aria-current="page">Explore</a><a href="all.html" data-route="all" data-nav="all">All work</a><a href="all.html#films" data-route="films" data-nav="films">Videos</a><a href="all.html#about" data-route="about" data-nav="about">About & contact</a></nav>
 <button class="theme-button" type="button" aria-label="Switch to dark theme" title="Switch theme"><span aria-hidden="true">◐</span></button></header>
 <main id="main" class="studio-main">{home_markup(v)}</main>
 <div class="studio-announcement sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
@@ -155,4 +274,4 @@ def render_static(registry:dict, glossary:dict, root:Path)->str:
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Will Cook — complete catalogue</title>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'">
 <link rel="canonical" href="https://wcook04.github.io/all.html"><meta name="robots" content="index, follow">
-<link rel="stylesheet" href="assets/hub.css"><link rel="stylesheet" href="assets/explorer.css"></head><body class="question-studio static-index"><a class="studio-skip" href="#main">Skip to the catalogue</a><header class="studio-header"><a class="studio-brand" href="index.html">← Explore the work</a><nav aria-label="Catalogue"><a href="#projects">Projects</a><a href="#films">Films</a><a href="#terms">Terms</a><a href="#about">Contact</a></nav></header><main id="main"><h1>All the work, in one place.</h1>{topics}<section id="projects">{''.join(projects)}</section><section id="films"><h2>Every film</h2><span id="introductions"></span>{''.join(film(f) for f in registry['films'])}</section><section><h2>Contributions</h2><ul>{contributions}</ul><h2>Earlier work</h2><ul>{older}</ul></section><section id="terms"><h2>Terms</h2>{terms}</section><section id="about"><h2>Will Cook</h2><p>{e(registry['owner']['lede'])}</p><p>{e(registry['owner']['availability'])}</p><p>{contacts}</p></section></main></body></html>'''
+<link rel="stylesheet" href="assets/hub.css"><link rel="stylesheet" href="assets/explorer.css"><link rel="stylesheet" href="assets/door-art.css"></head><body class="question-studio static-index"><a class="studio-skip" href="#main">Skip to the catalogue</a><header class="studio-header"><a class="studio-brand" href="index.html">← Explore the work</a><nav aria-label="Catalogue"><a href="#projects">Projects</a><a href="#films">Videos</a><a href="#terms">Terms</a><a href="#about">Contact</a></nav></header><main id="main"><h1>All the work, in one place.</h1>{topics}<section id="projects">{''.join(projects)}</section><section id="films"><h2>Every video</h2><span id="introductions"></span>{''.join(film(f) for f in registry['films'])}</section><section><h2>Contributions</h2><ul>{contributions}</ul><h2>Earlier work</h2><ul>{older}</ul></section><section id="terms"><h2>Terms</h2>{terms}</section><section id="about"><h2>Will Cook</h2><p>{e(registry['owner']['lede'])}</p><p>{e(registry['owner']['availability'])}</p><p>{contacts}</p></section></main></body></html>'''

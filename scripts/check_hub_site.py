@@ -31,9 +31,9 @@ REQUIRED = {
     "glossary.json", "catalogue.json", "family.json", "structured-data.jsonld", "explorer.json",
     "llms.txt", "agent-guide.md", "plectis-paths.txt", "robots.txt", "sitemap.xml",
     "sitemap-home.xml", "favicon.ico", "assets/hub.css", "assets/explorer.css",
-    "assets/explore.js", "assets/explore-model.js", "assets/redirect.js",
+    "assets/explore.js", "assets/explore-model.js", "assets/redirect.js", "assets/door-art.css",
     "assets/favicon.svg", "scripts/build_hub.py", "scripts/check_hub_site.py",
-    "scripts/catalogue_v3.py", "scripts/explorer_v3.py", "scripts/sites.schema.json",
+    "scripts/catalogue_v3.py", "scripts/explorer_v3.py", "scripts/door_art.py", "scripts/sites.schema.json",
     "scripts/glossary.schema.json", "tests/test_hub_site.py",
 }
 PRODUCTION_REQUIRED = {".github/workflows/public-site.yml", ".gitignore"}
