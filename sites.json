@@ -71,7 +71,8 @@
       "subject": "eight Erdős problems",
       "tagline": "Maths Map: AI-assisted research on eight Erdős problems, with Lean proofs",
       "summary": "Browse theorems from eight Erdős problems on one map, open each in a long research record or a short paper, and see which statements Lean or Comparator accepted and which original questions stay open.",
-      "line": "Eight Erdős problems on one map: each theorem, its paper and its Lean check."
+      "line": "Eight Erdős problems on one map: each theorem, its paper and its Lean check.",
+      "plain": "Eight unsolved Erdős problems: what is proved, and where"
     },
     {
       "id": "lean-exposition",
@@ -115,7 +116,8 @@
       "subject": "spin glasses",
       "tagline": "SK Reader: OpenAI's spin-glass Lean proof beside three readable papers",
       "summary": "Read three AI-written papers on OpenAI's Sherrington–Kirkpatrick theorem, click a ticked statement to open OpenAI's Lean, and follow a 131-step argument map. AI agents wrote the map and 799 links; no mathematician has reviewed them.",
-      "line": "In large Sherrington–Kirkpatrick spin glasses, two near-best states can differ in half their spins."
+      "line": "In large Sherrington–Kirkpatrick spin glasses, two near-best states can differ in half their spins.",
+      "plain": "OpenAI’s spin-glass paper, read beside its computer-checked proof"
     },
     {
       "id": "proof-reader",
@@ -147,7 +149,8 @@
       "subject": "any paper beside its Lean",
       "tagline": "General Reader: a published paper beside its authors' Lean proof",
       "summary": "Click a sentence in Contextual Embeddings (PLDI 2026) to open the authors' Lean lines it describes, with a graph and axiom list from Lean's own report. Will added the links with AI; it works for any paper with public Lean.",
-      "line": "Click a sentence in a paper to open the lines of Lean proof it describes."
+      "line": "Click a sentence in a paper to open the lines of Lean proof it describes.",
+      "plain": "Any maths paper, read beside its computer-checked proof"
     },
     {
       "id": "quartic",
@@ -182,7 +185,8 @@
       "subject": "quantum queries",
       "tagline": "Quartic Reader: OpenAI's randomized-versus-quantum query separation, proved in Lean 4",
       "summary": "About 29,000 lines of AI-written Lean 4 prove OpenAI's nearly quartic separation; Comparator accepted the main theorem and rejected five broken proofs. Each paper passage lists its Lean statements, labelled by AI as exact, stronger or partial matches.",
-      "line": "OpenAI’s nearly quartic gap between randomized and quantum query complexity, proved in Lean 4."
+      "line": "OpenAI’s nearly quartic gap between randomized and quantum query complexity, proved in Lean 4.",
+      "plain": "OpenAI’s quantum computing paper, read beside its computer-checked proof"
     },
     {
       "id": "atlas",
@@ -219,7 +223,8 @@
       "subject": "OpenAI’s maths papers, reviewed",
       "tagline": "Plectis Atlas: OpenAI's maths papers beside outside groups' assessments",
       "summary": "Browse or search OpenAI's 719 current maths papers, grouped into 372 families on a subject map, and read each outside group's coverage label and report, credited to that group. Atlas has not rerun the groups' proof checks.",
-      "line": "OpenAI’s 719 maths papers, and how outside groups assessed each paper’s Lean statement."
+      "line": "OpenAI’s 719 maths papers, and how outside groups assessed each paper’s Lean statement.",
+      "plain": "OpenAI’s maths papers, and how outside groups judged them"
     },
     {
       "id": "formal-verification",
@@ -257,7 +262,8 @@
       "subject": "Dafny proofs of a toolkit",
       "tagline": "Practical Formal Verification: Dafny proofs inside an 88-component research toolkit",
       "summary": "Dafny proofs cover 16 selected computations, 12 inside particular components and four shared, compiled to Python. A map shows each kind of evidence for each component separately; whole-claim coverage reads unknown for all 88.",
-      "line": "88 Python components of a toolkit; Dafny proofs for 16 of their calculations."
+      "line": "88 Python components of a toolkit; Dafny proofs for 16 of their calculations.",
+      "plain": "Which parts of a software toolkit are mathematically proved"
     },
     {
       "id": "zenith",
@@ -296,7 +302,8 @@
       "subject": "AI testers and missed bugs",
       "tagline": "Zenith measures whether showing an AI model its missed bugs improves testing",
       "summary": "A pre-registered study in which DeepSeek V4.1 Flash, given records of EvalPlus bugs it missed on 28 practice problems, caught 77% rather than 69% on 58 held-out problems; about half the rise came from timeouts. Every prompt and reply is published.",
-      "line": "Shown the bugs it missed, a model’s score on 58 new problems rose from 69% to 77%."
+      "line": "Shown the bugs it missed, a model’s score on 58 new problems rose from 69% to 77%.",
+      "plain": "Does seeing its missed bugs make an AI test code better?"
     },
     {
       "id": "code-ontology-bridge",
@@ -329,7 +336,8 @@
       "subject": "for NVIDIA Auto Ontology",
       "tagline": "Code Ontology Bridge exports call graphs to DuckDB for NVIDIA Auto Ontology",
       "summary": "Runs static analysis on Python source, writes functions and calls to DuckDB with semantic models for NVIDIA Auto Ontology's text-to-SQL agent, and publishes a 48-question study where every answer is a rerunnable SQL query. Independent of NVIDIA.",
-      "line": "With this DuckDB code database, NVIDIA Auto Ontology answered 10.3 of 12 questions; DeepSeek alone, 3.2."
+      "line": "With this DuckDB code database, NVIDIA Auto Ontology answered 10.3 of 12 questions; DeepSeek alone, 3.2.",
+      "plain": "Letting NVIDIA Auto Ontology answer questions about code"
     }
   ],
   "projects": [
@@ -350,7 +358,8 @@
       "subject": "Claude Code and Codex sessions",
       "tagline": "Agent Trace opens saved Codex and Claude Code sessions with their commands",
       "summary": "Lists local Codex and Claude Code conversation files, shows each command beside its saved status, exit code and output, and copies chosen conversations at a chosen level of detail; an optional MCP server gives agents the same records. Copied text is not redacted.",
-      "line": "Every Claude Code and Codex session on your computer, each command beside its output."
+      "line": "Every Claude Code and Codex session on your computer, each command beside its output.",
+      "plain": "Everything your AI coding assistant ran, in one place"
     },
     {
       "id": "narration-ir",
@@ -368,7 +377,8 @@
       "subject": "narration into picture plans",
       "tagline": "A portable agent skill for word-timed plans of narrated explanations",
       "summary": "Before an AI writes animation code, it writes a plan stating what each spoken sentence means and which recorded word times each picture change. A bundled program confirms each quote is in its source file; a person reads the meanings.",
-      "line": "Each spoken sentence gets its meaning, word-timed picture events and quotes from its sources."
+      "line": "Each spoken sentence gets its meaning, word-timed picture events and quotes from its sources.",
+      "plain": "Planning a film’s pictures from what is said"
     },
     {
       "id": "safety-core",
@@ -386,7 +396,8 @@
       "subject": "a rulebook for coding agents",
       "tagline": "Safety Core turns one rulebook into coding-agent instructions and command hooks",
       "summary": "Builds AGENTS.md, CLAUDE.md and Claude Code hooks from one editable rulebook adapting ideas from Anthropic's Claude Constitution, and maps rules to files. In one small Claude Haiku 4.5 test, 10 of 10 runs committed without it and 0 of 10 with hooks.",
-      "line": "A written rule cut an agent’s bad commits from 10 runs in 10 to 6; a command check, to 0."
+      "line": "A written rule cut an agent’s bad commits from 10 runs in 10 to 6; a command check, to 0.",
+      "plain": "Rules and checks that stop an assistant committing bad changes"
     },
     {
       "id": "one-checkout",
@@ -403,7 +414,8 @@
       "subject": "commit one fix among many edits",
       "tagline": "One Checkout commits one reviewed git patch while other agents keep editing",
       "summary": "Applies a coding agent's git patch to the last commit so the agent can test that version, then commits it while another agent's unfinished staged and working-tree edits stay. It skips git hooks and does not prevent overwrites.",
-      "line": "Commit one agent’s finished patch while another agent’s unfinished edits stay in the same file."
+      "line": "Commit one agent’s finished patch while another agent’s unfinished edits stay in the same file.",
+      "plain": "Save one assistant’s finished fix while another is still editing"
     },
     {
       "id": "codemap",
@@ -423,7 +435,8 @@
       "subject": "a map of AI-written code",
       "tagline": "Code Map shows code files with their saved descriptions and call links",
       "summary": "A private interface where each file is a box containing the docstring description coding agents write and update under fixed headings, with links to code that calls each function; agents fetch the same descriptions as text. Descriptions can be wrong or out of date.",
-      "line": "A map of a codebase, drawn from the descriptions coding agents save in each file."
+      "line": "A map of a codebase, drawn from the descriptions coding agents save in each file.",
+      "plain": "A map of a codebase, drawn from AI-written file descriptions"
     },
     {
       "id": "funnel",
@@ -440,7 +453,8 @@
       ],
       "tagline": "Instructions AI follows to rewrite Lean-checked maths for each kind of reader",
       "summary": "AI, following written instructions, turns a proof Lean has accepted into a long research record, a specialist paper, an exposition and a video. Worked examples are Erdős problem #257 and OpenAI's results on the Sherrington–Kirkpatrick spin glass and the nearly quartic quantum query separation.",
-      "line": "One Lean-checked proof of Erdős #257 becomes a 152-page record, two papers and a video."
+      "line": "One Lean-checked proof of Erdős #257 becomes a 152-page record, two papers and a video.",
+      "plain": "How one proof becomes papers, a reader website and a film"
     }
   ],
   "repos": [
@@ -1172,6 +1186,11 @@
       "from": "codemap",
       "to": "code-ontology-bridge",
       "label": "A related tool, public, on NVIDIA’s code"
+    },
+    {
+      "from": "zenith",
+      "to": "safety-core",
+      "label": "Both measure what coding agents do"
     }
   ],
   "collections": [
@@ -1284,5 +1303,131 @@
   "hero": {
     "headline": "Making what AI produces easier for people to understand",
     "summary": "AI-assisted mathematics checked in Lean, websites that put each paper beside its proof, tools for coding agents, and films that explain them."
-  }
+  },
+  "topics": [
+    {
+      "id": "erdos",
+      "label": "Unsolved maths problems",
+      "question": "What AI-assisted research has proved about eight problems posed by Paul Erdős.",
+      "area": "maths",
+      "items": [
+        "maths"
+      ],
+      "at": [
+        -190,
+        -235
+      ]
+    },
+    {
+      "id": "magnets",
+      "label": "Disordered magnets",
+      "question": "How different two near-best states of a spin glass can be.",
+      "area": "maths",
+      "items": [
+        "lean-exposition"
+      ],
+      "at": [
+        60,
+        -280
+      ]
+    },
+    {
+      "id": "quantum",
+      "label": "Quantum computing",
+      "question": "How much faster a quantum computer can answer certain yes-or-no questions.",
+      "area": "maths",
+      "items": [
+        "quartic"
+      ],
+      "at": [
+        300,
+        -205
+      ]
+    },
+    {
+      "id": "proofs",
+      "label": "Reading proofs",
+      "question": "Papers shown beside proofs that a computer has checked step by step.",
+      "area": "maths",
+      "items": [
+        "proof-reader",
+        "lean-exposition",
+        "quartic"
+      ],
+      "at": [
+        160,
+        -55
+      ]
+    },
+    {
+      "id": "checking",
+      "label": "Checking AI’s maths",
+      "question": "What a computer check of AI-written maths covers, and what it leaves out.",
+      "area": "maths",
+      "items": [
+        "atlas",
+        "formal-verification"
+      ],
+      "at": [
+        390,
+        25
+      ]
+    },
+    {
+      "id": "explaining",
+      "label": "Explaining research",
+      "question": "Turning one proof into papers, a reader website and a film.",
+      "area": "explain",
+      "items": [
+        "funnel",
+        "narration-ir"
+      ],
+      "at": [
+        -310,
+        -30
+      ]
+    },
+    {
+      "id": "assistants",
+      "label": "AI coding assistants",
+      "question": "Tools for seeing and controlling what coding assistants do in a repository.",
+      "area": "code",
+      "items": [
+        "agent-trace",
+        "one-checkout",
+        "safety-core"
+      ],
+      "at": [
+        30,
+        255
+      ]
+    },
+    {
+      "id": "code",
+      "label": "Making sense of code",
+      "question": "Maps of a codebase, and asking it questions in plain language.",
+      "area": "code",
+      "items": [
+        "codemap",
+        "code-ontology-bridge"
+      ],
+      "at": [
+        -250,
+        205
+      ]
+    },
+    {
+      "id": "testing",
+      "label": "Testing AI",
+      "question": "Measuring whether a model tests code better after seeing the bugs it missed.",
+      "area": "code",
+      "items": [
+        "zenith"
+      ],
+      "at": [
+        265,
+        235
+      ]
+    }
+  ]
 }

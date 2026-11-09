@@ -30,7 +30,7 @@ REQUIRED = {
     ".github/workflows/public-site.yml", ".gitignore", ".nojekyll", "README.md",
     "index.html", "404.html", "sites.json", "glossary.json", "catalogue.json", "llms.txt", "agent-guide.md", "plectis-paths.txt",
     "robots.txt", "sitemap.xml", "sitemap-home.xml", "favicon.ico",
-    "assets/hub.css", "assets/hub.js", "assets/hub-map.js", "assets/theme-init.js", "assets/redirect.js",
+    "assets/hub.css", "assets/hub.js", "assets/explore.js", "assets/theme-init.js", "assets/redirect.js",
     "assets/family/family.css", "assets/favicon.svg", "assets/favicon-32.png",
     "assets/apple-touch-icon.png", "assets/sites/home-light-1440.webp", "docs/family.md",
     "scripts/build_hub.py", "scripts/check_hub_site.py", "scripts/capture_cards.py", "tests/test_hub_site.py",
@@ -204,8 +204,8 @@ def validate(files: dict[str, bytes]) -> list[str]:
             if repo["href"] not in hrefs:
                 errors.append(f"index.html: repository not linked: {repo['name']}")
         scripts = [attrs for attrs in page.all("script") if attrs.get("src")]
-        if not any((attrs.get("src") or "").split("?")[0] == "/assets/hub-map.js" and "defer" in attrs for attrs in scripts):
-            errors.append("index.html: the map's lines come from the same-origin /assets/hub-map.js, deferred")
+        if not any((attrs.get("src") or "").split("?")[0] == "/assets/explore.js" and "defer" in attrs for attrs in scripts):
+            errors.append("index.html: the explorer runs from the same-origin /assets/explore.js, deferred")
     if "404.html" in files:
         errors += validate_page("404.html", files["404.html"].decode(), home=False)
     for name in sorted(forwards & files.keys()):

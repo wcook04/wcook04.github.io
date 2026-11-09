@@ -120,7 +120,7 @@ class HubTests(unittest.TestCase):
 
     def test_assets_carry_their_content_hash(self):
         index = self.files["index.html"].decode()
-        for asset in ("/assets/hub.css", "/assets/family/family.css", "/assets/hub.js", "/assets/hub-map.js"):
+        for asset in ("/assets/hub.css", "/assets/family/family.css", "/assets/hub.js", "/assets/explore.js"):
             self.assertRegex(index, re.escape(asset) + r"\?v=[0-9a-f]{12}")
 
     def test_project_paths_stay_free(self):
@@ -147,11 +147,11 @@ class HubTests(unittest.TestCase):
 
     def test_map_script_is_same_origin(self):
         self.files["index.html"] = re.sub(
-            rb'src="/assets/hub-map\.js(\?v=[0-9a-f]+)?"', b'src="https://cdn.example.com/hub-map.js"',
+            rb'src="/assets/explore\.js(\?v=[0-9a-f]+)?"', b'src="https://cdn.example.com/explore.js"',
             self.files["index.html"])
         errors = self.errors()
         self.assertTrue(any("another host" in error for error in errors))
-        self.assertTrue(any("hub-map.js" in error for error in errors))
+        self.assertTrue(any("explore.js" in error for error in errors))
 
     def test_every_repository_is_placed_and_known(self):
         registry = json.loads(self.files["sites.json"])

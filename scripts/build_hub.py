@@ -15,7 +15,7 @@ glossary.json defines the technical words the page uses. From them this writes:
                  at old /plectis/ addresses.
 
 Everything is static HTML. No script is needed to read the page or follow a
-link; assets/hub-map.js lights the map's threads and assets/hub.js adds the
+link; assets/explore.js runs the explorer on the first screen and assets/hub.js adds the
 theme switch and the glossary cards. Nothing loads from another host. Run with
 no arguments to write the pages, with --check to fail when the committed pages
 differ from what the data now produces, or with --preview DIR to write a copy
@@ -172,6 +172,13 @@ def validate_registry(registry: dict, root: Path = ROOT, exists=None) -> list[st
     for item in registry.get("contributions", []):
         if not item.get("repo") or not item.get("upstream") or not item.get("what"):
             problems.append("a contribution needs its fork, its upstream project and what it holds")
+    for topic in registry.get("topics", []):
+        for item in topic["items"]:
+            if item not in owners:
+                problems.append(f"topic {topic['id']} names unknown project {item}")
+    in_topics = {i for t in registry.get("topics", []) for i in t["items"]}
+    if registry.get("topics") and set(owners) - in_topics:
+        problems.append("projects in no topic: " + ", ".join(sorted(set(owners) - in_topics)))
     missing = set(films) - set(placed)
     if missing:
         problems.append("films on no project: " + ", ".join(sorted(missing)))
@@ -342,158 +349,180 @@ class Terms:
         return "".join(out)
 
 
-# ---------------------------------------------------------------- the map
-# Three strands leave one knot, the introduction, and run across the page: the
-# mathematics above, the explanations in the middle, the code below. Each
-# project is a stop on its area's strand. Threads between strands are the
-# typed links in sites.json (a worked example, a related tool); brackets over
-# a strand are its collections (three readers that share one walkthrough).
-# The drawing is made here, as SVG, so it is complete without a script; every
-# stop is a link to the project's card below.
+# ---------------------------------------------------------------- the explorer
+# The first screen: the work as topics in plain words, woven together. A night
+# stage holds the topics as knots and the threads between them (a thread means
+# two topics share a project, or a project in one is a worked example, a sibling
+# or a related tool of a project in the other). A paper panel on the left reads
+# the same thing in three levels: every topic; one topic and its projects; one
+# project with its short film and where to go next. assets/explore.js moves
+# the camera between the levels and blooms a topic's projects and a project's
+# film, website and code on the stage. Without the script the stage is a still
+# picture, the panel shows every topic, and each topic links to its projects in
+# the list below.
 
-MAP_W, MAP_H = 1200, 500
-STRAND_Y = {"maths": 150, "explain": 262, "code": 374}
-KNOT = (58, 262)
-STOPS_X = {
-    "maths": 262, "lean-exposition": 452, "quartic": 622, "proof-reader": 792, "atlas": 1022,
-    "funnel": 452, "narration-ir": 682,
-    "codemap": 228, "code-ontology-bridge": 380, "agent-trace": 540, "one-checkout": 690,
-    "safety-core": 840, "zenith": 978, "formal-verification": 1112,
-}
-FILMS_STOP_X = 900   # the end of the middle strand: every film
+def topic_threads(registry: dict) -> list[dict]:
+    """Threads between topics, each with the reasons that join them."""
+    topics = registry.get("topics", [])
+    home: dict[str, list[str]] = {}
+    for t in topics:
+        for item in t["items"]:
+            home.setdefault(item, []).append(t["id"])
+    owners = owners_of(registry)
+    reasons: dict[tuple[str, str], list[str]] = {}
 
+    def join(a: str, b: str, why: str) -> None:
+        if a == b:
+            return
+        key = tuple(sorted((a, b)))
+        if why not in reasons.setdefault(key, []):
+            reasons[key].append(why)
 
-def wrap_label(text: str, width: int = 15) -> list[str]:
-    words, lines, line = text.split(), [], ""
-    for word in words:
-        if line and len(line) + 1 + len(word) > width:
-            lines.append(line)
-            line = word
-        else:
-            line = f"{line} {word}".strip()
-    if line:
-        lines.append(line)
-    return lines
-
-
-def strand_path(area: str) -> str:
-    kx, ky = KNOT
-    y = STRAND_Y[area]
-    end = 960 if area == "explain" else MAP_W - 24
-    if y == ky:
-        return f"M {kx + 18} {ky} H {end}"
-    return f"M {kx + 14} {ky} C {kx + 70} {ky} {kx + 70} {y} {kx + 140} {y} H {end}"
-
-
-def render_map(registry: dict, owners: dict, films: dict, terms: Terms) -> str:
-    area_of = {item: area["id"] for area in registry["areas"] for item in area["items"]}
-    pos = {pid: (STOPS_X[pid], STRAND_Y[area_of[pid]]) for pid in area_of}
-    parts = []
-    # Strands, drawn from the knot outwards.
-    for area in registry["areas"]:
-        parts.append(f'<path class="pl-strand pl-strand--{e(area["id"])}" d="{strand_path(area["id"])}" pathLength="1"/>')
-    # Threads: typed links between projects.
-    threads = []
-    for i, link in enumerate(registry.get("links", [])):
-        (x1, y1), (x2, y2) = pos[link["from"]], pos[link["to"]]
-        if y1 == y2:   # same strand: a low arc into the open space between strands
-            lift = -30 if y1 != STRAND_Y["maths"] else 30
-            mid = (x1 + x2) / 2
-            d = f"M {x1} {y1} Q {mid} {y1 + lift * 2} {x2} {y2}"
-        else:
-            my = (y1 + y2) / 2
-            d = f"M {x1} {y1} C {x1} {my} {x2} {my} {x2} {y2}"
-        threads.append((link["from"], link["to"], link["label"], d, "link"))
-    # Collections: a bracket above (mathematics) or below (code) the strand,
-    # or a thread across strands when its members sit on two.
-    above = {"maths": 0, "code": 0}
+    for item, ts in home.items():
+        for i in range(len(ts)):
+            for j in range(i + 1, len(ts)):
+                join(ts[i], ts[j], f"{owners[item]['label']} is in both")
+    for link in registry.get("links", []):
+        for a in home.get(link["from"], []):
+            for b in home.get(link["to"], []):
+                join(a, b, f"{owners[link['from']]['label']} and {owners[link['to']]['label']}: {lc_first(link['label'])}")
     for group in registry.get("collections", []):
-        members = group["members"]
-        ys = {pos[m][1] for m in members}
-        xs = sorted(pos[m][0] for m in members)
-        if len(ys) == 1:
-            y = ys.pop()
-            area = "maths" if y == STRAND_Y["maths"] else "code"
-            level = above[area]
-            above[area] += 1
-            if area == "maths":
-                by = y - 74 - level * 30
-                ticks = " ".join(f"M {x} {by} V {y - 52}" for x in xs)
-                ty = by - 7
-            else:
-                by = y + 98 + level * 30
-                ticks = " ".join(f"M {x} {by} V {y + 90}" for x in xs)
-                ty = by + 16
-            d = f"M {xs[0]} {by} H {xs[-1]} {ticks}"
-            parts.append(f'<g class="pl-bracket" data-members="{e(" ".join(members))}">'
-                         f'<path d="{d}"/><text x="{xs[0]}" y="{ty}">{e(group["title"])}</text></g>')
-        else:
-            a, b = members[0], members[1]
-            (x1, y1), (x2, y2) = pos[a], pos[b]
-            my = (y1 + y2) / 2
-            threads.append((a, b, group["title"], f"M {x1} {y1} C {x1} {my} {x2} {my} {x2} {y2}", "collection"))
-    for a, b, label, d, kind in threads:
-        parts.append(f'<path class="pl-thread pl-thread--{kind}" data-a="{e(a)}" data-b="{e(b)}" data-label="{e(label)}" d="{d}"/>')
-    # The knot: the introduction, where every strand starts.
-    kx, ky = KNOT
-    parts.append(
-        f'<a class="pl-knot" href="#intro" aria-label="Start with the introduction">'
-        f'<circle cx="{kx}" cy="{ky}" r="20"/>'
-        f'<path d="M {kx - 9} {ky - 11} C {kx + 9} {ky - 4} {kx - 9} {ky + 4} {kx + 9} {ky + 11} M {kx + 9} {ky - 11} C {kx - 9} {ky - 4} {kx + 9} {ky + 4} {kx - 9} {ky + 11}"/>'
-        f'<text x="{kx}" y="{ky + 40}" text-anchor="middle">Start here</text></a>')
-    # Stops.
-    for area in registry["areas"]:
-        for pid in area["items"]:
-            owner = owners[pid]
-            x, y = pos[pid]
-            lines = wrap_label(owner["label"], 14)
-            sub = owner.get("subject", "")
-            below = area["id"] != "maths"
-            subs = wrap_label(sub, 21) if area["id"] == "code" else [sub]
-            name = "".join(f'<tspan x="{x}" dy="{0 if i == 0 else 17}">{e(line)}</tspan>' for i, line in enumerate(lines))
-            sub_lines = "".join(f'<tspan x="{x}" dy="{0 if i == 0 else 14}">{e(line)}</tspan>' for i, line in enumerate(subs))
-            if below:
-                ty = y + 30
-                sub_y = ty + 17 * (len(lines) - 1) + 17
-            else:
-                ty = y - 22 - 17 * (len(lines) - 1) - 15
-                sub_y = y - 20
-            parts.append(
-                f'<a class="pl-stop pl-stop--{e(area["id"])}" href="#{e(pid)}" data-id="{e(pid)}" '
-                f'aria-label="{e(owner["label"])}: {e(sub)}">'
-                f'<circle class="pl-stop__halo" cx="{x}" cy="{y}" r="18"/>'
-                f'<circle class="pl-stop__dot" cx="{x}" cy="{y}" r="7.5"/>'
-                f'<text class="pl-stop__name" x="{x}" y="{ty}" text-anchor="middle">{name}</text>'
-                f'<text class="pl-stop__sub" x="{x}" y="{sub_y}" text-anchor="middle">{sub_lines}</text></a>')
-    # The end of the explanations strand: every film.
-    total = len(films)
-    fy = STRAND_Y["explain"]
-    parts.append(
-        f'<a class="pl-stop pl-stop--films" href="#films" data-id="films" aria-label="Every film, in pairs">'
-        f'<circle class="pl-stop__halo" cx="{FILMS_STOP_X}" cy="{fy}" r="18"/>'
-        f'<rect class="pl-stop__reel" x="{FILMS_STOP_X - 9}" y="{fy - 6.5}" width="18" height="13" rx="2.5"/>'
-        f'<path class="pl-stop__tri" d="M {FILMS_STOP_X - 2.5} {fy - 3.5} L {FILMS_STOP_X + 3.5} {fy} L {FILMS_STOP_X - 2.5} {fy + 3.5} Z"/>'
-        f'<text class="pl-stop__name" x="{FILMS_STOP_X}" y="{fy + 30}" text-anchor="middle">Every film</text>'
-        f'<text class="pl-stop__sub" x="{FILMS_STOP_X}" y="{fy + 47}" text-anchor="middle">{total} films, in pairs</text></a>')
-    svg = (f'<svg class="plait" viewBox="0 0 {MAP_W} {MAP_H}" role="group" aria-labelledby="map-title map-key" '
-           f'data-plait>{"".join(parts)}</svg>')
-    # One caption per stop: what it is and what it joins. hub-map.js shows the
-    # pointed one; without the script they are a list under the drawing.
-    captions = []
-    for pid, owner in owners.items():
-        joins = []
-        for link in registry.get("links", []):
-            if pid in (link["from"], link["to"]):
-                other = link["to"] if link["from"] == pid else link["from"]
-                joins.append(f'{e(link["label"])} ({e(owners[other]["label"])})')
-        for group in registry.get("collections", []):
-            if pid in group["members"]:
-                others = ", ".join(owners[m]["label"] for m in group["members"] if m != pid)
-                joins.append(f'{e(group["title"])} (with {e(others)})')
-        joined = f'<span class="pl-cap__joins">{"; ".join(joins)}.</span>' if joins else ""
-        captions.append(f'<p class="pl-cap" data-for="{e(pid)}" hidden><strong>{e(owner["label"])}</strong> '
-                        f'{e(owner.get("tagline") or owner.get("purpose", ""))} {joined}</p>')
-    return svg, "".join(captions)
+        ms = group["members"]
+        for i in range(len(ms)):
+            for j in range(i + 1, len(ms)):
+                for a in home.get(ms[i], []):
+                    for b in home.get(ms[j], []):
+                        join(a, b, group["title"])
+    return [{"a": a, "b": b, "why": why} for (a, b), why in sorted(reasons.items())]
+
+
+def thread_path(p: tuple, q: tuple, bend: float = 0.18) -> str:
+    """A soft arc from p to q, bowed toward the centre of the loom."""
+    (x1, y1), (x2, y2) = p, q
+    mx, my = (x1 + x2) / 2, (y1 + y2) / 2
+    cx, cy = mx * (1 - bend * 2), my * (1 - bend * 2)
+    return f"M {x1:.1f} {y1:.1f} Q {cx:.1f} {cy:.1f} {x2:.1f} {y2:.1f}"
+
+
+def topic_radius(n: int) -> int:
+    return {1: 21, 2: 25}.get(n, 29)
+
+
+def render_explorer(registry: dict, owners: dict, films: dict, terms: Terms) -> str:
+    topics = registry.get("topics", [])
+    tmap = {t["id"]: t for t in topics}
+    threads = topic_threads(registry)
+    owner = registry["owner"]
+    hero = registry.get("hero", {})
+    intro = [films[f] for f in registry.get("intro", {}).get("films", [])]
+    short = next((f for f in intro if f["format"] == "short" and is_out(f)), None)
+    full = next((f for f in intro if f["format"] == "long" and is_out(f) and not is_earlier(f, films)), None)
+    main = short or full
+    # The stage, drawn here so it is a complete still picture without the script.
+    spokes = "".join(f'<path class="ex-spoke" d="M 0 0 L {t["at"][0]} {t["at"][1]}"/>' for t in topics)
+    lines = "".join(
+        f'<path class="ex-thread" data-a="{e(th["a"])}" data-b="{e(th["b"])}" d="{thread_path(tmap[th["a"]]["at"], tmap[th["b"]]["at"])}"/>'
+        for th in threads)
+    knots = []
+    for t in topics:
+        x, y = t["at"]
+        r = topic_radius(len(t["items"]))
+        label_y = y + r + 24
+        knots.append(
+            f'<g class="ex-topic ex-topic--{e(t["area"])}" data-topic="{e(t["id"])}" transform="translate({x} {y})">'
+            f'<circle class="ex-topic__glow" r="{r + 14}"/><circle class="ex-topic__ring" r="{r}"/>'
+            f'<circle class="ex-topic__core" r="{max(6, r - 13)}"/>'
+            f'<text class="ex-topic__label" y="{r + 26}" text-anchor="middle">{e(t["label"])}</text></g>')
+    knot = ('<g class="ex-knot" data-knot="1"><circle r="17"/>'
+            '<path d="M -8 -10 C 8 -3 -8 3 8 10 M 8 -10 C -8 -3 8 3 -8 10"/></g>')
+    stage = (f'<svg class="ex-stage" viewBox="-760 -400 1400 800" preserveAspectRatio="xMidYMid meet" aria-hidden="true" data-ex-stage>'
+             f'<g class="ex-world"><g class="ex-spokes">{spokes}</g><g class="ex-threads">{lines}</g>'
+             f'<g class="ex-flow"></g><g class="ex-topics">{"".join(knots)}</g><g class="ex-bloom"></g>{knot}</g></svg>')
+    # The panel's three levels.
+    topic_rows = "".join(
+        f'<li><a class="ex-row ex-row--{e(t["area"])}" href="#t={e(t["id"])}" data-go-topic="{e(t["id"])}">'
+        f'<span class="ex-row__dot" aria-hidden="true"></span><span class="ex-row__name">{e(t["label"])}</span></a></li>' for t in topics)
+    actions = ""
+    if main:
+        seconds = film_seconds(main)
+        actions = (f'<a class="btn btn--primary ex-intro" href="{e(film_href(main))}" target="_blank" rel="noopener noreferrer">'
+                   f'<span class="btn__play" aria-hidden="true"></span>Watch the introduction'
+                   f'{f"<span class=\"btn__time\">{clock(seconds)}</span>" if seconds else ""}<span class="sr-only">, on YouTube</span></a>')
+    level0 = (f'<section class="ex-level ex-level--home" data-level="home" aria-labelledby="hub-title">'
+              f'<h1 class="ex-title" id="hub-title">{e(hero.get("headline") or owner["lede"])}</h1>'
+              f'<p class="ex-lede">{terms.link(hero.get("summary", ""))}</p>'
+              f'<div class="ex-actions">{actions}<a class="ex-work" href="#contact">Open to work</a></div>'
+              f'<h2 class="ex-hint">Choose a topic</h2>'
+              f'<ul class="ex-rows" role="list">{topic_rows}</ul></section>')
+    levels = [level0]
+    for t in topics:
+        rows = "".join(
+            f'<li><a class="ex-row ex-row--project ex-row--{e(t["area"])}" href="#p={e(pid)}" data-go-project="{e(pid)}" data-in="{e(t["id"])}">'
+            f'<span class="ex-row__name">{e(owners[pid]["label"])}</span>'
+            f'<span class="ex-row__plain">{e(owners[pid].get("plain", ""))}</span></a></li>' for pid in t["items"])
+        near = []
+        for th in threads:
+            if t["id"] in (th["a"], th["b"]):
+                other = tmap[th["b"] if th["a"] == t["id"] else th["a"]]
+                near.append(f'<li><a class="ex-chip ex-chip--{e(other["area"])}" href="#t={e(other["id"])}" data-go-topic="{e(other["id"])}" '
+                            f'title="{e("; ".join(th["why"]))}">{e(other["label"])}</a></li>')
+        near_html = f'<h3 class="ex-sub">Connected to</h3><ul class="ex-near" role="list">{"".join(near)}</ul>' if near else ""
+        levels.append(
+            f'<section class="ex-level ex-level--topic ex-level--{e(t["area"])}" data-level="topic" data-topic="{e(t["id"])}" hidden>'
+            f'<nav class="ex-crumbs" aria-label="Where you are"><a href="#explore" data-go-home>All topics</a></nav>'
+            f'<h2 class="ex-name">{e(t["label"])}</h2><p class="ex-question">{terms.link(t["question"])}</p>'
+            f'<ul class="ex-rows" role="list">{rows}</ul>{near_html}</section>')
+    for t in topics:
+        for pid in t["items"]:
+            if any(f'data-project="{pid}"' in lv for lv in levels):
+                continue
+            o = owners[pid]
+            lead, full_film = lead_of(o, films)
+            acts = []
+            if full_film and is_out(full_film):
+                acts.append(f'<a class="act act--film" href="{e(film_href(full_film))}" target="_blank" rel="noopener noreferrer">Full video '
+                            f'<span class="act__time">{clock(film_seconds(full_film))}</span><span class="sr-only">: {e(full_film["title"])}, on YouTube</span></a>')
+            if o["kind"] == "site":
+                acts.append(f'<a class="act" href="{e(o["url"])}">Website<span class="sr-only">: {e(o["name"])}</span></a>')
+            repos = repos_of(registry, o)
+            if repos:
+                acts.append(f'<a class="act" href="{e(repos[0]["href"])}" rel="noopener">Code<span class="sr-only">: {e(repos[0]["name"])} on GitHub</span></a>')
+            acts.append(f'<a class="act act--quiet" href="#{e(pid)}">All details</a>')
+            homes = [x for x in topics if pid in x["items"]]
+            levels.append(
+                f'<section class="ex-level ex-level--project ex-level--{e(homes[0]["area"])}" data-level="project" data-project="{e(pid)}" hidden>'
+                f'<nav class="ex-crumbs" aria-label="Where you are"><a href="#explore" data-go-home>All topics</a>'
+                f'<a href="#t={e(homes[0]["id"])}" data-go-topic="{e(homes[0]["id"])}">{e(homes[0]["label"])}</a></nav>'
+                f'<h2 class="ex-name">{e(o["label"])}</h2><p class="ex-question">{e(o.get("plain", ""))}</p>'
+                f'{frame(lead, sizes="(min-width: 1000px) 400px, 90vw", named=True)}'
+                f'<p class="ex-line">{terms.link(o.get("line", ""))}</p>'
+                f'<p class="card__acts">{"".join(acts)}</p></section>')
+    # Data for the script: positions, threads, and what each project blooms into.
+    data = {"topics": [{"id": t["id"], "label": t["label"], "area": t["area"], "at": t["at"], "items": t["items"],
+                        "r": topic_radius(len(t["items"]))} for t in topics],
+            "threads": [{"a": th["a"], "b": th["b"]} for th in threads],
+            "projects": {}}
+    for t in topics:
+        for pid in t["items"]:
+            o = owners[pid]
+            lead, full_film = lead_of(o, films)
+            sats = [{"kind": "film", "label": "Short film" if lead["format"] == "short" else "Video",
+                     "time": clock(film_seconds(lead)) if film_seconds(lead) else "",
+                     "href": film_href(lead) if is_out(lead) else None, "img": (film_stem(lead) or "") + "-640.webp"}]
+            if full_film:
+                sats.append({"kind": "full", "label": "Full video", "time": clock(film_seconds(full_film)) if film_seconds(full_film) and is_out(full_film) else "",
+                             "href": film_href(full_film) if is_out(full_film) else None})
+            if o["kind"] == "site":
+                sats.append({"kind": "site", "label": "Website", "href": o["url"]})
+            for r in repos_of(registry, o)[:2]:
+                sats.append({"kind": "code", "label": r["name"], "href": r["href"]})
+            data["projects"][pid] = {"label": o["label"], "area": next(x["area"] for x in topics if pid in x["items"]), "sats": sats}
+    payload = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+    return (f'<section class="ex" id="explore" aria-label="Explore the work by topic">'
+            f'<span id="intro" class="hub-alias"></span><span id="map" class="hub-alias"></span>'
+            f'<div class="ex-stagewrap">{stage}<p class="ex-tip" aria-hidden="true">Click a topic. Esc goes back.</p></div>'
+            f'<div class="ex-panel" data-ex-panel>{"".join(levels)}</div>'
+            f'<script type="application/json" id="ex-data">{payload}</script></section>')
 
 
 # ---------------------------------------------------------------- project cards
@@ -681,7 +710,7 @@ def render_library(registry: dict, owners: dict, films: dict, terms: Terms) -> s
 
 def page_head(*, title: str, description: str, canonical: str | None, robots: str, map_script: bool = False) -> str:
     canonical_link = f'\n  <link rel="canonical" href="{e(canonical)}">' if canonical else ""
-    map_tag = f'\n  <script src="{versioned("/assets/hub-map.js")}" defer></script>' if map_script else ""
+    map_tag = f'\n  <script src="{versioned("/assets/explore.js")}" defer></script>' if map_script else ""
     return f'''<!doctype html>
 <html lang="en">
 <head>
@@ -716,8 +745,8 @@ def header(*, current: bool) -> str:
     <div class="wrap hub-header__inner">
       <a class="hub-wordmark" href="/"{current_attr}><img class="hub-wordmark__mark" src="/assets/favicon.svg" alt="" width="26" height="26" decoding="async">Will Cook</a>
       <nav class="hub-nav" aria-label="Primary">
-        <a href="/#map">Map</a>
-        <a href="/#projects">Projects</a>
+        <a href="/#explore">Explore</a>
+        <a href="/#projects">All projects</a>
         <a href="/#films">Films</a>
         <a href="/#contact">Contact</a>
       </nav>
@@ -740,44 +769,6 @@ def structured_data(registry: dict) -> str:
         ],
     }
     return json.dumps(data, ensure_ascii=False, indent=1).replace("</", "<\\/")
-
-
-def render_hero(registry: dict, films: dict, terms: Terms) -> str:
-    owner = registry["owner"]
-    intro_ids = registry.get("intro", {}).get("films", [])
-    intro = [films[f] for f in intro_ids]
-    short = next((f for f in intro if f["format"] == "short" and is_out(f)), None)
-    full = next((f for f in intro if f["format"] == "long" and is_out(f) and not is_earlier(f, films)), None)
-    main = short or full
-    hero = registry.get("hero", {})
-    headline = hero.get("headline") or owner["lede"]
-    sub = hero.get("summary") or owner.get("orient", "")
-    actions = []
-    if main:
-        seconds = film_seconds(main)
-        label = "Watch the introduction"
-        actions.append(f'<a class="btn btn--primary" href="{e(film_href(main))}" target="_blank" rel="noopener noreferrer">'
-                       f'<span class="btn__play" aria-hidden="true"></span>{label}'
-                       f'{f"<span class=\"btn__time\">{clock(seconds)}</span>" if seconds else ""}'
-                       f'<span class="sr-only">, on YouTube</span></a>')
-    if short and full and full is not short:
-        actions.append(f'<a class="btn btn--quiet" href="{e(film_href(full))}" target="_blank" rel="noopener noreferrer">'
-                       f'The full tour <span class="btn__time">{clock(film_seconds(full))}</span><span class="sr-only">, on YouTube</span></a>')
-    film_html = frame(main, sizes="(min-width: 1024px) 560px, 100vw", size="hero", loading="eager") if main else ""
-    caption = (f'<p class="hero__caption"><span class="hero__role">{e(film_meta(main))}</span> {film_title(main, cls="hero__filmtitle")}</p>'
-               if main else "")
-    return f'''<section class="hero" id="intro" aria-labelledby="hub-title">
-      <div class="wrap hero__grid">
-        <div class="hero__copy">
-          <p class="hero__name">Will Cook</p>
-          <h1 class="hero__title" id="hub-title">{e(headline)}</h1>
-          <p class="hero__lede">{terms.link(sub)}</p>
-          <div class="hero__actions">{"".join(actions)}</div>
-          <p class="hero__avail">{e(owner["availability"])} <a href="#contact">How to reach me</a></p>
-        </div>
-        <figure class="hero__film">{film_html}<figcaption>{caption}</figcaption></figure>
-      </div>
-    </section>'''
 
 
 def render_more(registry: dict) -> str:
@@ -830,8 +821,7 @@ def render_index(registry: dict, glossary: dict | None = None) -> str:
     protect = [n for o in owners.values() for n in [o["name"], o["label"], *o.get("aka", [])]]
     protect += [r["name"] for r in registry["repos"]] + ["Plectis Mathematics", "Lean Exposition"]
     terms = Terms(glossary, protect)
-    hero = render_hero(registry, films, terms)
-    plait, captions = render_map(registry, owners, films, terms)
+    explorer = render_explorer(registry, owners, films, terms)
     areas = render_areas(registry, owners, films, terms)
     library = render_library(registry, owners, films, terms)
     more = render_more(registry)
@@ -869,24 +859,12 @@ def render_index(registry: dict, glossary: dict | None = None) -> str:
   {header(current=True)}
 
   <main id="main">
-    {hero}
-
-    <section class="mapband" id="map" aria-labelledby="map-title">
-      <div class="wrap">
-        <div class="mapband__head">
-          <h2 class="section-title" id="map-title">How the work connects</h2>
-          <ul class="keys" role="list">{legend}</ul>
-        </div>
-        <p class="mapband__key" id="map-key">Lines are areas. Points are projects. Threads join projects that share a subject, a method or a film.</p>
-        <div class="mapband__figure">{plait}</div>
-        <div class="mapband__captions" aria-live="polite">{captions}</div>
-      </div>
-    </section>
+    {explorer}
 
     <section class="work" id="projects" aria-labelledby="projects-title">
       <span id="websites" class="hub-alias"></span><span id="work" class="hub-alias"></span>
       <div class="wrap">
-        <h2 class="section-title" id="projects-title">Projects</h2>
+        <h2 class="section-title" id="projects-title">All projects</h2>
         {areas}
       </div>
     </section>
@@ -940,7 +918,8 @@ def render_catalogue(registry: dict, glossary: dict) -> str:
             edges.append({"from": f"project:{pid}", "to": f"area:{area['id']}", "type": "in_area"})
     for pid, owner in owners.items():
         nodes.append({"id": f"project:{pid}", "type": "project", "title": owner["label"], "name": owner["name"],
-                      "subject": owner.get("subject"), "tagline": owner.get("tagline"),
+                      "subject": owner.get("subject"), "plain": owner.get("plain"), "line": owner.get("line"),
+                      "tagline": owner.get("tagline"),
                       "summary": owner.get("summary") or owner.get("purpose"), "anchor": f"{HOME}#{pid}",
                       "aka": owner.get("aka", [])})
         if owner["kind"] == "site":
@@ -968,6 +947,10 @@ def render_catalogue(registry: dict, glossary: dict) -> str:
                       "summary": repo["description"]})
     for link in registry.get("links", []):
         edges.append({"from": f"project:{link['from']}", "to": f"project:{link['to']}", "type": "related", "label": link["label"]})
+    for topic in registry.get("topics", []):
+        nodes.append({"id": f"topic:{topic['id']}", "type": "topic", "title": topic["label"], "summary": topic["question"]})
+        for item in topic["items"]:
+            edges.append({"from": f"project:{item}", "to": f"topic:{topic['id']}", "type": "in_topic"})
     for group in registry.get("collections", []):
         nodes.append({"id": f"collection:{group['id']}", "type": "collection", "title": group["title"]})
         for m in group["members"]:
