@@ -1,13 +1,25 @@
 #!/usr/bin/env python3
-"""Build the home page of wcook04.github.io from sites.json.
+"""Build the home page of wcook04.github.io from sites.json and glossary.json.
 
-The home page maps every website, film and repository: one row per project,
-its videos on the left, its website or tool in the middle and its code on
-GitHub on the right. It is static HTML: no script is needed to read it or to
-follow any link (assets/hub-map.js only draws the lines between the columns),
-and nothing is loaded from another host. Run
-with no arguments to write the pages, or with --check to fail when the
-committed pages differ from what sites.json now produces.
+sites.json is the catalogue: every website, tool, film and repository, the
+three areas they sit in, and how they connect (typed links and collections).
+glossary.json defines the technical words the page uses. From them this writes:
+
+  index.html     the home page: an introduction, a map of how the work
+                 connects, one card per project led by its short film, every
+                 film in pairs (short film, then the full version), other work
+                 and contributions, and the terms;
+  catalogue.json the same catalogue as a graph (nodes and typed edges) for
+                 agents and other tools;
+  llms.txt, agent-guide.md, the sitemaps, 404.html and the forwarding pages
+                 at old /plectis/ addresses.
+
+Everything is static HTML. No script is needed to read the page or follow a
+link; assets/hub-map.js lights the map's threads and assets/hub.js adds the
+theme switch and the glossary cards. Nothing loads from another host. Run with
+no arguments to write the pages, with --check to fail when the committed pages
+differ from what the data now produces, or with --preview DIR to write a copy
+in which every film in preparation is drawn as if it were out (for review).
 """
 from __future__ import annotations
 
@@ -15,6 +27,7 @@ import argparse
 import hashlib
 import html
 import json
+import math
 import re
 import sys
 import urllib.request
@@ -26,13 +39,10 @@ GITHUB = "https://github.com/wcook04/"
 YOUTUBE = re.compile(r"^https://www\.youtube\.com/watch\?v=[A-Za-z0-9_-]{11}$")
 OLD_PLECTIS = "/plectis/"
 NEW_PLECTIS = "/practical-formal-verification/"
-# Pages the Plectis website serves at its new address. Each gets a forwarding
-# page at its old address, so links already sent (emails, film descriptions)
-# answer 200 and forward, even where no script runs. Refresh the list with
-# --refresh-plectis-paths after the website adds pages.
 PLECTIS_PATHS = "plectis-paths.txt"
 PLECTIS_TREE = "https://api.github.com/repos/wcook04/practical-formal-verification/git/trees/gh-pages?recursive=1"
 PLECTIS_SKIP = ("404.html", "google")
+PREVIEW = False   # --preview: films in preparation are drawn as if they were out
 
 e = html.escape
 
@@ -45,6 +55,23 @@ def load_registry(root: Path = ROOT) -> dict:
     if problems:
         raise SystemExit("sites.json:\n  " + "\n  ".join(problems))
     return registry
+
+
+def load_glossary(root: Path = ROOT) -> dict:
+    path = root / "glossary.json"
+    if not path.is_file():
+        return {"terms": []}
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def owners_of(registry: dict) -> dict[str, dict]:
+    """Every website and tool by id, each stamped with its kind."""
+    out = {}
+    for site in registry["sites"]:
+        out[site["id"]] = dict(site, kind="site")
+    for project in registry["projects"]:
+        out[project["id"]] = dict(project, kind="tool")
+    return out
 
 
 def validate_registry(registry: dict, root: Path = ROOT, exists=None) -> list[str]:
@@ -64,9 +91,21 @@ def validate_registry(registry: dict, root: Path = ROOT, exists=None) -> list[st
         problems.append("site ids repeat")
     for film in registry["films"]:
         link, still, seconds = film.get("youtube"), film.get("still"), film.get("duration_seconds")
+        if film.get("format") not in ("short", "long"):
+            problems.append(f"{film['id']}: format must be short or long")
+        for target in film.get("leads_to", []):
+            if target not in films:
+                problems.append(f"{film['id']}: leads to unknown film {target}")
+        if film.get("superseded_by") and film["superseded_by"] not in films:
+            problems.append(f"{film['id']}: superseded by unknown film {film['superseded_by']}")
         if link is None:
             if still or seconds:
                 problems.append(f"{film['id']}: a film in preparation has no still or running time")
+            poster = film.get("poster")
+            if poster:
+                for width in (640, 1280):
+                    if not exists(f"{poster}-{width}.webp"):
+                        problems.append(f"{film['id']}: missing {poster}-{width}.webp")
             continue
         if not YOUTUBE.match(link):
             problems.append(f"{film['id']}: youtube must be https://www.youtube.com/watch?v=<id>")
@@ -75,7 +114,7 @@ def validate_registry(registry: dict, root: Path = ROOT, exists=None) -> list[st
         for width in (640, 1280):
             if not still or not exists(f"{still}-{width}.webp"):
                 problems.append(f"{film['id']}: missing {still}-{width}.webp")
-    placed: list[str] = []
+    placed: list[str] = list(registry.get("intro", {}).get("films", []))
     repos = {repo["id"]: repo for repo in registry.get("repos", [])}
     if len(repos) != len(registry.get("repos", [])):
         problems.append("repository ids repeat")
@@ -86,6 +125,8 @@ def validate_registry(registry: dict, root: Path = ROOT, exists=None) -> list[st
             problems.append(f"{repo['id']}: href must be {GITHUB}{repo['id']}")
     referenced: list[str] = []
     for owner in registry["sites"] + registry["projects"]:
+        if not owner.get("label"):
+            problems.append(f"{owner['id']}: a website or tool needs its short label")
         thumbnail = owner.get("thumbnail")
         if thumbnail and (not thumbnail.startswith("assets/") or ".." in Path(thumbnail).parts or not exists(thumbnail)):
             problems.append(f"{owner['id']}: thumbnail must name an existing local asset")
@@ -113,22 +154,27 @@ def validate_registry(registry: dict, root: Path = ROOT, exists=None) -> list[st
                 capture = f"{site['capture']}-{scheme}-{width}.webp"
                 if not exists(capture):
                     problems.append(f"{site['id']}: missing {capture}")
-    grouped: list[str] = []
-    for group in registry["film_groups"]:
-        if "site" in group:
-            if group["site"] not in sites:
-                problems.append(f"film group names unknown site {group['site']}")
-            else:
-                grouped += sites[group["site"]]["films"]
-        else:
-            grouped += group["films"]
-    indexed = [item for group in registry.get("index_groups", []) for item in group["items"]]
     owners = [owner["id"] for owner in registry["sites"] + registry["projects"]]
+    indexed = [item for area in registry.get("areas", []) for item in area["items"]]
     if sorted(indexed) != sorted(owners):
-        problems.append("index_groups must list every website and tool once")
-    missing = set(films) - set(grouped)
+        problems.append("areas must list every website and tool once")
+    for link in registry.get("links", []):
+        for end in (link["from"], link["to"]):
+            if end not in owners:
+                problems.append(f"link names unknown project {end}")
+        if not link.get("label"):
+            problems.append(f"link {link['from']} -> {link['to']} needs a label")
+    for group in registry.get("collections", []):
+        if len(group["members"]) < 2 or any(m not in owners for m in group["members"]):
+            problems.append(f"collection {group['id']} needs two or more known members")
+        if group.get("film") and group["film"] not in films:
+            problems.append(f"collection {group['id']} names unknown film {group['film']}")
+    for item in registry.get("contributions", []):
+        if not item.get("repo") or not item.get("upstream") or not item.get("what"):
+            problems.append("a contribution needs its fork, its upstream project and what it holds")
+    missing = set(films) - set(placed)
     if missing:
-        problems.append("films in no group: " + ", ".join(sorted(missing)))
+        problems.append("films on no project: " + ", ".join(sorted(missing)))
     return problems
 
 
@@ -176,57 +222,284 @@ def repos_of(registry: dict, owner: dict) -> list[dict]:
     return [repos[repo_id] for repo_id in owner.get("repos", [])]
 
 
-def film_groups(registry: dict) -> list[dict]:
-    """Each group of the Videos band: its title, its site (if any) and its films."""
-    films = {film["id"]: film for film in registry["films"]}
-    sites = {site["id"]: site for site in registry["sites"]}
-    groups = []
-    for group in registry["film_groups"]:
-        if "site" in group:
-            site = sites[group["site"]]
-            groups.append({"id": site["id"], "title": site["name"], "site": site,
-                           "films": [films[f] for f in site["films"]]})
-        else:
-            groups.append({"id": group["id"], "title": group["title"], "site": None,
-                           "films": [films[f] for f in group["films"]]})
-    return groups
+# ---------------------------------------------------------------- films
+
+def is_out(film: dict) -> bool:
+    return bool(film.get("youtube")) or (PREVIEW and bool(film.get("poster")))
 
 
-# ---------------------------------------------------------------- markup
+def film_href(film: dict) -> str:
+    return film.get("youtube") or "#preview-not-published"
 
-def still_img(still: str, *, sizes: str, loading: str = "lazy") -> str:
-    return (f'<img src="{e(still)}-640.webp" srcset="{e(still)}-640.webp 640w, {e(still)}-1280.webp 1280w" '
+
+def film_seconds(film: dict) -> int | None:
+    return film.get("duration_seconds") or (film.get("cut_seconds") if PREVIEW else None)
+
+
+def film_stem(film: dict) -> str | None:
+    return film.get("still") or film.get("poster")
+
+
+def is_earlier(film: dict, films: dict) -> bool:
+    """An earlier edition: said so, or replaced by a newer film that is out."""
+    if film.get("edition") == "earlier":
+        return True
+    newer = films.get(film.get("superseded_by") or "")
+    return bool(newer and is_out(newer))
+
+
+def role_of(film: dict) -> str:
+    return "Short film" if film["format"] == "short" else "Full video"
+
+
+def picture(film: dict, *, sizes: str, loading: str = "lazy") -> str:
+    stem = film_stem(film)
+    if not stem:
+        return f'<span class="frame__blank" aria-hidden="true">{e(film["short"])}</span>'
+    return (f'<img src="{e(stem)}-640.webp" srcset="{e(stem)}-640.webp 640w, {e(stem)}-1280.webp 1280w" '
             f'sizes="{e(sizes)}" alt="" width="1280" height="720" loading="{loading}" decoding="async">')
 
 
-def film_slot(film: dict, *, series: str, size: str = "", with_text: bool = True,
-              sizes: str = "(min-width: 1180px) 360px, (min-width: 720px) 45vw, 100vw",
-              pending_meta: str = "Video in preparation", meta: str = "", loading: str = "lazy") -> str:
-    """The family's film slot (docs/family.md): a still that opens YouTube, or a held frame."""
-    classes = "film-slot" + (f" film-slot--{size}" if size else "")
-    title = e(film["title"])
-    text = f'<p class="film-slot__text">{e(film["description"])}</p>' if with_text else ""
-    if film.get("youtube"):
-        link = e(film["youtube"])
-        seconds = film["duration_seconds"]
-        return (f'<figure class="{classes}">'
-                f'<a class="film-slot__frame" href="{link}" target="_blank" rel="noopener noreferrer" aria-hidden="true" tabindex="-1">'
-                f'{still_img(film["still"], sizes=sizes, loading=loading)}'
-                f'<span class="film-slot__play"></span><span class="film-slot__time">{clock(seconds)}</span></a>'
-                f'<figcaption class="film-slot__caption">'
-                f'<p class="film-slot__title"><a href="{link}" target="_blank" rel="noopener noreferrer">{title}'
-                f'<span class="sr-only">, video on YouTube, {spoken(seconds)}</span></a></p>'
-                f'{f"<p class=\"film-slot__meta\">{e(meta)}</p>" if meta else ""}'
-                f'{text}</figcaption></figure>')
-    return (f'<figure class="{classes} film-slot--pending">'
-            f'<div class="film-slot__frame film-slot__frame--pending" aria-hidden="true">'
-            f'<span class="film-slot__series">{e(series)}</span>'
-            f'<span class="film-slot__name">{e(film["short"])}</span>'
-            f'<span class="film-slot__status">In preparation</span></div>'
-            f'<figcaption class="film-slot__caption">'
-            f'<p class="film-slot__title">{title}</p>'
-            f'<p class="film-slot__meta">{e(pending_meta)}</p>'
-            f'{text}</figcaption></figure>')
+def frame(film: dict, *, sizes: str, size: str = "", loading: str = "lazy", named: bool = False) -> str:
+    """A film's picture. Out: it opens the film on YouTube. Where a title link
+    beside it opens the same film, the picture is hidden from the Tab order;
+    where it stands alone (named), it is the link and carries the title. In
+    preparation: the provisional picture, marked as such, with no link."""
+    seconds = film_seconds(film)
+    cls = "frame" + (f" frame--{size}" if size else "")
+    time = f'<span class="frame__time">{clock(seconds)}</span>' if seconds else ""
+    if is_out(film):
+        access = (f'aria-label="{e(film["title"])}, {role_of(film).lower()} on YouTube{", " + spoken(seconds) if seconds else ""}"'
+                  if named else 'aria-hidden="true" tabindex="-1"')
+        return (f'<a class="{cls}" href="{e(film_href(film))}" target="_blank" rel="noopener noreferrer" {access}>'
+                f'{picture(film, sizes=sizes, loading=loading)}<span class="frame__play"></span>{time}</a>')
+    return (f'<div class="{cls} frame--pending" aria-hidden="true">{picture(film, sizes=sizes, loading=loading)}'
+            f'<span class="frame__status">In preparation</span></div>')
+
+
+def film_title(film: dict, text: str | None = None, cls: str = "") -> str:
+    """The film's title: the link when the film is out, plain words when it is not."""
+    words = e(text or film["title"])
+    cls_attr = f' class="{cls}"' if cls else ""
+    if is_out(film):
+        seconds = film_seconds(film)
+        tail = f'<span class="sr-only">, {role_of(film).lower()} on YouTube{", " + spoken(seconds) if seconds else ""}</span>'
+        return f'<a{cls_attr} href="{e(film_href(film))}" target="_blank" rel="noopener noreferrer">{words}{tail}</a>'
+    return f'<span{cls_attr}>{words}</span>'
+
+
+def film_meta(film: dict) -> str:
+    seconds = film_seconds(film)
+    if is_out(film):
+        return f"{role_of(film)}, {clock(seconds)}" if seconds else role_of(film)
+    return f"{role_of(film)}, in preparation"
+
+
+# ---------------------------------------------------------------- glossary
+
+class Terms:
+    """Links the first use of each defined term in a block of text to its
+    definition at the foot of the page (#t-<id>); hub.js turns the link into a
+    card on hover or focus. Longest names win, whole words only."""
+
+    def __init__(self, glossary: dict, protect: list[str] | None = None):
+        # Project and repository names are never split by a term link: the
+        # "Ontology" in "Code Ontology Bridge" is a name, not the concept.
+        names_kept = sorted({p for p in (protect or []) if p}, key=len, reverse=True)
+        self.protect = (re.compile("|".join(re.escape(p) for p in names_kept)) if names_kept else None)
+        self.terms = glossary.get("terms", [])
+        self.by_id = {t["id"]: t for t in self.terms}
+        names = []
+        for t in self.terms:
+            for name in [t["term"]] + t.get("aliases", []):
+                names.append((name, t["id"]))
+        names.sort(key=lambda pair: -len(pair[0]))
+        self.lookup = {name.lower(): tid for name, tid in names}
+        self.pattern = (re.compile(r"(?<![\w-])(" + "|".join(re.escape(n) for n, _ in names) + r")(?![\w-])", re.IGNORECASE)
+                        if names else None)
+        self.used: set[str] = set()
+
+    def link(self, text: str, *, skip: set[str] | None = None) -> str:
+        if not text:
+            return ""
+        if not self.pattern:
+            return e(text)
+        seen = set(skip or ())
+        kept = [(p.start(), p.end()) for p in self.protect.finditer(text)] if self.protect else []
+        out, last = [], 0
+        for m in self.pattern.finditer(text):
+            tid = self.lookup.get(m.group(1).lower())
+            if not tid or tid in seen:
+                continue
+            if any(a < m.end() and m.start() < b for a, b in kept):
+                continue
+            seen.add(tid)
+            self.used.add(tid)
+            out.append(e(text[last:m.start()]))
+            out.append(f'<a class="term" href="#t-{e(tid)}" data-term="{e(tid)}">{e(m.group(1))}</a>')
+            last = m.end()
+        out.append(e(text[last:]))
+        return "".join(out)
+
+
+# ---------------------------------------------------------------- the map
+# Three strands leave one knot, the introduction, and run across the page: the
+# mathematics above, the explanations in the middle, the code below. Each
+# project is a stop on its area's strand. Threads between strands are the
+# typed links in sites.json (a worked example, a related tool); brackets over
+# a strand are its collections (three readers that share one walkthrough).
+# The drawing is made here, as SVG, so it is complete without a script; every
+# stop is a link to the project's card below.
+
+MAP_W, MAP_H = 1200, 500
+STRAND_Y = {"maths": 150, "explain": 262, "code": 374}
+KNOT = (58, 262)
+STOPS_X = {
+    "maths": 262, "lean-exposition": 452, "quartic": 622, "proof-reader": 792, "atlas": 1022,
+    "funnel": 452, "narration-ir": 682,
+    "codemap": 228, "code-ontology-bridge": 380, "agent-trace": 540, "one-checkout": 690,
+    "safety-core": 840, "zenith": 978, "formal-verification": 1112,
+}
+FILMS_STOP_X = 900   # the end of the middle strand: every film
+
+
+def wrap_label(text: str, width: int = 15) -> list[str]:
+    words, lines, line = text.split(), [], ""
+    for word in words:
+        if line and len(line) + 1 + len(word) > width:
+            lines.append(line)
+            line = word
+        else:
+            line = f"{line} {word}".strip()
+    if line:
+        lines.append(line)
+    return lines
+
+
+def strand_path(area: str) -> str:
+    kx, ky = KNOT
+    y = STRAND_Y[area]
+    end = 960 if area == "explain" else MAP_W - 24
+    if y == ky:
+        return f"M {kx + 18} {ky} H {end}"
+    return f"M {kx + 14} {ky} C {kx + 70} {ky} {kx + 70} {y} {kx + 140} {y} H {end}"
+
+
+def render_map(registry: dict, owners: dict, films: dict, terms: Terms) -> str:
+    area_of = {item: area["id"] for area in registry["areas"] for item in area["items"]}
+    pos = {pid: (STOPS_X[pid], STRAND_Y[area_of[pid]]) for pid in area_of}
+    parts = []
+    # Strands, drawn from the knot outwards.
+    for area in registry["areas"]:
+        parts.append(f'<path class="pl-strand pl-strand--{e(area["id"])}" d="{strand_path(area["id"])}" pathLength="1"/>')
+    # Threads: typed links between projects.
+    threads = []
+    for i, link in enumerate(registry.get("links", [])):
+        (x1, y1), (x2, y2) = pos[link["from"]], pos[link["to"]]
+        if y1 == y2:   # same strand: a low arc into the open space between strands
+            lift = -30 if y1 != STRAND_Y["maths"] else 30
+            mid = (x1 + x2) / 2
+            d = f"M {x1} {y1} Q {mid} {y1 + lift * 2} {x2} {y2}"
+        else:
+            my = (y1 + y2) / 2
+            d = f"M {x1} {y1} C {x1} {my} {x2} {my} {x2} {y2}"
+        threads.append((link["from"], link["to"], link["label"], d, "link"))
+    # Collections: a bracket above (mathematics) or below (code) the strand,
+    # or a thread across strands when its members sit on two.
+    above = {"maths": 0, "code": 0}
+    for group in registry.get("collections", []):
+        members = group["members"]
+        ys = {pos[m][1] for m in members}
+        xs = sorted(pos[m][0] for m in members)
+        if len(ys) == 1:
+            y = ys.pop()
+            area = "maths" if y == STRAND_Y["maths"] else "code"
+            level = above[area]
+            above[area] += 1
+            if area == "maths":
+                by = y - 74 - level * 30
+                ticks = " ".join(f"M {x} {by} V {y - 52}" for x in xs)
+                ty = by - 7
+            else:
+                by = y + 98 + level * 30
+                ticks = " ".join(f"M {x} {by} V {y + 90}" for x in xs)
+                ty = by + 16
+            d = f"M {xs[0]} {by} H {xs[-1]} {ticks}"
+            parts.append(f'<g class="pl-bracket" data-members="{e(" ".join(members))}">'
+                         f'<path d="{d}"/><text x="{xs[0]}" y="{ty}">{e(group["title"])}</text></g>')
+        else:
+            a, b = members[0], members[1]
+            (x1, y1), (x2, y2) = pos[a], pos[b]
+            my = (y1 + y2) / 2
+            threads.append((a, b, group["title"], f"M {x1} {y1} C {x1} {my} {x2} {my} {x2} {y2}", "collection"))
+    for a, b, label, d, kind in threads:
+        parts.append(f'<path class="pl-thread pl-thread--{kind}" data-a="{e(a)}" data-b="{e(b)}" data-label="{e(label)}" d="{d}"/>')
+    # The knot: the introduction, where every strand starts.
+    kx, ky = KNOT
+    parts.append(
+        f'<a class="pl-knot" href="#intro" aria-label="Start with the introduction">'
+        f'<circle cx="{kx}" cy="{ky}" r="20"/>'
+        f'<path d="M {kx - 9} {ky - 11} C {kx + 9} {ky - 4} {kx - 9} {ky + 4} {kx + 9} {ky + 11} M {kx + 9} {ky - 11} C {kx - 9} {ky - 4} {kx + 9} {ky + 4} {kx - 9} {ky + 11}"/>'
+        f'<text x="{kx}" y="{ky + 40}" text-anchor="middle">Start here</text></a>')
+    # Stops.
+    for area in registry["areas"]:
+        for pid in area["items"]:
+            owner = owners[pid]
+            x, y = pos[pid]
+            lines = wrap_label(owner["label"], 14)
+            sub = owner.get("subject", "")
+            below = area["id"] != "maths"
+            subs = wrap_label(sub, 21) if area["id"] == "code" else [sub]
+            name = "".join(f'<tspan x="{x}" dy="{0 if i == 0 else 17}">{e(line)}</tspan>' for i, line in enumerate(lines))
+            sub_lines = "".join(f'<tspan x="{x}" dy="{0 if i == 0 else 14}">{e(line)}</tspan>' for i, line in enumerate(subs))
+            if below:
+                ty = y + 30
+                sub_y = ty + 17 * (len(lines) - 1) + 17
+            else:
+                ty = y - 22 - 17 * (len(lines) - 1) - 15
+                sub_y = y - 20
+            parts.append(
+                f'<a class="pl-stop pl-stop--{e(area["id"])}" href="#{e(pid)}" data-id="{e(pid)}" '
+                f'aria-label="{e(owner["label"])}: {e(sub)}">'
+                f'<circle class="pl-stop__halo" cx="{x}" cy="{y}" r="18"/>'
+                f'<circle class="pl-stop__dot" cx="{x}" cy="{y}" r="7.5"/>'
+                f'<text class="pl-stop__name" x="{x}" y="{ty}" text-anchor="middle">{name}</text>'
+                f'<text class="pl-stop__sub" x="{x}" y="{sub_y}" text-anchor="middle">{sub_lines}</text></a>')
+    # The end of the explanations strand: every film.
+    total = len(films)
+    fy = STRAND_Y["explain"]
+    parts.append(
+        f'<a class="pl-stop pl-stop--films" href="#films" data-id="films" aria-label="Every film, in pairs">'
+        f'<circle class="pl-stop__halo" cx="{FILMS_STOP_X}" cy="{fy}" r="18"/>'
+        f'<rect class="pl-stop__reel" x="{FILMS_STOP_X - 9}" y="{fy - 6.5}" width="18" height="13" rx="2.5"/>'
+        f'<path class="pl-stop__tri" d="M {FILMS_STOP_X - 2.5} {fy - 3.5} L {FILMS_STOP_X + 3.5} {fy} L {FILMS_STOP_X - 2.5} {fy + 3.5} Z"/>'
+        f'<text class="pl-stop__name" x="{FILMS_STOP_X}" y="{fy + 30}" text-anchor="middle">Every film</text>'
+        f'<text class="pl-stop__sub" x="{FILMS_STOP_X}" y="{fy + 47}" text-anchor="middle">{total} films, in pairs</text></a>')
+    svg = (f'<svg class="plait" viewBox="0 0 {MAP_W} {MAP_H}" role="group" aria-labelledby="map-title map-key" '
+           f'data-plait>{"".join(parts)}</svg>')
+    # One caption per stop: what it is and what it joins. hub-map.js shows the
+    # pointed one; without the script they are a list under the drawing.
+    captions = []
+    for pid, owner in owners.items():
+        joins = []
+        for link in registry.get("links", []):
+            if pid in (link["from"], link["to"]):
+                other = link["to"] if link["from"] == pid else link["from"]
+                joins.append(f'{e(link["label"])} ({e(owners[other]["label"])})')
+        for group in registry.get("collections", []):
+            if pid in group["members"]:
+                others = ", ".join(owners[m]["label"] for m in group["members"] if m != pid)
+                joins.append(f'{e(group["title"])} (with {e(others)})')
+        joined = f'<span class="pl-cap__joins">{"; ".join(joins)}.</span>' if joins else ""
+        captions.append(f'<p class="pl-cap" data-for="{e(pid)}" hidden><strong>{e(owner["label"])}</strong> '
+                        f'{e(owner.get("tagline") or owner.get("purpose", ""))} {joined}</p>')
+    return svg, "".join(captions)
+
+
+# ---------------------------------------------------------------- project cards
+
+STILL_SIZES = "(min-width: 1180px) 430px, (min-width: 720px) 45vw, 100vw"
+SMALL_SIZES = "(min-width: 720px) 168px, 40vw"
 
 
 def capture_img(site: dict, scheme: str, *, sizes: str) -> str:
@@ -236,146 +509,39 @@ def capture_img(site: dict, scheme: str, *, sizes: str) -> str:
             f'sizes="{e(sizes)}" alt="" width="1440" height="810" loading="lazy" decoding="async">')
 
 
-# ---------------------------------------------------------------- the projects
-# The work as a short index: one row per website or tool, in the groups that
-# sites.json names. A closed row shows a picture, the name, one sentence and
-# the way in (the website, or the code), with a summary of what it holds. It
-# opens beneath itself into a small map of that project alone: its videos, the
-# website's main places, its code on GitHub, joined by lines that
-# assets/hub-map.js draws. "Show all details" opens every row, which is the
-# whole map. A tool has no website, so its open row is its films and its code,
-# with no middle node and no lines.
-# html.scripting (set in the head) keeps rows closed from the first paint;
-# without scripting every row is open and every link works. The middle cell
-# comes first in the markup, so a screen reader and a phone read each open
-# row as the website, then its videos, then its code.
-
-MAP_STILL_SIZES = "(min-width: 960px) 144px, 112px"
-THUMB_SIZES = "(min-width: 720px) 176px, 104px"
-COLUMNS = ("Videos", "On the website", "Code on GitHub")
-CHEVRON = ('<svg class="proj__chevron" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">'
-           '<path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+def shot(owner: dict) -> str:
+    """The website's own first screen (both schemes), or a tool's picture,
+    linked to the place it shows."""
+    sizes = "(min-width: 1180px) 430px, 45vw"
+    if owner["kind"] == "site" and owner.get("capture"):
+        return (f'<a class="card__shot" href="{e(owner["url"])}" aria-hidden="true" tabindex="-1">'
+                f'{capture_img(owner, "light", sizes=sizes)}{capture_img(owner, "dark", sizes=sizes)}</a>')
+    if owner.get("thumbnail"):
+        return (f'<span class="card__shot" aria-hidden="true"><img src="{e(owner["thumbnail"])}" alt="" loading="lazy" decoding="async"></span>')
+    return ""
 
 
-def index_entries(registry: dict) -> list[dict]:
-    """Each index group with its rows: a website or a tool, its films and its code."""
-    films = {film["id"]: film for film in registry["films"]}
-    owners = {item["id"]: ("site", item) for item in registry["sites"]}
-    owners.update({item["id"]: ("tool", item) for item in registry["projects"]})
-    groups = []
-    for group in registry["index_groups"]:
-        rows = []
-        for item_id in group["items"]:
-            kind, item = owners[item_id]
-            rows.append({"kind": kind, "item": item, "films": [films[f] for f in item.get("films", [])],
-                         "repos": repos_of(registry, item)})
-        groups.append({"id": group["id"], "title": group["title"], "lede": group.get("lede"), "rows": rows})
-    return groups
+def lead_of(owner: dict, films: dict) -> tuple[dict, dict | None]:
+    """The card's film, and the full film it leads to. A project's short film
+    leads when it is out; until then its full video stands in its place."""
+    own = [films[f] for f in owner.get("films", [])]
+    short = next((f for f in own if f["format"] == "short"), None)
+    if short is None:
+        first = next((f for f in own if is_out(f)), own[0] if own else None)
+        return first, None
+    full = films.get((short.get("leads_to") or [None])[0] or "")
+    if is_out(short) or not (full and is_out(full)):
+        return short, full
+    return full, None
 
 
-def plural(n: int, singular: str, many: str) -> str:
-    return f"{n} {singular if n == 1 else many}"
-
-
-def holds(films: list[dict], repos: list[dict]) -> list[str]:
-    """What a closed row holds, in the order its open map shows it."""
-    released = sum(1 for film in films if film.get("youtube"))
-    pending = len(films) - released
-    parts = []
-    if released:
-        parts.append(plural(released, "video", "videos"))
-    if pending:
-        parts.append(plural(pending, "video", "videos") + " in preparation")
-    if repos:
-        parts.append(plural(len(repos), "repository", "repositories"))
-    elif films:
-        parts.append("code not public")
-    return parts
-
-
-def film_words(film: dict) -> str:
-    """A film as words: its title (the link, when it is out), when or how long, what it shows."""
-    title = e(film["title"])
-    if film.get("youtube"):
-        seconds = film["duration_seconds"]
-        head = (f'<p class="film-words__title"><a href="{e(film["youtube"])}" target="_blank" rel="noopener noreferrer">{title}'
-                f'<span class="sr-only">, video on YouTube, {spoken(seconds)}</span></a></p>'
-                f'<p class="film-words__meta">Video, {clock(seconds)}</p>')
-    else:
-        head = (f'<p class="film-words__title">{title}</p>'
-                f'<p class="film-words__meta film-words__meta--pending">In preparation</p>')
-    return f'<div class="film-words">{head}<p class="film-words__text">{e(film["description"])}</p></div>'
-
-
-def map_films(films: list[dict], *, series: str, pictures: bool = True) -> str:
-    def one(film: dict) -> str:
-        if pictures and film.get("youtube"):
-            return film_slot(film, series=series, size="inline", sizes=MAP_STILL_SIZES)
-        return film_words(film)
-    if not films:  # The empty cell keeps the columns in their places.
-        return '<div class="map-cell map-cell--videos"></div>'
-    items = "".join(f'<li class="map-film">{one(film)}</li>' for film in films)
-    return (f'<div class="map-cell map-cell--videos"><p class="map-cell__label">{COLUMNS[0]}</p>'
-            f'<ul class="map-films" role="list">{items}</ul></div>')
-
-
-def map_repo(name: str, href: str, text: str) -> str:
-    return (f'<li class="map-repo"><p class="map-repo__name"><a href="{e(href)}" rel="noopener">{e(name)}'
-            f'<span class="sr-only">, on GitHub</span></a></p>'
-            f'<p class="map-repo__text">{e(text)}</p></li>')
-
-
-def map_code(repos: list[dict], note: str = "") -> str:
-    if repos:
-        body = f'<ul class="map-repos" role="list">{"".join(map_repo(r["name"], r["href"], r["description"]) for r in repos)}</ul>'
-    else:
-        return (f'<div class="map-cell map-cell--code"><p class="map-cell__label">Code</p>'
-                f'<p class="map-repo map-repo--none">No public repository. {e(note)}</p></div>')
-    return f'<div class="map-cell map-cell--code"><p class="map-cell__label">{COLUMNS[2]}</p>{body}</div>'
-
-
-def map_middle(row: dict) -> str:
-    """A website's main places, the node its videos and code join. A tool has
-    no website, so it has no middle: its open line is its films and its code."""
-    item = row["item"]
-    if row["kind"] != "site":
-        return ""
-    links = ([{"label": item["front_label"], "href": item["url"]}] if item.get("front_label") else []) + item.get("routes", [])
-    routes = "".join(f'<li><a href="{e(r["href"])}">{e(r["label"])}<span class="sr-only">, on {e(item["name"])}</span></a></li>'
-                     for r in links)
-    note = f'<p class="map-node__note">{e(item["status"])}</p>' if item.get("status") else ""
-    body = f'<p class="map-node__label">{COLUMNS[1]}</p><ul class="map-node__routes" role="list">{routes}</ul>{note}'
-    return f'<div class="map-cell map-cell--site"><div class="map-site map-node">{body}</div></div>'
-
-
-def row_thumb(row: dict) -> str:
-    """Show a supplied screenshot, a website capture or a film still."""
-    item = row["item"]
-    if item.get("thumbnail"):
-        href, _ = row_way_in(row)
-        return (f'<a class="proj__thumb" href="{e(href)}"{link_attrs(href)} aria-hidden="true" tabindex="-1">'
-                f'<img src="{e(item["thumbnail"])}" alt="" loading="lazy" decoding="async"></a>')
-    if row["kind"] == "site":
-        href, _ = row_way_in(row)
-        return (f'<a class="proj__thumb" href="{e(href)}"{link_attrs(href)} aria-hidden="true" tabindex="-1">'
-                f'{capture_img(item, "light", sizes=THUMB_SIZES)}{capture_img(item, "dark", sizes=THUMB_SIZES)}</a>')
-    film = next((f for f in row["films"] if f.get("youtube")), None)
-    if not film:
-        return '<span class="proj__thumb proj__thumb--empty" aria-hidden="true"></span>'
-    return (f'<a class="proj__thumb proj__thumb--film film-slot__frame" href="{e(film["youtube"])}" target="_blank" '
-            f'rel="noopener noreferrer" aria-hidden="true" tabindex="-1">{still_img(film["still"], sizes=THUMB_SIZES)}'
-            f'<span class="film-slot__play"></span><span class="film-slot__time">{clock(film["duration_seconds"])}</span></a>')
-
-
-def row_way_in(row: dict) -> tuple[str, str]:
-    """The row's main link: the website, else the code, else the film. (href, label)"""
-    item = row["item"]
-    if row["kind"] == "site" and item.get("way_in") != "code":
-        return item["url"], "Open the website"
-    if row["repos"]:
-        return row["repos"][0]["href"], "Code on GitHub"
-    film = next(f for f in row["films"] if f.get("youtube"))
-    return film["youtube"], "Watch the video"
+def lc_first(text: str) -> str:
+    """Lower-case a label's first letter for use mid-sentence, unless the first
+    word is a name (OpenAI, Lean, Erdős)."""
+    first = text.split(" ", 1)[0]
+    if first[:1].isupper() and (first[1:2].isupper() or first.rstrip("’'s") in ("Lean", "Erdős", "Atlas", "OpenAI", "NVIDIA") or first.startswith(("OpenAI", "NVIDIA"))):
+        return text
+    return text[:1].lower() + text[1:]
 
 
 def link_attrs(href: str) -> str:
@@ -384,87 +550,134 @@ def link_attrs(href: str) -> str:
     return ' rel="noopener"' if href.startswith("https://github.com/") else ""
 
 
-def row_summary(row: dict) -> str:
-    """The toggle: what it does (Show details, Hide details once open), then what
-    the details hold, in words a step quieter."""
-    return (f'<span class="proj__act"><span><span class="proj__verb">Show</span> videos and code</span>{CHEVRON}</span>'
-            f'<span class="proj__holds"><span class="sr-only">: </span>{e(", ".join(holds(row["films"], row["repos"])))}</span>')
+def card(owner: dict, registry: dict, owners: dict, films: dict, terms: Terms, area: str) -> str:
+    pid = owner["id"]
+    lead, full = lead_of(owner, films)
+    shown = {lead["id"]} | ({full["id"]} if full else set())
+    rows = []
+    if full:
+        rows.append(f'<li class="kin kin--full"><span class="kin__kind">Full video</span>'
+                    f'<span class="kin__what">{film_title(full)}<span class="kin__meta">{e(clock(film_seconds(full)) if film_seconds(full) and is_out(full) else "in preparation")}</span></span></li>')
+    more = [films[f] for f in owner.get("films", []) if f not in shown and not is_earlier(films[f], films)]
+    for film in more:
+        label = "Short film" if film["format"] == "short" else "Also"
+        meta = clock(film_seconds(film)) if is_out(film) and film_seconds(film) else "in preparation"
+        rows.append(f'<li class="kin"><span class="kin__kind">{label}</span>'
+                    f'<span class="kin__what">{film_title(film)}<span class="kin__meta">{e(meta)}</span></span></li>')
+    if owner["kind"] == "site":
+        routes = "".join(f'<a href="{e(r["href"])}">{e(r["label"])}<span class="sr-only">, on {e(owner["name"])}</span></a>'
+                         for r in owner.get("routes", []))
+        rows.append(f'<li class="kin kin--site"><span class="kin__kind">Website</span>'
+                    f'<span class="kin__what"><a class="kin__main" href="{e(owner["url"])}">{e(owner["name"])}</a>'
+                    f'{f"<span class=\"kin__routes\">{routes}</span>" if routes else ""}</span></li>')
+    repos = repos_of(registry, owner)
+    if repos:
+        names = "".join(f'<a href="{e(r["href"])}" rel="noopener" title="{e(r["description"])}">{e(r["name"])}<span class="sr-only">, on GitHub</span></a>'
+                        for r in repos)
+        rows.append(f'<li class="kin kin--code"><span class="kin__kind">Code</span><span class="kin__what kin__repos">{names}</span></li>')
+    elif owner.get("status"):
+        rows.append(f'<li class="kin kin--code"><span class="kin__kind">Code</span><span class="kin__what kin__note">{e(owner["status"])}</span></li>')
+    joins = []
+    for link in registry.get("links", []):
+        if pid in (link["from"], link["to"]):
+            other = link["to"] if link["from"] == pid else link["from"]
+            joins.append(f'<a href="#{e(other)}">{e(owners[other]["label"])}</a> <span class="kin__why">({e(lc_first(link["label"]))})</span>')
+    for group in registry.get("collections", []):
+        if pid in group["members"]:
+            others = ", ".join(f'<a href="#{e(m)}">{e(owners[m]["label"])}</a>' for m in group["members"] if m != pid)
+            joins.append(f'{others} <span class="kin__why">({e(lc_first(group["title"]))})</span>')
+    if joins:
+        rows.append(f'<li class="kin kin--joins"><span class="kin__kind">Connected</span><span class="kin__what">{"<br>".join(joins)}</span></li>')
+    takeaway = lead.get("takeaway") or lead.get("description", "")
+    summary = owner.get("summary") or owner.get("purpose", "")
+    credit = f'<p class="card__credit">{e(owner["credit"])}</p>' if owner.get("credit") else ""
+    # The default path: the film, the name, one line, and where to go next.
+    actions = []
+    if full and is_out(full):
+        actions.append(f'<a class="act act--film" href="{e(film_href(full))}" target="_blank" rel="noopener noreferrer">'
+                       f'Full video <span class="act__time">{clock(film_seconds(full))}</span>'
+                       f'<span class="sr-only">: {e(full["title"])}, on YouTube</span></a>')
+    if owner["kind"] == "site":
+        actions.append(f'<a class="act" href="{e(owner["url"])}">Website<span class="sr-only">: {e(owner["name"])}</span></a>')
+    if repos:
+        actions.append(f'<a class="act" href="{e(repos[0]["href"])}" rel="noopener">Code<span class="sr-only">: {e(repos[0]["name"])} on GitHub</span></a>')
+    return (f'<article class="card card--{e(area)}" id="{e(pid)}" aria-labelledby="{e(pid)}-name">'
+            f'{frame(lead, sizes=STILL_SIZES, named=True)}'
+            f'<div class="card__body">'
+            f'<p class="card__subject">{e(owner.get("subject", ""))}</p>'
+            f'<h4 class="card__name" id="{e(pid)}-name">{e(owner["label"])}</h4>'
+            f'<p class="card__line">{terms.link(owner.get("line") or takeaway)}</p>'
+            f'<p class="card__acts">{"".join(actions)}</p>'
+            f'<details class="card__more"><summary>More</summary>{shot(owner)}'
+            f'<p class="card__film"><span class="card__role">{e(film_meta(lead))}</span> {film_title(lead, cls="card__filmtitle")}</p>'
+            f'<p class="card__takeaway">{terms.link(takeaway)}</p>'
+            f'<p class="card__summary">{terms.link(summary)}</p>{credit}'
+            f'<ul class="kins" role="list">{"".join(rows)}</ul></details></div></article>')
 
 
-def project_row(row: dict) -> str:
-    item = row["item"]
-    pid = e(item["id"])
-    href, label = row_way_in(row)
-    attrs = link_attrs(href)
-    name = f'<a href="{e(href)}"{attrs}>{e(item["name"])}</a>'
-    way_in = f'<a class="proj__go" href="{e(href)}"{attrs}>{e(label)}<span class="sr-only">: {e(item["name"])}</span></a>'
-    series = item["name"]
-    # A tool's line already shows its film's still, so its open line gives the film as words.
-    films = map_films(row["films"], series=series, pictures=row["kind"] == "site")
-    more = (f'<div class="proj__more" id="more-{pid}">'
-            f'<div class="map-row map-row--{row["kind"]}" data-row="{pid}">{map_middle(row)}{films}'
-            f'{map_code(row["repos"], item.get("status") or "")}</div></div>')
-    kind = f'<p class="proj__kind">{e(item["kind"])}</p>' if item.get("kind") else ""
-    tags = "".join(f'<li>{e(t)}</li>' for t in item.get("tags", []))
-    tags = f'<ul class="proj__tags" role="list" aria-label="Tools and fields">{tags}</ul>' if tags else ""
-    credit = f'<p class="proj__credit">{e(item["credit"])}</p>' if item.get("credit") else ""
-    return (f'<li class="proj proj--{row["kind"]}" id="{pid}">'
-            f'<div class="proj__head">{row_thumb(row)}'
-            f'<div class="proj__main"><h4 class="proj__name">{name}</h4>{kind}'
-            f'<p class="proj__purpose">{e(item["purpose"])}</p>{credit}</div>'
-            f'<div class="proj__side"><div class="proj__ways">{way_in}'
-            f'<button class="proj__toggle" type="button" aria-expanded="false" aria-controls="more-{pid}">'
-            f'<span class="sr-only">{e(item["name"])}: </span>{row_summary(row)}</button></div>{tags}</div>'
-            f'</div>{more}</li>')
+def render_areas(registry: dict, owners: dict, films: dict, terms: Terms) -> str:
+    out = []
+    for area in registry["areas"]:
+        cards = "".join(card(owners[i], registry, owners, films, terms, area["id"]) for i in area["items"])
+        n = len(area["items"])
+        out.append(
+            f'<section class="area area--{e(area["id"])}" id="area-{e(area["id"])}" aria-labelledby="area-{e(area["id"])}-title">'
+            f'<div class="area__head"><div class="area__sticky">'
+            f'<span class="area__strand" aria-hidden="true"></span>'
+            f'<h3 class="area__title" id="area-{e(area["id"])}-title">{e(area["title"])}</h3>'
+            f'<p class="area__blurb">{terms.link(area["blurb"])}</p>'
+            f'</div></div><div class="area__cards">{cards}</div></section>')
+    return "".join(out)
 
 
-def render_projects(registry: dict) -> str:
-    groups = "".join(
-        f'<div class="proj-group" aria-labelledby="group-{e(g["id"])}">' +
-        ('<span id="group-software" class="hub-alias"></span>' if g["id"] == "agents" else "") +
-        f'<h3 class="proj-group__title" id="group-{e(g["id"])}">{e(g["title"])}</h3>'
-        f'{f"<p class=\"proj-group__lede\">{e(g["lede"])}</p>" if g.get("lede") else ""}'
-        f'<ul class="proj-list" role="list">{"".join(project_row(r) for r in g["rows"])}</ul></div>'
-        for g in index_entries(registry))
-    return f'<div class="map" data-hub-map>{groups}</div>'
+# ---------------------------------------------------------------- every film
+
+def film_tile(film: dict, terms: Terms, *, lead: bool = False) -> str:
+    takeaway = film.get("takeaway")
+    text = ""
+    return (f'<div class="tile tile--{e(film["format"])}">{frame(film, sizes=SMALL_SIZES, size="small")}'
+            f'<div class="tile__words"><p class="tile__meta">{e(film_meta(film))}</p>'
+            f'<p class="tile__title">{film_title(film)}</p>{text}</div></div>')
 
 
-def video_owner_names(registry: dict) -> dict[str, str]:
-    """Which project each film belongs to, as a short name for the video wall."""
-    names = {}
-    for group in registry["film_groups"]:
-        if "site" in group:
+def render_library(registry: dict, owners: dict, films: dict, terms: Terms) -> str:
+    """Every film: each short film beside the full video it leads to, in the
+    order of the areas; three short films that share one full video share one
+    row. Then the films no short film leads to, and the earlier editions."""
+    order = list(registry.get("intro", {}).get("films", []))
+    for area in registry["areas"]:
+        for pid in area["items"]:
+            order += owners[pid].get("films", [])
+    seen, groups = set(), {}
+    for fid in order:
+        film = films[fid]
+        if film["format"] != "short" or fid in seen:
             continue
-        for film_id in group["films"]:
-            names[film_id] = "Introduction" if group["id"] == "overview" else ""
-    for owner in registry["sites"] + registry["projects"]:
-        for film_id in owner.get("films", []):
-            names[film_id] = owner["name"]
-    return names
+        seen.add(fid)
+        target = (film.get("leads_to") or [None])[0]
+        groups.setdefault(target, []).append(film)
+    paired = set(seen) | {t for t in groups if t}
+    rows = []
+    for target, shorts in groups.items():
+        full = films.get(target or "")
+        left = "".join(f'<li>{film_tile(s, terms, lead=True)}</li>' for s in shorts)
+        right = film_tile(full, terms) if full else ""
+        many = " pair--many" if len(shorts) > 1 else ""
+        rows.append(f'<li class="pair{many}"><ul class="pair__shorts" role="list">{left}</ul>'
+                    f'<span class="pair__join" aria-hidden="true"></span><div class="pair__full">{right}</div></li>')
+    others = [films[f] for f in dict.fromkeys(order) if f not in paired and not is_earlier(films[f], films)]
+    earlier = [films[f] for f in dict.fromkeys(order) if f not in paired and is_earlier(films[f], films)]
+    out = [f'<ol class="pairs" role="list">{"".join(rows)}</ol>']
+    if others:
+        out.append('<h3 class="films__sub">More films</h3><ul class="tiles" role="list">'
+                   + "".join(f"<li>{film_tile(f, terms)}</li>" for f in others) + "</ul>")
+    if earlier:
+        out.append('<h3 class="films__sub" id="earlier-introductions">Earlier editions</h3><ul class="tiles tiles--quiet" role="list">'
+                   + "".join(f"<li>{film_tile(f, terms)}</li>" for f in earlier) + "</ul>")
+    return "".join(out)
 
 
-def render_videos(registry: dict) -> str:
-    """Current videos first, with earlier introductions in their own section below."""
-    names = video_owner_names(registry)
-    groups = film_groups(registry)
-    order = [film for group in groups if group["id"] != "earlier-introductions" for film in group["films"]]
-    earlier = [film for group in groups if group["id"] == "earlier-introductions" for film in group["films"]]
-    released = [f for f in order if f.get("youtube")]
-    pending = [f for f in order if not f.get("youtube")]
-    def cards(items):
-        return "".join(
-        f'<li class="vid">{film_slot(film, series=names[film["id"]], size="small", with_text=False, meta=names[film["id"]], sizes="(min-width: 1180px) 380px, (min-width: 820px) 31vw, (min-width: 520px) 48vw, 100vw")}</li>'
-        for film in items)
-    waiting = "".join(f'<li><span class="vid-pending__name">{e(film["title"])}</span>'
-                      f'<span class="vid-pending__for">{e(names[film["id"]])}</span></li>' for film in pending)
-    later = (f'<div class="vid-pending"><h3 class="vid-pending__title">In preparation</h3>'
-             f'<ul class="vid-pending__list" role="list">{waiting}</ul></div>') if pending else ""
-    archive = (f'<section class="vid-pending" aria-labelledby="earlier-introductions">'
-               f'<div class="hub-films__head"><h3 class="hub-section-title" id="earlier-introductions">Earlier introductions</h3>'
-               f'<p class="hub-films__lede">Older versions, kept for reference. Start with Introduction (V3) above.</p></div>'
-               f'<ul class="vid-wall" role="list">{cards(earlier)}</ul></section>') if earlier else ""
-    return f'<ul class="vid-wall" role="list">{cards(released)}</ul>{later}{archive}'
-
+# ---------------------------------------------------------------- page
 
 def page_head(*, title: str, description: str, canonical: str | None, robots: str, map_script: bool = False) -> str:
     canonical_link = f'\n  <link rel="canonical" href="{e(canonical)}">' if canonical else ""
@@ -489,6 +702,7 @@ def page_head(*, title: str, description: str, canonical: str | None, robots: st
   <link rel="preload" href="/assets/fonts/plectis-serif.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/plectis-sans.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="help" href="/llms.txt" type="text/plain" title="Guide for agents">
+  <link rel="alternate" href="/catalogue.json" type="application/json" title="Catalogue as a graph">
   <script src="{versioned("/assets/theme-init.js")}"></script>
   <link rel="stylesheet" href="{versioned("/assets/hub.css")}">
   <link rel="stylesheet" href="{versioned("/assets/family/family.css")}">
@@ -502,8 +716,9 @@ def header(*, current: bool) -> str:
     <div class="wrap hub-header__inner">
       <a class="hub-wordmark" href="/"{current_attr}><img class="hub-wordmark__mark" src="/assets/favicon.svg" alt="" width="26" height="26" decoding="async">Will Cook</a>
       <nav class="hub-nav" aria-label="Primary">
+        <a href="/#map">Map</a>
         <a href="/#projects">Projects</a>
-        <a href="/#videos">Videos</a>
+        <a href="/#films">Films</a>
         <a href="/#contact">Contact</a>
       </nav>
     </div>
@@ -527,38 +742,125 @@ def structured_data(registry: dict) -> str:
     return json.dumps(data, ensure_ascii=False, indent=1).replace("</", "<\\/")
 
 
-def render_index(registry: dict) -> str:
+def render_hero(registry: dict, films: dict, terms: Terms) -> str:
+    owner = registry["owner"]
+    intro_ids = registry.get("intro", {}).get("films", [])
+    intro = [films[f] for f in intro_ids]
+    short = next((f for f in intro if f["format"] == "short" and is_out(f)), None)
+    full = next((f for f in intro if f["format"] == "long" and is_out(f) and not is_earlier(f, films)), None)
+    main = short or full
+    hero = registry.get("hero", {})
+    headline = hero.get("headline") or owner["lede"]
+    sub = hero.get("summary") or owner.get("orient", "")
+    actions = []
+    if main:
+        seconds = film_seconds(main)
+        label = "Watch the introduction"
+        actions.append(f'<a class="btn btn--primary" href="{e(film_href(main))}" target="_blank" rel="noopener noreferrer">'
+                       f'<span class="btn__play" aria-hidden="true"></span>{label}'
+                       f'{f"<span class=\"btn__time\">{clock(seconds)}</span>" if seconds else ""}'
+                       f'<span class="sr-only">, on YouTube</span></a>')
+    if short and full and full is not short:
+        actions.append(f'<a class="btn btn--quiet" href="{e(film_href(full))}" target="_blank" rel="noopener noreferrer">'
+                       f'The full tour <span class="btn__time">{clock(film_seconds(full))}</span><span class="sr-only">, on YouTube</span></a>')
+    film_html = frame(main, sizes="(min-width: 1024px) 560px, 100vw", size="hero", loading="eager") if main else ""
+    caption = (f'<p class="hero__caption"><span class="hero__role">{e(film_meta(main))}</span> {film_title(main, cls="hero__filmtitle")}</p>'
+               if main else "")
+    return f'''<section class="hero" id="intro" aria-labelledby="hub-title">
+      <div class="wrap hero__grid">
+        <div class="hero__copy">
+          <p class="hero__name">Will Cook</p>
+          <h1 class="hero__title" id="hub-title">{e(headline)}</h1>
+          <p class="hero__lede">{terms.link(sub)}</p>
+          <div class="hero__actions">{"".join(actions)}</div>
+          <p class="hero__avail">{e(owner["availability"])} <a href="#contact">How to reach me</a></p>
+        </div>
+        <figure class="hero__film">{film_html}<figcaption>{caption}</figcaption></figure>
+      </div>
+    </section>'''
+
+
+def render_more(registry: dict) -> str:
+    contributions = "".join(
+        f'<li><p class="more__name"><a href="{e(GITHUB + c["repo"])}" rel="noopener">{e(c["upstream"])}</a></p>'
+        f'<p class="more__what">{e(c["what"])}'
+        f'{f" <a href=\"{e(c["evidence"]["href"])}\" rel=\"noopener\">{e(c["evidence"]["label"])}</a>" if c.get("evidence") else ""}</p></li>'
+        for c in registry.get("contributions", []))
+    earlier = "".join(
+        f'<li><p class="more__name"><a href="{e(x["href"])}" rel="noopener">{e(x["name"])}</a></p><p class="more__what">{e(x["note"])}</p></li>'
+        for x in registry.get("earlier", []))
+    return f'''<section class="more" id="more" aria-labelledby="more-title">
+      <div class="wrap more__grid">
+        <div>
+          <h2 class="section-title" id="more-title">Contributions to other projects</h2>
+          
+          <ul class="more__list" role="list">{contributions}</ul>
+        </div>
+        <div>
+          <h3 class="section-title section-title--small">Earlier work</h3>
+          <ul class="more__list" role="list">{earlier}</ul>
+        </div>
+      </div>
+    </section>'''
+
+
+def render_terms(glossary: dict, terms: Terms) -> str:
+    used = [t for t in glossary.get("terms", []) if t["id"] in terms.used]
+    if not used:
+        return ""
+    used.sort(key=lambda t: t["term"].lower())
+    items = "".join(
+        f'<div class="def" id="t-{e(t["id"])}"><dt>{e(t["term"])}</dt>'
+        f'<dd><p class="def__preview">{e(t["preview"])}</p><p class="def__detail">{e(t["detail"])}</p></dd></div>'
+        for t in used)
+    return f'''<section class="terms" id="terms" aria-labelledby="terms-title">
+      <div class="wrap">
+        <h2 class="section-title" id="terms-title">Terms used on this page</h2>
+        
+        <dl class="defs">{items}</dl>
+      </div>
+    </section>'''
+
+
+def render_index(registry: dict, glossary: dict | None = None) -> str:
+    glossary = glossary if glossary is not None else load_glossary()
     owner = registry["owner"]
     films = {film["id"]: film for film in registry["films"]}
-    released = [f for f in registry["films"] if f.get("youtube")]
-    pending = [f for f in registry["films"] if not f.get("youtube")]
-    intro = films["introduction"]
-
+    owners = owners_of(registry)
+    protect = [n for o in owners.values() for n in [o["name"], o["label"], *o.get("aka", [])]]
+    protect += [r["name"] for r in registry["repos"]] + ["Plectis Mathematics", "Lean Exposition"]
+    terms = Terms(glossary, protect)
+    hero = render_hero(registry, films, terms)
+    plait, captions = render_map(registry, owners, films, terms)
+    areas = render_areas(registry, owners, films, terms)
+    library = render_library(registry, owners, films, terms)
+    more = render_more(registry)
+    glossary_html = render_terms(glossary, terms)
+    out_count = sum(1 for f in films.values() if is_out(f))
+    pending = len(films) - out_count
+    films_lede = (f"{count_words(out_count, 'film is', 'films are', capital=True)} on YouTube"
+                  + (f" and {count_words(pending, 'is', 'are')} in preparation" if pending else "")
+                  + ". Each short film sits beside the full video it leads to.")
     contact = "".join(
         f'<li><a class="{"hub-contact__primary" if c["href"].startswith("mailto:") else ""}" href="{e(c["href"])}"'
         f'{"" if c["href"].startswith("mailto:") else " rel=\"me noopener\""}>{e(c["label"])}</a></li>'
         for c in owner["contact"]).replace(' class=""', "")
-    count_line = f"{count_words(len(released), 'video is', 'videos are', capital=True)} on YouTube"
-    if pending:
-        count_line += f" and {count_words(len(pending), 'is', 'are')} in preparation"
-    count_line += ". Each opens on YouTube in a new tab."
-    routes = "".join(
-        f'<li><a href="#group-{e(g["id"])}"><span class="hub-routes__title">{e(g["title"])}</span>'
-        f'<span class="hub-routes__count">{e(count_words(len(g["items"]), "project", "projects", capital=True))}</span></a></li>'
-        for g in registry["index_groups"])
-    description = ("Will Cook’s AI-assisted mathematics and software: Erdős research, papers linked to Lean proofs, "
-                   "agent tools, practical formal verification and videos.")
-    head = page_head(title="Will Cook: websites and videos", description=description, canonical=HOME,
+    legend = "".join(
+        f'<li class="key key--{e(a["id"])}"><span class="key__swatch" aria-hidden="true"></span>'
+        f'<a href="#area-{e(a["id"])}">{e(a["title"])}</a></li>' for a in registry["areas"])
+    description = ("Will Cook’s AI-assisted mathematics and software: Erdős research, OpenAI’s results beside "
+                   "their Lean proofs, tools for coding agents, and the films that explain them.")
+    head = page_head(title="Will Cook: mathematics, software and films", description=description, canonical=HOME,
                      robots="index, follow", map_script=True)
     return f'''{head}
-  <meta property="og:title" content="Will Cook: websites and videos">
+  <meta property="og:title" content="Will Cook: mathematics, software and films">
   <meta property="og:description" content="{e(description)}">
   <meta property="og:type" content="website">
   <meta property="og:url" content="{HOME}">
   <meta property="og:image" content="{HOME}assets/sites/home-light-1440.webp">
   <meta property="og:image:width" content="1440">
   <meta property="og:image:height" content="790">
-  <meta property="og:image:alt" content="Will Cook’s home page, with the introduction video and routes into his projects.">
+  <meta property="og:image:alt" content="Will Cook’s home page, with the introduction film and a map of how the projects connect.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="{HOME}assets/sites/home-light-1440.webp">
   <script type="application/ld+json">{structured_data(registry)}</script>
@@ -567,63 +869,123 @@ def render_index(registry: dict) -> str:
   {header(current=True)}
 
   <main id="main">
-    <section class="hub-intro" aria-labelledby="hub-title">
-      <div class="wrap hub-intro__top">
-        <div class="hub-intro__copy">
-          <h1 class="hub-title" id="hub-title">{e(owner["name"])}</h1>
-          <p class="hub-lede">{e(owner["lede"])}</p>
-          <p class="hub-orient">{e(owner["orient"])}</p>
-          <ul class="hub-routes" role="list" aria-label="Projects by field">{routes}</ul>
-          <p class="hub-avail">{e(owner["availability"])} <a href="#contact">How to reach me</a></p>
+    {hero}
+
+    <section class="mapband" id="map" aria-labelledby="map-title">
+      <div class="wrap">
+        <div class="mapband__head">
+          <h2 class="section-title" id="map-title">How the work connects</h2>
+          <ul class="keys" role="list">{legend}</ul>
         </div>
-        <div class="hub-intro__film">{film_slot(intro, series="Will Cook", size="large", with_text=False, sizes="(min-width: 1024px) 600px, 100vw", loading="eager")}</div>
+        <p class="mapband__key" id="map-key">Lines are areas. Points are projects. Threads join projects that share a subject, a method or a film.</p>
+        <div class="mapband__figure">{plait}</div>
+        <div class="mapband__captions" aria-live="polite">{captions}</div>
       </div>
     </section>
 
-    <section class="hub-projects" id="projects" aria-labelledby="projects-title">
-      <span id="websites" class="hub-alias"></span>
+    <section class="work" id="projects" aria-labelledby="projects-title">
+      <span id="websites" class="hub-alias"></span><span id="work" class="hub-alias"></span>
       <div class="wrap">
-        <div class="hub-projects__head">
-          <div>
-            <h2 class="hub-section-title" id="projects-title">Projects</h2>
-            <p class="hub-projects__lede">{e(registry["projects_lede"])}</p>
-          </div>
-          <button class="hub-projects__all" type="button" data-proj-all aria-expanded="false">Show all videos and code</button>
-        </div>
-        {render_projects(registry)}
+        <h2 class="section-title" id="projects-title">Projects</h2>
+        {areas}
       </div>
     </section>
 
-    <section class="hub-films" id="videos" aria-labelledby="videos-title">
+    <section class="films" id="films" aria-labelledby="films-title">
+      <span id="videos" class="hub-alias"></span>
       <div class="wrap">
-        <div class="hub-films__head">
-          <h2 class="hub-section-title" id="videos-title">Videos</h2>
-          <p class="hub-films__lede">{e(count_line)}</p>
-        </div>
-        {render_videos(registry)}
+        <h2 class="section-title" id="films-title">Every film</h2>
+        <p class="section-lede">{e(films_lede)}</p>
+        {library}
       </div>
     </section>
+
+    {more}
 
     <section class="hub-contact" id="contact" aria-labelledby="contact-title">
       <div class="wrap hub-contact__grid">
-        <h2 class="hub-section-title" id="contact-title">Get in touch</h2>
+        <h2 class="section-title" id="contact-title">Get in touch</h2>
         <div class="hub-contact__text">
           {"".join(f"<p>{e(p)}</p>" for p in owner["invitation"])}
           <ul class="hub-contact__links" role="list">{contact}</ul>
         </div>
       </div>
     </section>
+
+    {glossary_html}
   </main>
 
   <footer class="hub-footer">
     <div class="wrap hub-footer__inner">
-      <p>This page lists every website, film and repository. Each website links back here from its header.</p>
-      <p><a href="https://github.com/wcook04/wcook04.github.io">Source of this page</a> <a href="/sites.json">The list as data</a></p>
+      <p>This page lists every website, film and repository, and how they connect. Each website links back here from its header.</p>
+      <p><a href="https://github.com/wcook04/wcook04.github.io">Source of this page</a> <a href="/catalogue.json">The catalogue as a graph</a> <a href="/sites.json">The list as data</a> <a href="/glossary.json">The terms as data</a></p>
     </div>
   </footer>
 </body>
 </html>
 '''
+
+
+# ---------------------------------------------------------------- the catalogue as a graph
+
+def render_catalogue(registry: dict, glossary: dict) -> str:
+    """Nodes (areas, projects, websites, films, repositories, contributions,
+    terms) and typed edges, from the same data the page is drawn from."""
+    films = {f["id"]: f for f in registry["films"]}
+    owners = owners_of(registry)
+    nodes, edges = [], []
+    for area in registry["areas"]:
+        nodes.append({"id": f"area:{area['id']}", "type": "area", "title": area["title"], "summary": area["blurb"]})
+        for pid in area["items"]:
+            edges.append({"from": f"project:{pid}", "to": f"area:{area['id']}", "type": "in_area"})
+    for pid, owner in owners.items():
+        nodes.append({"id": f"project:{pid}", "type": "project", "title": owner["label"], "name": owner["name"],
+                      "subject": owner.get("subject"), "tagline": owner.get("tagline"),
+                      "summary": owner.get("summary") or owner.get("purpose"), "anchor": f"{HOME}#{pid}",
+                      "aka": owner.get("aka", [])})
+        if owner["kind"] == "site":
+            nodes.append({"id": f"site:{pid}", "type": "website", "title": owner["name"], "url": owner["url"],
+                          "routes": owner.get("routes", [])})
+            edges.append({"from": f"site:{pid}", "to": f"project:{pid}", "type": "website_of"})
+        for fid in owner.get("films", []):
+            edges.append({"from": f"film:{fid}", "to": f"project:{pid}", "type": "film_of"})
+        for rid in owner.get("repos", []):
+            edges.append({"from": f"repo:{rid}", "to": f"project:{pid}", "type": "code_of"})
+    for film in registry["films"]:
+        nodes.append({"id": f"film:{film['id']}", "type": "film", "format": film["format"], "title": film["title"],
+                      "takeaway": film.get("takeaway"), "url": film.get("youtube"),
+                      "seconds": film.get("duration_seconds") or film.get("cut_seconds"),
+                      "status": "published" if film.get("youtube") else "in_preparation",
+                      "edition": "earlier" if is_earlier(film, films) else "current"})
+        for target in film.get("leads_to", []):
+            edges.append({"from": f"film:{film['id']}", "to": f"film:{target}", "type": "leads_to"})
+        if film.get("superseded_by"):
+            edges.append({"from": f"film:{film['id']}", "to": f"film:{film['superseded_by']}", "type": "superseded_by"})
+    for fid in registry.get("intro", {}).get("films", []):
+        edges.append({"from": f"film:{fid}", "to": "home", "type": "introduces"})
+    for repo in registry["repos"]:
+        nodes.append({"id": f"repo:{repo['id']}", "type": "repository", "title": repo["name"], "url": repo["href"],
+                      "summary": repo["description"]})
+    for link in registry.get("links", []):
+        edges.append({"from": f"project:{link['from']}", "to": f"project:{link['to']}", "type": "related", "label": link["label"]})
+    for group in registry.get("collections", []):
+        nodes.append({"id": f"collection:{group['id']}", "type": "collection", "title": group["title"]})
+        for m in group["members"]:
+            edges.append({"from": f"project:{m}", "to": f"collection:{group['id']}", "type": "member_of"})
+        if group.get("film"):
+            edges.append({"from": f"film:{group['film']}", "to": f"collection:{group['id']}", "type": "film_of"})
+    for c in registry.get("contributions", []):
+        nodes.append({"id": f"contribution:{c['repo']}", "type": "contribution", "title": c["upstream"],
+                      "url": GITHUB + c["repo"], "upstream": "https://github.com/" + c["upstream"], "summary": c["what"]})
+    for t in glossary.get("terms", []):
+        nodes.append({"id": f"term:{t['id']}", "type": "term", "title": t["term"], "aliases": t.get("aliases", []),
+                      "preview": t["preview"], "detail": t["detail"], "anchor": f"{HOME}#t-{t['id']}"})
+    nodes.append({"id": "home", "type": "website", "title": "Will Cook", "url": HOME})
+    data = {"schema": "will_cook_catalogue_graph_v1", "updated": registry["updated"],
+            "about": "Generated from sites.json and glossary.json by scripts/build_hub.py; edit those, not this.",
+            "node_types": sorted({n["type"] for n in nodes}), "edge_types": sorted({x["type"] for x in edges}),
+            "nodes": nodes, "edges": edges}
+    return json.dumps(data, ensure_ascii=False, indent=1) + "\n"
 
 
 def render_404(registry: dict) -> str:
@@ -667,7 +1029,7 @@ def render_llms(registry: dict) -> str:
         evidence = "".join(f" [{route['label']}]({route['href']})."
                            for route in site.get("routes", []) if route["href"].startswith(GITHUB))
         lines.append(f"- [{site['name']}]({site['url']}): {site['purpose']}{credit}{evidence}{tail}")
-    lines += ["", "Films, with their YouTube addresses and the website each belongs to, are listed in https://wcook04.github.io/sites.json.",
+    lines += ["", "Every website, film, repository and term, with how they connect, is in https://wcook04.github.io/catalogue.json (a graph of typed nodes and edges, generated from https://wcook04.github.io/sites.json and https://wcook04.github.io/glossary.json).",
               "Use each site's own source links and stated limits when describing its findings.", ""]
     return "\n".join(lines)
 
@@ -749,9 +1111,11 @@ def render_plectis_forward(path: str) -> str:
 '''
 
 
-def outputs(registry: dict) -> dict[str, str]:
+def outputs(registry: dict, glossary: dict | None = None) -> dict[str, str]:
+    glossary = glossary if glossary is not None else load_glossary()
     pages = {
-        "index.html": render_index(registry),
+        "index.html": render_index(registry, glossary),
+        "catalogue.json": render_catalogue(registry, glossary),
         "404.html": render_404(registry),
         "llms.txt": render_llms(registry),
         "agent-guide.md": render_agent_guide(registry),
@@ -779,12 +1143,27 @@ def refresh_plectis_paths() -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="fail if the committed pages are out of date")
+    parser.add_argument("--preview", metavar="DIR",
+                        help="write index.html to DIR with every film in preparation drawn as if it were out")
     parser.add_argument("--refresh-plectis-paths", action="store_true",
                         help=f"rewrite {PLECTIS_PATHS} from the Plectis website's published pages first")
     args = parser.parse_args(argv)
     if args.refresh_plectis_paths:
         refresh_plectis_paths()
     registry = load_registry()
+    if args.preview:
+        global PREVIEW
+        PREVIEW = True
+        out = Path(args.preview)
+        out.mkdir(parents=True, exist_ok=True)
+        (out / "index.html").write_text(render_index(registry), encoding="utf-8")
+        for name in ("assets", "favicon.ico", "sites.json", "glossary.json"):
+            link = out / name
+            if not link.exists() and (ROOT / name).exists():
+                link.symlink_to(ROOT / name)
+        (out / "catalogue.json").write_text(render_catalogue(registry, load_glossary()), encoding="utf-8")
+        print(out / "index.html")
+        return 0
     stale = []
     for name, text in outputs(registry).items():
         path = ROOT / name

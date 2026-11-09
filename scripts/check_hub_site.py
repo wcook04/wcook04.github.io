@@ -28,7 +28,7 @@ SPEC.loader.exec_module(BUILD)
 
 REQUIRED = {
     ".github/workflows/public-site.yml", ".gitignore", ".nojekyll", "README.md",
-    "index.html", "404.html", "sites.json", "llms.txt", "agent-guide.md", "plectis-paths.txt",
+    "index.html", "404.html", "sites.json", "glossary.json", "catalogue.json", "llms.txt", "agent-guide.md", "plectis-paths.txt",
     "robots.txt", "sitemap.xml", "sitemap-home.xml", "favicon.ico",
     "assets/hub.css", "assets/hub.js", "assets/hub-map.js", "assets/theme-init.js", "assets/redirect.js",
     "assets/family/family.css", "assets/favicon.svg", "assets/favicon-32.png",
@@ -196,8 +196,9 @@ def validate(files: dict[str, bytes]) -> list[str]:
             if film.get("youtube") and film["youtube"] not in hrefs:
                 errors.append(f"index.html: released film not linked: {film['title']}")
             if not film.get("youtube"):
-                names = {film["title"], film["short"]}
-                if any(name in text for text in page.link_texts for name in names):
+                # The full title is what must not be a link; a short label
+                # ("CodeMap") is shared with the pair's published film.
+                if any(film["title"] in text for text in page.link_texts):
                     errors.append(f"index.html: a film in preparation has no link: {film['title']}")
         for repo in registry["repos"]:
             if repo["href"] not in hrefs:

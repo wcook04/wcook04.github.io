@@ -70,59 +70,88 @@
   else ready();
 })();
 
-/* The project index (index.html, "Projects"). Each project's line opens
-   beneath itself to show its videos and code; "Show all videos and code" opens every line,
-   which is the whole map. The head script stamps html.scripting, so the
-   stylesheet keeps lines closed from the first paint; without scripting every
-   line is open. A line named in the address (/#zenith) opens on arrival, by
-   CSS (:target) before this runs and by this after. Nothing is stored. */
+/* The terms (index.html, "Terms used on this page"). The build links the first
+   use of each defined term in a block to its definition at the foot of the
+   page, so every definition is one link away without this script. This adds a
+   card beside the word: after a short dwell for a pointer, at once for keys
+   (focus), on a tap for touch. The card stays while the pointer is on it, Esc
+   closes it, and it reads its words from the definition already on the page,
+   so the two can never disagree. Nothing is fetched or stored. */
 (function () {
-  var map = document.querySelector('[data-hub-map]');
-  if (!map) return;
-  var rows = Array.prototype.slice.call(map.querySelectorAll('.proj'));
-  var all = document.querySelector('[data-proj-all]');
-  var LABEL_OPEN = 'Show all videos and code', LABEL_CLOSE = 'Hide all videos and code';
+  var card = null, owner = null, openTimer = 0, closeTimer = 0;
+  var fine = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  function isOpen(row) { return row.classList.contains('is-open'); }
-  function set(row, open) {
-    var button = row.querySelector('.proj__toggle');
-    row.classList.toggle('is-open', open);
-    row.classList.toggle('is-shut', !open);
-    if (button) {
-      button.setAttribute('aria-expanded', open ? 'true' : 'false');
-      var verb = button.querySelector('.proj__verb');
-      if (verb) verb.textContent = open ? 'Hide' : 'Show';
-    }
+  function definition(id) {
+    var def = document.getElementById('t-' + id);
+    if (!def) return null;
+    var dt = def.querySelector('dt'), pre = def.querySelector('.def__preview'), det = def.querySelector('.def__detail');
+    return { term: dt ? dt.textContent : id, preview: pre ? pre.textContent : '', detail: det ? det.textContent : '' };
   }
-  function sync() {
-    if (!all) return;
-    var every = rows.every(isOpen);
-    all.setAttribute('aria-expanded', every ? 'true' : 'false');
-    all.textContent = every ? LABEL_CLOSE : LABEL_OPEN;
+  function build() {
+    card = document.createElement('div');
+    card.className = 'term-card';
+    card.setAttribute('role', 'tooltip');
+    card.id = 'term-card';
+    card.addEventListener('pointerenter', function () { clearTimeout(closeTimer); });
+    card.addEventListener('pointerleave', function () { closeSoon(); });
+    document.body.appendChild(card);
   }
-  function fromAddress() {
-    var id = '';
-    try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) {}
-    var row = id ? document.getElementById(id) : null;
-    if (row && row.classList.contains('proj')) { set(row, true); sync(); }
+  function place(link) {
+    var r = link.getBoundingClientRect(), w = card.offsetWidth, h = card.offsetHeight;
+    var left = Math.max(12, Math.min(window.innerWidth - w - 12, r.left + r.width / 2 - w / 2));
+    var top = r.bottom + 10;
+    if (top + h > window.innerHeight - 12 && r.top - h - 10 > 12) top = r.top - h - 10;
+    card.style.left = (left + window.scrollX) + 'px';
+    card.style.top = (top + window.scrollY) + 'px';
   }
+  function open(link) {
+    var d = definition(link.getAttribute('data-term'));
+    if (!d) return;
+    if (!card) build();
+    if (owner && owner !== link) owner.removeAttribute('aria-expanded');
+    owner = link;
+    card.innerHTML = '';
+    var t = document.createElement('p'); t.className = 'term-card__term'; t.textContent = d.term;
+    var p = document.createElement('p'); p.className = 'term-card__preview'; p.textContent = d.preview;
+    var q = document.createElement('p'); q.className = 'term-card__detail'; q.textContent = d.detail;
+    card.appendChild(t); card.appendChild(p); card.appendChild(q);
+    link.setAttribute('aria-describedby', 'term-card');
+    link.setAttribute('aria-expanded', 'true');
+    card.classList.remove('is-open');
+    place(link);
+    requestAnimationFrame(function () { card.classList.add('is-open'); });
+  }
+  function close() {
+    clearTimeout(openTimer);
+    if (!card || !owner) return;
+    card.classList.remove('is-open');
+    owner.removeAttribute('aria-expanded');
+    owner.removeAttribute('aria-describedby');
+    owner = null;
+  }
+  function closeSoon() { clearTimeout(closeTimer); closeTimer = setTimeout(close, 160); }
 
-  rows.forEach(function (row) {
-    var button = row.querySelector('.proj__toggle');
-    var head = row.querySelector('.proj__head');
-    if (button) button.addEventListener('click', function () { set(row, !isOpen(row)); sync(); });
-    // The whole line opens it, except its links, and except a reader selecting its words.
-    if (head) head.addEventListener('click', function (event) {
-      if (event.target.closest && event.target.closest('a, button')) return;
-      try { if (String(window.getSelection())) return; } catch (e) {}
-      set(row, !isOpen(row)); sync();
-    });
+  document.addEventListener('pointerover', function (event) {
+    var link = event.target.closest && event.target.closest('a.term');
+    if (!link || !fine) return;
+    clearTimeout(closeTimer); clearTimeout(openTimer);
+    openTimer = setTimeout(function () { open(link); }, owner ? 0 : 380);
   });
-  if (all) all.addEventListener('click', function () {
-    var open = !rows.every(isOpen);
-    rows.forEach(function (row) { set(row, open); });
-    sync();
+  document.addEventListener('pointerout', function (event) {
+    var link = event.target.closest && event.target.closest('a.term');
+    if (!link) return;
+    clearTimeout(openTimer);
+    closeSoon();
   });
-  window.addEventListener('hashchange', fromAddress);
-  fromAddress();
+  document.addEventListener('focusin', function (event) {
+    var link = event.target.closest && event.target.closest('a.term');
+    if (link) open(link); else if (owner && !(card && card.contains(event.target))) close();
+  });
+  document.addEventListener('click', function (event) {
+    var link = event.target.closest && event.target.closest('a.term');
+    if (link && !fine && owner !== link) { event.preventDefault(); open(link); return; }
+    if (!link && card && !card.contains(event.target)) close();
+  });
+  document.addEventListener('keydown', function (event) { if (event.key === 'Escape') close(); });
+  window.addEventListener('resize', close);
 })();
