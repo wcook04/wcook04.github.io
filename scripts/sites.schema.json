@@ -1,0 +1,1144 @@
+{
+  "type": "object",
+  "properties": {
+    "schema": {
+      "const": "will_cook_site_family_v3"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date"
+    },
+    "about": {
+      "type": "string"
+    },
+    "owner": {
+      "$ref": "#/$defs/owner"
+    },
+    "presentation": {
+      "type": "object",
+      "properties": {
+        "hero": {
+          "type": "object",
+          "properties": {
+            "headline": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "intro_action": {
+              "type": "string"
+            },
+            "index_action": {
+              "type": "string"
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "projects_lede": {
+          "type": "string"
+        },
+        "home_resource": {
+          "type": "string",
+          "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+        },
+        "preferred_video_platform": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "hero",
+        "home_resource",
+        "preferred_video_platform"
+      ],
+      "additionalProperties": false
+    },
+    "projects": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/project"
+      }
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/resource"
+      }
+    },
+    "areas": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/area"
+      }
+    },
+    "topics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/topic"
+      }
+    },
+    "collections": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/collection"
+      }
+    },
+    "people": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/person"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relationship"
+      }
+    },
+    "glossary_file": {
+      "const": "glossary.json"
+    }
+  },
+  "required": [
+    "schema",
+    "updated",
+    "about",
+    "owner",
+    "presentation",
+    "projects",
+    "resources",
+    "areas",
+    "topics",
+    "collections",
+    "people",
+    "relationships",
+    "glossary_file"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:plectis:site-family:v3",
+  "title": "Will Cook site family v3",
+  "$defs": {
+    "term_ref": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string",
+          "minLength": 1
+        },
+        "term_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+        },
+        "surface": {
+          "type": "string",
+          "minLength": 1
+        },
+        "occurrence": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "field",
+        "term_id",
+        "surface",
+        "occurrence"
+      ],
+      "additionalProperties": false
+    },
+    "credit": {
+      "type": "object",
+      "properties": {
+        "person_id": {
+          "type": "string",
+          "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "person_id",
+        "role"
+      ],
+      "additionalProperties": false
+    },
+    "contact": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "href": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "label",
+        "href"
+      ],
+      "additionalProperties": false
+    },
+    "owner": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "const": "person:will-cook"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "home": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://"
+        },
+        "lede": {
+          "type": "string"
+        },
+        "contact": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/contact"
+          }
+        },
+        "invitation": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "orient": {
+          "type": "string"
+        },
+        "availability": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "home",
+        "contact"
+      ],
+      "additionalProperties": false
+    },
+    "person": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+        },
+        "type": {
+          "enum": [
+            "person",
+            "organisation"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "name"
+      ],
+      "additionalProperties": false
+    },
+    "publication": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1
+        },
+        "state": {
+          "enum": [
+            "in_preparation",
+            "scheduled",
+            "published",
+            "unlisted",
+            "private",
+            "withdrawn"
+          ]
+        },
+        "url": {
+          "oneOf": [
+            {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "preferred": {
+          "type": "boolean"
+        },
+        "duration_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "thumbnail_stem": {
+          "type": "string",
+          "minLength": 1
+        },
+        "thumbnail_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://"
+        },
+        "published_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "published_on": {
+          "type": "string",
+          "format": "date"
+        },
+        "version": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "platform",
+        "state",
+        "url"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "enum": [
+                  "published",
+                  "unlisted"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https?://"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "in_preparation"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "url": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "chapter": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "end_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "publication_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+        },
+        "related_resources": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "start_seconds"
+      ],
+      "additionalProperties": false
+    },
+    "project": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "short": {
+          "type": "string"
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "credit": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "tagline": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "line": {
+          "type": "string"
+        },
+        "plain": {
+          "type": "string"
+        },
+        "front_label": {
+          "type": "string"
+        },
+        "way_in": {
+          "type": "string"
+        },
+        "capture": {
+          "type": "string"
+        },
+        "capture_caption": {
+          "type": "string"
+        },
+        "thumbnail": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "collection": {
+              "type": "string"
+            },
+            "index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "field": {
+              "type": "string"
+            },
+            "route_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "owner": {
+              "type": "string",
+              "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+            },
+            "file": {
+              "type": "string"
+            },
+            "json_pointer": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "aka": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "status": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "term_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/term_ref"
+          }
+        },
+        "credits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/credit"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "slug",
+        "name",
+        "label",
+        "term_refs"
+      ],
+      "additionalProperties": false
+    },
+    "resource": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "short": {
+          "type": "string"
+        },
+        "takeaway": {
+          "type": "string"
+        },
+        "poster": {
+          "type": "string"
+        },
+        "recording_id": {
+          "type": "string"
+        },
+        "availability_note": {
+          "type": "string"
+        },
+        "edition_label": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+        },
+        "type": {
+          "enum": [
+            "video",
+            "website",
+            "repository",
+            "paper",
+            "link"
+          ]
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "collection": {
+              "type": "string"
+            },
+            "index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "field": {
+              "type": "string"
+            },
+            "route_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "owner": {
+              "type": "string",
+              "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+            },
+            "file": {
+              "type": "string"
+            },
+            "json_pointer": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "term_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/term_ref"
+          }
+        },
+        "credits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/credit"
+          }
+        },
+        "publications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publication"
+          }
+        },
+        "format": {
+          "enum": [
+            "short",
+            "long"
+          ]
+        },
+        "cut_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "poster_provisional": {
+          "type": "boolean"
+        },
+        "edition": {
+          "enum": [
+            "current",
+            "earlier"
+          ]
+        },
+        "recorded_on": {
+          "type": "string",
+          "format": "date"
+        },
+        "chapters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/chapter"
+          }
+        },
+        "repository_kind": {
+          "enum": [
+            "own",
+            "contribution_fork",
+            "earlier",
+            "retired",
+            "upstream"
+          ]
+        },
+        "upstream": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://"
+        },
+        "paper_role": {
+          "enum": [
+            "original",
+            "research_record",
+            "specialist",
+            "exposition",
+            "earlier_study",
+            "study"
+          ]
+        },
+        "bibliographic_title": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "title_is_descriptive": {
+          "type": "boolean"
+        },
+        "pages": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "doi": {
+          "type": "string"
+        },
+        "link_role": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "id",
+        "slug",
+        "type",
+        "title",
+        "aliases",
+        "publications",
+        "term_refs"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "video"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "format",
+              "takeaway",
+              "chapters"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "repository"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "repository_kind",
+              "description"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "paper"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "paper_role",
+              "title_is_descriptive"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "repository_kind": {
+                "const": "contribution_fork"
+              }
+            },
+            "required": [
+              "repository_kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "upstream"
+            ]
+          }
+        }
+      ]
+    },
+    "area": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "blurb": {
+          "type": "string"
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "collection": {
+              "type": "string"
+            },
+            "index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "field": {
+              "type": "string"
+            },
+            "route_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "owner": {
+              "type": "string",
+              "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+            },
+            "file": {
+              "type": "string"
+            },
+            "json_pointer": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "slug",
+        "title"
+      ],
+      "additionalProperties": false
+    },
+    "topic": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "question": {
+          "type": "string"
+        },
+        "area_ref": {
+          "type": "string",
+          "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+        },
+        "at": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "items": false,
+          "minItems": 2
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "collection": {
+              "type": "string"
+            },
+            "index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "field": {
+              "type": "string"
+            },
+            "route_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "owner": {
+              "type": "string",
+              "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+            },
+            "file": {
+              "type": "string"
+            },
+            "json_pointer": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "term_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/term_ref"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "slug",
+        "label",
+        "area_ref"
+      ],
+      "additionalProperties": false
+    },
+    "collection": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string"
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "collection": {
+              "type": "string"
+            },
+            "index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "field": {
+              "type": "string"
+            },
+            "route_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "owner": {
+              "type": "string",
+              "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+            },
+            "file": {
+              "type": "string"
+            },
+            "json_pointer": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "term_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/term_ref"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "slug",
+        "title"
+      ],
+      "additionalProperties": false
+    },
+    "relationship": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+        },
+        "from": {
+          "type": "string",
+          "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+        },
+        "to": {
+          "type": "string",
+          "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+        },
+        "type": {
+          "enum": [
+            "resource_for",
+            "leads_to",
+            "superseded_by",
+            "in_area",
+            "in_topic",
+            "member_of",
+            "introduces",
+            "available_through",
+            "evidence_for",
+            "listed_in",
+            "worked_example",
+            "supports_video_stage",
+            "related_application",
+            "related",
+            "derived_from"
+          ]
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "activation": {
+          "enum": [
+            "immediate",
+            "when_target_is_published"
+          ]
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "collection": {
+              "type": "string"
+            },
+            "index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "field": {
+              "type": "string"
+            },
+            "route_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "owner": {
+              "type": "string",
+              "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+            },
+            "file": {
+              "type": "string"
+            },
+            "json_pointer": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "to",
+        "type"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "resource_for"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "role"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "superseded_by"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "activation"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "$comment": "Schema validates shape. catalogue_v3.semantic_errors validates reference integrity, typed endpoints, replacement cycles, publication states, chapter timebases, local assets and explicit glossary surfaces."
+}

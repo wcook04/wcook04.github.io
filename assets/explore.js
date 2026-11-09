@@ -1,403 +1,170 @@
-/* The explorer (index.html, the first screen): the work as topics woven
-   together on a night stage, read in three levels by the panel beside it.
-
-   Levels: every topic; one topic, whose projects bloom around its knot; one
-   project, whose short film, full video, website and code bloom around it.
-   The address names the level (#t=<topic>, #p=<project>), so a view can be
-   shared and Back works; Esc or an empty click goes up a level. Pointing at a
-   topic on the stage or at its row in the panel lights the same threads, so
-   the two read as one instrument. Small beads travel the threads to show
-   that the work is joined; they stop under reduced motion, Save-Data, in a
-   hidden tab or with the stage out of view.
-
-   The stage is static SVG written by scripts/build_hub.py, and the panel's
-   levels are already in the HTML; without this script the panel shows every
-   topic, each linking to its projects in the list below. Interaction model
-   adapted from the Plectis maths universe map (ai_workflow
-   sites/microcosm/maths/assets/universe.js: a panel in three levels, hover
-   previews, a click pins, Esc goes back, an addressable view); the beads from
-   this site's earlier map (the Plectis film map's cables, after Magic UI's
-   AnimatedBeam, MIT). Nothing is fetched or stored but a session flag. */
+/* Question-led explorer: native links, explicit states, progressive motion. */
 (function () {
   'use strict';
-  var root = document.getElementById('explore');
-  var dataEl = document.getElementById('ex-data');
-  if (!root || !dataEl || !window.requestAnimationFrame) return;
-  var svg = root.querySelector('[data-ex-stage]');
-  var panel = root.querySelector('[data-ex-panel]');
-  var world = svg.querySelector('.ex-world');
-  var bloomG = svg.querySelector('.ex-bloom');
-  var flowG = svg.querySelector('.ex-flow');
-  var data = JSON.parse(dataEl.textContent);
-  var NS = 'http://www.w3.org/2000/svg';
-  var topicById = {}, topicEl = {}, homeOf = {};
-  data.topics.forEach(function (t) {
-    topicById[t.id] = t;
-    t.items.forEach(function (p) { (homeOf[p] = homeOf[p] || []).push(t.id); });
+  var source=document.getElementById('explorer-data');
+  if(!source||!window.ExplorerModel)return;
+  var data=JSON.parse(source.textContent),M=window.ExplorerModel;
+  var main=document.getElementById('main'),homeHTML=main.innerHTML;
+  var popover=document.getElementById('glossary-card'),dialog=document.getElementById('film-dialog');
+  var terms=Object.fromEntries(data.terms.map(function(t){return[t.id,t];}));
+  var state=M.resolve(data,location.hash),currentHash='',lastFocus={},activeTerm=null,glossaryTimer=0,ignoreTermFocus=false;
+  var filmFilters={status:'all',history:false,format:'all'},projectQuery='';
+  var motion=window.matchMedia('(prefers-reduced-motion: reduce)'),pendingTransition=null,lastFilmOpener=null,journeyObserver=null,navSerial=0;
+  document.documentElement.classList.add('studio-root');
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function clock(f){var s=f.duration_seconds||f.cut_seconds;return s?Math.floor(s/60)+':'+String(s%60).padStart(2,'0'):'';}
+  function object(kind,cls){return '<div class="focus-object '+(cls||'')+'">'+data.objects[kind]+'</div>';}
+  function byDoor(id){return data.config.doors.find(function(d){return d.id===id;});}
+  function routeLink(route,text,cls,parent){return '<a href="#'+esc(route)+'" data-route="'+esc(route)+'"'+(parent?' data-parent="'+esc(parent)+'"':'')+(cls?' class="'+cls+'"':'')+'>'+text+'</a>';}
+  function external(url,text,cls){return '<a href="'+esc(url)+'" target="_blank" rel="noopener"'+(cls?' class="'+cls+'"':'')+'>'+text+' <span aria-hidden="true">↗</span></a>';}
+  function crumb(parent,text){return '<nav class="breadcrumb" aria-label="You are here"><button type="button" class="back-button" data-up="'+esc(parent)+'"><span aria-hidden="true">←</span> '+esc(text)+'</button></nav>';}
+  function termMarkup(item,field){
+    var text=item[field]||'',spans=[];
+    (item.term_refs||[]).forEach(function(b){if(b.field!==field||!terms[b.term_id])return;var pos=-1;for(var i=0;i<(b.occurrence||1);i++){pos=text.indexOf(b.surface,pos+1);if(pos<0)return;}spans.push({start:pos,end:pos+b.surface.length,id:b.term_id});});
+    spans.sort(function(a,b){return a.start-b.start;});var out='',end=0;
+    spans.forEach(function(s){if(s.start<end)return;out+=esc(text.slice(end,s.start))+'<button class="term-trigger" type="button" data-term="'+esc(s.id)+'" aria-expanded="false" aria-controls="glossary-card">'+esc(text.slice(s.start,s.end))+'</button>';end=s.end;});
+    return out+esc(text.slice(end));
+  }
+  function filmAction(f,label,cls){return f.youtube?external(f.youtube,esc(label),cls):'<button type="button" class="'+(cls||'text-button')+'" data-film="'+esc(f.id)+'">'+esc(label)+'</button>';}
+  function filmVisual(f,compact){
+    var stem=f.still||f.poster,image=stem?'<img src="'+esc(asset(stem+'-640.webp'))+'" width="1280" height="720" alt="" loading="'+(compact?'lazy':'eager')+'" decoding="async">':'<span class="film-blank">'+esc(f.short||f.title)+'</span>';
+    var inner=image+'<span class="film-visual__shade"></span><span class="film-visual__action">'+(f.youtube?'<span aria-hidden="true">▶</span> Watch':'Read the transcript')+'</span><span class="film-time">'+clock(f)+'</span>';
+    if(f.youtube)return '<a class="film-visual" href="'+esc(f.youtube)+'" target="_blank" rel="noopener" aria-label="Watch '+esc(f.title)+'">'+inner+'</a>';
+    return '<button class="film-visual is-coming" data-film="'+esc(f.id)+'" type="button" aria-label="Read the recorded transcript: '+esc(f.title)+'">'+inner+'<span class="film-availability">Video coming soon</span></button>';
+  }
+  function projectRoute(pid,via,film){return M.hashFor({view:'project',id:pid,via:via||M.parentOf(data,pid),film:film||null});}
+  function projectOption(pid,via){var p=data.projects[pid];return routeLink(projectRoute(pid,via),'<span><strong>'+esc(p.choice)+'</strong><small>'+esc(p.name)+'</small></span><span class="choice-arrow" aria-hidden="true">↗</span>','project-choice',via);}
+  function connectionLinks(door){var others=[];data.config.bridges.forEach(function(b){var to=b.from===door?b.to:b.to===door?b.from:null;if(to)others.push(routeLink('d='+to,'<span>'+esc(b.label)+'</span> <span aria-hidden="true">→</span>','related-route'));});return others.length?'<span class="eyebrow">Connected ideas</span>'+others.join(''):'';}
+  function doorView(d){
+    var groups='';if(d.id==='proofs')groups='<div class="choice-group"><h2>Read a paper beside its proof</h2>'+d.projects.slice(0,3).map(function(p){return projectOption(p,d.id);}).join('')+'</div><div class="choice-group"><h2>See what was checked</h2>'+d.projects.slice(3).map(function(p){return projectOption(p,d.id);}).join('')+'</div>';
+    var tour=d.id==='explaining'?routeLink('journey','Follow one real example <span aria-hidden="true">→</span>','journey-invitation'):'';
+    return '<section class="door-view ink-'+d.ink+'">'+crumb('home','All questions')+'<div class="door-layout"><div class="door-focus"><p class="eyebrow">Choose a way in</p><h1 tabindex="-1">'+esc(d.question)+'</h1><div data-shape="'+d.id+'">'+object(d.object)+'</div><p class="focus-caption">'+esc(d.caption)+'</p>'+tour+'</div><div class="project-choices">'+(groups||d.projects.map(function(p){return projectOption(p,d.id);}).join(''))+'</div></div><div class="local-connections">'+connectionLinks(d.id)+'</div></section>';
+  }
+  function websiteAction(p){
+    if(!p.url)return '';var label='Open the website',url=p.url;
+    if(['quartic','lean-exposition','proof-reader'].indexOf(p.id)>=0)label='Open the reader';
+    if(p.id==='maths')label='Explore the maths map';if(p.id==='atlas')label='Explore Atlas';if(p.id==='formal-verification')label='Explore the component map';if(p.id==='code-ontology-bridge')label='Explore the study';
+    if(p.id==='zenith'&&p.routes&&p.routes[0]){label='Read this study';url=p.routes[0].href;}
+    return external(url,esc(label),'resource-action');
+  }
+  function resourceDetails(p){
+    var routes=(p.routes||[]).map(function(r){return '<li>'+external(r.href,esc(r.label))+'</li>';}).join('');
+    var repos=p.repo_records.map(function(r){return '<li>'+external(r.href,esc(r.name))+'<span>'+esc(r.description||'')+'</span></li>';}).join('');
+    var films=p.films.map(function(fid){var f=data.films[fid];return '<li>'+filmAction(f,f.title+' · '+clock(f),'inline-action')+'</li>';}).join('');
+    return '<details class="resource-details"><summary>All resources, credits & details <span aria-hidden="true">+</span></summary><div class="resource-details__grid">'+(routes?'<div><h3>Read & explore</h3><ul>'+routes+'</ul></div>':'')+(repos?'<div><h3>Repositories</h3><ul>'+repos+'</ul></div>':'')+'<div><h3>Films</h3><ul>'+films+'</ul></div><div><h3>About this work</h3><p>'+termMarkup(p,'summary')+'</p>'+(p.credit?'<p>'+esc(p.credit)+'</p>':'')+(p.status?'<p>'+esc(p.status)+'</p>':'')+'</div></div></details>';
+  }
+  function smallInteraction(p){
+    var sets={proofs:[['paper','Paper statement'],['proof','Linked proof']],trace:[['read','Read'],['edit','Edit'],['test','Test']],code:[['parse','Parse'],['resolve','Resolve'],['index','Index']],bugs:[['missed','Missed bug'],['example','Next prompt']],funnel:[['proof','Proof'],['paper','Paper'],['film','Film']],magnets:[['arrangement-a','One arrangement'],['arrangement-b','Another arrangement']],quantum:[['inputs','The input'],['queries','Checks of the input']]};
+    var captions={proofs:'Select either side to follow the link.',trace:'A trace connects each command to its saved output.',code:'Select a function to follow its connections.',bugs:'The next prompt includes a record of bugs missed earlier.',funnel:'One result, rewritten for a different way of understanding it.',magnets:'The question is how different two near-best arrangements can be.',quantum:'A query is one check of the input. The result compares how many are needed.'};
+    var set=sets[p.object];if(!set)return '<p class="demo-caption">Start with the map, then follow a particular problem.</p>';
+    return '<div class="specimen-controls" aria-label="Explore the illustration">'+set.map(function(x,i){return '<button type="button" data-demo="'+x[0]+'" aria-pressed="'+(i===0)+'">'+x[1]+'</button>';}).join('')+'</div><p class="demo-caption">'+captions[p.object]+'</p>';
+  }
+  function projectConnections(p,via){
+    var result=[];data.links.forEach(function(l){var to=l.from===p.id?l.to:l.to===p.id?l.from:null;if(to&&data.projects[to])result.push(routeLink(projectRoute(to),'<span>'+esc(l.label)+'</span><strong>'+esc(data.projects[to].name)+' <span aria-hidden="true">→</span></strong>','related-route'));});
+    data.config.doors.forEach(function(d){if(d.id!==via&&d.projects.indexOf(p.id)>=0)result.push(routeLink('d='+d.id,'<span>Another way into this work</span><strong>'+esc(d.question)+' →</strong>','related-route'));});
+    return result.length?'<span class="eyebrow">Connected work</span>'+result.slice(0,3).join(''):'';
+  }
+  function projectView(s){
+    var p=data.projects[s.id],d=byDoor(s.via),f=M.lead(data,s),shorts=M.tasters(data,p.id),next=M.onward(data,f);
+    var reader=!!(f&&/reader|sk-website/.test(f.id)&&['quartic','lean-exposition'].indexOf(p.id)>=0);
+    var question=reader?(p.id==='quartic'?'Read the quantum paper beside its proof.':'Read the spin-glass paper beside its proof.'):p.question;
+    var tabs=shorts.length>1?'<div class="taster-tabs" aria-label="Choose an introduction">'+shorts.map(function(t){return '<button type="button" data-taster="'+t.id+'" aria-pressed="'+(t.id===f.id)+'">'+esc(M.filmLabel(t))+'</button>';}).join('')+'</div>':'';
+    var continuation=next.length?'<div class="continuations"><p class="eyebrow">Continue with</p>'+next.map(function(n){return filmAction(n,(n.id==='long-lean-readers'?'Full reader walkthrough':'Full explanation')+' · '+clock(n),'continue-action');}).join('')+'</div>':'';
+    var code=p.repo_records.length?external(p.repo_records[0].href,'Open the code','resource-action'):'';
+    var media=f?'<div class="project-media">'+tabs+filmVisual(f,false)+'<div class="film-caption"><p class="eyebrow">'+(f.format==='short'?'Short introduction':'Full explanation')+' · '+clock(f)+'</p><p>'+termMarkup(f,'takeaway')+'</p></div>'+continuation+'</div>':'';
+    var kind=reader?'proofs':p.object,initial={proofs:'paper',trace:'read',code:'parse',bugs:'missed',funnel:'proof',magnets:'arrangement-a',quantum:'inputs'}[kind]||'';
+    var parent=d&&d.projects.length>1?'d='+s.via:'home',parentLabel=d&&d.projects.length>1?d.question:'All questions';
+    return '<section class="project-view ink-'+p.area+'" data-project="'+p.id+'" data-demo-state="'+initial+'">'+crumb(parent,parentLabel)+'<div class="project-layout"><div class="project-story"><p class="eyebrow">'+esc(p.name)+'</p><h1 tabindex="-1">'+esc(question)+'</h1><p class="project-answer">'+(reader?esc(p.plain):termMarkup(p,'line'))+'</p><div class="interactive-specimen" data-shape="'+s.via+'">'+object(kind)+'</div>'+smallInteraction({...p,object:kind})+'<div class="resource-actions">'+websiteAction(p)+code+'</div></div>'+media+'</div>'+resourceDetails(p)+'<div class="local-connections">'+projectConnections(p,s.via)+'</div></section>';
+  }
+  function searchRows(){
+    var results=M.search(data,projectQuery);if(!results.length)return '<div class="empty-result"><h2>No matching project.</h2><p>Try a subject or a tool name.</p><button type="button" data-clear-search>Show all projects</button></div>';
+    return results.map(function(p){return routeLink(projectRoute(p.id),'<span class="index-number">'+String(Object.keys(data.projects).indexOf(p.id)+1).padStart(2,'0')+'</span><span><strong>'+esc(p.choice)+'</strong><small>'+esc(p.name)+' · '+esc(p.subject||'')+'</small></span><span aria-hidden="true">↗</span>','project-index-row ink-'+p.area);}).join('');
+  }
+  function allView(){return '<section class="index-view">'+crumb('home','All questions')+'<div class="index-heading"><h1 tabindex="-1">All the work.</h1><label class="search-label">Find a subject, project or repository<input id="project-search" type="search" placeholder="Try quantum, Lean, NVIDIA…" value="'+esc(projectQuery)+'" autocomplete="off"></label></div><div class="project-index" id="project-results">'+searchRows()+'</div><div class="index-links">'+routeLink('terms','Browse the glossary →')+routeLink('about','Contributions & contact →')+'<a href="all.html">Complete static catalogue →</a></div></section>';}
+  function filmRow(f){
+    var next=M.onward(data,f),owners=Object.values(data.projects).filter(function(p){return p.films.indexOf(f.id)>=0;});
+    return '<article class="film-row">'+filmVisual(f,true)+'<div><p class="eyebrow">'+(f.format==='short'?'Introduction':'Full explanation')+' · '+clock(f)+(f.youtube?'':' · Coming soon')+'</p><h2>'+filmAction(f,f.title,'film-title-button')+'</h2><p class="film-row-takeaway">'+termMarkup(f,'takeaway')+'</p>'+(next.length?'<div class="film-row-onward"><span>Then</span>'+next.map(function(n){return filmAction(n,n.short+' · '+clock(n),'inline-action');}).join('')+'</div>':'')+'<div class="film-projects">'+owners.map(function(owner){return routeLink(M.routeForFilm(data,owner.id,f.id),'Open '+esc(owner.name)+' →','film-project-link');}).join('')+'</div></div></article>';
+  }
+  function filmRows(){return M.filmList(data,filmFilters.status,filmFilters.history,filmFilters.format).map(filmRow).join('')||'<p class="empty-result">No films match those filters.</p>';}
+  function filmsView(){return '<section class="films-view">'+crumb('home','All questions')+'<div class="index-heading"><h1 tabindex="-1">Choose something to watch.</h1><p>Start with an introduction. Follow it into the full explanation.</p></div><div class="film-filters"><label>Show<select id="film-status"><option value="all"'+(filmFilters.status==='all'?' selected':'')+'>Published & forthcoming</option><option value="published"'+(filmFilters.status==='published'?' selected':'')+'>Published only</option></select></label><label>Length<select id="film-format"><option value="all"'+(filmFilters.format==='all'?' selected':'')+'>All films</option><option value="short"'+(filmFilters.format==='short'?' selected':'')+'>Introductions</option><option value="long"'+(filmFilters.format==='long'?' selected':'')+'>Full explanations</option></select></label><label class="check-label"><input type="checkbox" id="film-history"'+(filmFilters.history?' checked':'')+'> Include earlier editions</label><span id="film-count"></span></div><div id="film-results">'+filmRows()+'</div></section>';}
+  function introView(){
+    var f=data.films['short-introduction'],n=data.films['long-introduction'];var existing=Object.values(data.films).filter(function(x){return /introduction/.test(x.id)&&x.youtube&&!M.earlier(data,x);}).slice(-1)[0];
+    return '<section class="intro-view">'+crumb('home','All questions')+'<div class="intro-heading"><p class="eyebrow">Will Cook</p><h1 tabindex="-1">The work, and how it fits together.</h1><p>'+esc(data.owner.lede)+'</p></div><div class="intro-films"><article><h2>A short introduction</h2>'+filmVisual(f,false)+'<p>'+esc(f.takeaway)+'</p></article><article><h2>The full tour</h2>'+filmVisual(n,false)+'<p>'+esc(n.takeaway)+'</p></article></div>'+(existing?'<p class="published-intro">Already available: '+filmAction(existing,existing.title+' · '+clock(existing),'inline-action')+'</p>':'')+'</section>';
+  }
+  function aboutView(){return '<section class="about-view">'+crumb('home','All questions')+'<div class="about-heading"><p class="eyebrow">About Will Cook</p><h1 tabindex="-1">Making the work understandable.</h1><p>'+esc(data.owner.lede)+'</p><p>'+esc(data.owner.availability)+'</p><div class="contact-links">'+data.owner.contact.map(function(c){return external(c.href,esc(c.label),'resource-action');}).join('')+'</div></div><details class="contributions-details"><summary>Contributions to other projects <span>+</span></summary><ul>'+data.contributions.map(function(c){return '<li><strong>'+external('https://github.com/wcook04/'+c.repo,esc(c.upstream))+'</strong><p>'+esc(c.what)+'</p>'+(c.evidence?external(c.evidence.href,esc(c.evidence.label)):'')+'</li>';}).join('')+'</ul></details><details class="contributions-details"><summary>Earlier work <span>+</span></summary><ul>'+data.earlier.map(function(x){return '<li>'+external(x.href,esc(x.name))+'<p>'+esc(x.note)+'</p></li>';}).join('')+'</ul></details></section>';}
+  function termRows(query){return data.terms.filter(function(t){return M.fold([t.term,...(t.aliases||[])].join(' ')).includes(M.fold(query));}).sort(function(a,b){return a.term.localeCompare(b.term);}).map(function(t){return '<details class="term-definition" id="term-'+esc(t.id)+'"><summary>'+esc(t.term)+' <span aria-hidden="true">+</span></summary><p>'+esc(t.preview)+'</p><p>'+esc(t.detail)+'</p></details>';}).join('');}
+  function termsView(){return '<section class="terms-view">'+crumb('home','All questions')+'<div class="index-heading"><h1 tabindex="-1">A word in context.</h1><label class="search-label">Find a term<input type="search" id="term-search" placeholder="Try Lean, query or commit…"></label></div><div id="term-results">'+termRows('')+'</div></section>';}
+  function asset(path){return (data.embeddedAssets||{})[path]||path;}
+  function journeyView(){
+    var p=data.projects.quartic,full=data.films['quartic-query'];
+    var steps=[
+      {title:'Start with a question.',copy:'How many checks of the input does a quantum computer need?',visual:object('quantum'),link:external(p.routes[0].href,'Read OpenAI’s paper','resource-action')},
+      {title:'Follow the proof.',copy:'The formal proof records the definitions and steps in Lean.',visual:object('proofs'),link:external(p.repo_records[0].href,'Open the Lean proof','resource-action')},
+      {title:'Make a way to read it.',copy:'The reader places explanations beside the corresponding Lean declarations.',visual:'<img src="'+esc(asset('assets/sites/quartic-light-720.webp'))+'" width="720" height="395" alt="The supplied Quartic Reader website capture" loading="lazy">',link:external(p.url,'Open Quartic Reader','resource-action')},
+      {title:'Explain it in a film.',copy:'The same result becomes a narrated mathematical explanation.',visual:filmVisual(full,true),link:filmAction(full,'Watch the full explanation · '+clock(full),'resource-action')}
+    ];
+    return '<section class="journey-view ink-explain">'+crumb('d=explaining','Making explanations')+'<div class="journey-heading"><p class="eyebrow">One worked example · Quantum computing</p><h1 tabindex="-1">Follow one result.</h1><p>Paper, proof, reader and film. Each gives you a different way in.</p></div><div class="journey-layout"><div class="journey-sticky" aria-hidden="true">'+steps.map(function(s,i){return '<div class="journey-frame'+(i===0?' is-current':'')+'" data-journey-frame="'+i+'"><div class="journey-frame-body">'+s.visual+'</div><span class="journey-progress">'+String(i+1).padStart(2,'0')+' / 04</span></div>';}).join('')+'</div><div class="journey-steps">'+steps.map(function(s,i){return '<article class="journey-step" id="journey-step-'+i+'" data-journey-step="'+i+'"><span class="eyebrow">'+String(i+1).padStart(2,'0')+' / 04</span><h2>'+s.title+'</h2><p>'+s.copy+'</p><div class="journey-inline-visual">'+s.visual+'</div>'+s.link+'</article>';}).join('')+'</div></div><div class="journey-end">'+routeLink(projectRoute('narration-ir'),'How are the pictures planned? Explore Narration IR →','journey-invitation')+routeLink('home','Return to all questions →')+'</div></section>';
+  }
+  function attachJourney(){
+    if(!main.querySelector('.journey-view'))return;
+    // The sticky illustration is a visual duplicate; all real actions remain
+    // in the matching, keyboard-readable step.
+    main.querySelectorAll('.journey-sticky a,.journey-sticky button').forEach(function(n){n.setAttribute('tabindex','-1');});
+    if(!window.IntersectionObserver)return;
+    journeyObserver=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){var n=entry.target.dataset.journeyStep;main.querySelectorAll('[data-journey-frame]').forEach(function(f){f.classList.toggle('is-current',f.dataset.journeyFrame===n);});}});},{rootMargin:'-20% 0px -35% 0px',threshold:0});
+    main.querySelectorAll('[data-journey-step]').forEach(function(n){journeyObserver.observe(n);});
+  }
+  function pageHTML(s){if(s.view==='door')return doorView(byDoor(s.id));if(s.view==='project')return projectView(s);if(s.view==='all')return allView();if(s.view==='films')return filmsView();if(s.view==='about')return aboutView();if(s.view==='terms')return termsView();if(s.view==='intro')return introView();if(s.view==='journey')return journeyView();return homeHTML;}
+  function attachThreads(){
+    var scene=main.querySelector('.question-scene');if(!scene)return;var svg=scene.querySelector('.scene-threads'),box=scene.getBoundingClientRect(),NS='http://www.w3.org/2000/svg';svg.setAttribute('viewBox','0 0 '+box.width+' '+box.height);var group=svg.querySelector('g');group.textContent='';
+    data.config.bridges.forEach(function(b){var a=scene.querySelector('[data-door="'+b.from+'"] .door-object').getBoundingClientRect(),z=scene.querySelector('[data-door="'+b.to+'"] .door-object').getBoundingClientRect();var x1=a.left+a.width/2-box.left,y1=a.top+a.height*.55-box.top,x2=z.left+z.width/2-box.left,y2=z.top+z.height*.55-box.top;var path=document.createElementNS(NS,'path');path.setAttribute('d','M'+x1+','+y1+' C'+(x1+(x2-x1)*.3)+','+(y1+(y2-y1)*.7)+' '+(x2-(x2-x1)*.3)+','+(y2-(y2-y1)*.7)+' '+x2+','+y2);path.setAttribute('data-from',b.from);path.setAttribute('data-to',b.to);path.setAttribute('pathLength','1');group.appendChild(path);});
+  }
+  function cleanTransitionNames(){main.querySelectorAll('[data-shape]').forEach(function(n){n.style.viewTransitionName='none';});}
+  function upgradeLinks(){document.querySelectorAll('a[data-route]').forEach(function(a){var raw=a.dataset.route;if(a.dataset.parent&&raw.startsWith('p=')&&!raw.includes('via='))raw+='&via='+a.dataset.parent;a.setAttribute('href','#'+M.hashFor(M.resolve(data,raw)));});}
+  function updateFilmCount(){var c=document.getElementById('film-count');if(c)c.textContent=M.filmList(data,filmFilters.status,filmFilters.history,filmFilters.format).length+' films';}
+  function update(s,keyboard,restore){
+    closeGlossary();if(dialog.open)dialog.close();if(journeyObserver){journeyObserver.disconnect();journeyObserver=null;}state=s;main.innerHTML=pageHTML(s);currentHash=M.hashFor(s);attachJourney();upgradeLinks();
+    document.querySelectorAll('[data-nav]').forEach(function(a){var on=a.dataset.nav===s.view||(a.dataset.nav==='home'&&['door','project'].includes(s.view));if(on)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});attachThreads();var heading=main.querySelector('h1');document.title=(heading?heading.textContent+' — ':'')+'Will Cook';document.querySelector('.studio-announcement').textContent=heading?heading.textContent:'';if(s.view==='films')updateFilmCount();
+    if(restore&&lastFocus[currentHash]){var prev=Array.from(main.querySelectorAll('[data-route]')).find(function(a){return a.dataset.route===lastFocus[currentHash];});if(prev)prev.focus({preventScroll:true});else if(heading)heading.focus({preventScroll:true});}else if(keyboard&&heading)heading.focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'});
+  }
+  function navigate(raw,options){
+    options=options||{};var target=M.resolve(data,raw),hash=M.hashFor(target);if(hash===currentHash&&!options.force)return;
+    if(document.activeElement&&document.activeElement.dataset.route)lastFocus[currentHash]=document.activeElement.dataset.route;var prior=currentHash;
+    if(!options.history){var record={explorer:true,from:options.preserveParent&&history.state?history.state.from:prior};try{if(options.replace)history.replaceState(record,'','#'+hash);else history.pushState(record,'','#'+hash);}catch(e){location.hash=hash;}}
+    var shape=target.via||target.id||(state.via||state.id),old=shape&&main.querySelector('[data-shape="'+shape+'"]');if(pendingTransition){pendingTransition.skipTransition();pendingTransition=null;}cleanTransitionNames();if(old)old.style.viewTransitionName='selected-object';
+    var serial=++navSerial;
+    if(document.startViewTransition&&!motion.matches&&!options.instant){var transition=document.startViewTransition(function(){if(serial!==navSerial)return;update(target,options.keyboard,options.restore);var selected=shape&&main.querySelector('[data-shape="'+shape+'"]');if(selected)selected.style.viewTransitionName='selected-object';});pendingTransition=transition;transition.finished.catch(function(){}).finally(function(){if(pendingTransition===transition){pendingTransition=null;cleanTransitionNames();}});}else update(target,options.keyboard,options.restore);
+  }
+  function goUp(wanted){var destination=wanted||((state.view==='project'&&byDoor(state.via).projects.length>1)?'d='+state.via:'home'),normal=M.hashFor(M.resolve(data,destination));if(history.state&&history.state.explorer&&history.state.from===normal)history.back();else navigate(destination,{replace:true,keyboard:true,restore:true});}
+  function showFilm(fid,opener){var f=data.films[fid];if(!f)return;lastFilmOpener=opener;var lines=(f.transcript||'').split('\n').filter(function(s){return s.startsWith('- ');}).map(function(s){return '<p>'+esc(s.slice(2))+'</p>';}).join('');dialog.querySelector('.dialog-content').innerHTML='<button class="dialog-close" type="button" data-close-film aria-label="Close transcript">×</button><p class="eyebrow">Recorded film · '+clock(f)+'</p><h2 id="film-dialog-title">'+esc(f.title)+'</h2><p class="transcript-status">The video is in preparation. This is the supplied transcript of the recording.</p><div class="transcript-text">'+(lines||'<p>'+esc(f.takeaway||'A transcript was not supplied for this film.')+'</p>')+'</div>';dialog.showModal();dialog.querySelector('[data-close-film]').focus();}
+  function closeFilm(){dialog.close();if(lastFilmOpener&&lastFilmOpener.isConnected)lastFilmOpener.focus({preventScroll:true});}
+  function closeGlossary(){clearTimeout(glossaryTimer);popover.hidden=true;if(activeTerm){activeTerm.setAttribute('aria-expanded','false');activeTerm=null;}}
+  function returnTermFocus(old){if(!old)return;ignoreTermFocus=true;old.focus({preventScroll:true});requestAnimationFrame(function(){ignoreTermFocus=false;});}
+  function placeGlossary(){if(!activeTerm||popover.hidden)return;var b=activeTerm.getBoundingClientRect(),w=Math.min(360,window.innerWidth-32);popover.style.width=w+'px';popover.style.left=Math.max(16,Math.min(window.innerWidth-w-16,b.left))+'px';var h=popover.getBoundingClientRect().height;popover.style.top=(b.bottom+12+h>window.innerHeight?Math.max(12,b.top-h-12):b.bottom+12)+'px';}
+  function showGlossary(button,pin){clearTimeout(glossaryTimer);var t=terms[button.dataset.term];if(!t)return;if(activeTerm&&activeTerm!==button)activeTerm.setAttribute('aria-expanded','false');activeTerm=button;button.setAttribute('aria-expanded','true');popover.setAttribute('role','dialog');popover.setAttribute('aria-label',t.term);popover.setAttribute('aria-describedby','glossary-preview');popover.innerHTML='<div class="glossary-top"><strong>'+esc(t.term)+'</strong><button type="button" data-close-term aria-label="Close definition">×</button></div><p id="glossary-preview">'+esc(t.preview)+'</p><details><summary>Technical definition</summary><p>'+esc(t.detail)+'</p></details>'+routeLink('terms','All terms →','all-terms-link');popover.hidden=false;popover.dataset.pinned=pin?'true':'false';placeGlossary();if(pin)popover.querySelector('summary').focus({preventScroll:true});}
+  document.addEventListener('click',function(event){
+    var a=event.target.closest('[data-route]');if(a){if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||event.button>0)return;event.preventDefault();var raw=a.dataset.route;if(a.dataset.parent&&raw.startsWith('p=')&&!raw.includes('via='))raw+='&via='+a.dataset.parent;navigate(raw,{keyboard:event.detail===0});return;}
+    var up=event.target.closest('[data-up]');if(up){goUp(up.dataset.up);return;}var taster=event.target.closest('[data-taster]');if(taster){var selectedId=taster.dataset.taster;navigate(projectRoute(state.id,state.via,selectedId),{replace:true,instant:true,preserveParent:true});var replacement=main.querySelector('[data-taster="'+selectedId+'"]');if(replacement)replacement.focus({preventScroll:true});return;}
+    var film=event.target.closest('[data-film]');if(film){showFilm(film.dataset.film,film);return;}if(event.target.closest('[data-close-film]')){closeFilm();return;}var term=event.target.closest('[data-term]');if(term){showGlossary(term,true);return;}
+    if(event.target.closest('[data-close-term]')){var old=activeTerm;closeGlossary();returnTermFocus(old);return;}if(!popover.contains(event.target)&&!popover.hidden)closeGlossary();
+    var demo=event.target.closest('[data-demo]');if(demo){var p=main.querySelector('.project-view');p.dataset.demoState=demo.dataset.demo;p.querySelectorAll('[data-demo]').forEach(function(b){b.setAttribute('aria-pressed',String(b===demo));});var c=p.querySelector('.demo-caption'),words=demoCopy[demo.dataset.demo];if(p.querySelector('.specimen--funnel'))words={proof:'The formal proof is the starting point for the explanations.',paper:'The result is rewritten for a particular kind of reader.',film:'The narration determines which parts the pictures need to explain.'}[demo.dataset.demo];if(c&&words)c.textContent=words;return;}
+    if(event.target.closest('[data-clear-search]')){projectQuery='';var input=document.getElementById('project-search');input.value='';document.getElementById('project-results').innerHTML=searchRows();input.focus();}
   });
-  Array.prototype.forEach.call(svg.querySelectorAll('.ex-topic'), function (g) { topicEl[g.getAttribute('data-topic')] = g; });
-  var threads = Array.prototype.slice.call(svg.querySelectorAll('.ex-thread'));
-  var levels = Array.prototype.slice.call(panel.querySelectorAll('.ex-level'));
-
-  function mq(q) { try { return window.matchMedia(q).matches; } catch (e) { return false; } }
-  function still() {
-    if (mq('(prefers-reduced-motion: reduce)')) return true;
-    try { if (navigator.connection && navigator.connection.saveData) return true; } catch (e) {}
-    return false;
-  }
-  function el(name, attrs, parent) {
-    var n = document.createElementNS(NS, name);
-    for (var k in attrs) n.setAttribute(k, attrs[k]);
-    if (parent) parent.appendChild(n);
-    return n;
-  }
-  function ease(k) { return k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; }
-
-  root.classList.add('is-live');
-
-  // ------------------------------------------------------------ camera
-  // The graph sits in the stage to the right of the panel; a level zooms in
-  // on its topic or project, keeping it in that free space.
-  var GRAPH = { cx: 40, cy: -12, w: 940, h: 700 };
-  var cam = null, camAnim = 0;
-  function frameFor(px, py, zoom) {
-    var box = svg.getBoundingClientRect();
-    var W = Math.max(1, box.width), H = Math.max(1, box.height);
-    var wide = W >= 900;
-    var left = wide ? panel.getBoundingClientRect().right - box.left + 24 : 0;
-    var free = Math.max(240, W - left);
-    var scale = Math.min(free / GRAPH.w, H / GRAPH.h) * (zoom || 1);
-    var w = W / scale, h = H / scale;
-    var x = (px === undefined ? GRAPH.cx : px) - (left + free / 2) / scale;
-    var y = (py === undefined ? GRAPH.cy : py) - h / 2;
-    return { x: x, y: y, w: w, h: h };
-  }
-  // Semantic zoom: the camera magnifies the picture, but words and lines keep
-  // their reading size (the stylesheet divides them by --z).
-  function setBox(b) {
-    cam = b;
-    svg.setAttribute('viewBox', b.x + ' ' + b.y + ' ' + b.w + ' ' + b.h);
-    var base = frameFor();
-    svg.style.setProperty('--z', (base.w / b.w).toFixed(3));
-  }
-  function moveTo(target, instant) {
-    cancelAnimationFrame(camAnim);
-    if (instant || still() || !cam) { setBox(target); return; }
-    var from = cam, t0 = null, dur = 760;
-    function step(t) {
-      if (t0 === null) t0 = t;
-      var k = ease(Math.min(1, (t - t0) / dur));
-      setBox({ x: from.x + (target.x - from.x) * k, y: from.y + (target.y - from.y) * k,
-               w: from.w + (target.w - from.w) * k, h: from.h + (target.h - from.h) * k });
-      if (k < 1) camAnim = requestAnimationFrame(step);
-    }
-    camAnim = requestAnimationFrame(step);
-  }
-
-  // ------------------------------------------------------------ state
-  var state = { level: 'home', topic: null, project: null };
-
-  function showLevel(match) {
-    var shown = null;
-    levels.forEach(function (s) {
-      var on = match(s);
-      s.hidden = !on;
-      if (on) shown = s;
-    });
-    panel.scrollTop = 0;
-    if (shown) {
-      shown.classList.remove('is-entering'); void shown.offsetWidth; shown.classList.add('is-entering');
-    }
-    return shown;
-  }
-
-  function light(topicId, cls) {
-    cls = cls || 'is-on';
-    var near = {};
-    if (topicId) near[topicId] = true;
-    threads.forEach(function (p) {
-      var hit = !!topicId && (p.getAttribute('data-a') === topicId || p.getAttribute('data-b') === topicId);
-      p.classList.toggle(cls, hit);
-      if (hit) { near[p.getAttribute('data-a')] = true; near[p.getAttribute('data-b')] = true; }
-    });
-    Object.keys(topicEl).forEach(function (id) { topicEl[id].classList.toggle(cls, !!near[id]); });
-    svg.classList.toggle(cls === 'is-on' ? 'has-focus' : 'has-hover', !!topicId);
-  }
-
-  // A topic's projects bloom outward from its knot, away from the centre.
-  function bloomTopic(t) {
-    bloomG.innerHTML = '';
-    var n = t.items.length, base = Math.atan2(t.at[1], t.at[0]);
-    var spread = n === 1 ? 0 : Math.min(1.25, 0.62 * (n - 1));
-    var R = t.r + 112;
-    t.items.forEach(function (pid, i) {
-      var a = n === 1 ? base : base - spread / 2 + spread * i / (n - 1);
-      var x = t.at[0] + Math.cos(a) * R, y = t.at[1] + Math.sin(a) * R;
-      var p = data.projects[pid];
-      var stalk = el('path', { 'class': 'ex-stalk', d: 'M ' + t.at[0] + ' ' + t.at[1] + ' L ' + x + ' ' + y, pathLength: '1' }, bloomG);
-      // Its other topics: a faint line from the project to each.
-      (homeOf[pid] || []).forEach(function (other) {
-        if (other === t.id) return;
-        var o = topicById[other];
-        el('path', { 'class': 'ex-also', d: 'M ' + x + ' ' + y + ' Q ' + ((x + o.at[0]) / 2) * 0.8 + ' ' + ((y + o.at[1]) / 2) * 0.8 + ' ' + o.at[0] + ' ' + o.at[1] }, bloomG);
-      });
-      var g = el('g', { 'class': 'ex-proj ex-proj--' + p.area, 'data-project': pid, transform: 'translate(' + t.at[0] + ' ' + t.at[1] + ')' }, bloomG);
-      el('circle', { 'class': 'ex-proj__halo', r: 24 }, g);
-      el('circle', { 'class': 'ex-proj__dot', r: 10 }, g);
-      var right = Math.cos(a) >= -0.2;
-      var lx = right ? 18 : -18, anchor = right ? 'start' : 'end';
-      var name = el('text', { 'class': 'ex-proj__name', x: lx, y: -2, 'text-anchor': anchor }, g);
-      name.textContent = p.label;
-      g.style.opacity = '0';
-      g.__to = [x, y];
-      g.__from = [t.at[0], t.at[1]];
-      stalk.__delay = i * 70;
-      g.__delay = i * 70;
-    });
-    animateBloom();
-  }
-
-  function animateBloom() {
-    var items = Array.prototype.slice.call(bloomG.querySelectorAll('.ex-proj, .ex-sat'));
-    var stalks = Array.prototype.slice.call(bloomG.querySelectorAll('.ex-stalk, .ex-sat-stalk'));
-    if (still()) {
-      items.forEach(function (g) { g.setAttribute('transform', 'translate(' + g.__to[0] + ' ' + g.__to[1] + ')'); g.style.opacity = ''; });
-      return;
-    }
-    stalks.forEach(function (s) { s.classList.add('is-growing'); });
-    var t0 = null, dur = 620;
-    function step(t) {
-      if (t0 === null) t0 = t;
-      var done = true;
-      items.forEach(function (g) {
-        var k = Math.max(0, Math.min(1, (t - t0 - (g.__delay || 0)) / dur));
-        if (k < 1) done = false;
-        var q = 1 - Math.pow(1 - k, 4);
-        var x = g.__from[0] + (g.__to[0] - g.__from[0]) * q, y = g.__from[1] + (g.__to[1] - g.__from[1]) * q;
-        g.setAttribute('transform', 'translate(' + x + ' ' + y + ')');
-        g.style.opacity = String(Math.min(1, k * 1.6));
-      });
-      if (!done) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-
-  // A project's film, full video, website and code branch out beside it as a
-  // short list, drawn at reading size whatever the zoom (their bodies are
-  // scaled by 1 / --z in the stylesheet).
-  var PROJECT_ZOOM = 1.75;
-  function bloomProject(pid) {
-    var holder = bloomG.querySelector('.ex-proj[data-project="' + pid + '"]');
-    if (!holder) return;
-    Array.prototype.forEach.call(bloomG.querySelectorAll('.ex-sat, .ex-sat-stalk'), function (n) { n.parentNode.removeChild(n); });
-    Array.prototype.forEach.call(bloomG.querySelectorAll('.ex-proj'), function (g) {
-      g.classList.toggle('is-on', g === holder);
-      // The chosen project's name moves above its dot, clear of its branches.
-      var name = g.querySelector('.ex-proj__name');
-      if (!name.__home) name.__home = [name.getAttribute('x'), name.getAttribute('y'), name.getAttribute('text-anchor')];
-      if (g === holder) { name.setAttribute('x', 0); name.setAttribute('y', -30); name.setAttribute('text-anchor', 'middle'); }
-      else { name.setAttribute('x', name.__home[0]); name.setAttribute('y', name.__home[1]); name.setAttribute('text-anchor', name.__home[2]); }
-    });
-    var p = data.projects[pid];
-    var cx = holder.__to[0], cy = holder.__to[1];
-    var side = cx >= GRAPH.cx - 40 ? 1 : -1;
-    var u = 1 / PROJECT_ZOOM;                    // one screen pixel in map units
-    var FILM_W = 176, FILM_H = 99, PILL_H = 32, GAP = 10, OFF = 120;
-    var heights = p.sats.map(function (s) { return s.kind === 'film' ? FILM_H + 22 : PILL_H; });
-    var total = heights.reduce(function (a, b) { return a + b; }, 0) + GAP * (p.sats.length - 1);
-    var y = cy - (total / 2) * u;
-    p.sats.forEach(function (s, i) {
-      var h = heights[i];
-      var ix = cx + side * OFF * u, iy = y + (s.kind === 'film' ? FILM_H / 2 : h / 2) * u;
-      y += (h + GAP) * u;
-      el('path', { 'class': 'ex-sat-stalk', pathLength: '1',
-        d: 'M ' + cx + ' ' + cy + ' C ' + (cx + side * 60 * u) + ' ' + cy + ' ' + (ix - side * 60 * u) + ' ' + iy + ' ' + ix + ' ' + iy }, bloomG);
-      var g = el('g', { 'class': 'ex-sat ex-sat--' + s.kind + (s.href ? '' : ' is-pending'), transform: 'translate(' + cx + ' ' + cy + ')' }, bloomG);
-      var body = el('g', { 'class': 'ex-sat__body' }, g);
-      var x0 = side > 0 ? 0 : -1;               // left edge, or right edge on the left side
-      if (s.kind === 'film') {
-        var fx = side > 0 ? 0 : -FILM_W;
-        var clip = 'exclip-' + pid;
-        var cp = el('clipPath', { id: clip }, el('defs', {}, body));
-        el('rect', { x: fx, y: -FILM_H / 2, width: FILM_W, height: FILM_H, rx: 7 }, cp);
-        el('rect', { 'class': 'ex-sat__frame', x: fx - 1, y: -FILM_H / 2 - 1, width: FILM_W + 2, height: FILM_H + 2, rx: 8 }, body);
-        var img = el('image', { href: s.img, x: fx, y: -FILM_H / 2, width: FILM_W, height: FILM_H, 'clip-path': 'url(#' + clip + ')', preserveAspectRatio: 'xMidYMid slice' }, body);
-        img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', s.img);
-        if (s.href) {
-          el('circle', { 'class': 'ex-sat__chip', cx: fx + FILM_W / 2, cy: 0, r: 17 }, body);
-          el('path', { 'class': 'ex-sat__play', d: 'M ' + (fx + FILM_W / 2 - 5) + ' -7 L ' + (fx + FILM_W / 2 + 8) + ' 0 L ' + (fx + FILM_W / 2 - 5) + ' 7 Z' }, body);
-        }
-        var cap = el('text', { 'class': 'ex-sat__label', x: side > 0 ? fx : fx + FILM_W, y: FILM_H / 2 + 16, 'text-anchor': side > 0 ? 'start' : 'end' }, body);
-        cap.textContent = s.label + (s.time ? ', ' + s.time : '') + (s.href ? '' : ', in preparation');
-      } else {
-        var t = el('text', { 'class': 'ex-sat__label ex-sat__label--pill', y: 4.5 }, body);
-        t.textContent = s.label + (s.time ? '  ' + s.time : '') + (s.href ? '' : ', in preparation');
-        var w = 28;
-        try { w = t.getComputedTextLength() + 28; } catch (e) { w = t.textContent.length * 7 + 28; }
-        var px = side > 0 ? 0 : -w;
-        var r = el('rect', { 'class': 'ex-sat__pill', x: px, y: -PILL_H / 2, width: w, height: PILL_H, rx: PILL_H / 2 }, body);
-        body.insertBefore(r, t);
-        t.setAttribute('x', px + 14);
-      }
-      if (s.href) {
-        g.setAttribute('data-href', s.href);
-        g.setAttribute('data-out', /^https?:/.test(s.href) ? '1' : '');
-      }
-      g.style.opacity = '0';
-      g.__from = [cx, cy]; g.__to = [ix, iy]; g.__delay = 80 + i * 55;
-    });
-    animateBloom();
-  }
-
-  function go(level, id, instant) {
-    if (level === 'project') {
-      var t = state.topic && homeOf[id] && homeOf[id].indexOf(state.topic) !== -1 ? state.topic : (homeOf[id] || [])[0];
-      if (!t) return;
-      if (state.topic !== t || state.level === 'home') { state.topic = t; bloomTopic(topicById[t]); }
-      state.level = 'project'; state.project = id;
-      light(t);
-      bloomProject(id);
-      var g = bloomG.querySelector('.ex-proj[data-project="' + id + '"]');
-      var to = g ? g.__to : topicById[t].at;
-      moveTo(frameFor(to[0] + (to[0] >= GRAPH.cx - 40 ? 1 : -1) * 90 / PROJECT_ZOOM, to[1], PROJECT_ZOOM), instant);
-      showLevel(function (s) { return s.getAttribute('data-project') === id; });
-      svg.setAttribute('data-level', 'project');
-    } else if (level === 'topic' && topicById[id]) {
-      state.level = 'topic'; state.topic = id; state.project = null;
-      light(id);
-      bloomTopic(topicById[id]);
-      var at = topicById[id].at;
-      var ang = Math.atan2(at[1], at[0]);
-      moveTo(frameFor(at[0] + Math.cos(ang) * 70, at[1] + Math.sin(ang) * 70, 1.3), instant);
-      showLevel(function (s) { return s.getAttribute('data-level') === 'topic' && s.getAttribute('data-topic') === id; });
-      svg.setAttribute('data-level', 'topic');
-    } else {
-      state.level = 'home'; state.topic = null; state.project = null;
-      light(null);
-      bloomG.innerHTML = '';
-      moveTo(frameFor(), instant);
-      showLevel(function (s) { return s.getAttribute('data-level') === 'home'; });
-      svg.setAttribute('data-level', 'home');
-    }
-  }
-
-  function fromHash(instant) {
-    var h = '';
-    try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) {}
-    var m = /^([tp])=(.+)$/.exec(h);
-    if (m && m[1] === 't') go('topic', m[2], instant);
-    else if (m && m[1] === 'p' && data.projects[m[2]]) go('project', m[2], instant);
-    else if (!h || h === 'explore' || h === 'intro' || h === 'map') go('home', null, instant);
-  }
-  function setHash(h) {
-    if (location.hash !== '#' + h) {
-      try { history.pushState(null, '', '#' + h); } catch (e) { location.hash = h; return; }
-    }
-    fromHash(false);
-  }
-  function up() {
-    if (state.level === 'project') setHash('t=' + state.topic);
-    else if (state.level === 'topic') setHash('explore');
-  }
-
-  // ------------------------------------------------------------ input
-  svg.addEventListener('click', function (event) {
-    var sat = event.target.closest('.ex-sat');
-    if (sat) {
-      var href = sat.getAttribute('data-href');
-      if (href) {
-        if (sat.getAttribute('data-out')) window.open(href, '_blank', 'noopener');
-        else location.href = href;
-      }
-      return;
-    }
-    var proj = event.target.closest('.ex-proj');
-    if (proj) { setHash('p=' + proj.getAttribute('data-project')); return; }
-    var topic = event.target.closest('.ex-topic');
-    if (topic) { setHash('t=' + topic.getAttribute('data-topic')); return; }
-    if (event.target.closest('.ex-knot')) { setHash('explore'); return; }
-    up();
-  });
-  svg.addEventListener('pointerover', function (event) {
-    var topic = event.target.closest('.ex-topic');
-    light(topic ? topic.getAttribute('data-topic') : null, 'is-hover');
-  });
-  svg.addEventListener('pointerleave', function () { light(null, 'is-hover'); });
-  panel.addEventListener('pointerover', function (event) {
-    var row = event.target.closest('[data-go-topic]');
-    light(row ? row.getAttribute('data-go-topic') : null, 'is-hover');
-  });
-  panel.addEventListener('pointerleave', function () { light(null, 'is-hover'); });
-  panel.addEventListener('click', function (event) {
-    var a = event.target.closest('[data-go-topic], [data-go-project], [data-go-home]');
-    if (!a) return;
-    event.preventDefault();
-    if (a.hasAttribute('data-go-home')) setHash('explore');
-    else if (a.hasAttribute('data-go-topic')) setHash('t=' + a.getAttribute('data-go-topic'));
-    else setHash('p=' + a.getAttribute('data-go-project'));
-    var heading = panel.querySelector('.ex-level:not([hidden]) .ex-name, .ex-level:not([hidden]) .ex-title');
-    if (heading && event.detail === 0) { heading.setAttribute('tabindex', '-1'); heading.focus({ preventScroll: true }); }
-  });
-  document.addEventListener('keydown', function (event) {
-    if (event.key !== 'Escape' || state.level === 'home') return;
-    var r = root.getBoundingClientRect();
-    if (r.bottom < 0 || r.top > window.innerHeight) return;
-    up();
-  });
-  window.addEventListener('popstate', function () { fromHash(false); });
-  window.addEventListener('hashchange', function () { fromHash(false); });
-  var resizeTimer = 0;
-  window.addEventListener('resize', function () {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function () { fromHash(true); }, 120);
-  });
-
-  // ------------------------------------------------------------ beads
-  // Two beads per thread, slow, brighter on lit threads.
-  var beads = [], running = false, visible = true, last = 0;
-  threads.forEach(function (p, i) {
-    var len = 0;
-    try { len = p.getTotalLength(); } catch (e) {}
-    if (!len) return;
-    for (var k = 0; k < 2; k++) {
-      var b = el('circle', { 'class': 'ex-bead', r: 2.2 }, flowG);
-      beads.push({ el: b, path: p, len: len, u: ((i * 0.37) + k * 0.5) % 1, dir: (i + k) % 2 ? 1 : -1 });
-    }
-  });
-  function tick(t) {
-    if (!running) return;
-    var dt = last ? Math.min(64, t - last) : 16;
-    last = t;
-    for (var i = 0; i < beads.length; i++) {
-      var b = beads[i];
-      var lit = b.path.classList.contains('is-on') || b.path.classList.contains('is-hover');
-      b.u = (b.u + b.dir * dt * (lit ? 0.00016 : 0.00006) + 1) % 1;
-      var pt = b.path.getPointAtLength(b.u * b.len);
-      b.el.setAttribute('cx', pt.x); b.el.setAttribute('cy', pt.y);
-      b.el.setAttribute('class', lit ? 'ex-bead is-lit' : 'ex-bead');
-    }
-    requestAnimationFrame(tick);
-  }
-  function startStop() {
-    var want = visible && !document.hidden && !still();
-    if (want && !running) { running = true; last = 0; requestAnimationFrame(tick); }
-    else if (!want) running = false;
-    flowG.style.display = still() ? 'none' : '';
-  }
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (es) { visible = es[0].isIntersecting; startStop(); }).observe(svg);
-  }
-  document.addEventListener('visibilitychange', startStop);
-
-  // ------------------------------------------------------------ first view
-  var drawn = false;
-  try { drawn = sessionStorage.getItem('ex-drawn') === '1'; } catch (e) {}
-  if (!drawn && !still()) {
-    svg.classList.add('is-arriving');
-    Object.keys(topicEl).forEach(function (id, i) { topicEl[id].style.setProperty('--d', (260 + i * 70) + 'ms'); });
-    try { sessionStorage.setItem('ex-drawn', '1'); } catch (e) {}
-    setTimeout(function () { svg.classList.remove('is-arriving'); }, 2200);
-  }
-  fromHash(true);
-  startStop();
+  var demoCopy={paper:'The selected paper passage is linked to the corresponding Lean declaration.',proof:'Follow the link back from the Lean declaration to the passage it supports.',read:'Read: the file and its contents are recorded in the session.',edit:'Edit: the change and its output stay beside the command.',test:'Test: inspect the saved output as well as the command status.',parse:'Parse: read source files into a structured representation.',resolve:'Resolve: follow references between the pieces of code.',index:'Index: make that structure available for browsing or questions.',missed:'A bug the model did not catch is kept as an example.',example:'The next prompt includes the record of the earlier miss.',film:'The narration determines which parts the pictures need to explain.','arrangement-a':'One possible arrangement of spins; the arrows show their directions.','arrangement-b':'A different arrangement; the research asks how good such different states can be.',inputs:'The input contains the information needed to answer the problem.',queries:'A query checks part of the input; count checks rather than elapsed seconds.'};
+  document.addEventListener('input',function(event){if(event.target.id==='project-search'){projectQuery=event.target.value;document.getElementById('project-results').innerHTML=searchRows();}if(event.target.id==='term-search')document.getElementById('term-results').innerHTML=termRows(event.target.value);});
+  document.addEventListener('change',function(event){if(event.target.id==='film-status')filmFilters.status=event.target.value;else if(event.target.id==='film-format')filmFilters.format=event.target.value;else if(event.target.id==='film-history')filmFilters.history=event.target.checked;else return;document.getElementById('film-results').innerHTML=filmRows();updateFilmCount();});
+  document.addEventListener('pointerover',function(event){var term=event.target.closest('[data-term]');if(term&&event.pointerType!=='touch'){clearTimeout(glossaryTimer);glossaryTimer=setTimeout(function(){showGlossary(term,false);},220);}var door=event.target.closest('[data-door]');if(door)main.querySelectorAll('.scene-threads path').forEach(function(p){p.classList.toggle('is-active',p.dataset.from===door.dataset.door||p.dataset.to===door.dataset.door);});});
+  document.addEventListener('pointerout',function(event){var term=event.target.closest('[data-term]');if(term&&(!event.relatedTarget||!term.contains(event.relatedTarget))){clearTimeout(glossaryTimer);if(popover.dataset.pinned!=='true')glossaryTimer=setTimeout(closeGlossary,280);}var door=event.target.closest('[data-door]');if(door&&(!event.relatedTarget||!door.contains(event.relatedTarget)))main.querySelectorAll('.scene-threads path').forEach(function(p){p.classList.remove('is-active');});});
+  popover.addEventListener('pointerenter',function(){clearTimeout(glossaryTimer);});popover.addEventListener('pointerleave',function(){if(popover.dataset.pinned!=='true')glossaryTimer=setTimeout(closeGlossary,280);});
+  popover.addEventListener('toggle',function(){requestAnimationFrame(placeGlossary);},true);
+  popover.addEventListener('focusout',function(event){if(event.relatedTarget&&!popover.contains(event.relatedTarget)&&event.relatedTarget!==activeTerm)closeGlossary();});
+  document.addEventListener('focusin',function(event){if(!ignoreTermFocus&&event.target.matches('[data-term]'))showGlossary(event.target,false);var door=event.target.closest('[data-door]');if(door)main.querySelectorAll('.scene-threads path').forEach(function(p){p.classList.toggle('is-active',p.dataset.from===door.dataset.door||p.dataset.to===door.dataset.door);});});
+  document.addEventListener('focusout',function(event){if(event.target.matches('[data-term]')){clearTimeout(glossaryTimer);if(!event.relatedTarget||!popover.contains(event.relatedTarget))glossaryTimer=setTimeout(closeGlossary,150);}var door=event.target.closest('[data-door]');if(door&&(!event.relatedTarget||!door.contains(event.relatedTarget)))main.querySelectorAll('.scene-threads path').forEach(function(p){p.classList.remove('is-active');});});
+  document.addEventListener('keydown',function(event){if(event.key!=='Escape')return;if(dialog.open){event.preventDefault();closeFilm();return;}if(!popover.hidden){var old=activeTerm;closeGlossary();returnTermFocus(old);return;}if(state.view!=='home'){event.preventDefault();goUp();}});
+  dialog.addEventListener('click',function(event){if(event.target===dialog){var r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closeFilm();}});dialog.addEventListener('cancel',function(event){event.preventDefault();closeFilm();});
+  var themeButton=document.querySelector('.theme-button');function theme(value){document.documentElement.dataset.theme=value;themeButton.setAttribute('aria-label','Switch to '+(value==='dark'?'light':'dark')+' theme');try{localStorage.setItem('plectis-question-theme',value);}catch(e){}}
+  try{theme(localStorage.getItem('plectis-question-theme')||'light');}catch(e){theme('light');}themeButton.addEventListener('click',function(){theme(document.documentElement.dataset.theme==='dark'?'light':'dark');});
+  function historyChanged(){var next=M.resolve(data,location.hash);if(M.hashFor(next)!==currentHash)navigate(location.hash,{history:true,restore:true,keyboard:true});}window.addEventListener('popstate',historyChanged);window.addEventListener('hashchange',historyChanged);
+  var resizeTimer;window.addEventListener('resize',function(){clearTimeout(resizeTimer);resizeTimer=setTimeout(function(){attachThreads();closeGlossary();},120);});
+  try{history.replaceState({explorer:true,from:null},'','#'+M.hashFor(state));}catch(e){}update(state,false,false);
 })();

@@ -15,7 +15,10 @@ back. Every site carries the same three elements, implemented in its own code:
 
 The list of websites, videos and repositories is [`sites.json`](../sites.json)
 in this repository. A website's `repos` names repositories by id from its
-top-level `repos` list (name, address and a one-sentence description). Each site keeps a copy beside its own source (`family.json`) and
+top-level `repos` list (name, address and a one-sentence description). Since
+November 2026 `sites.json` uses schema v3; the build writes the same content in
+the v2 shape these sites read as [`family.json`](../family.json). Each site keeps
+an unchanged copy of `family.json` beside its own source (also named `family.json`) and
 renders from it at build time, so no page requests anything from another host
 or depends on JavaScript to show its videos.
 

@@ -1,0 +1,47 @@
+# Asking NVIDIA's Auto Ontology about its own code
+
+long film `long-code-ontology`, 269 s as cut. Machine transcript of Will's recorded take (lower case, recognition errors kept), one sentence per line.
+
+- Where is this function used?
+- So before I change a function, I want a list of all the code connected to it.
+- So I built code ontology bridge using the same logic as codemap, which is another video which you can watch, which has a map of my own interface.
+- But in this application, it's not an interface.
+- It reads Python source files without running them and records each function and each call between functions as rows in a database, a set of tables.
+- Autoontology is NVIDIA's open source program that uses an AI model to turn English questions into database queries and then runs them.
+- So I gave Autoontology a database of its own source code.
+- I'll follow one question to its answer, then show a study's results and its
+- So here's the question.
+- autoontology what would be affected if this function changed, following calls backwards and including callbacks.
+- Autoontology's AI model wrote a query that starts at the function, finds the function that calls it, and repeats from each of those.
+- The query returned four functions numbered by the fewest recorded steps from each one to the target.
+- One of the four in autoontology scheduler connects through a callback.
+- Instead of calling the next function, it hands that function to another one to run. The bridge records that handoff from the source text shown this dashed arrow.
+- Without that row, the scheduler function isn't in the answer.
+- The request asked for callbacks, so this answer shows the model following that instruction.
+- It comes from an earlier smaller experiment than the study,
+- and the bridge writes eight tables, including one for function definitions and one for calls, so a query can find where a function is defined and where it's used.
+- Most recorded calls have no identified target, such as calls to Python's built -in functions or outside libraries. So the answers cover only connections the bridge identified at both ends.
+- The bridge also writes a description of each table, its keys, and how the tables join in the format Autoontology imports,
+- and it adds six optional saved queries, such as one that lists which function reaches which, so a model can read from it instead of building the chain itself.
+- Loading used Autoontology's own reader and import step unchanged, plus a script of mine that matches the descriptions to Autoontology's names for the tables.
+- The runs also used a patch that lets Autoontology use AI models from other providers.
+- Then the results.
+- So AI models wrote 48 questions about four open source Python projects, 12 of them about automatology itself, each with an answer key, the rows a correct answer returned.
+- The questions, keys, and scoring results were saved in the repository before any run.
+- An answer counts only if it returns the right rows on the real database and on eight altered copies, so a query can't be right by luck, or it's less likely to.
+- And after the runs, AI models rechecked every answer key against its question, and the scores here use the corrected keys.
+- Every question, answer, and score is published in the repository,
+- so inside autoontology with only the code database, DeepSeq's AI model answered 10 .3 of the 12 autoontology questions correctly on average.
+- The same model asked on its own answered 3 .2.
+- So autoontology with the Bridges database got about three times as many right.
+- On the study's callback question, autoontology with DeepSeq was right in all three runs, and DeepSeq on its own was right once in 20.
+- Asked on its own across all from 18 to 27 .2 correct when given the bridge's table descriptions.
+- And the descriptions and saved queries more than tripled the score of Nvidia's own model, Neumotron, from 2 .4 to 7 .6.
+- Autoontology is slower, about 4 .5 minutes per question, against under 2 seconds from the model on its own.
+- And the limits are, AI models wrote the questions rather than the project's maintainers, only 12 ran aside autoontology, and the bridge reads source text so calls made in unusual ways can be missed.
+- So autoontology answered English questions about its own code from a database of which function calls which with rows a person can check
+- and I've opened an issue on autoontology's github describing the bridge.
+- My codemap video shows the map of my own code that the bridge came from
+- and the repository the results website and my introduction if you'd find it interesting
+- but otherwise thanks for watching
+- if you have any questions please shoot me an email if you're interested in collaboration i'd love to work together and yeah thank you very much for watching i hope to see you in the next video thank you

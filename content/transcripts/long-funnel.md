@@ -1,0 +1,109 @@
+# The funnel: how AI-written maths becomes papers, a video and a reader website
+
+long film `long-funnel`, 721 s as cut. Machine transcript of Will's recorded take (lower case, recognition errors kept), one sentence per line.
+
+- OpenAI has released maths papers that its internal AI model wrote, and a common criticism from experts is that they're quite hard to follow, the papers that they write.
+- And so they skip steps, and they read whatever path the model happened to take without saying why each step was chosen.
+- And AI is producing more of this maths than anybody can really keep up with, at least manually.
+- and an AI can read these papers without seemingly much trouble at all.
+- It's people who struggle to follow the exact arguments because of the different ways in which AI and people process information.
+- And so I built this automated funnel to help keep people involved in the maths by using AI to help make what AI produces more understandable.
+- And I'll show it on three results.
+- So problem 257 posed by Paul Erdos, which is my own research using AI, and then two results OpenAI released on spin glasses and on quantum computers.
+- So what goes into this automated funnel is a proof.
+- So it's like a written paper or a proof that Lean, a program that checks mathematical proofs step by step, has accepted.
+- And so first, AI writes the proof up in full in every detail.
+- So it takes the lean and it writes all of that, but in written form in a very long paper in a long research record, we call it.
+- And it's written to be complete and it's not written to be read by a person end to end.
+- It would just it's too long.
+- Second, we then take that and we turn it into a short paper for experts.
+- So ideally, you'd be asking the experts, OK, what matters?
+- What would you like to see in this paper?
+- What wouldn't you like to see?
+- what parts are important to you
+- what steps are totally trivial and you don't like care to see them with the economy of available time
+- but they're busy so ai uses the published papers from the field in the literature on the problem as the sort of reference for a filter
+- which filters for the, so you filter the long reasoning paper through this
+- and you figure out what's standard, what's new, interesting, what would an expert want to know.
+- And so the short paper skips what the expert already knows, or at least aims to, by identifying what's already known in the literature
+- and then spends the pages and the word count on the harder parts of the result and the key ideas.
+- And okay, that seems like a good place to end up at, but I wanted to take it a little bit further and apply the same principles of making stuff understandable by seeing how far we could go in an exposition for any reader.
+- So anybody with the right mathematical background, not domain specialization, who can then read that.
+- So it works through examples before the general proof so that the core idea comes across without requiring deep expertise from the reader.
+- and fourth we then take one step farther some people don't even want to read anything written by ai some people still want to hear the voice of a human
+- and so i thought well okay why don't we try on video because ai is getting increasingly good at animating visuals and so it seemed like an interesting thing to do
+- because you can have dynamic visuals where it's you're reading you can of course read at your own pace so that's one advantage
+- but i think videos have numerous taking advantage of the senses in a way so it's like what you can hear what you can see visually and how those two sync up together in order to convey information in what I see as being a much more efficient and effective way
+- because I think AI prose is not very nice to read
+- and inspired by three blue one brown the idea is like you have pictures that move in time with what you're saying
+- and so for the Eidos problem the record is 152 pages the expert paper 26 and the exposition 16 an hour
+- and one additional thing is well okay we have all of this lean we have this form formally checked maths
+- and the papers of course were built from the lean in a way
+- and so actually each paper you're you're reading is checked formally
+- and so you'd want to be able to see that lean in real time as you're scrolling through
+- but who wants to like open links these days or at least who wants to keep having to go to their github and like be okay let me find that theorem
+- it's much easier to build a website which lets you read the papers
+- because a person reads better with visuals ideally visuals that adapt um reactively to what you're doing in an almost ergonomic way
+- and so the graph of the proof sits beside the paper on the right
+- so as you scroll the paper it highlights the part that you're reading
+- and you can see the graph update in real time
+- and you can click a node and open its lean
+- and there's one for each open ai result
+- and one for a published paper by other authors
+- so ai is applied sort of twice to the papers and to the way that you actually read them
+- and the question is what why are you doing all this basically
+- and i i think mathematicians mathematicians talk about digesting a proof
+- and i'm not an expert
+- but so in my mind, I'm sort of doing pre -digestion.
+- So when you eat, the easy parts to break down, like sugars start breaking down in your mouth and you find out whether something tastes good before swallowing.
+- And that is a gross comparison.
+- And I give this comparison in the Quartic video where I was totally freestyling.
+- And I've been thinking about it and I can't really think of a better analogy than that because people like me who maybe are capable of using AI but don't have the domain expertise in any area of maths to be able to verify the papers in a specific area.
+- Well, if you do this automated final approach, you have a comparative advantage in producing things, using AI and applying it.
+- Experts who might have spent their whole careers in a single field of maths have a massive singular comparative advantage in understanding what whatever niche topic that AI has done some groundbreaking proof on or whatever
+- but I think it seems to me that it's taking a long time for like humans just working manually to be able to cope with the pace and the pace is pretty much only bounded by the amount of energy which you can dedicate to the problem
+- and so it just seems like in the next year or so models will be so capable that there will just be such an onslaught of mathematical results that no human will be able to keep in touch like keep up to date with it without ai assistants helping
+- but that doesn't necessarily mean that experts need to now become super proficient in using ai
+- because that doesn't seem realistic
+- it seems like a smart way to do it is for some people who have a comparative advantage in using ai to produce these a different um the hierarchy of compression all the way from formally checked maths so that you can trust it
+- to the long reasoning records that you can audit any specific part of the lean but see it written in prose, I guess,
+- to the short paper for the experts to the exposition paper for any interested mathematical reader to the video for anybody who would find that kind of thing engaging.
+- And the idea would be, well, the experts have very, their time is extremely valuable and extremely limited.
+- So how do they discern in terms of doing digestion, which is turning the AI produced paper into something where other humans can understand it?
+- How do you make their life easier?
+- And so that's why I see this as pre -digestion.
+- It's where an expert can see, like get a taste of the video and be like, OK, does this look interesting enough for me to dedicate my time to it a little bit more, at least to see where it can go?
+- And since you've already produced what this funnel produces, it gives them a much stronger point to start their digestion process than just, you know, a bunch of lean and then a poorly written paper.
+- it's got multiple different representations of the same underlying paper
+- but you know for different target audiences
+- and then if you have multiple representations especially if you have a website that lets you move passage to passage across the papers which my websites do and lets you even see the lean with the paper
+- and I started having my videos reference certain passages in the paper if you want to do further reading
+- all these different things it um i think allow for a better human interfacing with um what uh ai produced maths um really is about
+- and so i think it's quite ambitious
+- and i'm sure lots of people are have lots of different ideas
+- but i just thought could just prototype it
+- and then if like certain experts in each um field which i've been doing this in like find at least somewhat useful um they can maybe see see the vision of it
+- because everything i'm doing it requires experts to validate it um
+- and it's kind of like uniquely dependent on experts validating it which
+- is obviously kind of hard like it's not like a product which like you can get like lots of users that's like a lay person product which like
+- anyway yeah that's that's pretty much the full idea of the funnel and how that works
+- any other other thing would be the idea of if you have a skill to go from each level so to go from the lean to the long reasoning record to then go to the short paper to then go to the exposition to then turn that into the video
+- you can check out my ir video you can see a little bit about my process of making these videos you can check out um the papers themselves check out the websites and the links below
+- but the key idea is that if you have a skill for how to do that
+- and then based on expert feedback you can then up propagate um that skill like improvements
+- so critical feedback from one specific paper you can then store that of course
+- and then I'll propagate it for that specific attempt and then iterate again.
+- And then the idea is experts can just give feedback and then you can improve it,
+- but then also take those learnings, generalize them and apply it to all of them.
+- And as long as then that leads to better outcomes in other problems that you're doing that in, then I guess it would be like a candidate patch.
+- And then if it's validated in other domains, then it could become more permanent.
+- and then you could have a self -improving process of making the funnel.
+- And if you had that scale, I imagine you could have a pretty good automated pipeline where then mathematicians could easily, hopefully, engage with AI -generated maths in a way that is more net beneficial.
+- It's not zero -sum.
+- and so yeah hopefully hopefully this is at least an interesting audacious attempt or crazy attempt depending on whether it works
+- but yeah ultimately if you have any questions any critiques any problems with it i'd love to hear
+- you can just find all the links below
+- and please check out my other videos there's quite a few across a broad different range of problems i've been attacking
+- think this is like probably for me the most interesting one
+- so yeah thank you very much
+- and hope to see you in the next video

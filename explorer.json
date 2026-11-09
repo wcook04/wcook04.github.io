@@ -1,0 +1,173 @@
+{
+  "version": 1,
+  "title": "Where would you like to start?",
+  "subtitle": "I use AI to do maths, build tools and make the work understandable.",
+  "doors": [
+    {
+      "id": "research",
+      "question": "What can AI help prove?",
+      "caption": "Eight old problems. Quantum computers. Disordered magnets.",
+      "object": "research",
+      "ink": "maths",
+      "projects": [
+        "maths",
+        "quartic",
+        "lean-exposition"
+      ],
+      "shortcuts": [
+        {
+          "project": "maths",
+          "label": "Erdős problems"
+        },
+        {
+          "project": "quartic",
+          "label": "Quantum computers"
+        },
+        {
+          "project": "lean-exposition",
+          "label": "Magnets"
+        }
+      ]
+    },
+    {
+      "id": "proofs",
+      "question": "How do you follow a proof?",
+      "caption": "A sentence in a paper. The proof behind it.",
+      "object": "proofs",
+      "ink": "maths",
+      "projects": [
+        "proof-reader",
+        "quartic",
+        "lean-exposition",
+        "atlas",
+        "formal-verification"
+      ]
+    },
+    {
+      "id": "assistants",
+      "question": "What did the AI actually do?",
+      "caption": "Follow its commands. Keep control of the changes.",
+      "object": "trace",
+      "ink": "code",
+      "projects": [
+        "agent-trace",
+        "one-checkout",
+        "safety-core"
+      ]
+    },
+    {
+      "id": "explaining",
+      "question": "How does a proof become a film?",
+      "caption": "Follow the same result through different explanations.",
+      "object": "funnel",
+      "ink": "explain",
+      "projects": [
+        "funnel",
+        "narration-ir"
+      ]
+    },
+    {
+      "id": "code",
+      "question": "How does this code fit together?",
+      "caption": "See the connections. Ask a precise question.",
+      "object": "code",
+      "ink": "code",
+      "projects": [
+        "codemap",
+        "code-ontology-bridge"
+      ]
+    },
+    {
+      "id": "testing",
+      "question": "Can AI find more bugs?",
+      "caption": "Show it the bugs it missed last time.",
+      "object": "bugs",
+      "ink": "code",
+      "projects": [
+        "zenith"
+      ]
+    }
+  ],
+  "bridges": [
+    {
+      "from": "research",
+      "to": "proofs",
+      "label": "Read the same results beside their proofs"
+    },
+    {
+      "from": "research",
+      "to": "explaining",
+      "label": "The results become worked examples"
+    },
+    {
+      "from": "proofs",
+      "to": "explaining",
+      "label": "Readers are one of the outputs"
+    }
+  ],
+  "topic_aliases": {
+    "erdos": "research",
+    "magnets": "research",
+    "quantum": "research",
+    "proofs": "proofs",
+    "checking": "proofs",
+    "assistants": "assistants",
+    "code": "code",
+    "testing": "testing",
+    "explaining": "explaining"
+  },
+  "direct_topics": {
+    "erdos": "maths",
+    "magnets": "lean-exposition",
+    "quantum": "quartic",
+    "testing": "zenith"
+  },
+  "project_questions": {
+    "maths": "What can AI help prove about eight old problems?",
+    "quartic": "How much faster can a quantum computer be?",
+    "lean-exposition": "Can very different arrangements be almost as good?",
+    "proof-reader": "Can you follow a paper into its proof?",
+    "atlas": "How have OpenAI’s maths papers been checked?",
+    "formal-verification": "Which parts of this software have proofs?",
+    "agent-trace": "What did the coding assistant actually run?",
+    "one-checkout": "How do you save one fix while work continues?",
+    "safety-core": "Can a rule stop a bad command?",
+    "codemap": "How does this codebase fit together?",
+    "code-ontology-bridge": "Can you ask a codebase a question?",
+    "zenith": "Can AI find more bugs?",
+    "funnel": "How does one proof become several explanations?",
+    "narration-ir": "How do the words become the pictures?"
+  },
+  "project_objects": {
+    "maths": "research",
+    "quartic": "quantum",
+    "lean-exposition": "magnets",
+    "proof-reader": "proofs",
+    "atlas": "proofs",
+    "formal-verification": "proofs",
+    "agent-trace": "trace",
+    "one-checkout": "trace",
+    "safety-core": "trace",
+    "codemap": "code",
+    "code-ontology-bridge": "code",
+    "zenith": "bugs",
+    "funnel": "funnel",
+    "narration-ir": "funnel"
+  },
+  "project_choices": {
+    "maths": "Explore eight Erdős problems",
+    "quartic": "Understand a quantum speedup",
+    "lean-exposition": "Explore near-best arrangements of magnets",
+    "proof-reader": "Read a paper beside its Lean proof",
+    "atlas": "Compare outside assessments of maths papers",
+    "formal-verification": "See which software components have proofs",
+    "agent-trace": "See the commands and their outputs",
+    "one-checkout": "Save one finished fix",
+    "safety-core": "Put checks before commands",
+    "codemap": "Navigate files and their descriptions",
+    "code-ontology-bridge": "Query code with NVIDIA Auto Ontology",
+    "zenith": "Follow a code-testing experiment",
+    "funnel": "Follow one result into papers and a film",
+    "narration-ir": "Plan pictures from the spoken words"
+  }
+}

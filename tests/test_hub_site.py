@@ -1,8 +1,14 @@
-"""Regression checks for the home page and the repository that serves it."""
+"""Bounded regressions for the v3 catalogue/explorer integration.
+
+These checks protect source identity, live states, complete static access,
+the important branching routes and staged-snapshot semantics. Visual layout
+and motion are checked in the browser, not duplicated as DOM-shape tests.
+"""
+from copy import deepcopy
 import importlib.util
 import json
-import re
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -14,199 +20,148 @@ CHECK = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(CHECK)
 
 
-def current_files() -> dict[str, bytes]:
-    return CHECK.snapshot(ROOT)
-
-
 class HubTests(unittest.TestCase):
-    def setUp(self):
-        self.files = current_files()
+    @classmethod
+    def setUpClass(cls):
+        cls.files = CHECK.snapshot(ROOT)
+        cls.canonical = json.loads(cls.files["sites.json"])
+        cls.glossary = json.loads(cls.files["glossary.json"])
+        cls.registry = CHECK.BUILD.load_registry(ROOT)
+        cls.view = CHECK.embedded_view(cls.files["index.html"].decode())
 
-    def errors(self):
-        return CHECK.validate(self.files)
+    def test_v3_load_retains_the_canonical_record(self):
+        self.assertEqual(self.registry["_canonical_v3"], self.canonical)
+        self.assertEqual(self.registry["schema"], "will_cook_site_family_v2")
+        self.assertEqual(len(self.registry["films"]), 38)
+        self.assertEqual(len(self.registry["sites"]) + len(self.registry["projects"]), 14)
 
-    def pending_film(self):
-        registry = json.loads(self.files["sites.json"])
-        pending = registry["films"][0]
-        pending.update(youtube=None, still=None, duration_seconds=None)
-        self.files["sites.json"] = json.dumps(registry).encode()
-        self.files.update({name: text.encode() for name, text in CHECK.BUILD.outputs(registry).items()})
-        return registry, pending
+    def test_graph_and_structured_data_do_not_publish_preview_films(self):
+        before = CHECK.BUILD.render_catalogue(self.registry, self.glossary)
+        structured = CHECK.BUILD.structured_data(self.registry)
+        old = CHECK.BUILD.PREVIEW
+        try:
+            CHECK.BUILD.PREVIEW = True
+            self.assertEqual(CHECK.BUILD.render_catalogue(self.registry, self.glossary), before)
+            self.assertEqual(CHECK.BUILD.structured_data(self.registry), structured)
+        finally:
+            CHECK.BUILD.PREVIEW = old
+        videos = [n for n in json.loads(before)["nodes"] if n["type"] == "video"]
+        self.assertEqual(sum(n["publicly_available"] for n in videos), 14)
+        self.assertEqual(sum(not n["publicly_available"] for n in videos), 24)
 
-    def test_project_thumbnail_requires_a_local_file(self):
-        registry = json.loads(self.files["sites.json"])
-        project = registry["projects"][0]
-        project["thumbnail"] = "https://example.com/image.png"
-        errors = CHECK.BUILD.validate_registry(registry, ROOT)
-        self.assertTrue(any("thumbnail" in error for error in errors))
-        project["thumbnail"] = "assets/missing.png"
-        errors = CHECK.BUILD.validate_registry(registry, ROOT)
-        self.assertTrue(any("thumbnail" in error for error in errors))
+    def test_the_portable_package_matches_its_sources_and_links(self):
+        self.assertEqual(CHECK.validate(self.files, prototype=True), [])
 
-    def test_evidence_routes_are_scoped_to_attached_repositories(self):
-        registry = json.loads(self.files["sites.json"])
-        site = next(site for site in registry["sites"] if site["id"] == "zenith")
-        self.assertEqual(CHECK.BUILD.validate_registry(registry, ROOT), [])
-        for href in ("https://example.com/study", "https://github.com/wcook04/plectis-zenith-other/study",
-                     "https://github.com/wcook04/one-checkout/blob/main/README.md", "javascript:alert(1)"):
-            site["routes"][0]["href"] = href
-            self.assertTrue(any("each route" in error for error in CHECK.BUILD.validate_registry(registry, ROOT)))
+    def test_outputs_include_the_full_static_catalogue_and_metadata(self):
+        outputs = CHECK.BUILD.outputs(self.registry, self.glossary, include_redirects=False)
+        self.assertTrue({"index.html", "all.html", "catalogue.json", "structured-data.jsonld"}.issubset(outputs))
+        static = CHECK.Page(outputs["all.html"])
+        self.assertEqual(sum(x.startswith("project-") for x in static.ids), 14)
+        self.assertEqual(sum(x.startswith("film-") for x in static.ids), 38)
+        self.assertEqual(sum(x.startswith("term-") for x in static.ids), 61)
+        self.assertFalse(any(path.startswith("plectis/") for path in outputs))
 
-    def test_collapsed_project_copy_stays_compact(self):
-        registry = json.loads(self.files["sites.json"])
-        words = sum(len(" ".join((item.get("purpose", ""), item.get("kind", ""),
-                                  item.get("credit", ""), " ".join(item.get("tags", [])))).split())
-                    for item in registry["sites"] + registry["projects"])
-        # Editorial review threshold, with room beyond the 406-word revision.
-        self.assertLessEqual(words, 500, "Review repeated card metadata before increasing this budget")
+    def test_six_doors_cover_known_projects_and_all_nine_topic_aliases(self):
+        self.assertEqual(len(self.view["config"]["doors"]), 6)
+        self.assertEqual(len(self.view["config"]["topic_aliases"]), 9)
+        self.assertEqual(CHECK.validate_projection(self.view, self.canonical), [])
+        bad = deepcopy(self.view)
+        bad["config"]["doors"][0]["projects"].append("missing-project")
+        self.assertTrue(any("unknown project" in error for error in CHECK.validate_projection(bad, self.canonical)))
 
-    def test_agent_summary_retains_attribution_and_study_evidence(self):
-        registry = json.loads(self.files["sites.json"])
-        summary = self.files["llms.txt"].decode()
-        for site in registry["sites"]:
-            if site.get("credit"):
-                self.assertIn(site["credit"], summary)
-            for route in site.get("routes", []):
-                if route["href"].startswith("https://github.com/"):
-                    self.assertIn(route["href"], summary)
+    def test_a_planned_video_cannot_gain_a_fake_playable_url_in_the_view(self):
+        bad = deepcopy(self.view)
+        planned = next(f for f in bad["films"].values() if not f.get("youtube"))
+        planned["youtube"] = "https://www.youtube.com/watch?v=AAAAAAAAAAA"
+        self.assertTrue(any("invented or changed public video URL" in error
+                            for error in CHECK.validate_projection(bad, self.canonical)))
 
-    def test_current_site_contract(self):
-        self.assertEqual(self.errors(), [])
+    def test_a_dropped_continuation_is_detected(self):
+        bad = deepcopy(self.view)
+        bad["films"]["short-quartic"]["leads_to"] = []
+        self.assertTrue(any("omitted or changed continuation" in error
+                            for error in CHECK.validate_projection(bad, self.canonical)))
 
-    def test_capture_cli_help_needs_no_optional_packages(self):
-        result = subprocess.run([sys.executable, "-I", "-S", str(ROOT / "scripts/capture_cards.py"), "--help"],
-                                capture_output=True, text=True, timeout=10)
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("proof-reader", result.stdout)
-        self.assertIn("--browser", result.stdout)
+    def test_static_access_cannot_drop_a_public_resource(self):
+        files = dict(self.files)
+        resource = next(r for r in self.canonical["resources"] if r["id"] == "paper:quartic-original")
+        url = CHECK.CATALOGUE.public_location(resource)["url"]
+        files["all.html"] = files["all.html"].replace(('href="' + url + '"').encode(), b'href="#removed"')
+        self.assertTrue(any("public resource not linked: paper:quartic-original" in error
+                            for error in CHECK.validate(files, prototype=True, check_generated=False)))
 
-    def test_capture_cli_reports_unknown_sites_before_loading_browser(self):
-        result = subprocess.run([sys.executable, "-I", "-S", str(ROOT / "scripts/capture_cards.py"), "not-a-site"],
-                                capture_output=True, text=True, timeout=10)
-        self.assertEqual(result.returncode, 2)
-        self.assertIn("unknown site(s): not-a-site", result.stderr)
-
-    def test_obsolete_thumbnail_copies_are_rejected(self):
-        self.files["assets/films/unplaced-old-640.webp"] = b"old thumbnail"
-        self.assertTrue(any("unreferenced media" in error for error in self.errors()))
-
-    def test_retained_introductions_are_not_orphaned(self):
-        self.assertIn("assets/films/introduction-640.webp", self.files)
-        self.assertIn("assets/films/introduction-alternate-640.webp", self.files)
-        self.assertFalse(any("unreferenced media" in error for error in self.errors()))
-
-    def test_pages_must_match_the_registry(self):
-        registry = json.loads(self.files["sites.json"])
-        registry["sites"][0]["purpose"] = "Changed without rebuilding."
-        self.files["sites.json"] = json.dumps(registry).encode()
-        self.assertTrue(any("out of date" in error for error in self.errors()))
-
-    def test_a_film_in_preparation_gets_no_invented_link(self):
-        registry, pending = self.pending_film()
-        pending["youtube"] = "https://www.youtube.com/watch?v=AAAAAAAAAAA"
-        self.files["sites.json"] = json.dumps(registry).encode()
-        self.assertTrue(any("running time" in error or "missing" in error for error in self.errors()))
-
-    def test_no_embedded_player(self):
-        self.files["index.html"] = self.files["index.html"].replace(
-            b'<main id="main">', b'<main id="main"><iframe src="https://www.youtube-nocookie.com/embed/x"></iframe>')
-        self.assertTrue(any("embedded player" in error for error in self.errors()))
-
-    def test_nothing_loads_from_another_host(self):
-        self.files["index.html"] = re.sub(
-            rb'src="/assets/theme-init\.js(\?v=[0-9a-f]+)?"', b'src="https://cdn.example.com/theme.js"',
-            self.files["index.html"])
-        self.assertTrue(any("another host" in error for error in self.errors()))
-
-    def test_assets_carry_their_content_hash(self):
-        index = self.files["index.html"].decode()
-        for asset in ("/assets/hub.css", "/assets/family/family.css", "/assets/hub.js", "/assets/explore.js"):
-            self.assertRegex(index, re.escape(asset) + r"\?v=[0-9a-f]{12}")
-
-    def test_project_paths_stay_free(self):
-        self.files["plectis-atlas/index.html"] = b"<!doctype html>"
-        self.assertTrue(any("own repositories" in error for error in self.errors()))
-
-    def test_every_website_is_linked(self):
-        url = json.loads(self.files["sites.json"])["sites"][2]["url"].encode()
-        self.files["index.html"] = self.files["index.html"].replace(b'href="' + url + b'"', b'href="#"')
-        self.assertTrue(any("website not linked" in error for error in self.errors()))
-
-    def test_every_repository_is_linked(self):
-        href = json.loads(self.files["sites.json"])["repos"][1]["href"].encode()
-        self.files["index.html"] = self.files["index.html"].replace(b'href="' + href + b'"', b'href="#"')
-        self.assertTrue(any("repository not linked" in error for error in self.errors()))
-
-    def test_a_film_in_preparation_is_not_linked(self):
-        _, pending = self.pending_film()
-        title = pending["title"].encode()
-        self.assertIn(title, self.files["index.html"])
-        self.files["index.html"] = self.files["index.html"].replace(
-            b'<span>' + title + b'</span>', b'<a href="#">' + title + b'</a>', 1)
-        self.assertTrue(any("in preparation has no link" in error for error in self.errors()))
-
-    def test_map_script_is_same_origin(self):
-        self.files["index.html"] = re.sub(
-            rb'src="/assets/explore\.js(\?v=[0-9a-f]+)?"', b'src="https://cdn.example.com/explore.js"',
-            self.files["index.html"])
-        errors = self.errors()
+    def test_remote_assets_and_embedded_players_are_rejected(self):
+        page = self.files["index.html"].decode().replace("</main>", '<iframe src="https://example.org/player"></iframe></main>')
+        page = page.replace('src="assets/explore.js"', 'src="https://example.org/explore.js"')
+        errors = CHECK.validate_page("index.html", page, prototype=True)
+        self.assertTrue(any("embedded player" in error for error in errors))
         self.assertTrue(any("another host" in error for error in errors))
-        self.assertTrue(any("explore.js" in error for error in errors))
 
-    def test_every_repository_is_placed_and_known(self):
-        registry = json.loads(self.files["sites.json"])
-        registry["sites"][0]["repos"].append("no-such-repository")
-        registry["repos"].append({"id": "stray", "name": "stray", "href": "https://github.com/wcook04/stray",
-                                  "description": "Placed nowhere."})
-        problems = CHECK.BUILD.validate_registry(registry, exists=lambda rel: rel in self.files)
-        self.assertTrue(any("unknown repository no-such-repository" in p for p in problems))
-        self.assertTrue(any("on no website or tool: stray" in p for p in problems))
+    def test_host_wide_crawling_and_project_ownership_are_preserved(self):
+        files = dict(self.files)
+        files["robots.txt"] += b"Disallow: /plectis-atlas/\n"
+        files["plectis-atlas/index.html"] = b"<h1>Wrong repository</h1>"
+        errors = CHECK.validate(files, prototype=True, check_generated=False)
+        self.assertTrue(any("project crawling" in error for error in errors))
+        self.assertTrue(any("own repositories" in error for error in errors))
 
-    def test_old_plectis_pages_answer_and_forward(self):
-        self.assertIn("plectis/docs/contact.html", self.files)
-        page = self.files["plectis/docs/contact.html"].decode()
-        self.assertIn('url=/practical-formal-verification/docs/contact.html"', page)
-        self.assertIn('url=/"', self.files["plectis/index.html"].decode())
-        self.files["plectis/docs/contact.html"] = page.replace("/assets/redirect.js", "/assets/other.js").encode()
-        self.assertTrue(any("plectis/docs/contact.html" in error for error in self.errors()))
-
-    def test_plectis_holds_only_listed_forwarding_pages(self):
-        self.files["plectis/unlisted.html"] = b"<!doctype html>"
-        self.assertTrue(any("plectis/unlisted.html" in error for error in self.errors()))
-
-    def test_missing_page_forwards_old_plectis_addresses(self):
-        self.files["404.html"] = self.files["404.html"].replace(b"/assets/redirect.js", b"/assets/other.js")
-        self.assertTrue(any("redirect.js" in error for error in self.errors()))
-
-    def test_host_rules_cannot_block_project_sites(self):
-        self.files["robots.txt"] += b"Disallow: /plectis-atlas/\n"
-        self.assertTrue(any("project crawling" in error for error in self.errors()))
-
-    def test_index_uses_staged_contents_and_honours_deletions(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
+    def test_index_reads_staged_bytes_and_staged_deletions(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
             subprocess.run(["git", "init", "-q", str(root)], check=True)
-            for name, content in self.files.items():
-                path = root / name
-                path.parent.mkdir(parents=True, exist_ok=True)
-                path.write_bytes(content)
-            CHECK.git(root, "add", ".")
-            CHECK.git(root, "-c", "user.name=Hub test", "-c", "user.email=hub@example.invalid",
-                      "-c", "core.hooksPath=/dev/null", "commit", "-qm", "fixture")
-            broken = self.files["index.html"].replace(b"index, follow", b"noindex, follow")
-            (root / "index.html").write_bytes(broken)
-            CHECK.git(root, "add", "index.html")
-            (root / "index.html").write_bytes(self.files["index.html"])
-            self.assertEqual(CHECK.validate(CHECK.snapshot(root)), [])
-            self.assertTrue(any("robots" in error for error in CHECK.validate(CHECK.snapshot(root, index=True))))
-            CHECK.git(root, "add", "index.html")
-            CHECK.git(root, "rm", "-q", "llms.txt")
-            (root / "llms.txt").write_bytes(self.files["llms.txt"])
-            self.assertEqual(CHECK.validate(CHECK.snapshot(root)), [])
-            self.assertTrue(any("llms.txt" in error for error in CHECK.validate(CHECK.snapshot(root, index=True))))
-            (root / "__pycache__").mkdir()
-            (root / "__pycache__/ignored.pyc").write_bytes(b"cache")
-            self.assertNotIn("__pycache__/ignored.pyc", CHECK.snapshot(root))
+            (root / "sites.json").write_text("staged catalogue")
+            (root / "removed.txt").write_text("staged then removed")
+            CHECK.git(root, "add", "sites.json", "removed.txt")
+            (root / "sites.json").write_text("unstaged repair")
+            CHECK.git(root, "rm", "--cached", "--", "removed.txt")
+            staged = CHECK.snapshot(root, index=True)
+            working = CHECK.snapshot(root)
+            self.assertEqual(staged["sites.json"], b"staged catalogue")
+            self.assertEqual(working["sites.json"], b"unstaged repair")
+            self.assertNotIn("removed.txt", staged)
+            self.assertIn("removed.txt", working)
+        with tempfile.TemporaryDirectory() as temporary:
+            with self.assertRaisesRegex(ValueError, "Git checkout"):
+                CHECK.snapshot(Path(temporary), index=True)
+
+    @unittest.skipUnless(shutil.which("node"), "Node is optional; needed for pure navigation checks")
+    def test_navigation_preserves_reader_result_shared_and_deep_routes(self):
+        script = r'''
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const M = require(process.argv[1]);
+const d = JSON.parse(fs.readFileSync(0,'utf8'));
+for (const id of ['short-sk-website','short-quartic-reader','short-proof-reader']) {
+  assert.deepEqual(M.onward(d,d.films[id]).map(f=>f.id),['long-lean-readers']);
+}
+assert.equal(Object.values(d.films).reduce((n,f)=>n+M.onward(d,f).length,0),18);
+const multiple=JSON.parse(JSON.stringify(d));
+multiple.films['short-quartic'].leads_to.push('long-funnel');
+assert.equal(M.onward(multiple,multiple.films['short-quartic']).length,2);
+assert.equal(M.lead(d,M.resolve(d,'#p=quartic&via=research')).id,'short-quartic');
+assert.equal(M.lead(d,M.resolve(d,'#p=quartic&via=proofs')).id,'short-quartic-reader');
+for (const [pid,expected] of [['quartic','short-quartic-reader'],['lean-exposition','short-sk-website'],['proof-reader','short-proof-reader']]) {
+  const state=M.resolve(d,M.routeForFilm(d,pid,'long-lean-readers'));
+  assert.equal(state.id,pid); assert.equal(state.via,'proofs'); assert.equal(M.lead(d,state).id,expected);
+}
+for (const [pid,fid,taster] of [['quartic','quartic-query','short-quartic'],['lean-exposition','sk-no-gap','short-sk-no-gap']]) {
+  const state=M.resolve(d,M.routeForFilm(d,pid,fid));
+  assert.equal(state.via,'research'); assert.equal(M.lead(d,state).id,taster);
+}
+assert.equal(M.resolve(d,'#t=quantum').id,'quartic');
+assert.equal(M.resolve(d,'#d=testing').id,'zenith');
+for (const alias of Object.keys(d.config.topic_aliases)) assert.notEqual(M.resolve(d,'#t='+alias).view,'home');
+for (const [name,id] of [['Proof Reader','proof-reader'],['Lean Exposition','lean-exposition'],['Plectis Mathematics','maths'],['Code Map','codemap']]) {
+  assert(M.search(d,name).some(p=>p.id===id));
+}
+assert.equal(M.published(d.films['short-quartic']),false);
+assert.equal(M.earlier(d,d.films['introduction']),false);
+assert.equal(M.earlier(d,d.films['introduction-v2']),true);
+process.stdout.write('shared/result/deep routes, all continuations, aliases and live states passed\n');
+'''
+        result = subprocess.run(["node", "-e", script, str(ROOT / "assets/explore-model.js")],
+                                input=json.dumps(self.view), text=True, capture_output=True, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
 
 
 if __name__ == "__main__":

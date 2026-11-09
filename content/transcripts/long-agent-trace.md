@@ -1,0 +1,65 @@
+# Agent Trace: why exit code 0 didn't mean the tests passed
+
+long film `long-agent-trace`, 432 s as cut. Machine transcript of Will's recorded take (lower case, recognition errors kept), one sentence per line.
+
+- Agent Trace shows the conversations Clawcode and Codex are having on your computer as they run and lets you copy exactly the context that you want into another chat.
+- So Codex and Clawcode are AI coding assistants and they edit files, they run commands and they have thinking summaries as they're going about their business.
+- their apps save every conversation as a file on your computer.
+- And in this video, I'll show the live list, what you see inside the conversations and the ways that you can copy it, as well as why I paste it into ChatGPT on the web and its usage and the benefits and the limits to it.
+- So Agent Trace lists the conversations from both assistants archived and active and refreshes about five seconds.
+- So a running thread shows up as it goes,
+- and an assister can hand a worker the conversation.
+- So you can just reference a conversation to Clawcode, a conversation that you had in Codex, and Clawcode can access that information and vice versa, as well as you can then copy those conversations to your clipboards in varying degrees of fidelity.
+- So you can open a conversation, and each command the assistant ran is a tile beside its saved result.
+- the command, whether it passed, and its output as well.
+- So in this example the first tile is a test that failed, expected 825 and got 824, and the second is the one -line fix, and the third is the same test passing.
+- Then you choose how much to copy.
+- So compact gives the messages, so the thinking summaries and short previews of each command and the outcome,
+- but detailed adds the full inputs, outputs and changes to let commands run and the diffs of like files changed,
+- and you can choose how far back in the conversation you want to go
+- so do you want to go to just the last turn just the latest end terms or the whole thread including helper conversations so like sub agents
+- and then preview lets you see the exact text before you copy it
+- and then when you press copy this text it copies it to your clipboard
+- and okay if I just walk through like a workflow so imagine you're doing some work so you're like I want to fix this problem or like look through for like security flaws in my system.
+- And then you can prompt that to Codex.
+- And then it can go through and you can even say use sub -agents.
+- And it can go through and you can say, come back to me like with your evaluation of it.
+- It doesn't even have to make changes.
+- And then that leaves you using this app with a bunch of different possibilities.
+- So what you could do is you could get claw code to then go through and say like, okay, look at what it found.
+- Why don't you also have a look and give a second opinion
+- okay kind of kind of boring what would be interesting is okay instead you can copy that thread in agent trace and let's say it's right about to hit its context limit
+- um one thing you could do is you could do slash compact on codex and it would compact the thread
+- another thing you could do you could use this app copy that thread in full detail
+- and then i have a context compaction prompt which I run where you can then put that into ChatGPT on the web, give it the full trace basically
+- and then it can give you the same compaction message I imagine, a very similar one that you get in Codex.
+- Okay so now you've got that thread compacted
+- but at the same time as you had one tab in ChatGPT summarizing the thread another tab could be doing research into what you could be doing next
+- another tab could be given the same context and be doing a look back and being like what mistakes do we make what aren't we seeing
+- and this is what i mean by like you can parallelize it across as much as you want as many tabs
+- and then you get all these returns back you just copy them put them back into codex in a new thread because it's got the context compaction it's basically like you're continuing in the thread
+- um and you can continue on on your way
+- and so that kind of shows the application of this in kind of any sort of workflow
+- and there's multiple different variations of this but the core idea still stands that it's quite effective for being economical
+- so when you're on a student budget like me it's like running into usage limits is probably like my number one bottleneck
+- and so this has really helped me a lot
+- so for anybody who like struggles with affordability um can't really afford to have like multiple subscriptions on the go and things this can really really help
+- um so that's what i found so far
+- um i it only accesses files on your own computer it doesn't try and access any encrypted thinking um traces
+- um and so i it should follow the rules um there are other comparable ones which are released which have many users so I'm presuming that this is okay
+- and so for repeated use yeah you have the MCP server for claw code and codecs
+- and ultimately the main limits are that agent trace only shows what like the files were recorded and opening a command like you can't run the command again to confirm it as result
+- and it doesn't like remove the passwords but it's really your own usage of it
+- so as long as you're then transferring that information into a trusted source like chat gpt on the web i don't i don't really see uh any problems that don't already exist inherently with using claw code or codex
+- so yeah ultimately that pretty much sums up like my perceived use case of it
+- i think it's very useful for um when you hit like usage limits
+- um you can get very creative with how you you use this
+- and using it across claw code and codex is uh super useful because each app agents in one thread can see what other agents and other threads are doing but they can't really do it across providers very easily
+- so this allows you to do that and it's pretty much my daily driver like that's what I use to like be economical throughout my day and make use of the generous limits in the web app which otherwise I wouldn't be using
+- so yeah hopefully somebody might get some usage out of this
+- and yeah if you've got any thoughts any complaints any worries if you know I can see how this could be misused I'm not misusing it and it doesn't have any intent around being like it's just accessing files on your own computer and not accessing apps
+- and from my review of other githubs there are numerous other ones which do the exact same thing just mine has an interface
+- and so yeah hopefully you make some use of it if you want to try it out it's on the github repo which is linked below
+- and the broader introduction to all of my other projects are also linked below which have been produced using this process
+- and yeah hopefully next video.
+- Thank you very much.

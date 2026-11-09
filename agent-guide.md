@@ -2,7 +2,7 @@
 
 Start at the [home page](https://wcook04.github.io/) or read [sites.json](https://wcook04.github.io/sites.json), which lists every website, film and repository.
 
-- [Plectis Mathematics](https://wcook04.github.io/practical-formal-verification/map/). Source: [plectis-erdos](https://github.com/wcook04/plectis-erdos), [plectis-erdos-lean](https://github.com/wcook04/plectis-erdos-lean).
+- [Maths Map](https://wcook04.github.io/practical-formal-verification/map/). Source: [plectis-erdos](https://github.com/wcook04/plectis-erdos), [plectis-erdos-lean](https://github.com/wcook04/plectis-erdos-lean).
 - [SK Reader](https://wcook04.github.io/lean-exposition-site/). Source: [lean-exposition](https://github.com/wcook04/lean-exposition), [lean-exposition-site](https://github.com/wcook04/lean-exposition-site).
 - [General Reader](https://wcook04.github.io/proof-reader/). Source: [proof-reader](https://github.com/wcook04/proof-reader).
 - [Quartic Reader](https://wcook04.github.io/quartic-query-lean/). Source: [quartic-query-lean](https://github.com/wcook04/quartic-query-lean).

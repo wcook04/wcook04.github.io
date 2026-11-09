@@ -1,25 +1,20 @@
 #!/usr/bin/env python3
-"""Build the home page of wcook04.github.io from sites.json and glossary.json.
+"""Build the question explorer and complete catalogue from sites.json v3.
 
-sites.json is the catalogue: every website, tool, film and repository, the
-three areas they sit in, and how they connect (typed links and collections).
-glossary.json defines the technical words the page uses. From them this writes:
+The canonical registry and glossary hold facts; explorer.json holds the
+editorial question scene. The v3 adapter keeps the existing repository's
+forwarding, sitemap and sister-site contracts available during migration.
 
-  index.html     the home page: an introduction, a map of how the work
-                 connects, one card per project led by its short film, every
-                 film in pairs (short film, then the full version), other work
-                 and contributions, and the terms;
-  catalogue.json the same catalogue as a graph (nodes and typed edges) for
-                 agents and other tools;
-  llms.txt, agent-guide.md, the sitemaps, 404.html and the forwarding pages
-                 at old /plectis/ addresses.
+index.html contains the interactive question scene and its data. all.html
+contains the complete readable catalogue with ordinary links and no required
+JavaScript. catalogue.json is the typed graph; structured-data.jsonld is its
+separate schema.org projection. No runtime content fetch is required.
 
-Everything is static HTML. No script is needed to read the page or follow a
-link; assets/explore.js runs the explorer on the first screen and assets/hub.js adds the
-theme switch and the glossary cards. Nothing loads from another host. Run with
-no arguments to write the pages, with --check to fail when the committed pages
-differ from what the data now produces, or with --preview DIR to write a copy
-in which every film in preparation is drawn as if it were out (for review).
+Run with --prototype to build the review package without legacy forwarding
+pages, --check to check generated outputs, or --preview DIR to write a portable
+review directory with the actual publication states preserved. The default
+build still generates the existing forwarding pages. scripts/build_portable.py
+adds two fully bundled HTML files for opening from the review ZIP.
 """
 from __future__ import annotations
 
@@ -29,6 +24,7 @@ import html
 import json
 import math
 import re
+import shutil
 import sys
 import urllib.request
 from pathlib import Path
@@ -51,6 +47,14 @@ e = html.escape
 
 def load_registry(root: Path = ROOT) -> dict:
     registry = json.loads((root / "sites.json").read_text(encoding="utf-8"))
+    if registry.get("schema") == "will_cook_site_family_v3":
+        from catalogue_v3 import adapt_v3_to_v2, semantic_errors
+        errors = semantic_errors(registry, load_glossary(root), asset_root=root)
+        if errors:
+            raise SystemExit("sites.json v3:\n  " + "\n  ".join(errors))
+        canonical = registry
+        registry = adapt_v3_to_v2(canonical)
+        registry["_canonical_v3"] = canonical
     problems = validate_registry(registry, root)
     if problems:
         raise SystemExit("sites.json:\n  " + "\n  ".join(problems))
@@ -252,7 +256,7 @@ def is_earlier(film: dict, films: dict) -> bool:
     if film.get("edition") == "earlier":
         return True
     newer = films.get(film.get("superseded_by") or "")
-    return bool(newer and is_out(newer))
+    return bool(newer and newer.get("youtube"))
 
 
 def role_of(film: dict) -> str:
@@ -755,6 +759,9 @@ def header(*, current: bool) -> str:
 
 
 def structured_data(registry: dict) -> str:
+    if registry.get("_canonical_v3"):
+        from catalogue_v3 import jsonld
+        return json.dumps(jsonld(registry["_canonical_v3"]), ensure_ascii=False, indent=1).replace("</", "<\\/")
     owner = registry["owner"]
     same_as = [c["href"] for c in owner["contact"] if c["href"].startswith("https://")]
     data = {
@@ -813,7 +820,7 @@ def render_terms(glossary: dict, terms: Terms) -> str:
     </section>'''
 
 
-def render_index(registry: dict, glossary: dict | None = None) -> str:
+def render_checkpoint_index(registry: dict, glossary: dict | None = None) -> str:
     glossary = glossary if glossary is not None else load_glossary()
     owner = registry["owner"]
     films = {film["id"]: film for film in registry["films"]}
@@ -906,9 +913,21 @@ def render_index(registry: dict, glossary: dict | None = None) -> str:
 
 # ---------------------------------------------------------------- the catalogue as a graph
 
+def render_index(registry: dict, glossary: dict | None = None) -> str:
+    from explorer_v3 import render_page
+    return render_page(registry, glossary or load_glossary(), ROOT, structured_data(registry))
+
+
+def render_static_catalogue(registry: dict, glossary: dict | None = None) -> str:
+    from explorer_v3 import render_static
+    return render_static(registry, glossary or load_glossary(), ROOT)
+
 def render_catalogue(registry: dict, glossary: dict) -> str:
     """Nodes (areas, projects, websites, films, repositories, contributions,
     terms) and typed edges, from the same data the page is drawn from."""
+    if registry.get("_canonical_v3"):
+        from catalogue_v3 import build_graph
+        return json.dumps(build_graph(registry["_canonical_v3"], glossary), ensure_ascii=False, indent=2) + "\n"
     films = {f["id"]: f for f in registry["films"]}
     owners = owners_of(registry)
     nodes, edges = [], []
@@ -1017,6 +1036,15 @@ def render_llms(registry: dict) -> str:
     return "\n".join(lines)
 
 
+def render_family(registry: dict) -> str:
+    """The v2-shaped list the family's other websites copy as family.json.
+
+    Sister sites read websites, films and repositories in the v2 shape. The
+    canonical v3 file stays sites.json; this is its compatibility export."""
+    view = {k: v for k, v in registry.items() if not k.startswith("_")}
+    return json.dumps(view, ensure_ascii=False, indent=2) + "\n"
+
+
 def render_agent_guide(registry: dict) -> str:
     lines = ["# Will Cook's websites", "",
              "Start at the [home page](https://wcook04.github.io/) or read [sites.json](https://wcook04.github.io/sites.json), which lists every website, film and repository.", ""]
@@ -1094,18 +1122,21 @@ def render_plectis_forward(path: str) -> str:
 '''
 
 
-def outputs(registry: dict, glossary: dict | None = None) -> dict[str, str]:
+def outputs(registry: dict, glossary: dict | None = None, *, include_redirects: bool = True) -> dict[str, str]:
     glossary = glossary if glossary is not None else load_glossary()
     pages = {
         "index.html": render_index(registry, glossary),
+        "all.html": render_static_catalogue(registry, glossary),
+        "structured-data.jsonld": structured_data(registry) + "\n",
         "catalogue.json": render_catalogue(registry, glossary),
+        "family.json": render_family(registry),
         "404.html": render_404(registry),
         "llms.txt": render_llms(registry),
         "agent-guide.md": render_agent_guide(registry),
         "sitemap.xml": render_sitemap(),
         "sitemap-home.xml": render_sitemap_home(registry),
     }
-    for path in plectis_paths():
+    for path in plectis_paths() if include_redirects else []:
         pages["plectis/" + path] = render_plectis_forward(path)
     return pages
 
@@ -1126,8 +1157,9 @@ def refresh_plectis_paths() -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="fail if the committed pages are out of date")
+    parser.add_argument("--prototype", action="store_true", help="build this review package without the legacy forwarding pages")
     parser.add_argument("--preview", metavar="DIR",
-                        help="write index.html to DIR with every film in preparation drawn as if it were out")
+                        help="write a self-contained review directory, preserving actual publication states")
     parser.add_argument("--refresh-plectis-paths", action="store_true",
                         help=f"rewrite {PLECTIS_PATHS} from the Plectis website's published pages first")
     args = parser.parse_args(argv)
@@ -1135,20 +1167,18 @@ def main(argv: list[str] | None = None) -> int:
         refresh_plectis_paths()
     registry = load_registry()
     if args.preview:
-        global PREVIEW
-        PREVIEW = True
         out = Path(args.preview)
         out.mkdir(parents=True, exist_ok=True)
-        (out / "index.html").write_text(render_index(registry), encoding="utf-8")
-        for name in ("assets", "favicon.ico", "sites.json", "glossary.json"):
-            link = out / name
-            if not link.exists() and (ROOT / name).exists():
-                link.symlink_to(ROOT / name)
-        (out / "catalogue.json").write_text(render_catalogue(registry, load_glossary()), encoding="utf-8")
+        for name, text in outputs(registry, include_redirects=False).items():
+            (out / name).write_text(text, encoding="utf-8")
+        if out.resolve() != ROOT.resolve():
+            shutil.copytree(ROOT / "assets", out / "assets", dirs_exist_ok=True)
+            for name in ("favicon.ico", "sites.json", "glossary.json", "explorer.json"):
+                shutil.copy2(ROOT / name, out / name)
         print(out / "index.html")
         return 0
     stale = []
-    for name, text in outputs(registry).items():
+    for name, text in outputs(registry, include_redirects=not args.prototype).items():
         path = ROOT / name
         if args.check:
             if not path.is_file() or path.read_text(encoding="utf-8") != text:

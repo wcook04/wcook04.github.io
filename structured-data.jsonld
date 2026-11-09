@@ -1,0 +1,411 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Person",
+   "@id": "https://wcook04.github.io/#person",
+   "name": "Will Cook",
+   "url": "https://wcook04.github.io/",
+   "sameAs": [
+    "https://github.com/wcook04",
+    "https://www.youtube.com/@willcook2004",
+    "https://x.com/cookie1234593"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://wcook04.github.io/#website",
+   "url": "https://wcook04.github.io/",
+   "name": "Will Cook",
+   "author": {
+    "@id": "https://wcook04.github.io/#person"
+   }
+  },
+  {
+   "@type": "SoftwareSourceCode",
+   "@id": "https://wcook04.github.io/#resource-repo%3Aplectis-erdos",
+   "name": "plectis-erdos",
+   "url": "https://github.com/wcook04/plectis-erdos",
+   "codeRepository": "https://github.com/wcook04/plectis-erdos",
+   "description": "Papers, Lean proofs, experiments and open questions from the research on eight Erdős problems, and papers on how the research was done."
+  },
+  {
+   "@type": "SoftwareSourceCode",
+   "@id": "https://wcook04.github.io/#resource-repo%3Aplectis-erdos-lean",
+   "name": "plectis-erdos-lean",
+   "url": "https://github.com/wcook04/plectis-erdos-lean",
+   "codeRepository": "https://github.com/wcook04/plectis-erdos-lean",
+   "description": "Lean 4 source for the eight problems. Comparator accepted selected proofs against separately written statements, and Palomar, an online proof registry, reran some of them."
+  },
+  {
+   "@type": "SoftwareSourceCode",
+   "@id": "https://wcook04.github.io/#resource-repo%3Alean-exposition",
+   "name": "lean-exposition",
+   "url": "https://github.com/wcook04/lean-exposition",
+   "codeRepository": "https://github.com/wcook04/lean-exposition",
+   "description": "The three papers, the Lean they link to at a fixed version, and the source of the reading website."
+  },
+  {
+   "@type": "SoftwareSourceCode",
+   "@id": "https://wcook04.github.io/#resource-repo%3Aproof-reader",
+   "name": "proof-reader",
+   "url": "https://github.com/wcook04/proof-reader",
+   "codeRepository": "https://github.com/wcook04/proof-reader",
+   "description": "Each paper is one folder, and any paper with public Lean can be added. A program compares the site’s text with the PDF word for word."
+  },
+  {
+   "@type": "SoftwareSourceCode",
+   "@id": "https://wcook04.github.io/#resource-repo%3Aplectis-atlas",
+   "name": "plectis-atlas",
+   "url": "https://github.com/wcook04/plectis-atlas",
+   "codeRepository": "https://github.com/wcook04/plectis-atlas",
+   "description": "The Atlas website’s source: OpenAI’s maths papers, their Lean statements, and outside groups’ reports credited to their authors."
+  },
+  {
+   "@type": "SoftwareSourceCode",
+   "@id": "https://wcook04.github.io/#resource-repo%3Apractical-formal-verification",
+   "name": "practical-formal-verification",
+   "url": "https://github.com/wcook04/practical-formal-verification",
+   "codeRepository": "https://github.com/wcook04/practical-formal-verification",
+   "description": "The components, their Dafny proofs, the Python compiled from them and worked examples."
+  },
+  {
+   "@type": "SoftwareSourceCode",
+   "@id": "https://wcook04.github.io/#resource-repo%3Aplectis-zenith",
+   "name": "plectis-zenith",
+   "url": "https://github.com/wcook04/plectis-zenith",
+   "codeRepository": "https://github.com/wcook04/plectis-zenith",
+   "description": "Code, data and paper for the experiments on showing an AI tester the bugs it missed, and the code-repair studies."
+  },
+  {
+   "@type": "SoftwareSourceCode",
+   "@id": "https://wcook04.github.io/#resource-repo%3Asafety-core",
+   "name": "safety-core",
+   "url": "https://github.com/wcook04/safety-core",
+   "codeRepository": "https://github.com/wcook04/safety-core",
+   "description": "A rule file for coding agents and the hooks that block commands a rule forbids."
+  },
+  {
+   "@type": "SoftwareSourceCode",
+   "@id": "https://wcook04.github.io/#resource-repo%3Aone-checkout",
+   "name": "one-checkout",
+   "url": "https://github.com/wcook04/one-checkout",
+   "codeRepository": "https://github.com/wcook04/one-checkout",
+   "description": "Commit one agent’s fix without including another agent’s unfinished edits."
+  },
+  {
+   "@type": "SoftwareSourceCode",
+   "@id": "https://wcook04.github.io/#resource-repo%3Aagent-trace-mechanism",
+   "name": "agent-trace-mechanism",
+   "url": "https://github.com/wcook04/agent-trace-mechanism",
+   "codeRepository": "https://github.com/wcook04/agent-trace-mechanism",
+   "description": "The session viewer and the optional MCP server for Codex and Claude Code logs. Install it with pip and run agent-trace-app."
+  },
+  {
+   "@type": "SoftwareSourceCode",
+   "@id": "https://wcook04.github.io/#resource-repo%3Acode-ontology-bridge",
+   "name": "code-ontology-bridge",
+   "url": "https://github.com/wcook04/code-ontology-bridge",
+   "codeRepository": "https://github.com/wcook04/code-ontology-bridge",
+   "description": "The exporter, the DuckDB schema, the Auto Ontology table descriptions and the 48-question study with every answer."
+  },
+  {
+   "@type": "SoftwareSourceCode",
+   "@id": "https://wcook04.github.io/#resource-repo%3Aquartic-query-lean",
+   "name": "quartic-query-lean",
+   "url": "https://github.com/wcook04/quartic-query-lean",
+   "codeRepository": "https://github.com/wcook04/quartic-query-lean",
+   "description": "The Lean proof of OpenAI’s nearly quartic separation, three written explanations of the argument, and the reader website’s source."
+  },
+  {
+   "@type": "SoftwareSourceCode",
+   "@id": "https://wcook04.github.io/#resource-repo%3Anarration-ir",
+   "name": "narration-ir",
+   "url": "https://github.com/wcook04/narration-ir",
+   "codeRepository": "https://github.com/wcook04/narration-ir",
+   "description": "The portable skill, references, worked example and optional Python tools for validation and scene briefs."
+  },
+  {
+   "@type": "SoftwareSourceCode",
+   "@id": "https://wcook04.github.io/#resource-repo%3Alean-exposition-site",
+   "name": "lean-exposition-site",
+   "url": "https://github.com/wcook04/lean-exposition-site",
+   "codeRepository": "https://github.com/wcook04/lean-exposition-site",
+   "description": "The published SK Reader website, built from lean-exposition."
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://wcook04.github.io/#resource-site%3Amaths",
+   "name": "Maths Map",
+   "url": "https://wcook04.github.io/practical-formal-verification/map/"
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://wcook04.github.io/#resource-site%3Alean-exposition",
+   "name": "SK Reader",
+   "url": "https://wcook04.github.io/lean-exposition-site/"
+  },
+  {
+   "@type": "ScholarlyArticle",
+   "@id": "https://wcook04.github.io/#resource-paper%3Ask-exposition",
+   "name": "Exposition of the Sherrington–Kirkpatrick result",
+   "url": "https://wcook04.github.io/lean-exposition-site/read/expository/"
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://wcook04.github.io/#resource-site%3Aproof-reader",
+   "name": "General Reader",
+   "url": "https://wcook04.github.io/proof-reader/"
+  },
+  {
+   "@type": "ScholarlyArticle",
+   "@id": "https://wcook04.github.io/#resource-paper%3Acontextual-embeddings",
+   "name": "Contextual Embeddings",
+   "url": "https://wcook04.github.io/proof-reader/#/contextual-embeddings"
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://wcook04.github.io/#resource-site%3Aquartic",
+   "name": "Quartic Reader",
+   "url": "https://wcook04.github.io/quartic-query-lean/"
+  },
+  {
+   "@type": "ScholarlyArticle",
+   "@id": "https://wcook04.github.io/#resource-paper%3Aquartic-original",
+   "name": "OpenAI’s quantum query-complexity paper",
+   "url": "https://wcook04.github.io/quartic-query-lean/#/read/original"
+  },
+  {
+   "@type": "ScholarlyArticle",
+   "@id": "https://wcook04.github.io/#resource-paper%3Aquartic-exposition",
+   "name": "Exposition of the quantum query-complexity result",
+   "url": "https://wcook04.github.io/quartic-query-lean/#/read/exposition"
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://wcook04.github.io/#resource-site%3Aatlas",
+   "name": "Plectis Atlas",
+   "url": "https://wcook04.github.io/plectis-atlas/"
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://wcook04.github.io/#resource-site%3Aformal-verification",
+   "name": "Practical Formal Verification",
+   "url": "https://wcook04.github.io/practical-formal-verification/explorer/"
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://wcook04.github.io/#resource-site%3Azenith",
+   "name": "Zenith",
+   "url": "https://wcook04.github.io/plectis-zenith/"
+  },
+  {
+   "@type": "ScholarlyArticle",
+   "@id": "https://wcook04.github.io/#resource-paper%3Azenith-program-repair",
+   "name": "Earlier paper on program repair",
+   "url": "https://wcook04.github.io/plectis-zenith/assets/paper.pdf"
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://wcook04.github.io/#resource-site%3Acode-ontology-bridge",
+   "name": "Code Ontology Bridge",
+   "url": "https://wcook04.github.io/code-ontology-bridge/"
+  },
+  {
+   "@type": "ItemList",
+   "@id": "https://wcook04.github.io/#resources",
+   "name": "Projects, papers and source code",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-repo%3Aplectis-erdos"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-repo%3Aplectis-erdos-lean"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-repo%3Alean-exposition"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-repo%3Aproof-reader"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 5,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-repo%3Aplectis-atlas"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 6,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-repo%3Apractical-formal-verification"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 7,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-repo%3Aplectis-zenith"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 8,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-repo%3Asafety-core"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 9,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-repo%3Aone-checkout"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 10,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-repo%3Aagent-trace-mechanism"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 11,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-repo%3Acode-ontology-bridge"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 12,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-repo%3Aquartic-query-lean"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 13,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-repo%3Anarration-ir"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 14,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-repo%3Alean-exposition-site"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 15,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-site%3Amaths"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 16,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-site%3Alean-exposition"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 17,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-paper%3Ask-exposition"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 18,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-site%3Aproof-reader"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 19,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-paper%3Acontextual-embeddings"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 20,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-site%3Aquartic"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 21,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-paper%3Aquartic-original"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 22,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-paper%3Aquartic-exposition"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 23,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-site%3Aatlas"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 24,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-site%3Aformal-verification"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 25,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-site%3Azenith"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 26,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-paper%3Azenith-program-repair"
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 27,
+     "item": {
+      "@id": "https://wcook04.github.io/#resource-site%3Acode-ontology-bridge"
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,7 +1,7 @@
 {
   "schema": "will_cook_glossary_v1",
   "updated": "2026-11-09",
-  "about": "Definitions of the technical terms on wcook04.github.io. The home page links the first use of each term in a block to its definition and shows it as a card on hover or focus. Edit here, then run scripts/build_hub.py.",
+  "about": "Technical terms used across the Plectis catalogue. Short previews, optional details and related terms. Aliases support search; authored term references determine inline explanations.",
   "terms": [
     {
       "id": "agent-skill",
@@ -9,23 +9,46 @@
       "aliases": [
         "Agent Skills",
         "SKILL.md",
-        "skill"
+        "agent skills"
       ],
-      "preview": "A folder of written instructions, and optionally scripts, that an AI coding agent such as Claude Code or Codex loads when a task matches its description.",
-      "detail": "A skill's main file, SKILL.md, starts with a name and a one-line description; the agent reads the full instructions only when the task calls for them. 'Portable' means the folder works with any agent that reads this format. Narration IR is a skill of this kind: instructions for writing plans plus a small program that confirms each quoted passage is in its source file.",
-      "area": "explain"
+      "preview": "A folder of instructions and optional resources that an AI agent can load for a particular task.",
+      "detail": "Its SKILL.md file supplies a name, description and instructions. Scripts, examples and reference files can sit beside it. Narration IR uses this format to guide picture planning and check that quoted text occurs in the cited source.",
+      "area": "explain",
+      "related_terms": [
+        "intermediate-representation",
+        "coding-agent"
+      ],
+      "references": [
+        {
+          "label": "Agent Skills specification",
+          "url": "https://github.com/agentskills/agentskills/blob/main/docs/specification.mdx"
+        }
+      ]
     },
     {
       "id": "auto-ontology",
-      "term": "Auto Ontology",
+      "term": "NVIDIA Auto Ontology",
       "aliases": [
+        "Auto Ontology",
         "AutoOntology",
-        "NVIDIA Auto Ontology",
-        "NVIDIA's Auto Ontology"
+        "NVIDIA’s Auto Ontology",
+        "NVIDIA's Auto Ontology",
+        "auto-ontology"
       ],
-      "preview": "NVIDIA's open-source system that uses an AI model to turn English questions about a database into SQL queries and then runs them.",
-      "detail": "Auto Ontology imports a database and descriptions of its tables, then an agent built around a language model writes SQL for each English question, runs it and returns the rows. In Code Ontology Bridge it was loaded with a DuckDB database of its own Python source, through its own reader and import step plus a patch allowing other model providers.",
-      "area": "code"
+      "preview": "NVIDIA’s framework for describing database concepts and relationships, then using that structure to answer questions with SQL.",
+      "detail": "The semantic layer connects names and meanings to tables, columns and joins. Code Ontology Bridge supplies a database of Python functions and calls, with descriptions in the format Auto Ontology imports. The framework and Will’s bridge are separate projects.",
+      "area": "code",
+      "related_terms": [
+        "ontology",
+        "semantic-model",
+        "text-to-sql"
+      ],
+      "references": [
+        {
+          "label": "NVIDIA Auto Ontology",
+          "url": "https://github.com/NVIDIA/auto-ontology"
+        }
+      ]
     },
     {
       "id": "axiom",
@@ -33,21 +56,33 @@
       "aliases": [
         "axioms"
       ],
-      "preview": "A statement a formal proof assumes without proof; Lean can list every axiom a theorem depends on.",
-      "detail": "Lean's command #print axioms reports the axioms a theorem uses. Most Lean proofs rely only on three standard ones: propext, Classical.choice and Quot.sound. The Contextual Embeddings authors also state an axiom of their own, and General Reader shows which theorems depend on it.",
-      "area": "maths"
+      "preview": "A statement assumed without proof inside a formal system.",
+      "detail": "A theorem can depend on axioms as well as proved results. Lean’s #print axioms command lists those dependencies. Standard mathematical axioms and a placeholder such as sorryAx have different purposes; the dependency list makes that distinction visible.",
+      "area": "maths",
+      "related_terms": [
+        "lean-4",
+        "lean-proof"
+      ],
+      "references": [
+        {
+          "label": "Lean reference: axioms",
+          "url": "https://lean-lang.org/doc/reference/latest/Axioms"
+        }
+      ]
     },
     {
       "id": "call-graph",
       "term": "call graph",
       "aliases": [
-        "call graphs",
-        "callee",
-        "caller"
+        "call graphs"
       ],
-      "preview": "A record of which functions call which, drawn as points for functions and arrows from each caller to each function it calls.",
-      "detail": "If function a contains the instruction b(), the call graph has an arrow from a (the caller) to b (the callee). Following arrows backwards from a function lists the code that could be affected if that function changed. A statically built call graph can miss calls made in unusual ways.",
-      "area": "code"
+      "preview": "A graph of functions and recorded call relations, with an arrow from a caller to the function it calls.",
+      "detail": "If a calls b, a is the caller and b the callee. Following arrows backwards identifies possible callers affected by a change. A graph built from source text describes the relations its analysis found, which can differ from calls made at runtime.",
+      "area": "code",
+      "related_terms": [
+        "callback",
+        "static-analysis"
+      ]
     },
     {
       "id": "callback",
@@ -55,44 +90,75 @@
       "aliases": [
         "callbacks"
       ],
-      "preview": "A function passed as a value to another function, which then runs it later, instead of being called directly by name.",
-      "detail": "In run_later(send_email), send_email is not called at that line; it is handed to run_later, which calls it afterwards. A call graph built only from direct calls misses this link. In the Code Ontology Bridge example, one of four functions in an answer was connected through a callback row, and without that row it was absent from the answer.",
-      "area": "code"
+      "preview": "A function supplied to other code so that code can call it.",
+      "detail": "In process_items(items, on_item), on_item is passed as a value. process_items may call it immediately, later or repeatedly. Recording this handoff helps a code graph include a relation that a search for direct function calls could miss.",
+      "area": "code",
+      "related_terms": [
+        "call-graph",
+        "static-analysis"
+      ]
     },
     {
       "id": "claude-code-hook",
       "term": "Claude Code hook",
       "aliases": [
+        "Claude Code hooks",
         "PreToolUse hook",
-        "hook",
-        "hooks"
+        "PreToolUse hooks"
       ],
-      "preview": "A program Claude Code runs at set moments, such as just before a command, which can let the command run, refuse it or ask a person to approve it.",
-      "detail": "Safety Core's checks run as Claude Code hooks. One hook reads each command before it runs; if a test or commit already failed in the session and the agent retries it with a setting the failed attempt lacked, the hook holds the command for a person's approval. With nobody to approve, the command does not run.",
-      "area": "code"
+      "preview": "A configured action Claude Code runs at a particular event, such as before a tool call.",
+      "detail": "Hooks can inspect event data and return a decision where the event supports one. Safety Core uses command hooks before selected tool actions to check a retry and, when required, request a person’s approval.",
+      "area": "code",
+      "related_terms": [
+        "git-hook",
+        "coding-agent"
+      ],
+      "references": [
+        {
+          "label": "Claude Code hooks reference",
+          "url": "https://code.claude.com/docs/en/hooks"
+        }
+      ]
     },
     {
       "id": "coding-agent",
       "term": "coding agent",
       "aliases": [
+        "coding agents",
         "AI coding assistant",
-        "AI coding assistants",
-        "coding agents"
+        "AI coding assistants"
       ],
-      "preview": "An AI model connected to a project so that it can read files, change code and run commands such as tests, usually in a loop until a task is done.",
-      "detail": "Claude Code (Anthropic) and Codex (OpenAI) are coding agents: each sends the model's chosen actions to the computer, such as editing a file or running pytest, and feeds the results back to the model. Both save each conversation, including commands and outputs, as a file on the user's computer.",
-      "area": "code"
+      "preview": "An AI application that can use tools to read files, edit code and run commands.",
+      "detail": "The model proposes actions; the surrounding application runs permitted tools and returns their results. Claude Code and Codex are examples. Agent Trace displays the saved session records produced by those applications.",
+      "area": "code",
+      "related_terms": [
+        "agent-skill",
+        "mcp"
+      ]
     },
     {
       "id": "commit",
       "term": "commit",
       "aliases": [
         "commits",
-        "committed"
+        "committed",
+        "Git commit",
+        "Git commits"
       ],
-      "preview": "A saved version of a project's files in git's history, with an author, a message and a link to the previous version.",
-      "detail": "Running git commit records the contents prepared in the git index as a new version. Each commit has an identifier, so any earlier version can be compared or restored. In the One Checkout and Safety Core videos, 'saving' a change means making a commit.",
-      "area": "code"
+      "preview": "A recorded snapshot of a project in Git history, with authorship, a message and links to its parent commits.",
+      "detail": "A normal commit records the prepared index. Most commits have one parent; a first commit has none and a merge can have several. The identifier names that snapshot and its history.",
+      "area": "code",
+      "related_terms": [
+        "git-index",
+        "git-patch",
+        "working-tree"
+      ],
+      "references": [
+        {
+          "label": "Git glossary",
+          "url": "https://git-scm.com/docs/gitglossary"
+        }
+      ]
     },
     {
       "id": "comparator",
@@ -100,111 +166,190 @@
       "aliases": [
         "the Comparator"
       ],
-      "preview": "A Lean tool that checks a supplied proof against a separately written challenge statement, confirming the proof proves exactly that statement with only permitted axioms.",
-      "detail": "A challenge file contains the statement alone and a solution file contains the proof. Comparator compiles both and accepts only if the theorem in the solution matches the challenge statement exactly. For the Quartic Reader, Comparator accepted the main theorem and rejected five deliberately broken proofs.",
-      "area": "maths"
+      "preview": "A tool that checks a Lean solution against a separately supplied formal challenge statement and permitted axioms.",
+      "detail": "Comparator compares the relevant formal declarations and checks the proof under its configured conditions. The challenge is itself written in Lean. Matching that challenge is different from comparing the formal statement with the original prose problem.",
+      "area": "maths",
+      "related_terms": [
+        "lean-proof",
+        "axiom",
+        "statement-fidelity"
+      ],
+      "references": [
+        {
+          "label": "Comparator documentation",
+          "url": "https://github.com/leanprover/comparator"
+        }
+      ]
     },
     {
       "id": "context-compaction",
       "term": "context compaction",
       "aliases": [
-        "compact",
+        "conversation compaction",
         "compaction"
       ],
-      "preview": "Replacing a long conversation with a shorter written summary so an AI model can continue the work within its context limit.",
-      "detail": "A model reads only a fixed amount of text at once, its context window. When a conversation nears that limit, Codex's /compact and Claude Code's equivalent ask a model to write a summary that replaces the earlier messages. Agent Trace can copy a whole thread so that a summary is written in another chat, such as ChatGPT on the web, instead.",
-      "area": "code"
+      "preview": "Condensing a long conversation so an AI application can continue within its context limit.",
+      "detail": "A summary carries forward selected decisions, facts and unfinished work. It can omit detail. Agent Trace lets a user export selected session material into another chat, where it can be summarised before work continues.",
+      "area": "code",
+      "related_terms": [
+        "coding-agent"
+      ]
     },
     {
       "id": "dafny",
       "term": "Dafny",
-      "aliases": [],
-      "preview": "A programming language from Microsoft Research in which code carries written requirements that an automatic verifier proves before the code compiles.",
-      "detail": "A Dafny method states preconditions and postconditions; the verifier translates them into logic and asks the Z3 solver to prove them. Verified Dafny can be compiled to Python, C#, Java, Go or JavaScript. In Practical Formal Verification, deliberately broken copies of each proved computation are run through Dafny to show they are rejected.",
-      "area": "maths"
+      "aliases": [
+        "Dafny proof",
+        "Dafny proofs"
+      ],
+      "preview": "A programming language and verifier for checking code against written mathematical specifications.",
+      "detail": "Preconditions describe allowed inputs, postconditions describe required results, and invariants describe what must stay true. Dafny generates proof obligations for these specifications and can compile executable code. Compilation and successful verification are distinct operations.",
+      "area": "maths",
+      "related_terms": [
+        "formal-verification"
+      ],
+      "references": [
+        {
+          "label": "Dafny reference manual",
+          "url": "https://dafny.org/dafny/DafnyRef/DafnyRef"
+        }
+      ]
     },
     {
       "id": "dependency-graph",
-      "term": "dependency graph",
+      "term": "Lean dependency graph",
       "aliases": [
-        "graph of the Lean",
-        "proof graph"
+        "dependency graph",
+        "dependency graphs",
+        "Lean dependency graphs",
+        "graph of the Lean"
       ],
-      "preview": "A graph whose nodes are Lean definitions and theorems, with a line from A to B when A's statement or proof uses B.",
-      "detail": "In Quartic Reader and General Reader a program reads these lines from the compiled Lean, so they record actual use. The SK Reader's argument map is different: AI agents drew it from the papers and formal checks, and Lean does not check it.",
-      "area": "maths"
+      "preview": "A graph showing which Lean declarations occur in other declarations’ statements or proofs.",
+      "detail": "Quartic Reader and General Reader obtain these dependencies from compiled Lean. A node can be a definition or theorem. This graph describes formal use; an authored argument map instead arranges explanatory steps for a reader.",
+      "area": "maths",
+      "related_terms": [
+        "proof-graph",
+        "lean-proof",
+        "axiom"
+      ]
     },
     {
       "id": "docstring",
       "term": "docstring",
       "aliases": [
-        "docstrings"
+        "docstrings",
+        "documentation string",
+        "documentation strings"
       ],
-      "preview": "A text description written at the top of a file, class or function in its source code, stored with the code rather than in a separate document.",
-      "detail": "In Python a docstring is a string literal placed first in a module, class or function, readable by programs at run time. Code Map reads descriptions that coding agents write in docstrings under fixed headings, such as a purpose line, so the map displays saved text and no AI writes anything new when the map opens.",
-      "area": "code"
+      "preview": "A string at the start of a Python module, class or function that documents what it does.",
+      "detail": "Python makes this string available as the object’s __doc__ attribute. CodeMap displays descriptions saved with the code and lets coding agents retrieve them as text. A docstring is documentation, so its accuracy depends on how it is maintained.",
+      "area": "code",
+      "related_terms": [
+        "static-analysis"
+      ],
+      "references": [
+        {
+          "label": "Python glossary: docstring",
+          "url": "https://docs.python.org/3/glossary.html#term-docstring"
+        }
+      ]
     },
     {
       "id": "duckdb",
       "term": "DuckDB",
       "aliases": [],
-      "preview": "An open-source SQL database that runs inside another program and stores a whole database in a single file, designed for fast analytical queries.",
-      "detail": "DuckDB needs no separate server: a Python program or command-line tool opens the database file directly. Code Ontology Bridge writes eight tables to a DuckDB file, including one row per function definition (code.symbols) and one row per call (code.calls), which Auto Ontology then reads.",
-      "area": "code"
+      "preview": "A SQL database designed for analytical queries that runs inside the application using it.",
+      "detail": "A DuckDB database can live in memory or in a file. Code Ontology Bridge stores Python functions and call relations in its tables, then queries those tables directly or through NVIDIA Auto Ontology.",
+      "area": "code",
+      "related_terms": [
+        "sql",
+        "call-graph",
+        "auto-ontology"
+      ]
     },
     {
       "id": "erdos-problem",
       "term": "Erdős problem",
       "aliases": [
         "Erdos problem",
+        "Erdős problems",
+        "Erdos problems",
         "Erdős #257",
-        "Erdős problem #257",
-        "Erdős problems"
+        "Erdős problem #257"
       ],
-      "preview": "One of the many questions posed by the mathematician Paul Erdős (1913–1996), now numbered and tracked as open or solved at erdosproblems.com.",
-      "detail": "Problem #257 asks: for every infinite set A of positive integers, is the sum over n in A of 1/(2ⁿ − 1) irrational? The terms are 1, 1/3, 1/7, 1/15, and so on. The general question is open; special cases, such as the sum over all n, are proved.",
-      "area": "maths"
+      "preview": "A mathematical question posed by Paul Erdős, catalogued by number with its known results.",
+      "detail": "Problem #257 asks whether every infinite selection from 1, 1/3, 1/7, 1/15, … has an irrational sum. The selected terms have the form 1/(2ⁿ − 1). Maths Map brings together work on eight numbered Erdős problems.",
+      "area": "maths",
+      "related_terms": [
+        "irrationality",
+        "formal-conjectures"
+      ]
     },
     {
       "id": "evalplus",
       "term": "EvalPlus",
-      "aliases": [
-        "HumanEval",
-        "HumanEval+"
+      "aliases": [],
+      "preview": "A project for evaluating generated code with expanded test sets, including HumanEval+ and MBPP+.",
+      "detail": "The expanded tests expose errors that the original benchmark tests can miss. Zenith uses faulty implementations from this setting to score generated test inputs. EvalPlus names the wider project; HumanEval and HumanEval+ name particular benchmarks.",
+      "area": "code",
+      "related_terms": [
+        "test-input",
+        "test-harness",
+        "held-out-problems"
       ],
-      "preview": "A research benchmark that adds many extra test inputs to the HumanEval programming problems, exposing faulty solutions that passed the original tests.",
-      "detail": "HumanEval is a set of 164 short Python problems with tests. The EvalPlus researchers generated additional inputs and found AI-written solutions (from ChatGPT, CodeGen and InCoder, among others) that pass the original tests but fail the new ones. Zenith uses those faulty solutions as bugs for a model's test inputs to catch.",
-      "area": "code"
+      "references": [
+        {
+          "label": "EvalPlus project",
+          "url": "https://github.com/evalplus/evalplus/blob/master/README.md"
+        },
+        {
+          "label": "EvalPlus research paper",
+          "url": "https://arxiv.org/abs/2305.01210"
+        }
+      ]
     },
     {
       "id": "exit-code",
       "term": "exit code",
       "aliases": [
-        "exit code 0",
-        "exit status"
+        "exit codes",
+        "exit status",
+        "exit code 0"
       ],
-      "preview": "The number a program returns when it finishes; 0 conventionally means success and any other number means failure.",
-      "detail": "Shells and tools such as git hooks read exit codes to decide what happens next. In a pipeline such as pytest | tail, the shell by default reports the exit code of the last program (tail), so exit code 0 can appear even when tests failed; the saved test counts show the actual result.",
-      "area": "code"
+      "preview": "A number a finished command returns to the program that ran it; zero conventionally signals success.",
+      "detail": "The meaning of other values depends on the command. A shell pipeline’s reported status can also depend on shell options and which command failed. Reading a test’s recorded output can therefore answer a different question from reading the final exit code.",
+      "area": "code",
+      "related_terms": [
+        "git-hook",
+        "test-harness"
+      ]
     },
     {
       "id": "exposition",
       "term": "exposition",
       "aliases": [
+        "expository paper",
         "exposition paper",
-        "expository paper"
+        "expositions"
       ],
-      "preview": "A paper that explains a result to any reader with general mathematical training, not only specialists, working through examples before the general proof.",
-      "detail": "An exposition assumes standard tools such as calculus, linear algebra and probability, but not the field's literature. It works small cases first so the main idea appears before the full argument. In the funnel it comes after the specialist paper and before the video; for Erdős problem #257 it is 16 pages. A specialist paper, by contrast, is written for experts in the field and skips what they already know.",
-      "area": "explain"
+      "preview": "An explanation of a mathematical result for readers who do not specialise in that result’s field.",
+      "detail": "An exposition can introduce the needed ideas, work through examples and then explain the argument. In the funnel it is one of the written outputs between the specialist paper and the video. Its assumed background should be stated for that particular paper.",
+      "area": "explain",
+      "related_terms": [
+        "specialist-paper",
+        "research-record"
+      ]
     },
     {
       "id": "flint-hills-series",
       "term": "Flint Hills series",
       "aliases": [],
-      "preview": "The infinite sum of 1/(n³ sin²n) over positive whole numbers n; whether its running totals approach a finite number is an open question.",
-      "detail": "Convergence depends on how close n comes to a multiple of π, so it is tied to π's irrationality exponent. OpenAI's π paper states a consequence for this series, but its chosen Lean statement PiExponent covers only the exponent claim.",
-      "area": "maths"
+      "preview": "The infinite sum of 1/(n³ sin² n) over positive integers n, with the angle measured in radians.",
+      "detail": "Some denominators become small when an integer is very close to a multiple of π, linking the convergence question to rational approximations of π. The Atlas example compares reports about an exponent statement and a separate consequence for this series.",
+      "area": "maths",
+      "related_terms": [
+        "irrationality-exponent"
+      ]
     },
     {
       "id": "forced-alignment",
@@ -213,97 +358,163 @@
         "forced aligner",
         "forced-alignment"
       ],
-      "preview": "Matching a known transcript to its audio to find the exact start and end time of every word or phoneme.",
-      "detail": "Speech recognition has to guess the words; forced alignment already has them and only finds where each one occurs in the audio, usually with an acoustic model run over phonemes. The Montreal Forced Aligner and WhisperX's alignment step are common tools. It gives tighter word boundaries than the timestamps a recogniser produces as a by-product. The new videos' word times were taken from Whisper estimates, without forced alignment.",
-      "area": "explain"
+      "preview": "Matching a supplied transcript to recorded speech to estimate where its words or sounds occur.",
+      "detail": "Speech recognition predicts the words; alignment starts from a transcript and estimates their positions in the audio. The boundaries still have uncertainty. A narration plan can use those positions to place visual events near the intended spoken words.",
+      "area": "explain",
+      "related_terms": [
+        "word-timing",
+        "whisper"
+      ]
     },
     {
       "id": "formal-conjectures",
       "term": "Formal Conjectures",
-      "aliases": [],
-      "preview": "Google DeepMind's open GitHub repository of mathematical conjectures stated in Lean 4, each tagged with its status, such as research open or research solved.",
-      "detail": "The repository includes many Erdős problems. Its entry for Erdős problem #257 keeps the general question tagged open and lists Erdős's 1968 case as solved, with a link to the Lean proof in Will's repository.",
-      "area": "maths"
+      "aliases": [
+        "formal-conjectures"
+      ],
+      "preview": "Google DeepMind’s public collection of mathematical problem statements written in Lean.",
+      "detail": "Its entries include numbered Erdős problems and information about their research and formalisation status. The packet’s #257 example distinguishes the general question from the particular 1968 case linked to Will’s proof repository.",
+      "area": "maths",
+      "related_terms": [
+        "erdos-problem",
+        "lean-4"
+      ]
     },
     {
       "id": "formal-verification",
       "term": "formal verification",
       "aliases": [
-        "formal proof",
-        "formalisation",
-        "formalization",
         "formally verified"
       ],
-      "preview": "Proving with machine-checked logic that a program or mathematical statement meets a precise written specification, instead of testing examples.",
-      "detail": "A formal proof is written in a language such as Lean or Dafny so that software can check every step from axioms and earlier results. The guarantee covers only the stated specification: a proof that a sorting function returns a sorted list says nothing about its running time or about code outside the proved function.",
-      "area": "maths"
+      "preview": "Using mathematical methods to establish that a formal model or program satisfies a stated specification.",
+      "detail": "The specification says what is being checked. A proof may cover one calculation, one theorem or a larger system. Formalising a statement means expressing it precisely; verifying a proof or program is a further task.",
+      "area": "maths",
+      "related_terms": [
+        "dafny",
+        "lean-proof",
+        "statement-fidelity"
+      ]
     },
     {
       "id": "git-hook",
-      "term": "git hook",
+      "term": "Git hook",
       "aliases": [
-        "git hooks",
-        "pre-commit hook"
+        "Git hooks",
+        "pre-commit hook",
+        "pre-commit hooks"
       ],
-      "preview": "A program git runs automatically at a set step, such as before a commit, often to run tests or format checks and refuse the step if they fail.",
-      "detail": "A pre-commit hook in .git/hooks runs before each commit; if it exits with a non-zero code, git refuses the commit. One Checkout turns git hooks off for its commits, so the agents must run the project's required tests themselves.",
-      "area": "code"
+      "preview": "A script Git can run at a particular stage of an operation, such as before creating a commit.",
+      "detail": "A pre-commit hook can run checks and stop that commit command by returning a failing status. Other hooks run after an operation. Git hooks belong to Git; Claude Code hooks run at events in the coding-agent application.",
+      "area": "code",
+      "related_terms": [
+        "claude-code-hook",
+        "commit",
+        "exit-code"
+      ],
+      "references": [
+        {
+          "label": "Git hooks documentation",
+          "url": "https://git-scm.com/docs/githooks"
+        }
+      ]
     },
     {
       "id": "git-index",
-      "term": "git index",
+      "term": "Git index",
       "aliases": [
-        "index",
-        "staged",
-        "staging area"
+        "Git staging area",
+        "staging area",
+        "staged changes"
       ],
-      "preview": "Git's prepared copy of the files for the next commit, filled by git add and separate from the files on disk.",
-      "detail": "git add copies a file's current contents into the index; git commit then records the index, not the working tree. If one agent staged a file before another agent fixed it on disk, the staged copy still contains the old code, and a commit from it puts the old code back into history.",
-      "area": "code"
+      "preview": "Git’s stored preparation area for the contents of the next commit.",
+      "detail": "Staging a file or patch updates this area. Later edits in the working tree do not automatically change the staged version. That difference explains how an older staged copy can conflict with another agent’s newly committed fix.",
+      "area": "code",
+      "related_terms": [
+        "commit",
+        "working-tree",
+        "git-patch"
+      ],
+      "references": [
+        {
+          "label": "Git glossary",
+          "url": "https://git-scm.com/docs/gitglossary"
+        }
+      ]
     },
     {
       "id": "git-patch",
-      "term": "git patch",
+      "term": "Git patch",
       "aliases": [
-        "diff",
-        "patch"
+        "Git patches",
+        "patch",
+        "patches"
       ],
-      "preview": "A text file listing exact line changes to files (lines removed and lines added, with surrounding lines for position), which git can apply to a version of the code.",
-      "detail": "A patch is produced by git diff and applied by git apply. Lines starting with '-' are removed and lines starting with '+' are added. One Checkout takes a patch the agent supplies, applies it to the last commit, and commits the result, without copying the whole shared file.",
-      "area": "code"
+      "preview": "A description of changes between file versions, such as added and removed lines with their surrounding context.",
+      "detail": "Git can produce patch text from a comparison and apply it to another version. One Checkout uses a selected patch to build a commit while leaving other unfinished edits in the shared working tree.",
+      "area": "code",
+      "related_terms": [
+        "commit",
+        "git-index",
+        "working-tree"
+      ],
+      "references": [
+        {
+          "label": "Git patch format",
+          "url": "https://git-scm.com/docs/git-diff"
+        }
+      ]
     },
     {
       "id": "git-worktree",
-      "term": "git worktree",
+      "term": "Git worktree",
       "aliases": [
-        "git worktrees",
-        "worktrees"
+        "Git worktrees",
+        "linked worktree",
+        "linked worktrees"
       ],
-      "preview": "A git feature that gives one repository several working folders, each with its own checked-out branch, so agents can edit separate copies.",
-      "detail": "git worktree add creates another folder linked to the same history. Separate worktrees keep two agents' unfinished edits apart, but a fix made in one must be merged or copied into the other before that agent can test with it. One Checkout is for agents that already share one folder.",
-      "area": "code"
+      "preview": "A checked-out working tree with its own Git state, attached to a repository that can also have other worktrees.",
+      "detail": "Linked worktrees share repository history and objects but have separate checked-out files and index state. They provide separate places to work. One Checkout explores a different arrangement: several agents editing one shared checkout.",
+      "area": "code",
+      "related_terms": [
+        "working-tree",
+        "git-index"
+      ],
+      "references": [
+        {
+          "label": "Git worktree documentation",
+          "url": "https://git-scm.com/docs/git-worktree"
+        }
+      ]
     },
     {
       "id": "ground-state",
       "term": "ground state",
       "aliases": [
-        "ground states",
-        "lowest energy"
+        "ground states"
       ],
-      "preview": "An arrangement of a system with the lowest possible energy; in Will's spin-glass films, the arrangement with the highest score.",
-      "detail": "On the four-arrow board in the sk-no-gap film, all 16 arrangements are scored and the best score is 7, reached by all arrows up and by all arrows down. With random Gaussian strengths, the ground state is almost surely unique apart from reversing every arrow.",
-      "area": "maths"
+      "preview": "A configuration with the lowest possible energy for the system being considered.",
+      "detail": "The spin-glass videos use a score equal to minus the energy, so the ground state has the highest score. A near-ground-state configuration has energy close to the minimum; the interesting question is how different such good configurations can be.",
+      "area": "maths",
+      "related_terms": [
+        "spin-glass",
+        "sherringtonkirkpatrick-model"
+      ]
     },
     {
       "id": "held-out-problems",
       "term": "held-out problems",
       "aliases": [
-        "held-out",
-        "held-out set"
+        "held-out problem",
+        "held out problems",
+        "held-out tasks"
       ],
-      "preview": "Problems kept separate from anything the model or method saw during preparation, used only for the final measurement.",
-      "detail": "In the Zenith study the record of missed bugs came from 28 practice problems, and scores were measured on 58 other problems the model had not seen. The plan was saved with a timestamp before any held-out run, so the measurement could not be changed after seeing results.",
-      "area": "code"
+      "preview": "Problems set aside from the examples used to develop a method, then used to evaluate it.",
+      "detail": "In Zenith, the missed-bug material comes from practice problems and the reported comparison uses 58 other problems. Held out refers to this experiment’s preparation; it does not establish that the underlying model never encountered the problems during training.",
+      "area": "code",
+      "related_terms": [
+        "evalplus",
+        "test-input"
+      ]
     },
     {
       "id": "intermediate-representation",
@@ -312,20 +523,29 @@
         "IR",
         "intermediate representations"
       ],
-      "preview": "A structured description that sits between a source form and a final output, so it can be read, edited and tested before the output is produced.",
-      "detail": "The term comes from compilers, which translate source code into an intermediate representation before generating machine code. In Narration IR the source is the spoken script and the output is animation code. For each sentence the plan records what it means, which sources support it, and picture changes attached to identifiers of spoken words, not to seconds. A person can read and correct the plan before any animation code exists.",
-      "area": "explain"
+      "preview": "A structured form between an input and a final output, used to make a transformation easier to inspect or carry out.",
+      "detail": "Compilers use intermediate representations between source code and generated code. Narration IR applies the idea to explanation: a plan records sentence meanings, source quotations and visual events before an animation is produced.",
+      "area": "explain",
+      "related_terms": [
+        "word-timing",
+        "agent-skill"
+      ]
     },
     {
       "id": "irrationality",
       "term": "irrationality",
       "aliases": [
         "irrational",
-        "irrational number"
+        "irrational number",
+        "irrational numbers"
       ],
-      "preview": "A real number is irrational when it cannot be written as p/q with whole numbers p and q, q not zero.",
-      "detail": "Examples are √2 and π. A common route to proving a sum S irrational: assume S = p/q, so q·S is a whole number; then find a positive remainder smaller than 1/q, which is impossible for a fraction with denominator q.",
-      "area": "maths"
+      "preview": "The property of a real number that cannot be written as p/q for integers p and q with q nonzero.",
+      "detail": "Every finite sum of fractions is rational, but the limit of infinitely many such partial sums can be irrational. The #257 video proves a particular irrationality result by ruling out every possible denominator using a carefully constructed remainder.",
+      "area": "maths",
+      "related_terms": [
+        "erdos-problem",
+        "irrationality-exponent"
+      ]
     },
     {
       "id": "irrationality-exponent",
@@ -333,35 +553,63 @@
       "aliases": [
         "irrationality measure"
       ],
-      "preview": "The largest μ for which |x − p/q| < 1/q^μ has infinitely many fraction solutions p/q; it measures how well fractions approximate x.",
-      "detail": "Every irrational number has irrationality exponent at least 2, and almost every real number has exactly 2. Fractions such as 22/7 approximate π. OpenAI's paper in Plectis Atlas family 017 claims that the irrationality exponent of π is exactly 2, the smallest possible value.",
-      "area": "maths"
+      "preview": "A number describing how closely a real number can be approximated by infinitely many fractions.",
+      "detail": "For x, it is the supremum of exponents μ for which 0 < |x − p/q| < 1/q^μ has infinitely many integer pairs p, q with q positive. A larger exponent permits unusually accurate rational approximations.",
+      "area": "maths",
+      "related_terms": [
+        "irrationality",
+        "flint-hills-series"
+      ]
     },
     {
       "id": "lean-4",
       "term": "Lean 4",
       "aliases": [
         "Lean",
-        "Lean code",
-        "Lean proof",
-        "Lean theorem prover"
+        "Lean theorem prover",
+        "Lean proof assistant"
       ],
-      "preview": "A programming language and proof assistant whose small trusted kernel accepts a proof only after checking every logical step against the stated theorem.",
-      "detail": "In Lean 4 a theorem is written as a type and its proof as a term of that type; a file compiles only if the kernel accepts every proof in it. A Lean statement is the exact formal claim, so a correct proof can still prove something different from a paper's sentence. Mathlib supplies most of the background mathematics.",
-      "area": "maths"
+      "preview": "A programming language and proof assistant for expressing definitions, statements and proofs that a small kernel can check.",
+      "detail": "Tactics help construct proof terms; the kernel checks those terms against their types. Files can also contain assumptions or unfinished placeholders, so a successful build alone is not the same as a completed proof of every stated theorem.",
+      "area": "maths",
+      "related_terms": [
+        "lean-proof",
+        "axiom",
+        "mathlib"
+      ],
+      "references": [
+        {
+          "label": "Lean reference: validating proofs",
+          "url": "https://lean-lang.org/doc/reference/latest/ValidatingProofs/"
+        }
+      ]
     },
     {
       "id": "lean-proof",
       "term": "Lean proof",
       "aliases": [
         "Lean proofs",
-        "Lean-accepted",
-        "Lean-checked",
-        "formal proof"
+        "Lean-checked proof",
+        "Lean-accepted proof"
       ],
-      "preview": "A proof written in the Lean language that Lean's kernel has accepted, meaning every step has been mechanically derived from the stated definitions and axioms.",
-      "detail": "Acceptance covers the proof of the formal statement as written in Lean. It does not cover whether that statement matches the problem in the paper (statement fidelity), and it says nothing about the prose papers or videos made from the proof. The quantum query result's Lean proof is about 29,000 lines. The reader websites link each section of a paper to the Lean declarations it describes.",
-      "area": "explain"
+      "preview": "A proof expressed in Lean as a term whose type is the theorem statement.",
+      "detail": "When the kernel accepts the term, it establishes that formal statement from its definitions and declared assumptions. A reader website can link a passage of prose to the declarations involved. Matching the prose to the formal statement is a separate question.",
+      "area": "explain",
+      "related_terms": [
+        "lean-4",
+        "statement-fidelity",
+        "axiom"
+      ],
+      "references": [
+        {
+          "label": "Lean reference: validating proofs",
+          "url": "https://lean-lang.org/doc/reference/latest/ValidatingProofs/"
+        },
+        {
+          "label": "Lean reference: axioms",
+          "url": "https://lean-lang.org/doc/reference/latest/Axioms"
+        }
+      ]
     },
     {
       "id": "manim",
@@ -371,42 +619,71 @@
         "ManimCE",
         "ManimGL"
       ],
-      "preview": "A Python library for programmatic mathematical animation, created by Grant Sanderson for his 3Blue1Brown videos.",
-      "detail": "In Manim, each animation is Python code: objects such as equations, graphs and shapes are created, transformed and moved over time, then rendered to video. There are two main versions, ManimGL, Sanderson's own, and ManimCE, the community edition. The 3Blue1Brown style, pictures that change in time with the narration, is the model Will cites for the funnel's video level.",
-      "area": "explain"
+      "preview": "A family of Python tools for making mathematical animations from code.",
+      "detail": "Code creates equations, shapes and graphs, then specifies their changes over time. Manim Community and ManimGL are related implementations with different APIs. A narration plan can describe the intended visual explanation before code for a particular renderer is written.",
+      "area": "explain",
+      "related_terms": [
+        "intermediate-representation",
+        "word-timing"
+      ]
     },
     {
       "id": "mathlib",
-      "term": "Mathlib",
+      "term": "mathlib",
       "aliases": [
+        "Mathlib",
         "mathlib4"
       ],
-      "preview": "The community-maintained library of formalised mathematics for Lean 4, from basic algebra to analysis and probability.",
-      "detail": "Mathlib is developed on GitHub as leanprover-community/mathlib4 and reviewed by maintainers before each contribution is merged. Most Lean proofs of research mathematics, including the Erdős and quartic proofs here, import its definitions of real numbers, sums, limits and probability.",
-      "area": "maths"
+      "preview": "The community-maintained Lean library of mathematical definitions and proved results.",
+      "detail": "A Lean development can import mathlib and build on existing results instead of proving every prerequisite again. Its declarations also appear in dependency graphs and in the list of results a proof uses.",
+      "area": "maths",
+      "related_terms": [
+        "lean-4",
+        "dependency-graph"
+      ]
     },
     {
       "id": "mcp",
       "term": "MCP",
       "aliases": [
-        "MCP server",
         "Model Context Protocol"
       ],
-      "preview": "Model Context Protocol, an open standard by which an AI application connects to outside programs (MCP servers) that offer it tools and data.",
-      "detail": "An MCP server is a program that lists named tools, such as search_trace_threads, which an AI application like Claude Code or Codex can call and receive results from. Agent Trace's optional MCP server lets an agent search and read saved Codex and Claude Code conversations, the same records a person sees in its window.",
-      "area": "code"
+      "preview": "Model Context Protocol: a standard way for AI applications to connect to tools, data and reusable prompts.",
+      "detail": "An MCP server can expose executable tools, readable resources and prompt templates. A compatible client decides how to make these available. Agent Trace’s optional server exposes access to saved session records.",
+      "area": "code",
+      "related_terms": [
+        "coding-agent"
+      ],
+      "references": [
+        {
+          "label": "MCP server primitives",
+          "url": "https://modelcontextprotocol.io/specification/2025-06-18/server"
+        }
+      ]
     },
     {
       "id": "nearly-quartic-separation",
       "term": "nearly quartic separation",
       "aliases": [
+        "quartic separation",
+        "nearly quartic query separation",
         "fourth-power result",
-        "quartic result",
-        "quartic separation"
+        "quartic result"
       ],
-      "preview": "A total Boolean function whose randomized query complexity is roughly the fourth power of its quantum query complexity, matching the known upper limit up to lower-order factors.",
-      "detail": "Since R(f) = O(Q(f)⁴) for every total function, the fourth power is the largest possible gap between randomized and quantum query counts. OpenAI's AI-written result constructs a function with R(f) = Q(f)^(4−o(1)), where o(1) shrinks to zero as the input grows. AI systems Will directs proved the result again in Lean 4, in about 29,000 lines.",
-      "area": "explain"
+      "preview": "A family of problems where randomized query counts grow almost as the fourth power of quantum query counts.",
+      "detail": "For the relevant total Boolean functions, the construction makes R(fₙ) at least Q(fₙ)^(4 − o(1)) as the family grows: the exponent approaches four. This approaches the known fourth-power upper bound on input queries, rather than total running time.",
+      "area": "explain",
+      "related_terms": [
+        "randomized-query-complexity",
+        "quantum-query-complexity",
+        "total-function"
+      ],
+      "references": [
+        {
+          "label": "Aaronson et al.: Degree vs. Approximate Degree and Quantum Implications of Huang’s Sensitivity Theorem",
+          "url": "https://arxiv.org/abs/2010.12629"
+        }
+      ]
     },
     {
       "id": "ontology",
@@ -414,135 +691,198 @@
       "aliases": [
         "ontologies"
       ],
-      "preview": "A formal description of the kinds of things in a domain, their properties and the relationships between them, written so a program can use it.",
-      "detail": "In data systems an ontology names entity types (for example 'function' and 'call'), their attributes and how they relate (a call has a caller and a callee). NVIDIA's Auto Ontology builds such a description over database tables so that an AI model can map an English question onto the right tables, columns and joins.",
-      "area": "code"
+      "preview": "A structured account of the kinds of things in a domain, their properties and their relationships.",
+      "detail": "For code, the kinds might include functions and calls, with relations such as caller and callee. In a database application, these concepts can be connected to concrete tables and columns so a query system has useful context.",
+      "area": "code",
+      "related_terms": [
+        "semantic-model",
+        "auto-ontology"
+      ]
     },
     {
       "id": "palomar",
       "term": "Palomar",
       "aliases": [
-        "Palomar registry",
-        "PalomarCorpus"
+        "Palomar registry"
       ],
-      "preview": "A public registry of formal proof entries at palomar-registry.org, each recording a challenge statement, its proof files and the recorded checker results.",
-      "detail": "Will's Palomar entry for the Erdős work records selected results with challenge files containing the statements alone and solution files containing the Lean proofs. The saved result of 24 September 2026 lists eight theorems accepted by Lean's own checker and by a second checker, nanoda.",
-      "area": "maths"
+      "preview": "The formal-proof registry used in the supplied Erdős example to record challenge statements, proof files and checker results.",
+      "detail": "An entry records the particular submitted statements and proofs alongside its saved results. In the packet’s #257 example, the registry is one route from the paper to the formal statement and the proof that was checked.",
+      "area": "maths",
+      "related_terms": [
+        "comparator",
+        "lean-proof"
+      ]
     },
     {
       "id": "pldi",
       "term": "PLDI",
-      "aliases": [],
-      "preview": "Programming Language Design and Implementation, the ACM SIGPLAN annual conference on programming languages.",
-      "detail": "The paper in General Reader, Contextual Embeddings: Implementing Bound Variables Through Instance Resolution, appeared at PLDI 2026 with its four authors' Lean proof released alongside it.",
-      "area": "maths"
+      "aliases": [
+        "Programming Language Design and Implementation"
+      ],
+      "preview": "Programming Language Design and Implementation, an ACM SIGPLAN conference on programming-language research.",
+      "detail": "General Reader’s current example is Contextual Embeddings, a PLDI 2026 paper. The reader places its text beside the Lean proof released by the paper’s authors.",
+      "area": "maths",
+      "related_terms": [
+        "lean-proof"
+      ]
     },
     {
       "id": "proof-graph",
-      "term": "proof graph",
+      "term": "argument map",
       "aliases": [
-        "argument map",
-        "dependency graph",
-        "graph of the proof"
+        "argument maps",
+        "graph of the argument",
+        "graph of the proof",
+        "proof graph"
       ],
-      "preview": "A diagram of a formal proof in which each node is a definition, lemma or theorem and each edge joins a result to a result its proof uses.",
-      "detail": "On the reader websites the graph is beside the paper. Scrolling the paper highlights the nodes for the section being read, and clicking a node opens its Lean code. The graph is built from the Lean files, so it shows the formal argument's actual structure rather than a hand-drawn summary.",
-      "area": "explain"
+      "preview": "An explanatory diagram showing the main steps of an argument and how they connect.",
+      "detail": "SK Reader’s map was authored from the papers and formal material to help readers follow the explanation. It is different from a Lean dependency graph extracted from compiled declarations. A map can be useful without reproducing every formal dependency.",
+      "area": "explain",
+      "related_terms": [
+        "dependency-graph",
+        "lean-proof"
+      ]
     },
     {
       "id": "quantum-query-complexity",
       "term": "quantum query complexity",
       "aliases": [
-        "Q(f)",
-        "quantum query"
+        "quantum queries",
+        "quantum query",
+        "Q(f)"
       ],
-      "preview": "The fewest queries a quantum algorithm needs to compute a function with probability at least 2/3, where one query may read a superposition of positions.",
-      "detail": "Written Q(f). Grover's algorithm finds a marked item among n with about √n queries, against about n classically. For total functions the gap between R(f) and Q(f) is at most a fourth power, and OpenAI showed functions that come within any smaller power of that limit.",
-      "area": "maths"
+      "preview": "The fewest input-oracle calls a quantum algorithm needs to compute a function with a specified success guarantee.",
+      "detail": "In the bounded-error setting here, success must be at least two thirds on every input, and the query bound is worst case. A query can act on a superposition of input positions; that does not reveal all those bits separately.",
+      "area": "maths",
+      "related_terms": [
+        "query-complexity",
+        "randomized-query-complexity",
+        "total-function"
+      ]
     },
     {
       "id": "query-complexity",
       "term": "query complexity",
       "aliases": [
-        "queries",
-        "query",
-        "query-complexity"
+        "query-complexity",
+        "input queries",
+        "query count"
       ],
-      "preview": "The number of input bits an algorithm must read, in the worst case, to compute a function; running time is not counted.",
-      "detail": "The input is a string of bits hidden behind an oracle, and each query reveals one bit. For example, deciding whether n bits contain a 1 needs n queries for an ordinary deterministic algorithm. Deterministic, randomized and quantum query complexity, written D(f), R(f) and Q(f), count queries for the three kinds of algorithm.",
-      "area": "maths"
+      "preview": "The number of calls an algorithm makes to an input oracle, counting those accesses rather than all its computation.",
+      "detail": "A classical bit query returns a requested input bit. A quantum query is an allowed oracle operation that can act on a superposition. Query complexity compares algorithms in this access model, which is why it is not a direct measurement of elapsed time.",
+      "area": "maths",
+      "related_terms": [
+        "quantum-query-complexity",
+        "randomized-query-complexity"
+      ]
     },
     {
       "id": "randomized-query-complexity",
       "term": "randomized query complexity",
       "aliases": [
-        "R(f)",
-        "randomized query"
+        "randomised query complexity",
+        "randomized queries",
+        "randomised queries",
+        "R(f)"
       ],
-      "preview": "The fewest queries a coin-flipping algorithm needs to compute a function correctly with probability at least 2/3 on every input.",
-      "detail": "Written R(f). R(f) ≤ D(f), since a deterministic algorithm is a special case. For total functions, Aaronson, Ben-David, Kothari, Rao and Tal (2020) proved D(f) = O(Q(f)⁴), so R(f) is at most a constant times Q(f)⁴. OpenAI's 2026 result gives total functions with R(f) ≥ Q(f)^(4 − o(1)), so the power four cannot be lowered.",
-      "area": "maths"
+      "preview": "The fewest input queries a randomised algorithm needs under a specified success guarantee and query bound.",
+      "detail": "Here R(f) uses a worst-case query bound and requires a correct answer with probability at least two thirds on every input. The random choices can change which positions are queried. Different conventions should be stated when used.",
+      "area": "maths",
+      "related_terms": [
+        "query-complexity",
+        "quantum-query-complexity"
+      ]
     },
     {
       "id": "recursive-query",
-      "term": "recursive query",
+      "term": "recursive SQL query",
       "aliases": [
-        "recursive CTE",
-        "recursive SQL"
+        "recursive query",
+        "recursive queries",
+        "recursive SQL",
+        "WITH RECURSIVE"
       ],
-      "preview": "An SQL query that repeats a step on its own results, used to follow chains such as caller of a caller of a function.",
-      "detail": "Written with WITH RECURSIVE, it starts from some rows and repeatedly joins the latest results back onto a table until no new rows appear. To find everything affected by changing function f, it starts at f, finds functions that call f, then functions that call those, and so on, often recording the number of steps from each one to f.",
-      "area": "code"
+      "preview": "A database query that repeatedly uses rows from an earlier step to find more results.",
+      "detail": "A recursive common table expression can follow a function’s callers, then their callers, and so on. The query needs a stopping condition or cycle handling appropriate to its form; WITH RECURSIVE by itself does not guarantee termination.",
+      "area": "code",
+      "related_terms": [
+        "sql",
+        "call-graph"
+      ],
+      "references": [
+        {
+          "label": "DuckDB: recursive common table expressions",
+          "url": "https://duckdb.org/docs/lts/sql/query_syntax/with"
+        }
+      ]
     },
     {
       "id": "research-record",
       "term": "research record",
       "aliases": [
-        "full write-up",
+        "long research record",
         "long reasoning record",
-        "long research record"
+        "full write-up"
       ],
-      "preview": "The first and longest written level of the funnel: the whole Lean proof written out in prose, step by step, meant to be complete rather than read end to end.",
-      "detail": "AI writes the record directly from the accepted Lean proof, so any section of the prose can be traced to the formal steps behind it. It can include routes that were tried and failed. For Erdős problem #257 the record is 152 pages. The shorter specialist paper and exposition are written from it.",
-      "area": "explain"
+      "preview": "The detailed written account of a result’s reasoning, used as the fuller source for shorter explanations.",
+      "detail": "In the funnel, the record works through the formal proof and its mathematical context before a specialist paper, exposition and video are produced. It is designed for looking up detail as well as reading sequentially.",
+      "area": "explain",
+      "related_terms": [
+        "specialist-paper",
+        "exposition",
+        "lean-proof"
+      ]
     },
     {
       "id": "semantic-model",
       "term": "semantic model",
       "aliases": [
-        "semantic layer",
-        "semantic models"
+        "semantic models",
+        "semantic layer"
       ],
-      "preview": "A description of what each table and column in a database means, its keys and how tables join, in a form a query-writing program can import.",
-      "detail": "A semantic model adds meaning to a bare schema: for example, that code.calls.caller_id refers to code.symbols.id, and that a row in code.calls is one call from one function to another. Code Ontology Bridge writes these descriptions in Auto Ontology's import format, plus six optional saved queries such as one listing which function reaches which.",
-      "area": "code"
+      "preview": "A description of what data means and how its entities, fields and relationships fit together.",
+      "detail": "For Code Ontology Bridge, it explains tables of functions and calls, their identifiers and how rows join. This gives a query system more context than column names alone. A semantic layer may also define reusable expressions or measures.",
+      "area": "code",
+      "related_terms": [
+        "ontology",
+        "auto-ontology",
+        "sql"
+      ]
     },
     {
       "id": "sherringtonkirkpatrick-model",
       "term": "Sherrington–Kirkpatrick model",
       "aliases": [
-        "SK",
-        "SK model",
-        "SK spin glass",
         "Sherrington-Kirkpatrick model",
         "Sherrington–Kirkpatrick spin glass",
-        "spin glass"
+        "Sherrington-Kirkpatrick spin glass",
+        "SK model",
+        "SK spin glass",
+        "SK"
       ],
-      "preview": "A spin-glass model of N up-or-down arrows where every pair interacts with an independent random Gaussian strength.",
-      "detail": "Each arrangement σ ∈ {+1, −1}ᴺ has energy H(σ) = −(1/√N) Σ_{i<j} g_ij σ_i σ_j, with g_ij independent standard Gaussians; Will's films use score = −energy. Introduced by David Sherrington and Scott Kirkpatrick in 1975. Reversing every arrow leaves the energy unchanged.",
-      "area": "maths"
+      "preview": "A spin-glass model in which every pair of spins interacts with a randomly chosen strength.",
+      "detail": "Each spin is +1 or −1. In a common zero-field convention, H(σ) = −n^(−1/2) Σᵢ<ⱼ Jᵢⱼσᵢσⱼ, with independent standard Gaussian couplings Jᵢⱼ. The videos draw spins as arrows and use a score equal to minus the energy.",
+      "area": "maths",
+      "related_terms": [
+        "spin-glass",
+        "ground-state"
+      ]
     },
     {
       "id": "specialist-paper",
       "term": "specialist paper",
       "aliases": [
         "expert paper",
-        "short paper",
-        "short paper for experts"
+        "short paper for experts",
+        "specialist papers"
       ],
-      "preview": "A short research paper written for experts in the result's field, which skips what the field's literature already establishes and spends its pages on the new steps.",
-      "detail": "In the funnel, AI compares the research record with published papers on the problem to sort standard steps from new ones, then writes in the form a paper in that literature would take. For Erdős problem #257 it is 26 pages, against 152 for the record. It differs from an exposition, which assumes general mathematical training rather than knowledge of the field.",
-      "area": "explain"
+      "preview": "A paper written for readers who already know the relevant research field.",
+      "detail": "It can rely on standard background and concentrate on the result and its argument. In the funnel it is shorter than the research record. The exposition instead supplies more context for readers outside that specialism.",
+      "area": "explain",
+      "related_terms": [
+        "research-record",
+        "exposition"
+      ]
     },
     {
       "id": "spin-glass",
@@ -551,52 +891,78 @@
         "spin glasses",
         "spin-glass"
       ],
-      "preview": "A magnetic material or model in which pair interactions of mixed signs conflict, so no arrangement of the magnetic directions satisfies every pair.",
-      "detail": "Iron atoms scattered through copper are a physical example. In a triangle where two pairs favour agreeing and the third favours opposite directions, one preference always fails; this conflict is called frustration. Mathematicians study the low-energy arrangements of random models such as the Sherrington–Kirkpatrick model.",
-      "area": "maths"
+      "preview": "A model of a disordered magnet with competing interactions between spins.",
+      "detail": "A spin can be represented by an up or down arrow. Some interactions favour matching spins and others favour opposite spins, so satisfying one interaction can conflict with satisfying another. The Sherrington–Kirkpatrick model is one particular spin-glass model.",
+      "area": "maths",
+      "related_terms": [
+        "sherringtonkirkpatrick-model",
+        "ground-state"
+      ]
     },
     {
       "id": "sql",
       "term": "SQL",
       "aliases": [
+        "Structured Query Language",
         "SQL query",
-        "query"
+        "SQL queries"
       ],
-      "preview": "Structured Query Language, the standard language for reading and changing data in relational databases made of tables with rows and columns.",
-      "detail": "An SQL query states which rows to return, for example SELECT name FROM symbols WHERE kind = 'function'. Queries can join tables on shared keys. Every answer in the Code Ontology Bridge study is a saved SQL query, so a person can rerun it against the same database and see the same rows.",
-      "area": "code"
+      "preview": "Structured Query Language: a language for retrieving and changing data organised in relational tables.",
+      "detail": "A query can select rows, combine tables through joins and compute results. Code Ontology Bridge publishes SQL queries alongside its answers, so the operation can be inspected and rerun against the supplied database.",
+      "area": "code",
+      "related_terms": [
+        "duckdb",
+        "recursive-query",
+        "text-to-sql"
+      ]
     },
     {
       "id": "statement-fidelity",
       "term": "statement fidelity",
       "aliases": [
         "faithful formalisation",
-        "formalisation fidelity"
+        "formalisation fidelity",
+        "formalization fidelity"
       ],
-      "preview": "Whether a formal statement in Lean says exactly what the informal mathematical statement says, with the same objects, quantifiers and hypotheses.",
-      "detail": "Lean can accept a correct proof of a wrongly formalised statement, for example one with a hypothesis that makes it trivially true. Statement fidelity is therefore judged by a person who reads both versions, or with tools that compare a proof's statement with a separately written one. Several of these repositories mark human review of statement fidelity as pending.",
-      "area": "explain"
+      "preview": "How accurately a formal statement expresses the mathematical claim it is meant to represent.",
+      "detail": "The objects, quantifiers, hypotheses and conclusion all matter. A proof can establish its formal statement even if that statement differs from the paper. Reader links make the two versions easier to compare; the links themselves do not settle the comparison.",
+      "area": "explain",
+      "related_terms": [
+        "lean-proof",
+        "comparator",
+        "formal-verification"
+      ]
     },
     {
       "id": "static-analysis",
       "term": "static analysis",
       "aliases": [
         "static analyser",
-        "statically analysed"
+        "static analyzer"
       ],
-      "preview": "Examining a program's source code without running it, to record facts such as which functions exist and which call which.",
-      "detail": "A static analyser reads source text, usually by parsing it into a syntax tree, and reports what the text contains. Code Ontology Bridge parses Python files and records each function definition and each call it can resolve. Because nothing runs, calls built at run time (for example a function looked up by a string name) can be missed, and calls into Python's built-ins or outside libraries often have no identified target.",
-      "area": "code"
+      "preview": "Examining a program without executing it, using its source code or another representation.",
+      "detail": "An analysis can extract definitions, calls and possible dependencies. Dynamic dispatch and other runtime behaviour can make these relations incomplete or approximate. Code Ontology Bridge uses source analysis to populate its code database.",
+      "area": "code",
+      "related_terms": [
+        "call-graph",
+        "callback"
+      ]
     },
     {
       "id": "test-harness",
       "term": "test harness",
       "aliases": [
+        "test harnesses",
         "harness"
       ],
-      "preview": "The program that runs code under test with chosen inputs, compares the outputs with expected ones and records each result.",
-      "detail": "Zenith's harness runs every proposed input on the reference solution and on each faulty version, applies the time limit, records whether each bug was caught, and can re-score stored model replies with no new model calls, so anyone can replay the scoring.",
-      "area": "code"
+      "preview": "The surrounding code that runs tests, collects results and applies the scoring or pass rules.",
+      "detail": "A harness can prepare inputs, run a reference implementation and faulty versions, enforce time limits and record outputs. Zenith’s saved responses can be rescored through its harness without generating new model replies.",
+      "area": "code",
+      "related_terms": [
+        "test-input",
+        "timeout",
+        "evalplus"
+      ]
     },
     {
       "id": "test-input",
@@ -604,31 +970,45 @@
       "aliases": [
         "test inputs"
       ],
-      "preview": "A value given to a program under test, chosen so that a faulty version and a correct version return different results or the faulty one crashes.",
-      "detail": "In Zenith the model sees only a description of a short program and proposes five inputs. Each input runs through the faulty code and a correct version; a different answer, a crash, or the faulty code running past a one-second limit counts as catching the bug. An empty list is the only input that catches one CodeGen bug.",
-      "area": "code"
+      "preview": "A value or set of values supplied to a program during a test.",
+      "detail": "For a function that adds a list, an input might be [2, −1, 0]. A useful input can expose a faulty implementation by producing a wrong result, error or timeout. Not every test input reveals a bug.",
+      "area": "code",
+      "related_terms": [
+        "test-harness",
+        "timeout"
+      ]
     },
     {
       "id": "text-to-sql",
       "term": "text-to-SQL",
       "aliases": [
         "NL-to-SQL",
-        "text to SQL"
+        "text to SQL",
+        "natural-language-to-SQL"
       ],
-      "preview": "Translating a question written in ordinary language into an SQL query that returns the answer from a database.",
-      "detail": "A text-to-SQL system receives a question such as 'which functions call parse_config?' and the database's schema, writes an SQL query, runs it and returns the rows. Accuracy is usually measured by comparing returned rows with an answer key. Code Ontology Bridge counted an answer correct only if its query returned the right rows on the real database and on eight altered copies.",
-      "area": "code"
+      "preview": "Turning an ordinary-language database question into an SQL query.",
+      "detail": "For example, a question about which functions call parse_config can become a query over function and call tables. The system may then run the query and explain the rows. The query’s correctness depends on how well it expresses the question.",
+      "area": "code",
+      "related_terms": [
+        "sql",
+        "semantic-model",
+        "auto-ontology"
+      ]
     },
     {
       "id": "timeout",
       "term": "timeout",
       "aliases": [
-        "time limit",
-        "timeouts"
+        "timeouts",
+        "time limit"
       ],
-      "preview": "Stopping a program that runs longer than a fixed limit; in Zenith, faulty code still running after one second counts as a caught bug.",
-      "detail": "The correct version of each Zenith problem answers almost immediately, so a faulty version that is still running after one second is treated as faulty. About half of the 69% to 77% rise came from larger inputs that made slow faulty code exceed this limit.",
-      "area": "code"
+      "preview": "A time limit after which an operation is stopped or recorded as unfinished.",
+      "detail": "A test harness needs a rule for how to score a timeout. In the Zenith study, timeouts account for roughly half the reported gain. A timeout records that a limit was reached; its cause depends on the program and test setup.",
+      "area": "code",
+      "related_terms": [
+        "test-harness",
+        "test-input"
+      ]
     },
     {
       "id": "total-function",
@@ -637,43 +1017,71 @@
         "total Boolean function",
         "total functions"
       ],
-      "preview": "A yes-or-no function defined on every possible input string, with no promise restricting which inputs can occur.",
-      "detail": "A total Boolean function maps every string in {0,1}ⁿ to 0 or 1. Partial functions, defined only on promised inputs, allow exponential quantum speed-ups in query complexity; total functions allow at most a fourth-power gap between randomized and quantum query complexity.",
-      "area": "maths"
+      "preview": "A function defined for every input in its stated domain.",
+      "detail": "Here the relevant case is a total Boolean function: every n-bit string has an output of 0 or 1. A promise problem restricts the allowed inputs. That distinction matters when comparing randomized and quantum query complexity.",
+      "area": "maths",
+      "related_terms": [
+        "query-complexity",
+        "nearly-quartic-separation"
+      ]
     },
     {
       "id": "whisper",
       "term": "Whisper",
-      "aliases": [
-        "WhisperX",
-        "mlx-whisper"
+      "aliases": [],
+      "preview": "OpenAI’s speech-recognition system for turning recorded speech into text.",
+      "detail": "Its software can also estimate word timestamps. mlx-whisper is an implementation for Apple’s MLX framework; WhisperX is a separate project that adds alignment and other processing around speech transcription. These names are related tools, not synonyms.",
+      "area": "explain",
+      "related_terms": [
+        "word-timing",
+        "forced-alignment"
       ],
-      "preview": "OpenAI's open-source speech recognition model, which turns recorded speech into a transcript and can estimate a start and end time for each word.",
-      "detail": "Whisper is a transformer trained on about 680,000 hours of labelled audio. Word times can be estimated from its cross-attention weights by dynamic time warping (DTW), a method for lining up two sequences. WhisperX adds a separate forced-alignment step for more exact times. mlx-whisper runs Whisper on Apple silicon. Machine transcripts contain recognition errors, such as 'lien' for 'Lean'.",
-      "area": "explain"
+      "references": [
+        {
+          "label": "Whisper word timestamp implementation",
+          "url": "https://github.com/openai/whisper/blob/main/whisper/transcribe.py"
+        }
+      ]
     },
     {
       "id": "word-timing",
       "term": "word timing",
       "aliases": [
-        "word timestamps",
+        "word-timed",
         "word timings",
-        "word-timed"
+        "word timestamps"
       ],
-      "preview": "The start and end time of each spoken word in a recording, used to place a picture change at the moment a given word is said.",
-      "detail": "In a Narration IR plan a picture change is attached to a word, for example 'the turn finishes by the word down'. After recording, a speech recogniser such as Whisper supplies each word's start and end, and the change's time is computed from them. Times taken from a recogniser are estimates; forced alignment against the audio gives more exact boundaries. Re-recording changes the times, so events are rebound to the new words.",
-      "area": "explain"
+      "preview": "The estimated or annotated start and end positions of spoken words in a particular recording.",
+      "detail": "A visual event can be attached to a word identifier, then placed in time using the recording’s word positions. Re-recording changes those times, so the event must be aligned with the new audio. Recognition and forced alignment both produce estimates.",
+      "area": "explain",
+      "related_terms": [
+        "forced-alignment",
+        "whisper",
+        "intermediate-representation"
+      ]
     },
     {
       "id": "working-tree",
       "term": "working tree",
       "aliases": [
         "working directory",
-        "working-tree"
+        "working-tree edits",
+        "working-tree changes"
       ],
-      "preview": "The project files as they currently are on disk, including edits that have not been staged or committed.",
-      "detail": "Git compares three places: the last commit, the git index and the working tree. When two agents share a folder, both edit the same working tree. One Checkout commits a patch without changing the working tree, so another agent's unfinished edits stay in the files it is using.",
-      "area": "code"
+      "preview": "The checked-out files you can read and edit, including changes not yet committed.",
+      "detail": "The working tree can differ from both the current commit and the index. Saving a file changes the working tree; staging and committing are separate operations. One Checkout leaves other agents’ unfinished edits here while recording a selected patch.",
+      "area": "code",
+      "related_terms": [
+        "git-index",
+        "commit",
+        "git-worktree"
+      ],
+      "references": [
+        {
+          "label": "Git glossary",
+          "url": "https://git-scm.com/docs/gitglossary"
+        }
+      ]
     }
   ]
 }

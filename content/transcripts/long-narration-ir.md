@@ -1,0 +1,92 @@
+# Narration IR: timing an animation to the spoken word
+
+long film `long-narration-ir`, 652 s as cut. Machine transcript of Will's recorded take (lower case, recognition errors kept), one sentence per line.
+
+- So this is just a quick longer run through of my narration IR process.
+- And the way you can think about it is if you have like sort of like a script for a movie or something, you don't just have the dialogue between characters, but you also have the stage directions.
+- And let's say if you're, I mean, I don't know exactly how they make cartoons, but if I was going to make a cartoon, I would be thinking about the broad story of the pictures without committing all the time to colouring them in straight away.
+- And if it was like an animated picture, like a Pixar movie or something, you would start to figure out the broad sketches of the story for, let's say, a specific scene.
+- You would start to figure out the dialogue and maybe the dialogue depends on what's happening in the scene, but you haven't fully specified what's happening in the scene, but you also haven't specified what the dialogue is going to be.
+- I think the most effective way to develop this would be to do those two in conjunction where you start drafting out different iterations of what's going to be said while also figuring out different iterations of what's going to be shown visually
+- and what I do is basically the way to resolve this is through an intermediate representation which kind of captures both of those
+- so you can quickly iterate on the script and you just describe basically what the scene is supposed to deliver to the audience
+- what information are you trying to convey?
+- What should the audience take away from that specific visual?
+- And how does it serve the broad argument?
+- And one of the key ideas is elaborating in a lot more depth on what's been said.
+- So it'd be like if for a dialogue of characters, if you then wanted to hand that over to the animators, you would want them to not just know what's being said, but the underlying subtext of what's been said.
+- Between these characters, the emotions with which they say and all sorts of different details which aren't necessarily captured in just spoken word.
+- That's, you know, transcripts and captions or something.
+- And so how I make these videos is, I mean, right now I'm completely freestyling.
+- I'm not reading off a script.
+- But what's going to happen is I'm then going to transcribe what I say and then I'll fit it into our IR schema and get an AI to,
+- I'll probably discuss a little bit more with the AIs truly understand what I'm trying to say,
+- and then we can figure out how we can have visuals which will map to what I'm saying.
+- And so I haven't even specified visuals in this case.
+- But the key idea is for any sort of script that you have, you can then enrich that.
+- So I think of it like a just heuristically like a 10 to 1 ratio between every word said and every word used to describe that word that's been said.
+- So for instance, if you have a 10 word sentence, it would be a 100 word paragraph describing that sentence talking about okay what is he really trying to say in in in that specific snippet
+- and so when you're describing parts of a system or let's say when you're describing maths
+- so in my maths videos which you can see um one thing i i do is um the agents can link themselves to the papers of of what i'm presenting
+- so they can actually get a very in -depth understanding of the underlying mathematics by which I'm describing in words
+- so that they can create visuals that are completely mathematically correct or are more likely to be mathematically correct
+- that still match to what I'm saying and are also accurate and also can convey understanding
+- because our specific schema of our intermediate representation is designed so it kind of encodes what the deliverables would be for that visual
+- and one of the key things is you don't over specify what the visual is going to be
+- you can just specify the deliverables in such detail and at such a high level that then when it comes to um claude going through and compiling the visuals and actually writing the code for the visuals
+- um there's so much information and context and um relevant information stored in each little segment each sentence that it can create these amazing visuals
+- uh while still giving you the freedom to be able to iterate on whatever visuals you might the very last minute
+- the visuals aren't specified they're just represented to in increasingly um more uh nuanced and high fidelity levels of detail uh as you keep iterating
+- and so i think the the valuable point of that is that it doesn't pigeonhole you into one specific presentation
+- it's as if you were writing presentation notes for every slide until the day before you present you actually haven't written out the presentation in full
+- and you get your interns to do it in grind crunch time right before
+- and that's maybe a bad example because it would lead to not a great presentation because you're not familiar with the materials
+- but the thing is my recording stays the same either way what I say what I'm saying here will remain the same
+- and there might be a couple different iterations of okay what are the deliverables how do we explain the idea of an IR
+- and it might even represent it with showing the schema of different um fields in the IR um and then show that growing over time
+- and it might even show the um like I can just specify and just speak things into existence basically
+- um and maybe there there'll be a logo of like a person and they're speaking and from the mouth waves it like points the arrow into that IR
+- and it's like maybe you can take in quotations my words right here
+- it could then take that and then create visuals for that
+- and it's like okay what is he doing there he's doing like a real -time meta sort of explanation of how the video is edited using the video itself
+- and so it can take that it can show you that it can read that and it could show the rich different information attributed to that with that
+- um which would be interesting to see how it handle that handles that because it's quite messy
+- but um anyway this is my sort of rant of how narration ir really works
+- um it's not like the full thing which i use internally because that's really it's quite messy it's not easy to package uh for other people to use
+- and i think the complexity might put people off
+- but hopefully people can see that there is like a coherent like use case and through all of my videos it consistently does work quite effectively I find
+- so yeah hopefully this is at least interesting
+- and if you're interested in like ask me any questions about how I use this or if you have any critiques and how the videos are being done then I would love to hear them to improve
+- I'd be happy to credit you and I'm open to any collaboration at all
+- I think making videos with AI is only going to get better as these models get better at writing code to do visuals.
+- So I think the representations of how you specify the visuals need to also, you can anticipate that and then create deliverables based representations rather than over specification so that you allow the models to sort of flex their creative juices.
+- As they get smarter you don't want to pigeonhole models, you want to just more specify what's important to you which is the deliverable of understanding, less so saying, okay, I want this rectangle box and then an arrow which points to this rectangle box
+- and there's going to be these words in both these boxes.
+- An AI can't really, like it could probably find a much better way of representing that information through like a flowchart or maybe some 3D visual which shows like an intuitive analogy.
+- And like if you over specified exactly what you wanted for your visuals, you're not going to be able to get the best results as the models improve
+- and the key idea of everything i'm doing really is to find a bunch of different projects which will only get better as the ai models improve rather than will become obsolete by the ai models improving
+- um so yeah that's pretty much everything
+- um if you want to check out my other videos see sort of what this produces
+- we've got my maths videos we've got my walkthrough interface videos of all of my and we also have my short summaries um across all of my different videos
+- the i mean there's a short summary for this one as well
+- um and because obviously i end up just like talking my head off
+- but yeah uh you can also check out the website i've got my landing page my introduction video and all sorts of different videos
+- and i find a lot of fun actually making videos um because they keep getting better and that's that's a nice feeling
+- um and yeah thank you very much for watching if you made it this far i really appreciate that
+- um this has been highly uh unstructured and unscripted but um on purpose so that i can show just how flexible this video editing system is
+- and kind of how powerful it is in terms of getting the ai to understand what i'm saying
+- like if you just chuck my transcript and ai probably wouldn't fully grasp what i'm saying
+- but because the ai can access that same information in my own recording infrastructure then it will truly know that what i'm saying isn't a bunch of nonsense but is actually how it works
+- and so it can have a better understanding um then perhaps the audience you would be able to get just off hearing what i'm saying
+- and with that uh better understanding it can probably get a better understanding than I have at least definitely more technically grounded
+- and so it can create visuals where me and the AI are effectively on the same page or it's on you know it's on the same book I'm on the same page
+- and so it can just create visuals that perfectly encapsulate what I'm trying to say
+- which is hopefully I said in a very roundabout way just me and the AI are working from the same underlying information
+- and so since the ai has several advantages in its ability to code and ability to find information it's able to create visuals uh where i just ad hoc speak random stuff and it can just create visuals that match with what i'm saying
+- and while also understanding what it's communicating rather than just working off of just the script of what i'm saying just the transcript which would be far less effective
+- which actually is linking into the whole of having the full stack system.
+- So if you own the full stack and if your AI can access the full stack, then it gives the AI a much better understanding and a lot of flexibility.
+- But anyway, yeah, I'll wrap things up.
+- I've been waffling.
+- As I said before, check out my other videos and thank you very much for watching.
+- Hopefully see you in another video.

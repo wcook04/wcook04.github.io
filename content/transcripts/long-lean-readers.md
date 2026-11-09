@@ -1,0 +1,47 @@
+# Read a Maths Paper Beside Its Lean Proof
+
+long film `long-lean-readers`, 290 s as cut. Machine transcript of Will's recorded take (lower case, recognition errors kept), one sentence per line.
+
+- When I click this sentence in a published paper, the proof code related to that sentence opens next to it,
+- and the code is written for Lean, which is a program that checks mathematical proofs, and Lean checks the code, and whether the sentences and the code say the same thing, it's for a person and an expert to judge,
+- and so these websites put the two side by side to make it easier for the expert to do that,
+- and I've built three of these different reader websites tailored to different papers
+- which I've sort of applied my funnel to which you can check out in one of my other videos
+- and in this video I'll show you what each one lets you do
+- so we have lean exposition a quartic reader and proofreader and then which parts come from lean and which parts ai wrote
+- so first lean exposition it's built around a open ai release on mathematical models of magnets and open ai's own lean proof for that and three papers produced funnel which AI agents which I directed produced
+- and so the paper is on the left and on the right is a map of the argument in lean so with one card for each step and 131 in total
+- and as I scroll through the paper which I'm reading it highlights the step that I'm reading in the graph of the lean and AI agents drew this map from the papers and the formal checks
+- so it's a guide to the argument and Lean doesn't check the graph and the higher level of abstraction itself.
+- And so statements with a tick link to the Lean, and I click one, and the Lean opens beside the text while the paper stays where it was.
+- A compare page lines up each step across the lien and the three papers.
+- A what -ram page records what was checked, so lien accepted the main theorem with no step left unproved.
+- The same page says how the links were made.
+- An AI agent linked 799 statements in the papers to the lean and a second AI agent re -read 150 of them and fixed the ones it found loosely or wrongly worded.
+- No mathematician has reviewed the links yet to the point of checking all of it and
+- second the quartic reader.
+- OpenAI published a paper about quantum computers with no lean proof.
+- So AI systems that I directed again wrote one about 29 ,000 lines of lean and lean accepts it.
+- So the site holds OpenAI's paper and the three papers about it written with AI.
+- And beside each passage, the site lists the lien statements linked to it, each labeled by how it compares with the paper, an exact match, stronger in lien, or partial match.
+- And AI wrote these labels.
+- A graph shows which theorem in the lien uses which, read from the compiled lien by a program.
+- and comparator a program that checks a proof against the separately written statement accepted the main theorem and rejected five deliberately broken proofs
+- third proofreader
+- so where the paper and the lean both come from the paper's own authors which is slightly different and these are human authors
+- so it shows a published computer science paper whose authors release their lean with it and
+- the paper is on the left and their lean one file is on the right
+- So you can click a sentence and the lines of lean it describes open beside it.
+- And a graph and an index of the lean come from lean's own report, including the assumptions each proof relies on.
+- And I used AI to add the links from sentences to the lean, plus plain titles and short notes.
+- And so, yeah, looking at this side by side on lean exposition, the map and the links are AIs.
+- On the quartic reader, the graph comes from the lean and the links and labels are AIs.
+- on proofreader the paper the lean and the graph come from the authors and from lean and only the links and the notes are from ai and
+- on all three a program checks that each link points to a real sentence and a real piece of lean
+- whether the two say the same thing is what an expert still needs to judge and the point of the website is to make that judgment easier
+- so if you've written a paper with public lean and an open license i'd love to put it on proofreader
+- i'm currently looking into how i could turn it into a clonable repo where anybody can then run it locally deploy the website from their own provider and be able to host their papers with the lean checks in a way where they can point people to the website and they can show their lean as a graph next to their papers and
+- so it's reusable and can be applied to essentially the only thing you need is a paper and lean and you can get AI coding agents to do the rest
+- and all a human would have to do is to just inspect that and see whether it's accurate
+- so yeah all of the links to the three websites and my introduction to my whole broader project are all linked below in the description if you want to check that out
+- but otherwise thank you very much for watching and hopefully see you in the next video

@@ -1,0 +1,94 @@
+# How all my videos fit together, and where to start
+
+long film `long-introduction`, 630 s as cut. Machine transcript of Will's recorded take (lower case, recognition errors kept), one sentence per line.
+
+- As AI gets better, the output that this AI creates becomes more complex in nature of the types of things it can build or the types of maths it can prove.
+- And so everything I've been building here has come from two key ideas.
+- So the first idea, use that same AI increasing intelligence to the point of maybe super intelligence in the future to make what AI produces easier to understand for people at every level of detail.
+- So from a whole proof to a single command to using AI to build interfaces which let you sort of browse through all the different parts.
+- And then secondly, you should build things that get better as the AI model gets better.
+- So you can just plug in a smarter AI model and so as you write up that exponential, what the AI model sort of finds itself in, the system it finds itself in, it's able to then just make improvements to that. It's idempotent to any one AI model.
+- And so this is my full introduction for each project and I'll say what it makes easier to understand and how it gets better as the models do.
+- I've put them into five groups.
+- So we've got maths, we've got what a check covers, we've got code, AI coding assistance at work and then how I make these videos themselves.
+- So each project has a short video of about a minute or so that leads to a longer one
+- and at the end I'll say which short to start with.
+- So first maths, we have an AI model that has proved a conjecture about quantum computers that has been open since 2009.
+- That was a recent one and one of the two researchers who posed it wrote that he hasn't actually understood the proof yet and wondered when anyone would have time to digest results like these.
+- And so MyFunnel uses AI to do a first round of digesting results like these.
+- And it takes a proof that Lean, a program that checks proofs, has accepted and turns it into levels for different readers.
+- A full write -up of hundreds of pages, then papers around 10 to 20 pages for experts, grounded in the literature.
+- So it's written in the same way in which a paper in the literature would have been written
+- and then uses examples. And it doesn't assume prior knowledge, but just assumes general mathematical tools to make a write -up for a general mathematical reader.
+- And then finally, we get a video built off of all of that.
+- And each level informs the next.
+- And a mathematician can decide quickly whether a result deserves their time. And they can start at the level which suits them the most.
+- And AI writes the papers and animates the video.
+- And it's designed so that there's a skill to go from each layer in this funnel. so every time you do it and you get feedback you can hypothetically improve the process itself
+- and i've run the funnel on my own research with ai i tackled eight erdos problems
+- and one specifically 257 is a problem about the infinite sum of fractions
+- and in 1968 erdos proved one case of it only with an extra restriction
+- and the ai system that i direct proved that case without the restriction and we added it to google deep minds catalog of maths which now lists the problem as
+- specific case. My Erdos short says what that case is.
+- Then we have MathsMap, which is the idea of using interfaces to make what AI produces more understandable at a level of abstraction beyond just the actual substrate, but more the actual project itself.
+- How do you then make it so a person can navigate through that?
+- And so that, of course, will get better as AI gets better.
+- And so for the eight problems I posed by Paul Erdos, you start from the theorem that you care it's written up
+- and the funnel also ran on two of openai's ai written results one on quantum computers and one on a model of magnets
+- and ai systems that i direct then prove the quantum computer result in lean in about 29 000 lines
+- my quantum computer and spin glass shorts then say what each result proves
+- and the same idea applies to how you read
+- so my three reader websites put a paper beside it in a lean proof
+- so you can actually read the paper and you can see the lean as you scroll through, as well as a map of the argument which highlights the step that you're reading.
+- AI added those links and they share one longer video called read a math paper besides its lean proof.
+- And second is what a check covers.
+- So when an AI result is called checked, then a useful question is which statement has actually been checked.
+- And my website atlas holds all 719 of OpenAI's maths papers from the October release with other groups reports external reports checking them
+- and it lets you see in one place the different verdicts from from those checks and compare them side by side
+- then we have my formal verification map which shows the evidence behind each part of my 88 component public toolkit
+- so basically I have this internal system and I created these standalone slices, 88 of them,
+- and it basically checks those and it sees what each proof covers and what each proof leaves out.
+- That was a way to try and showcase a system without relying on the full complexity of how it connects together.
+- Then we have third, which is code.
+- AI coding assistants write most of my code, which is more than I could read.
+- And we have codemap, which shows the code as a map built from short descriptions that the assistants write at the top of each file within the file.
+- And an AI assistant works from that same information when it's querying my code, which you'll see in a second with NVIDIA.
+- But also that works with a front end interface, all derived from the same underlying source of information.
+- And better assistants write better descriptions. they're capable of connecting broader processes together and storing that in the descriptions
+- so the map improves as AI improves.
+- Then we have Code Ontology Bridge which applies that logic to NVIDIA's Auto Ontology, a system that uses an AI model to answer English questions about a database
+- and it turns Auto Ontology's own code into a database of every function and which calls which
+- and given that database autoontology answered about three times as many questions about its code correctly and the same ai model asked on its own so in comparison
+- and autoontology lets you choose the model so a better model slots straight in which of course improves as ai improves
+- then fourth we have ai coding assistants at work
+- so when two assistants edit the same file one checkout saves only one assistance finish fix as a commit a recorded version of the code without any others finished edits so each fix can be read and tested on its own
+- and that allows you to scale up concurrency
+- so safety core is my rule book for these assistants
+- so if you're going to scale up concurrency you better hope that you have checks and balances in place for the behavior of agents
+- and in one experiment an assistant made up a setting value so a failing test passed then committed its change in 10 runs out of 10
+- with safety course checks which hold a risky command for a person's approval, it committed none.
+- Then we also have agent trace which it shows your conversations in an interface
+- and it lets claw code and codecs actually see what the other threads are doing across the apps as they run in real time.
+- You can choose how much to copy, how much information you want to store in your clipboard for a single thread whether it's every command and its output or just the chat summaries just the AI reasoning summaries
+- and this is very good for distributing your usage limits across both chatgbt in the web and let's say codecs in the app because those are treated separately
+- and then we have zenith which is my research on AI models at test code
+- so you're trying to see how we can improve performance there
+- so when an AI model was shown the bugs and missed on practice problems. Its average score on 58 new problems rose from 69 to 77 percent.
+- And then finally how I even make these videos in the first place.
+- So before an AI writes any animation I write a plan following my instructions called narration IR
+- which is basically the ontology of a script and ontology of how you represent video prior to the visuals actually being specified.
+- So it's like what each sentence must get across which word maps to each change in the picture before you've even decided exactly what the picture is going to show.
+- So it's like, what information are you trying to get across in a short amount of time, like this video you're seeing right now.
+- And the plan says what the viewer should understand and leaves the drawing to the model at the very final step in a way compiling.
+- And so a better model draws a better picture and a better model can come up with better visuals, which can more effectively communicate what you're trying to say, for instance, in 3D.
+- All of this is just in prototype form.
+- And none of my papers have been thoroughly peer -reviewed by experts yet.
+- And I would recommend starting off with the funnel.
+- Or if you're interested in the videos in particular, I think that's quite intuitive.
+- It doesn't require any prior knowledge.
+- And if you're into the technical coding side, I would recommend NVIDIA's ontology side.
+- and yeah ultimately you can have a look at wherever is it where it interests you uh for each of those short videos you can then also find the websites in particular as well which are quite fun to just have a look around in
+- and really it like i'm making these videos to try and just show people but um and the reason why i'm trying to show people is that i really like to collaborate
+- I'd also like the opportunity to start conversations with anybody who works in or is adjacent to any labs because I feel like I've been working on some interesting problems and on a student budget I've been majorly bottlenecked but I have still just kept kept going with this
+- but I would really love for the opportunity to work with other people working on similar problems because from my position on the outside it's it's quite difficult coming from economics to find people who are on problems such as these.
+- So for that opportunity, I'd be extremely grateful, but otherwise, thank you for watching. Please check out my other videos and hopefully see you in the next one.

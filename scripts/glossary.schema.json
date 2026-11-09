@@ -1,0 +1,107 @@
+{
+  "type": "object",
+  "properties": {
+    "schema": {
+      "const": "will_cook_glossary_v1"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date"
+    },
+    "about": {
+      "type": "string"
+    },
+    "terms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+          },
+          "term": {
+            "type": "string",
+            "minLength": 1
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "preview": {
+            "type": "string",
+            "minLength": 1
+          },
+          "detail": {
+            "type": "string",
+            "minLength": 1
+          },
+          "area": {
+            "type": "string",
+            "minLength": 1
+          },
+          "related_terms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "references": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "pattern": "^https?://"
+                },
+                "resource_id": {
+                  "type": "string",
+                  "pattern": "^(home|[a-z]+:[A-Za-z0-9][A-Za-z0-9._-]*)$"
+                }
+              },
+              "required": [
+                "label",
+                "url"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "matching": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "term",
+          "aliases",
+          "preview",
+          "detail",
+          "area"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema",
+    "updated",
+    "about",
+    "terms"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:plectis:glossary:v1",
+  "title": "Compatible Plectis glossary; definitions stay independent of page matching"
+}
