@@ -442,9 +442,9 @@ def _door_assistants():
     o.append(R(6, 8, 190, 112, "art-frame", rx=4))
     o.append(T(16, 26, "session transcript", "art-lab", 11.5))
     rows = [
-        (50, "test", "exit 1", False),
+        (50, "pytest", "exit 1", False),
         (76, "edit", "1 line", None),
-        (102, "test", "exit 0", True),
+        (102, "pytest", "exit 0", True),
     ]
     for i, (y, cmd, st, ok) in enumerate(rows):
         g = T(16, y, "$", "art-monoq", 12) + T(28, y, cmd, "art-mono", 12)
@@ -478,30 +478,31 @@ def _door_explaining():
     k = "explaining"
     o = []
     base, sc = 100, 0.42
-    o.append(R(6, 46, 58, 54, "art-frame-ink", rx=3))
-    o.append(T(35, 70, "#257", "art-f", 16, "middle"))
-    o.append(T(35, 88, "Lean ✓", "art-labi", 11.5, "middle"))
-    xs = [(88, 152, "152 pages"), (154, 26, "26 pages"), (220, 16, "16 pages")]
-    for i, (x, n, lab) in enumerate(xs):
-        o.append(plait((64, 73), (x + 2, base - n * sc - 3), c1=(76, 73), c2=(x - 8, base - n * sc - 3),
-                       amp=1.6, crossings=2, ends=False, delay=f"art-d{i}"))
+    # One Lean-accepted proof, then what AI writes from it, all on one line.
+    o.append(R(6, 46, 56, 54, "art-frame-ink", rx=3))
+    o.append(T(34, 70, "#257", "art-f", 16, "middle"))
+    o.append(T(34, 89, "Lean ✓", "art-labi", 11.5, "middle"))
+    o.append(plait((34, 110), (331, 110), amp=2.2, crossings=9, ends=False))
+    o.append(C(34, 110, 3, "art-fill"))
+    for i, (x, n) in enumerate(((84, 152), (152, 26), (220, 16))):
         o.append(G(pile(x, base, 52, n, sc), f"art-rise art-d{i + 1}"))
-        o.append(T(x + 26, 120, lab, "art-txt", 12, "middle"))
-    o.append(plait((64, 73), (288, 60), c1=(120, 30), c2=(240, 40), amp=1.6, crossings=4, ends=False, delay="art-d3"))
+        o.append(C(x + 26, 110, 3, "art-fill"))
+        o.append(T(x + 26, 128, f"{n} pages", "art-txt", 12, "middle"))
     o.append(filmframe(288, 44, 86, 56))
-    o.append(T(331, 120, "video", "art-txt", 12, "middle"))
+    o.append(T(296, 59, "video", "art-lab", 11))
+    o.append(C(331, 110, 3, "art-fill"))
     # One spoken sentence: a recorded word times the third arrow.
-    o.append(waveform(8, 372, 144, 7, seed=3))
-    widths = [22, 34, 18, 40, 26, 30, 20, 38, 28, 36, 24]
-    x = 8
+    o.append(waveform(8, 372, 146, 6, seed=3))
+    widths = [22, 34, 18, 40, 26, 30, 20, 38, 28, 36, 30]
+    x, cx = 8, 0
     for i, w in enumerate(widths):
-        cue = i == 9
+        cue = i == len(widths) - 1
         o.append(R(x, 160, w, 10, "art-fill art-cueword" if cue else "art-word", rx=2))
         if cue:
             cx = x + w / 2
         x += w + 5
-    o.append(P(f"M{_f(cx)} 158V{_f(102)}", "art-line art-dashed art-draw art-d2", ' pathLength="1"'))
-    o.append(T(cx - 22, 152, "cue word", "art-labi", 11.5, "end"))
+    o.append(P(f"M{_f(cx)} 158V{_f(101)}", "art-line art-dashed art-draw art-d2"))
+    o.append(T(cx - 7, 136, "cue word", "art-labi", 11.5, "end"))
     return svg(k, "".join(o), (380, 180))
 
 
@@ -533,25 +534,25 @@ def _door_code():
     b, rb = _codefile(6, 98, 140, 76, 38, 1, seed=5)
     o += [a, b]
     # B's function calls A's first function: the CodeMap link.
-    o.append(T(100, rb[0] + 4, "f()", "art-monoi", 12))
-    o.append(plait((119, rb[0]), (88, ra[0]), c1=(162, rb[0]), c2=(162, ra[0]), amp=2, crossings=3))
-    o.append(T(150, 96, "calls", "art-labi", 11.5))
+    o.append(T(96, rb[0] + 4, "f()", "art-monoi", 12))
+    o.append(plait((124, rb[0]), (86, ra[0]), c1=(170, rb[0]), c2=(170, ra[0]), amp=2, crossings=3))
+    o.append(T(176, 96, "calls", "art-labi", 11.5, "end"))
     # DuckDB: functions and calls written by static analysis.
     cx, top = 226, 22
     o.append(P(f"M{cx - 26} {top}v58a26 8 0 0 0 52 0v-58", "art-frame-ink"))
     o.append(P(f"M{cx - 26} {top}a26 8 0 0 0 52 0a26 8 0 0 0 -52 0Z", "art-frame-ink"))
     o.append(P(f"M{cx - 26} {top + 29}a26 8 0 0 0 52 0", "art-line art-thin"))
     o.append(T(cx, 112, "DuckDB", "art-txt", 12, "middle"))
-    o.append(plait((146, 46), (cx - 30, 52), amp=1.8, crossings=2, ends=False))
-    for i, (tx, lab) in enumerate(((266, "functions"), (322, "calls"))):
-        tw = 52
+    o.append(plait((146, 30), (cx - 30, 40), amp=1.8, crossings=2, ends=False))
+    for i, (tx, lab) in enumerate(((262, "functions"), (320, "calls"))):
+        tw = 54
         o.append(R(tx, 22, tw, 64, "art-frame", rx=3))
         o.append(R(tx, 22, tw, 16, "art-tint", rx=3))
         o.append(T(tx + tw / 2, 34, lab, "art-labi", 11, "middle"))
         for r in range(4):
             yy = 48 + r * 10
             if lab == "calls":
-                o.append(bar(tx + 6, yy, 16) + P(f"M{tx + 25} {yy}h4", "art-line-q") + bar(tx + 32, yy, 14))
+                o.append(bar(tx + 6, yy, 16) + P(f"M{tx + 25} {yy}h4", "art-line-q") + bar(tx + 33, yy, 14))
             else:
                 o.append(bar(tx + 6, yy, 24 + 10 * (r % 2)))
     # A recursive query over calls: every caller of f.
@@ -564,36 +565,37 @@ def _door_code():
 def _door_testing():
     k = "testing"
     o = [hatch(k)]
-    # 28 practice problems; their missed bugs go back to the model.
+    # 28 practice problems; the bugs their tests missed go back to the model.
     o.append(T(8, 24, "28 practice", "art-lab", 12))
     for i in range(28):
         r, c = divmod(i, 7)
         o.append(R(8 + c * 13, 36 + r * 13, 10, 10, "art-cell", rx=1.5))
-    o.append(T(8, 108, "missed bugs", "art-labi", 12))
-    o.append(T(8, 122, "shown to the model", "art-lab", 12))
-    o.append(plait((102, 62), (164, 104), c1=(140, 62), c2=(130, 104), amp=2, crossings=3))
-    # 58 held-out problems: share of bugs caught.
+    o.append(T(8, 112, "missed bugs", "art-labi", 12))
+    o.append(T(8, 127, "shown to the model", "art-lab", 12))
+    o.append(plait((102, 62), (164, 112), c1=(140, 62), c2=(130, 112), amp=2, crossings=3))
+    # 58 held-out problems: share of bugs caught, full 0-100% scale.
     o.append(T(168, 24, "bugs caught, 58 held-out problems", "art-lab", 12))
     x0, W = 168, 206
-    o.append(R(x0, 40, W, 6, "art-track", rx=1))
     for v in (0, 50, 100):
-        o.append(L(x0 + W * v / 100, 36, x0 + W * v / 100, 50, "art-hair"))
-    o.append(T(x0, 62, "0", "art-lab", 11, "middle"))
-    o.append(T(x0 + W / 2, 62, "50", "art-lab", 11, "middle"))
-    o.append(T(x0 + W, 62, "100%", "art-lab", 11, "end"))
+        o.append(L(x0 + W * v / 100, 36, x0 + W * v / 100, 132, "art-hair"))
+    o.append(T(x0, 46, "0", "art-lab", 11))
+    o.append(T(x0 + W / 2, 46, "50", "art-lab", 11, "middle"))
+    o.append(T(x0 + W, 46, "100%", "art-lab", 11, "end"))
     w69, w77 = W * 0.69, W * 0.77
-    o.append(R(x0, 76, w69, 18, "art-barq art-grow", rx=2))
-    o.append(T(x0 + w69 + 8, 90, "69%", "art-f", 16))
-    o.append(G(R(x0, 102, w69, 22, "art-fill", rx=2)
-               + R(x0 + w69, 102, (w77 - w69) / 2, 22, "art-fill")
-               + R(x0 + w69 + (w77 - w69) / 2, 102, (w77 - w69) / 2, 22, "art-hatchbar", rx=0, extra=hatch_fill(k))
-               + R(x0 + w69 + (w77 - w69) / 2, 102, (w77 - w69) / 2, 22, "art-chipline"),
+    half = (w77 - w69) / 2
+    o.append(R(x0, 56, w69, 22, "art-barq art-grow", rx=2))
+    o.append(T(x0 + 7, 71, "before", "art-chipt-q", 11.5))
+    o.append(T(x0 + w69 + 8, 73, "69%", "art-f", 16))
+    o.append(G(R(x0, 100, w69 + half, 26, "art-fill", rx=2)
+               + R(x0 + w69 + half, 100, half, 26, "art-hatchbar", extra=hatch_fill(k))
+               + R(x0 + w69 + half, 100, half, 26, "art-outline"),
                "art-grow art-d1"))
+    o.append(T(x0 + 7, 117, "with missed bugs", "art-chipt", 11.5))
     o.append(T(x0 + w77 + 8, 120, "77%", "art-fink", 22))
-    o.append(T(x0, 146, "before", "art-lab", 11.5))
-    o.append(L(x0 + w69 + (w77 - w69) * 0.75, 126, x0 + w69 + (w77 - w69) * 0.75, 136, "art-line art-thin"))
-    o.append(T(x0 + w69 + (w77 - w69) * 0.75, 150, "≈ half the rise: timeouts", "art-labi", 11.5, "end"))
-    o.append(T(x0, 172, "DeepSeek V4.1 Flash", "art-lab", 11.5))
+    hx = x0 + w69 + half * 1.5
+    o.append(L(hx, 128, hx, 140, "art-line art-thin"))
+    o.append(T(hx + 4, 154, "≈ half the rise: timeouts", "art-labi", 11.5, "end"))
+    o.append(T(x0, 174, "DeepSeek V4.1 Flash", "art-lab", 11.5))
     return svg(k, "".join(o), (380, 180))
 
 
@@ -655,9 +657,9 @@ def _p_quartic():
     o.append(G(halo(ox + 6, oy - h + 6, 112, 24, "bound")
                + R(ox + 10, oy - h + 10, 104, 18, "art-paperf", rx=2)
                + T(ox + 14, oy - h + 23, "2020: R = O(Q⁴)", "art-f", 13), "art-dim-separation art-dim-query"))
-    o.append(T(ox + w - 2, oy - h / 4 - 8, "R = Q", "art-fq", 12.5, "end"))
-    o.append(G(halo(ox + 88, oy - 74, 112, 26, "separation")
-               + T(ox + 94, oy - 56, "R = Q<tspan dy='-6' font-size='10.5'>4−o(1)</tspan>", "art-fink", 13.5),
+    o.append(T(ox + w - 2, oy - 12, "R = Q", "art-fq", 12.5, "end"))
+    o.append(G(halo(ox + 78, oy - 56, 104, 26, "separation")
+               + T(ox + 84, oy - 40, "R = Q<tspan dy='-6' font-size='10.5'>4−o(1)</tspan>", "art-fink", 13.5),
                "art-dim-bound art-dim-query"))
     # The Lean proof and Comparator's verdicts.
     x = 256
@@ -836,37 +838,30 @@ def _p_formal_verification():
     for i in dafny_at:
         a = -math.pi / 2 + math.tau * i / 88
         x, y = cx + (r - 13) * math.cos(a), cy + (r - 13) * math.sin(a)
-        d.append(P(f"M{_f(x)} {_f(y - 4.2)}l4.2 4.2-4.2 4.2-4.2-4.2Z", "art-fill"))
+        d.append(P(f"M{_f(x)} {_f(y - 4.2)}l4.2 4.2-4.2 4.2-4.2-4.2Z", "art-fill art-pop"))
         d.append(L(x + 4.4 * math.cos(a), y + 4.4 * math.sin(a), cx + (r - 3) * math.cos(a), cy + (r - 3) * math.sin(a), "art-line art-thin"))
     for j in range(4):
         sx, sy = cx - 11 + (j % 2) * 14, cy - 11 + (j // 2) * 14
-        d.append(R(sx, sy, 8, 8, "art-fill", rx=1.2))
+        d.append(R(sx, sy, 8, 8, "art-fill art-pop art-d2", rx=1.2))
     o.append(G("".join(d), "art-dim-coverage"))
     o.append(G(halo(cx - r - 21, cy - r - 21, 2 * r + 42, 2 * r + 42, "coverage", rx=r + 21)
                + C(cx, cy, r + 13, "art-ring-unknown"), "art-dim-dafny"))
     # Legend, in the order the rings read.
     x = 214
-    rows = [
-        (28, "88", "Python components", "dot", "art-dim-coverage"),
-        (78, "16", "calculations proved in Dafny", "diamond", "art-dim-coverage"),
-    ]
-    for y, num, lab, glyph, dcls in rows:
-        g = []
-        if glyph == "dot":
-            g.append(C(x + 5, y + 10, 3, "art-dot-strong"))
-        else:
-            g.append(P(f"M{x + 5} {y + 5.5}l4.5 4.5-4.5 4.5-4.5-4.5Z", "art-fill"))
-        g.append(T(x + 18, y + 17, num, "art-f", 22))
-        g.append(T(x + 48, y + 15, lab, "art-txt", 12))
-        o.append(G("".join(g), dcls))
-    o.append(G(T(x + 48, 112, "12 inside components", "art-lab", 11.5)
-               + T(x + 48, 127, "4 shared", "art-lab", 11.5)
-               + P(f"M{x + 48} 146h0", "art-line")
-               + T(x + 48, 146, "compiled to Python", "art-labi", 11.5),
+    o.append(G(C(x + 5, 38, 3, "art-dot-strong") + T(x + 18, 45, "88", "art-f", 22)
+               + T(x + 48, 43, "Python components", "art-txt", 12), "art-dim-coverage"))
+    o.append(G(P(f"M{x + 5} {83.5}l4.5 4.5-4.5 4.5-4.5-4.5Z", "art-fill") + T(x + 18, 95, "16", "art-f", 22)
+               + T(x + 48, 93, "calculations", "art-txt", 12)
+               + T(x + 48, 108, "proved in Dafny", "art-labi", 11.5), "art-dim-coverage"))
+    o.append(G(P(f"M{x + 52} {120}l3.5 3.5-3.5 3.5-3.5-3.5Z", "art-fill")
+               + T(x + 62, 127, "12 inside components", "art-lab", 11.5)
+               + R(x + 49, 136, 6.5, 6.5, "art-fill", rx=1)
+               + T(x + 62, 143, "4 shared", "art-lab", 11.5)
+               + T(x + 48, 160, "→ compiled to Python", "art-lab", 11.5),
                "art-dim-coverage art-dim-components"))
-    o.append(G(C(x + 7, 182, 7, "art-ring-unknown-s")
-               + T(x + 22, 187, "unknown", "art-fi", 17)
-               + T(x + 22, 204, "whole-claim coverage, all 88", "art-lab", 11.5),
+    o.append(G(C(x + 7, 186, 7, "art-ring-unknown-s")
+               + T(x + 22, 191, "unknown", "art-fi", 17)
+               + T(x + 22, 207, "whole-claim coverage, all 88", "art-lab", 11.5),
                "art-dim-dafny art-dim-components"))
     return svg(k, "".join(o), (400, 220))
 
@@ -883,36 +878,37 @@ def _p_agent_trace():
             o.append(R(10, y - 15, 104, 22, "art-wash", rx=3))
         o.append(C(19, y - 4, 2.6, "art-fill" if i == 0 else "art-dot-strong"))
         o.append(T(28, y, name, "art-txt" if i == 0 else "art-lab", 12))
-    o.append(T(16, 196, "copy detail", "art-labi", 11.5))
-    o.append(T(16, 208, "into another chat", "art-lab", 11))
+    o.append(T(16, 192, "copy detail", "art-labi", 11.5))
+    o.append(T(16, 206, "into another chat", "art-lab", 11))
     o.append(T(128, 30, "command", "art-lab", 11.5))
-    o.append(T(384, 30, "status · exit", "art-lab", 11.5, "end"))
+    o.append(T(304, 30, "status", "art-lab", 11.5))
+    o.append(T(384, 30, "exit", "art-lab", 11.5, "end"))
     # 1. Failing test.
     r1 = [halo(122, 38, 268, 52, "fail", rx=5)]
-    r1.append(T(128, 58, "$ test", "art-mono", 12.5))
-    r1.append(cross(312, 54, 3.4))
-    r1.append(T(384, 58, "failed · 1", "art-monoi", 12.5, "end"))
+    r1.append(T(128, 58, "$ pytest", "art-mono", 12.5))
+    r1.append(cross(294, 54, 3.4))
+    r1.append(T(304, 58, "failed", "art-mono", 12.5))
+    r1.append(T(384, 58, "1", "art-monoi", 13, "end"))
     r1.append(R(128, 68, 256, 16, "art-wash", rx=2))
     r1.append(bar(134, 76, 120, "art-bar art-bar-strong"))
     o.append(G("".join(r1), "art-dim-fix art-dim-pass"))
     # 2. One-line fix.
     r2 = [halo(122, 96, 268, 52, "fix", rx=5)]
-    r2.append(T(128, 116, "edit", "art-mono", 12.5))
-    r2.append(T(384, 116, "1 line", "art-monoi", 12.5, "end"))
-    r2.append(T(132, 138, "−", "art-mono", 13))
-    r2.append(bar(146, 134, 150, "art-bar art-bar-strong"))
-    r2.append(T(132, 138 + 0, "", "art-mono", 1))
-    r2.append(R(128, 126, 256, 16, "art-wash", rx=2))
-    r2.append(T(134, 138, "−", "art-mono", 13))
-    r2.append(bar(146, 134, 150, "art-bar art-bar-strong"))
-    r2.append(T(262, 138, "+", "art-monoi", 13))
-    r2.append(bar(274, 134, 100, "art-fill"))
+    r2.append(T(128, 114, "edit", "art-mono", 12.5))
+    r2.append(T(304, 114, "1 line", "art-monoi", 12.5))
+    r2.append(R(128, 121, 256, 11, "art-wash", rx=2))
+    r2.append(T(134, 130, "−", "art-mono", 12))
+    r2.append(bar(148, 126.5, 150, "art-bar art-bar-strong"))
+    r2.append(R(128, 134, 256, 11, "art-tint", rx=2))
+    r2.append(T(133, 143, "+", "art-monoi", 12))
+    r2.append(bar(148, 139.5, 150, "art-fill"))
     o.append(G("".join(r2), "art-dim-fail art-dim-pass"))
     # 3. Passing rerun.
     r3 = [halo(122, 154, 268, 52, "pass", rx=5)]
-    r3.append(T(128, 174, "$ test", "art-mono", 12.5))
-    r3.append(tick(314, 170, 1))
-    r3.append(T(384, 174, "passed · 0", "art-monoi", 12.5, "end"))
+    r3.append(T(128, 174, "$ pytest", "art-mono", 12.5))
+    r3.append(tick(295, 170, 1))
+    r3.append(T(304, 174, "passed", "art-mono", 12.5))
+    r3.append(T(384, 174, "0", "art-monoi", 13, "end"))
     r3.append(R(128, 184, 256, 16, "art-wash", rx=2))
     r3.append(bar(134, 192, 70, "art-bar art-bar-strong"))
     o.append(G("".join(r3), "art-dim-fail art-dim-fix"))
@@ -922,51 +918,48 @@ def _p_agent_trace():
 def _p_one_checkout():
     k = "one-checkout"
     o = []
-    # Commit history: last commit, then the new commit carrying A's patch.
-    o.append(T(14, 26, "commits", "art-lab", 11.5))
-    o.append(L(40, 178, 40, 66, "art-line-q"))
-    o.append(C(40, 178, 7, "art-node"))
-    o.append(T(54, 182, "last commit", "art-txt", 12))
-    o.append(T(54, 198, "HEAD before", "art-lab", 11))
-    nc = [halo(24, 50, 104, 34, "result", rx=8)]
-    nc.append(C(40, 66, 8.5, "art-fill"))
-    nc.append(T(54, 64, "new commit", "art-txt", 12))
-    nc.append(T(54, 79, "A's patch", "art-labi", 11.5))
-    o.append(G("".join(nc), "art-hide-before art-dim-kept"))
-    # Agent A's patch card.
-    pa = [R(14, 104, 96, 50, "art-frame-ink", rx=4)]
-    pa.append(T(22, 122, "agent A: patch", "art-labi", 11.5))
-    pa.append(T(22, 140, "+", "art-monoi", 12.5))
-    pa.append(bar(34, 136, 64, "art-fill"))
+    # Agent A's patch.
+    pa = [R(10, 14, 166, 46, "art-frame-ink", rx=4)]
+    pa.append(T(20, 32, "agent A's patch", "art-labi", 11.5))
+    pa.append(T(20, 50, "+", "art-monoi", 12.5))
+    pa.append(bar(34, 46, 120, "art-fill"))
     o.append(G("".join(pa), "art-dim-kept"))
-    o.append(G(plait((110, 128), (196, 92), c1=(150, 128), c2=(160, 92), amp=2.2, crossings=3, ends=False)
-               + plait((48, 104), (44, 76), c1=(80, 92), c2=(70, 80), amp=1.6, crossings=1, ends=False),
+    # Commit history: the last commit, then the new commit carrying A's patch.
+    o.append(T(10, 96, "commits", "art-lab", 11.5))
+    o.append(L(30, 124, 128, 124, "art-line-q"))
+    o.append(C(30, 124, 7, "art-node"))
+    o.append(T(30, 150, "last commit", "art-txt", 12, "middle"))
+    nc = [halo(98, 102, 82, 60, "result", rx=8)]
+    nc.append(C(140, 124, 9, "art-fill art-pop"))
+    nc.append(T(140, 150, "new commit", "art-txt", 12, "middle"))
+    nc.append(plait((92, 60), (136, 114), c1=(92, 90), c2=(136, 90), amp=1.6, crossings=2, ends=False))
+    o.append(G("".join(nc), "art-hide-before art-dim-kept"))
+    o.append(G(plait((176, 37), (204, 78), c1=(192, 37), c2=(190, 78), amp=1.6, crossings=2, ends=False),
                "art-dim-before art-dim-kept"))
-    # The same file, line by line, with whose change each line carries.
+    # The same file, line by line, marked by whose change each line carries.
     fx = 196
-    f = [R(fx, 14, 198, 196, "art-frame", rx=4)]
-    f.append(R(fx + 10, 22, 12, 14, "art-filetab", rx=1.5))
-    f.append(T(fx + 28, 33, "the same file", "art-lab", 11.5))
-    o.append(G("".join(f)))
+    o.append(R(fx, 14, 198, 196, "art-frame", rx=4))
+    o.append(R(fx + 10, 22, 12, 14, "art-filetab", rx=1.5))
+    o.append(T(fx + 28, 33, "the same file", "art-lab", 11.5))
     lines = ["", "", "A", "", "Bs", "Bs", "", "Bw", "", "", "Bw", ""]
     for i, who in enumerate(lines):
         y = 52 + i * 13.2
-        w = 120 + (i * 37 % 50)
+        w = 110 + (i * 37 % 50)
         if who == "A":
             o.append(G(halo(fx + 4, y - 7, 190, 14, "result", rx=3)
                        + T(fx + 12, y + 4, "A", "art-monoi", 11)
-                       + bar(fx + 30, y, w, "art-fill"), "art-dim-kept"))
+                       + bar(fx + 30, y, w, "art-fill"), "art-dim-kept art-hide-before"))
         elif who.startswith("B"):
             cls = "art-bline-staged" if who == "Bs" else "art-bline-work"
             o.append(G(halo(fx + 4, y - 7, 190, 14, "kept before", rx=3)
                        + T(fx + 12, y + 4, "B", "art-mono", 11)
-                       + R(fx + 30, y - 2.2, w, 4.4, cls, rx=2.2), "art-dim-result"))
+                       + R(fx + 30, y - 2.2, w, 4.4, cls, rx=2.2)))
         else:
             o.append(bar(fx + 30, y, w))
-    o.append(G(T(fx + 10, 204, "B: staged", "art-lab", 11)
-               + R(fx + 70, 199, 18, 4.4, "art-bline-staged", rx=2.2)
-               + T(fx + 98, 204, "B: working tree", "art-lab", 11)
-               + R(fx + 180, 199, 10, 4.4, "art-bline-work", rx=2.2), "art-dim-result"))
+    # Legend for agent B's unfinished edits.
+    o.append(G(halo(4, 170, 182, 46, "kept before", rx=6)
+               + R(12, 181, 22, 4.4, "art-bline-staged", rx=2.2) + T(42, 186, "B: staged", "art-txt", 11.5)
+               + R(12, 199, 22, 4.4, "art-bline-work", rx=2.2) + T(42, 204, "B: working tree", "art-txt", 11.5)))
     return svg(k, "".join(o), (400, 220))
 
 
@@ -1010,7 +1003,7 @@ def _p_codemap():
     o.append(G(halo(108, rb[0] - 9, 50, 18, "callers", rx=5)
                + T(118, rb[0] + 4, "f()", "art-monoi", 12)
                + plait((140, rb[0]), (88, ra[0]), c1=(204, rb[0]), c2=(204, ra[0]), amp=2.2, crossings=4)
-               + T(196, 132, "called by", "art-labi", 11.5, "end"),
+               + T(100, 125, "called by", "art-labi", 11.5),
                "art-dim-text art-dim-file"))
     # The same description, fetched as text.
     t = [halo(214, 6, 186, 208, "text", rx=7)]
@@ -1113,21 +1106,21 @@ def _p_zenith():
         res.append(L(x0 + W * v / 100, 36, x0 + W * v / 100, 114, "art-hair"))
         res.append(T(x0 + W * v / 100, 124, f"{v}", "art-lab", 10.5, "middle"))
     w69, w77 = W * 0.69, W * 0.77
+    half = (w77 - w69) / 2
     res.append(R(x0, 44, w69, 22, "art-barq art-grow", rx=2))
     res.append(T(x0 + w69 + 8, 61, "69%", "art-f", 17))
-    res.append(T(x0 + 6, 59.5, "before", "art-chipt-q", 11.5))
-    res.append(G(R(x0, 80, w69, 26, "art-fill", rx=2)
-                 + R(x0 + w69, 80, (w77 - w69) / 2, 26, "art-fill"), "art-grow art-d1"))
-    res.append(T(x0 + 6, 97.5, "with records", "art-chipt", 11.5))
+    res.append(T(x0 + 7, 59.5, "before", "art-chipt-q", 11.5))
+    res.append(G(R(x0, 80, w69 + half, 26, "art-fill", rx=2), "art-grow art-d1"))
+    res.append(T(x0 + 7, 97.5, "with records", "art-chipt", 11.5))
     res.append(T(x0 + w77 + 8, 100, "77%", "art-fink", 22))
     o.append(G("".join(res), "art-dim-records"))
-    hx = x0 + w69 + (w77 - w69) / 2
-    tm = [halo(hx - 8, 74, (w77 - w69) / 2 + 16, 38, "timeouts", rx=4)]
-    tm.append(R(hx, 80, (w77 - w69) / 2, 26, "art-hatchbar art-grow art-d2", extra=hatch_fill(k)))
-    tm.append(R(hx, 80, (w77 - w69) / 2, 26, "art-chipline"))
-    tm.append(P(f"M{_f(hx + 2)} 110v26", "art-line art-thin"))
-    tm.append(T(hx + 8, 150, "≈ half of the rise:", "art-labi", 12))
-    tm.append(T(hx + 8, 165, "timeouts", "art-labi", 12))
+    hx = x0 + w69 + half
+    tm = [halo(hx - 8, 74, half + 16, 38, "timeouts", rx=4)]
+    tm.append(R(hx, 80, half, 26, "art-hatchbar art-grow art-d2", extra=hatch_fill(k)))
+    tm.append(R(hx, 80, half, 26, "art-outline"))
+    tm.append(P(f"M{_f(hx + half / 2)} 110v26", "art-line art-thin"))
+    tm.append(T(hx + half / 2 + 26, 150, "≈ half of the rise:", "art-labi", 12, "end"))
+    tm.append(T(hx + half / 2 + 26, 165, "timeouts", "art-labi", 12, "end"))
     o.append(G("".join(tm), "art-dim-records"))
     return svg(k, "".join(o), (400, 220))
 
@@ -1135,38 +1128,39 @@ def _p_zenith():
 def _p_funnel():
     k = "funnel"
     o = []
-    lp = [halo(2, 58, 80, 90, "proof", rx=8)]
-    lp.append(R(8, 64, 68, 78, "art-frame-ink", rx=4))
-    lp.append(T(42, 92, "#257", "art-f", 18, "middle"))
-    lp.append(T(42, 112, "Erdős", "art-lab", 11.5, "middle"))
-    lp.append(chip(16, 118, 52, "Lean ✓", size=11.5, h=17))
+    base, sc = 146, 0.5
+    lp = [halo(2, 66, 82, 86, "proof", rx=8)]
+    lp.append(R(8, 72, 70, 74, "art-frame-ink", rx=4))
+    lp.append(T(43, 98, "#257", "art-f", 18, "middle"))
+    lp.append(T(43, 116, "Erdős", "art-lab", 11.5, "middle"))
+    lp.append(chip(17, 122, 52, "Lean ✓", size=11.5, h=17))
     o.append(G("".join(lp)))
-    base, sc = 150, 0.5
-    items = [(104, 152, "152 pages", "research record"), (176, 26, "26 pages", "expert paper"),
-             (248, 16, "16 pages", "exposition")]
-    pg = [halo(96, 60, 222, 132, "pages", rx=8)]
+    o.append(T(96, 34, "AI, following written instructions", "art-lab", 11.5))
+    o.append(plait((43, 156), (364, 156), amp=2.2, crossings=11, ends=False))
+    o.append(C(43, 156, 3, "art-fill"))
+    items = [(96, 152, "152 pages", "research record"), (178, 26, "26 pages", "expert paper"),
+             (260, 16, "16 pages", "exposition")]
+    pg = [halo(88, 60, 238, 136, "pages", rx=8)]
     for i, (x, n, lab, what) in enumerate(items):
-        pg.append(plait((76, 103), (x + 4, base - n * sc - 4), c1=(88, 103), c2=(x - 10, base - n * sc - 4),
-                        amp=1.6, crossings=2, ends=False, delay=f"art-d{i}"))
-        pg.append(G(pile(x, base, 60, n, sc, every=8), f"art-rise art-d{i + 1}"))
-        pg.append(T(x + 30, 170, lab, "art-txt", 12.5, "middle"))
-        pg.append(T(x + 30, 186, what, "art-lab", 11.5, "middle"))
+        pg.append(G(pile(x, base, 56, n, sc, every=8), f"art-rise art-d{i + 1}"))
+        pg.append(C(x + 28, 156, 3, "art-fill"))
+        pg.append(T(x + 28, 176, lab, "art-txt", 12.5, "middle"))
+        pg.append(T(x + 28, 191, what, "art-lab", 11, "middle"))
     o.append(G("".join(pg), "art-dim-proof art-dim-video"))
-    o.append(T(104, 34, "AI, following written instructions", "art-lab", 11.5))
-    v = [halo(318, 60, 80, 132, "video", rx=8)]
-    v.append(plait((76, 103), (322, 118), c1=(160, 30), c2=(300, 60), amp=1.8, crossings=5, ends=False, delay="art-d3"))
-    v.append(filmframe(322, 100, 72, 50, arrows=False))
-    v.append(P("M352 114l14 11-14 11Z", "art-fill"))
-    v.append(T(358, 170, "video", "art-txt", 12.5, "middle"))
+    v = [halo(328, 60, 70, 136, "video", rx=8)]
+    v.append(filmframe(334, 104, 60, 42, arrows=False))
+    v.append(P("M358 116l12 9-12 9Z", "art-fill"))
+    v.append(C(364, 156, 3, "art-fill"))
+    v.append(T(364, 176, "video", "art-txt", 12.5, "middle"))
     o.append(G("".join(v), "art-dim-proof art-dim-pages"))
-    o.append(T(8, 210, "stacks drawn to scale: 1 line = 8 pages", "art-lab", 11))
+    o.append(T(8, 212, "stacks drawn to scale: 1 line = 8 pages", "art-lab", 11))
     return svg(k, "".join(o), (400, 220))
 
 
 def _p_narration_ir():
     k = "narration-ir"
     o = []
-    pl = [halo(4, 6, 184, 106, "plan quotes", rx=8)]
+    pl = [halo(4, 6, 184, 106, "plan", rx=8)]
     pl.append(R(8, 10, 176, 98, "art-frame-ink", rx=4))
     pl.append(T(18, 28, "plan for one sentence", "art-lab", 11.5))
     pl.append(T(18, 50, "meaning", "art-txt", 12))
@@ -1175,8 +1169,8 @@ def _p_narration_ir():
     pl.append(R(52, 63, 30, 11, "art-fill", rx=2))
     pl.append(T(88, 72, "→ arrow 3 on", "art-labi", 12))
     pl.append(T(18, 94, "quote", "art-txt", 12))
-    pl.append(G(R(62, 85, 74, 12, "art-tint", rx=2) + bar(66, 91, 64, "art-bar art-bar-ink")
-                + tick(152, 91, 1), "art-dim-cue"))
+    pl.append(G(halo(58, 81, 112, 20, "quotes", rx=4) + R(62, 85, 74, 12, "art-tint", rx=2)
+                + bar(66, 91, 64, "art-bar art-bar-ink") + tick(154, 91, 1)))
     o.append(G("".join(pl)))
     # Picture: the third arrow turns on at the cue word.
     pic = [halo(204, 6, 194, 106, "cue", rx=8)]
@@ -1184,30 +1178,26 @@ def _p_narration_ir():
     pic.append(T(218, 28, "picture", "art-lab", 11.5))
     for i, x in enumerate((236, 288, 340)):
         cls = "art-line art-cuearrow" if i == 2 else "art-line-q"
-        pic.append(P(f"M{x} 64h30m-7-7 7 7-7 7", cls))
-        pic.append(T(x + 15, 92, f"{i + 1}", "art-lab", 11, "middle"))
+        pic.append(P(f"M{x} 62h30m-7-7 7 7-7 7", cls))
+        pic.append(T(x + 15, 90, f"{i + 1}", "art-lab", 11, "middle"))
     o.append(G("".join(pic), "art-dim-quotes"))
     # The recording: one spoken sentence, word by word.
-    rec = []
-    rec.append(waveform(10, 390, 142, 9, seed=8))
+    rec = [waveform(10, 390, 144, 8, seed=8)]
     widths = [26, 40, 20, 44, 30, 34, 22, 40, 30, 38, 26]
-    x = 10
-    cx = 0
+    x, cx = 10, 0
     for i, w in enumerate(widths):
         cue = i == 8
         rec.append(R(x, 162, w, 12, "art-fill art-cueword" if cue else "art-word", rx=2))
         if cue:
             cx = x + w / 2
         x += w + 4.7
-    rec.append(T(10, 196, "recorded words", "art-lab", 11.5))
-    rec.append(T(390, 196, "time →", "art-lab", 11.5, "end"))
+    rec.append(T(10, 194, "recorded words", "art-lab", 11.5))
+    rec.append(T(390, 194, "time →", "art-lab", 11.5, "end"))
     o.append(G("".join(rec), "art-dim-quotes"))
     o.append(G(P(f"M{_f(cx)} 160V{_f(108)}", "art-line art-dashed")
-               + T(cx - 8, 126, "named word", "art-labi", 11.5, "end"), "art-dim-plan art-dim-quotes"))
-    o.append(G(T(196, 214, "", "art-lab", 1)))
-    q = [halo(4, 118, 392, 0.1, "quotes")]
-    o.append(G("".join(q)))
-    o.append(G(T(204, 214, "quote found in its source file ✓", "art-labi", 11.5), "art-hide-plan art-hide-cue"))
+               + T(cx - 8, 128, "named word", "art-labi", 11.5, "end"), "art-dim-plan art-dim-quotes"))
+    o.append(G(T(392, 214, "each quote found in its source file ✓", "art-labi", 11.5, "end"),
+               "art-hide-plan art-hide-cue"))
     return svg(k, "".join(o), (400, 220))
 
 
