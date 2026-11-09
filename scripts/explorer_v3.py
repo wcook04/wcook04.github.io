@@ -277,7 +277,7 @@ def render_page(registry: dict, glossary: dict, root: Path, structured: str) -> 
 <link rel="stylesheet" href="assets/hub.css"><link rel="stylesheet" href="assets/explorer.css"><link rel="stylesheet" href="assets/door-art.css"><script src="assets/explore-model.js" defer></script><script src="assets/explore.js" defer></script>
 <script type="application/ld+json">{structured}</script></head>
 <body class="question-studio"><a class="studio-skip" href="#main">Skip to the questions</a>
-<header class="studio-header"><a class="studio-brand" href="index.html" data-route="home"><img src="assets/favicon.svg" width="27" height="27" alt=""><span>Will Cook</span><span class="name-tag">my name</span></a>
+<header class="studio-header"><a class="studio-brand" href="index.html" data-route="home"><img src="assets/favicon.svg" width="27" height="27" alt=""><span class="brand-text"><span>Will Cook</span><span class="name-note">(my name)</span></span></a>
 <nav aria-label="Main"><a href="index.html" data-route="home" data-nav="home" aria-current="page">Explore</a><a href="all.html" data-route="all" data-nav="all">All work</a><a href="all.html#films" data-route="films" data-nav="films">Videos</a><a href="all.html#about" data-route="about" data-nav="about">About & contact</a></nav>
 <button class="theme-button" type="button" aria-label="Switch to dark theme" title="Switch theme"><span aria-hidden="true">◐</span></button></header>
 <main id="main" class="studio-main">{home_markup(v)}</main>

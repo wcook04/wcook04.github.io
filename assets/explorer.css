@@ -432,9 +432,9 @@
 /* ---------------------------------------------------------------- home: short videos first */
 .home-view--videos { min-height:0; }
 .home-view--videos .scene-heading { padding:18px 0 0; }
-.home-view--videos .principles h1 { font-size:clamp(21px,1.75vw,26px);gap:2px; }
+.home-view--videos .principles h1 { font-size:clamp(21px,1.75vw,26px);gap:14px;margin-top:14px; }
 .home-view--videos .principle__n { width:20px;height:20px;font-size:11px; }
-.home-view--videos .scene-intro { margin-top:8px; }
+.home-view--videos .scene-intro { margin-top:16px; }
 .vgrid { display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:22px 22px;margin:22px 0 18px; }
 .vtile { display:flex;flex-direction:column;min-width:0;color:var(--text); }
 .vtile--intro { grid-column:span 2;grid-row:span 2; }
@@ -459,8 +459,9 @@
 .strand-card .film-player { box-shadow:0 1px 0 var(--hairline),0 18px 36px -26px rgba(20,22,20,.55); }
 .film-row .film-player { max-width:520px; }
 
-/* "my name" beside the name in the header */
-.name-tag { font-family:var(--font-sans, system-ui, sans-serif);font-size:11px;font-weight:500;letter-spacing:.02em;line-height:1;padding:4px 7px;border-radius:999px;border:1px solid var(--hairline);color:var(--muted, #6b6f6c);margin-left:-2px;align-self:center; }
+/* "(my name)" in small type under the name in the header */
+.brand-text { display:flex;flex-direction:column;line-height:1.05; }
+.name-note { font-family:var(--font-sans);font-size:11px;font-weight:400;letter-spacing:.01em;color:var(--muted);margin-top:3px; }
 
 /* One column: heading, then the player, then everything in the project */
 @media (max-width:800px) {
