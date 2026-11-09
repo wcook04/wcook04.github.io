@@ -258,7 +258,7 @@ def home_markup(view: dict) -> str:
     principles = "".join(f'<span class="principle"><span class="principle__n" aria-hidden="true">{i}</span>{e(t)}</span>'
                          for i, t in enumerate(cfg["principles"], 1))
     return f'''<section class="home-view home-view--videos" aria-labelledby="home-heading">
-    <div class="scene-heading"><div class="principles"><p class="eyebrow">{e(cfg['eyebrow'])}</p><h1 id="home-heading" tabindex="-1">{principles}</h1>
+    <div class="scene-heading"><div class="principles"><h1 id="home-heading" tabindex="-1">{principles}</h1>
     <p class="scene-intro">{e(cfg['subtitle'])}</p></div></div>
     <div class="vgrid">{''.join(tiles)}</div>
     <div class="scene-footer"><a href="#index" data-scroll="index">Everything, project by project <span aria-hidden="true">↓</span></a><a href="all.html" data-route="all">Search all the work <span aria-hidden="true">→</span></a></div>
