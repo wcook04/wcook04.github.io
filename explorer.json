@@ -1,7 +1,7 @@
 {
   "version": 1,
   "title": "Use AI to make what AI produces easier to understand, at every level of detail. Build things that get better as AI models get better.",
-  "subtitle": "Each question below opens with a short video of about two minutes, then leads to the full video, the website and the code.",
+  "subtitle": "Each project starts with a short video of about two minutes. Click one for the full video, the website and the code.",
   "doors": [
     {
       "id": "research",
@@ -27,7 +27,8 @@
           "project": "lean-exposition",
           "label": "Spin glasses"
         }
-      ]
+      ],
+      "keyword": "Maths proved with AI"
     },
     {
       "id": "proofs",
@@ -41,7 +42,8 @@
         "lean-exposition",
         "atlas",
         "formal-verification"
-      ]
+      ],
+      "keyword": "Papers beside their proofs"
     },
     {
       "id": "assistants",
@@ -53,7 +55,8 @@
         "agent-trace",
         "one-checkout",
         "safety-core"
-      ]
+      ],
+      "keyword": "Coding agents"
     },
     {
       "id": "explaining",
@@ -64,7 +67,8 @@
       "projects": [
         "funnel",
         "narration-ir"
-      ]
+      ],
+      "keyword": "Proofs into papers and videos"
     },
     {
       "id": "code",
@@ -75,7 +79,8 @@
       "projects": [
         "codemap",
         "code-ontology-bridge"
-      ]
+      ],
+      "keyword": "Understanding code"
     },
     {
       "id": "testing",
@@ -85,7 +90,8 @@
       "ink": "code",
       "projects": [
         "zenith"
-      ]
+      ],
+      "keyword": "Testing AI"
     }
   ],
   "bridges": [
@@ -170,9 +176,26 @@
     "funnel": "Follow one result into papers and a film",
     "narration-ir": "Plan pictures from the spoken words"
   },
-  "eyebrow": "Will Cook · the two ideas behind everything here",
+  "eyebrow": "Will Cook",
   "principles": [
     "Use AI to make what AI produces easier to understand, at every level of detail.",
     "Build things that get better as AI models get better."
-  ]
+  ],
+  "intro_keywords": "Start here: the two ideas and every project",
+  "project_keywords": {
+    "maths": "Erdős problems · Lean",
+    "quartic": "Quantum query complexity · Lean",
+    "lean-exposition": "Spin glasses · Lean",
+    "proof-reader": "Any paper beside its Lean proof",
+    "atlas": "OpenAI's 719 maths papers",
+    "formal-verification": "Dafny · software proofs",
+    "agent-trace": "Claude Code · Codex sessions",
+    "one-checkout": "Git · parallel coding agents",
+    "safety-core": "Agent rules · Claude Code hooks",
+    "funnel": "Lean proof → papers → video",
+    "narration-ir": "Narration → animation plans",
+    "codemap": "Codebase map · docstrings",
+    "code-ontology-bridge": "NVIDIA Auto Ontology · SQL",
+    "zenith": "AI test generation · missed bugs"
+  }
 }

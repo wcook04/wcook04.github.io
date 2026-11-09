@@ -4,11 +4,11 @@ This repository contains the code for [Will Cook's home page](https://wcook04.gi
 The page links his mathematics research, software and videos. The projects
 have their own repositories, listed below.
 
-The page opens on the two ideas from Will's introduction video and six
-questions about the work. Each question opens on its projects' short videos of
-about two minutes; each short video leads to its full video, the project's
-website and its code. Below the questions, the index lists every project in one
-row: short videos, full videos, website and code.
+The page opens on the two ideas from Will's introduction video, then the short
+videos of about two minutes: the introduction first, then one per project, each
+labelled with a few keywords. A video opens its project's page, with the full
+video, a drawing of the work, the website and the code. Below, the index lists
+every project in one row: short videos, full videos, website and code.
 
 [![The home page, with an introduction video and links to the projects](assets/sites/home-light-1440.webp)](https://wcook04.github.io/)
 
@@ -104,9 +104,10 @@ including a fixed study revision. Keep collapsed project descriptions and credit
 under the 500-word review threshold across all projects; remove repeated
 labels before expanding the budget. Attribution and study limits still belong
 next to the claims they qualify.
-For visual audits, the first-screen choices are the six `.door-open` links.
-They are intentional navigation, so retain all six if a generic
-call-to-action audit warns about more than two buttons.
+For visual audits, the first-screen choices are the fifteen `.vtile` video
+thumbnails: the introduction and one per project. They are intentional
+navigation, so retain them all if a generic call-to-action audit warns about
+more than two buttons.
 Then run the build, tests and checker again. Do not edit the generated
 `index.html` by hand.
 

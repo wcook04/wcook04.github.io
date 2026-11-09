@@ -184,7 +184,7 @@ def index_markup(view: dict) -> str:
             <li class="cell cell--code"><span class="cell__label">Code</span><div class="cell__items cell__items--code">{code}</div></li>
             </ol></article>''')
         if rows:
-            groups.append(f'<section class="index-group ink-{e(d["ink"])}"><h3><a href="all.html#topic-{e(d["id"])}" data-route="d={e(d["id"])}">{e(d["question"])}</a></h3>{"".join(rows)}</section>')
+            groups.append(f'<section class="index-group ink-{e(d["ink"])}"><h3><a href="all.html#topic-{e(d["id"])}" data-route="d={e(d["id"])}">{e(d.get("keyword") or d["question"])}</a></h3>{"".join(rows)}</section>')
     intro = [films[i] for i in ("short-introduction", "long-introduction", "introduction") if i in films]
     if intro:
         shorts = [f for f in intro if f.get("format") == "short"]
@@ -208,22 +208,57 @@ def index_markup(view: dict) -> str:
 
 
 
+def lead_short(view: dict, pid: str, door: str | None) -> dict | None:
+    """The short video a project is entered by (same rule as ExplorerModel.lead)."""
+    import re
+    films = view["films"]
+    shorts = [films[f] for f in view["projects"][pid]["films"]
+              if films.get(f, {}).get("format") == "short" and films[f].get("edition") != "earlier"]
+    lead = None
+    if door == "proofs":
+        lead = next((f for f in shorts if re.search(r"reader|sk-website", f["id"])), None)
+    if lead is None and pid == "maths":
+        lead = next((f for f in shorts if f["id"] == "short-mathematics-overview"), None)
+    return lead or (shorts[0] if shorts else None)
+
+
+def video_tile(film: dict | None, *, name: str, keys: str, href: str, route: str, parent: str = "",
+               ink: str = "maths", cls: str = "") -> str:
+    stem = film and (film.get("still") or film.get("poster"))
+    secs = film and (film.get("duration_seconds") or film.get("cut_seconds")) or 0
+    img = f'<img src="{e(stem)}-1280.webp" width="1280" height="720" alt="" decoding="async">' if stem else ""
+    time = f'<span class="vtile__time">{secs // 60}:{secs % 60:02d}</span>' if secs else ""
+    parent_attr = f' data-parent="{e(parent)}"' if parent else ""
+    return (f'<a class="vtile ink-{e(ink)} {cls}" href="{e(href)}" data-route="{e(route)}"{parent_attr}>'
+            f'<span class="vtile__thumb">{img}<span class="vtile__play" aria-hidden="true">▶</span>{time}</span>'
+            f'<span class="vtile__name">{e(name)}</span><span class="vtile__keys">{e(keys)}</span></a>')
+
+
 def home_markup(view: dict) -> str:
-    doors=[]
-    for i,d in enumerate(view['config']['doors']):
-        shortcuts=''
-        if d.get('shortcuts'):
-            shortcuts='<div class="door-shortcuts">'+''.join(f'<a href="all.html#project-{e(s["project"])}" data-route="p={e(s["project"])}" data-parent="{e(d["id"])}">{e(s["label"])}</a>' for s in d['shortcuts'])+'</div>'
-        doors.append(f'''<article class="door door--{e(d['id'])} ink-{e(d['ink'])}" data-door="{e(d['id'])}">
-        <a class="door-open" href="all.html#topic-{e(d['id'])}" data-route="d={e(d['id'])}" aria-describedby="hint-{e(d['id'])}">
-        <div class="door-object" data-shape="{e(d['id'])}">{view['objects'][d['object']]}</div>
-        <h2>{e(d['question'])}<span class="open-arrow" aria-hidden="true">↗</span></h2>
-        </a><p class="door-videos"><span class="knot" aria-hidden="true"></span>{door_videos(view, d)}</p><p class="door-caption" id="hint-{e(d['id'])}">{e(d['caption'])}</p>{shortcuts}</article>''')
-    return f'''<section class="home-view" aria-labelledby="home-heading">
-    <div class="scene-heading"><div class="principles"><p class="eyebrow">{e(view['config']['eyebrow'])}</p><h1 id="home-heading" tabindex="-1">{''.join(f'<span class="principle"><span class="principle__n" aria-hidden="true">{i}</span>{e(t)}</span>' for i, t in enumerate(view['config']['principles'], 1))}</h1>
-    <p class="scene-intro">{e(view['config']['subtitle'])} <a href="all.html#introductions" data-route="intro">Watch the introduction <span aria-hidden="true">↗</span></a></p></div></div>
-    <div class="question-scene"><svg class="scene-threads" aria-hidden="true"><g></g></svg>{''.join(doors)}</div>
-    <div class="scene-footer"><a href="#index" data-scroll="index">The index of all {len(view['projects'])} projects <span aria-hidden="true">↓</span></a><a href="all.html" data-route="all">Search all the work <span aria-hidden="true">→</span></a></div>
+    """Short videos first: the introduction, then one tile per project.
+    A tile opens the project page, which has the video, its drawing, the full
+    video, the website and the code."""
+    cfg, films, projects = view["config"], view["films"], view["projects"]
+    keys = cfg["project_keywords"]
+    intro = films.get("short-introduction")
+    tiles = [video_tile(intro, name="Introduction", keys=cfg["intro_keywords"], href="all.html#introductions",
+                        route="intro", ink="explain", cls="vtile--intro")]
+    seen = set()
+    for d in cfg["doors"]:
+        for pid in d["projects"]:
+            if pid in seen:
+                continue
+            seen.add(pid)
+            p = projects[pid]
+            tiles.append(video_tile(lead_short(view, pid, d["id"]), name=p["name"], keys=keys[pid],
+                                    href=f"all.html#project-{pid}", route=f"p={pid}", parent=d["id"], ink=p["area"]))
+    principles = "".join(f'<span class="principle"><span class="principle__n" aria-hidden="true">{i}</span>{e(t)}</span>'
+                         for i, t in enumerate(cfg["principles"], 1))
+    return f'''<section class="home-view home-view--videos" aria-labelledby="home-heading">
+    <div class="scene-heading"><div class="principles"><p class="eyebrow">{e(cfg['eyebrow'])}</p><h1 id="home-heading" tabindex="-1">{principles}</h1>
+    <p class="scene-intro">{e(cfg['subtitle'])}</p></div></div>
+    <div class="vgrid">{''.join(tiles)}</div>
+    <div class="scene-footer"><a href="#index" data-scroll="index">Everything, project by project <span aria-hidden="true">↓</span></a><a href="all.html" data-route="all">Search all the work <span aria-hidden="true">→</span></a></div>
     </section>{index_markup(view)}'''
 
 
