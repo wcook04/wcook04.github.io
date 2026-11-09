@@ -471,3 +471,7 @@
   .project-media { order:1;width:100%;margin:22px 0 30px; }
   .project-story > .everything { order:2; }
 }
+
+/* The two principles take the logo's two strands: brick red, then steel blue */
+.principle__n { background:#a8443d;color:#fff; }
+.principle + .principle .principle__n { background:#4d7fa9; }
