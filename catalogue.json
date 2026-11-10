@@ -928,7 +928,7 @@
       "publicly_available": true
     },
     {
-      "title": "Erdős #257: a case from 1968, proved and checked in Lean",
+      "title": "Erdős #257: AI proved one case of an infinite-sum problem, checked in Lean",
       "short": "Erdős #257",
       "description": "Erdős #257: a case from 1968, proved and checked in Lean",
       "format": "short",
@@ -1012,7 +1012,7 @@
       "edition_state": "current"
     },
     {
-      "title": "Spin glasses: two nearly best answers, half the arrows differ",
+      "title": "Spin glasses: Two near-best arrangements with about half their arrows different",
       "short": "Spin glasses",
       "description": "Spin glasses: two nearly best answers, half the arrows differ",
       "format": "short",
@@ -1044,7 +1044,7 @@
       "edition_state": "current"
     },
     {
-      "title": "Atlas: two groups, two labels for one maths paper",
+      "title": "Atlas: Two coverage labels for OpenAI's paper about π",
       "short": "Atlas",
       "description": "Atlas: two groups, two labels for one maths paper",
       "format": "short",
@@ -1076,7 +1076,7 @@
       "edition_state": "current"
     },
     {
-      "title": "Formal verification: what one proof covers",
+      "title": "Formal verification: What a proof covers in my 88-component toolkit",
       "short": "Formal verification",
       "description": "Formal verification: what one proof covers",
       "format": "short",
@@ -1115,7 +1115,7 @@
       "edition_state": "current"
     },
     {
-      "title": "CodeMap: a map of my code from AI-written descriptions",
+      "title": "CodeMap: A map of my code from AI-written file descriptions",
       "short": "CodeMap",
       "description": "CodeMap: a map of my code from AI-written descriptions",
       "format": "short",
@@ -1154,7 +1154,7 @@
       "edition_state": "current"
     },
     {
-      "title": "One Checkout: commit one fix while another AI keeps editing",
+      "title": "One Checkout: Commit one fix while another AI edits the same file",
       "short": "One Checkout",
       "description": "One Checkout: commit one fix while another AI keeps editing",
       "format": "short",
@@ -1193,7 +1193,7 @@
       "edition_state": "current"
     },
     {
-      "title": "Safety Core: a written rule let 6 of 10 runs commit",
+      "title": "Safety Core: 6 of 10 AI runs committed with rules, 0 with a command check",
       "short": "Safety Core",
       "description": "Safety Core: a written rule let 6 of 10 runs commit",
       "format": "short",
@@ -1225,7 +1225,7 @@
       "edition_state": "current"
     },
     {
-      "title": "Zenith: showing an AI tester the bugs it missed",
+      "title": "Zenith: AI found 69% vs 77% of bug types per program, without and with past misses",
       "short": "Zenith",
       "description": "Zenith: showing an AI tester the bugs it missed",
       "format": "short",
@@ -1264,7 +1264,7 @@
       "edition_state": "current"
     },
     {
-      "title": "OpenAI's quantum fourth-power result, proved again in Lean",
+      "title": "Quantum vs classical computers: OpenAI's fourth-power bound, checked in Lean",
       "short": "Quantum computer",
       "description": "OpenAI's quantum fourth-power result, proved again in Lean",
       "format": "short",
@@ -1309,7 +1309,7 @@
       "edition_state": "current"
     },
     {
-      "title": "How I turn AI-written maths into papers and a video",
+      "title": "How I use AI to turn a Lean proof into three papers and a video",
       "short": "The funnel",
       "description": "How I turn AI-written maths into papers and a video",
       "format": "short",
@@ -1372,7 +1372,7 @@
       "edition_state": "current"
     },
     {
-      "title": "The funnel: how AI-written maths becomes papers, a video and a reader website",
+      "title": "The funnel: How I use AI to turn a Lean proof into papers, a website and a video",
       "short": "The funnel",
       "description": "The funnel: from a Lean proof to papers, a video and a reader",
       "format": "long",
@@ -1411,7 +1411,7 @@
       "edition_state": "current"
     },
     {
-      "title": "Introduction: Making AI-written maths and code easier to understand",
+      "title": "Introduction: Using AI to explain maths and code",
       "short": "Introduction",
       "description": "Making AI-written maths and code easier to understand",
       "format": "short",
@@ -1450,7 +1450,7 @@
       "edition_state": "current"
     },
     {
-      "title": "Introduction (V4): How all my videos fit together, and where to start",
+      "title": "Introduction (V4): Using AI to explain maths and code",
       "short": "Introduction",
       "description": "How all my videos fit together, and where to start",
       "format": "long",
@@ -1482,7 +1482,7 @@
       "edition_state": "current"
     },
     {
-      "title": "Read OpenAI's spin glass proof beside its Lean",
+      "title": "Lean Exposition: Open the Lean proof of OpenAI's spin-glass theorem",
       "short": "SK Reader",
       "description": "SK Reader: read the spin-glass paper beside its Lean proof",
       "format": "short",
@@ -1521,7 +1521,7 @@
       "edition_state": "current"
     },
     {
-      "title": "OpenAI's quantum paper beside its Lean proof",
+      "title": "Quantum Reader: Open the Lean proof of OpenAI's fourth-power query bound",
       "short": "Quartic Reader",
       "description": "Quartic Reader: the quantum query paper beside its Lean proof",
       "format": "short",
@@ -1560,7 +1560,7 @@
       "edition_state": "current"
     },
     {
-      "title": "Click a paper's sentence to open its Lean proof",
+      "title": "Proof Reader: Open Lean code linked to a paper's sentence",
       "short": "General Reader",
       "description": "General Reader: click a paper’s sentence to open its Lean proof",
       "format": "short",
@@ -1599,7 +1599,7 @@
       "edition_state": "current"
     },
     {
-      "title": "Read a Maths Paper Beside Its Lean Proof",
+      "title": "Three maths websites: Open Lean proofs linked to maths papers",
       "short": "Three reader websites",
       "description": "Read a maths paper beside its Lean proof",
       "format": "long",
@@ -1650,7 +1650,7 @@
       "edition_state": "current"
     },
     {
-      "title": "NVIDIA's Auto Ontology answering questions about its own code",
+      "title": "NVIDIA's Auto Ontology: 10.3 of 12 questions about its own code correct",
       "short": "Code Ontology Bridge",
       "description": "NVIDIA Auto Ontology answering questions about its own code",
       "format": "short",
@@ -1695,7 +1695,7 @@
       "edition_state": "current"
     },
     {
-      "title": "Asking NVIDIA's Auto Ontology about its own code",
+      "title": "I asked NVIDIA's Auto Ontology which functions call one Python function",
       "short": "Code Ontology Bridge",
       "description": "Asking NVIDIA Auto Ontology about its own code",
       "format": "long",
@@ -1746,7 +1746,7 @@
       "edition_state": "current"
     },
     {
-      "title": "Agent Trace: read what your AI coding assistant ran",
+      "title": "Agent Trace: Read Claude Code and Codex commands and results",
       "short": "Agent Trace",
       "description": "Agent Trace: read what your AI coding assistant ran",
       "format": "short",
@@ -1778,7 +1778,7 @@
       "edition_state": "current"
     },
     {
-      "title": "Agent Trace: read and copy what Claude Code and Codex ran",
+      "title": "Agent Trace: Read and copy Claude Code and Codex chats, commands and results",
       "short": "Agent Trace",
       "description": "Agent Trace: inspect coding sessions and copy context into ChatGPT",
       "format": "long",
@@ -1810,7 +1810,7 @@
       "edition_state": "current"
     },
     {
-      "title": "Narration IR: plan what each sentence means, then animate",
+      "title": "Narration IR: Time an arrow's movement to spoken words",
       "short": "Narration IR",
       "description": "Narration IR: plan what each sentence means, then animate",
       "format": "short",
@@ -1849,7 +1849,7 @@
       "edition_state": "current"
     },
     {
-      "title": "Narration IR: timing an animation to the spoken word",
+      "title": "Narration IR: Planning AI animations around recorded speech",
       "short": "Narration IR",
       "description": "Narration IR: what each picture needs to explain",
       "format": "long",
@@ -1881,7 +1881,7 @@
       "edition_state": "current"
     },
     {
-      "title": "Introduction (V3): I still want to understand what AI builds",
+      "title": "Introduction (V3, older version): I still want to understand what AI builds",
       "short": "Introduction",
       "description": "I use AI for maths research and software, and build interfaces so other people can follow the results.",
       "format": "long",
