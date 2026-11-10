@@ -42,7 +42,7 @@ ALLOWED = REQUIRED | PRODUCTION_REQUIRED | {
     "assets/favicon-32.png", "assets/apple-touch-icon.png", "scripts/capture_cards.py",
     "scripts/check_explorer_model.js", "scripts/build_portable.py", "tests/__init__.py", "requirements.txt",
 }
-ALLOWED_DIRS = ("assets/fonts/", "assets/films/", "assets/sites/", "assets/family/marks/",
+ALLOWED_DIRS = ("assets/fonts/", "assets/films/", "assets/sites/", "assets/logos/", "assets/family/marks/",
                 "content/transcripts/", "docs/")
 PROJECT_PATHS = ("plectis-atlas/", "plectis-zenith/", "practical-formal-verification/",
                  "lean-exposition-site/", "proof-reader/", "microcosm-substrate/",

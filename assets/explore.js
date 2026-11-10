@@ -118,21 +118,20 @@
     var f=data.films['short-introduction'],n=data.films['long-introduction'];var existing=Object.values(data.films).filter(function(x){return /introduction/.test(x.id)&&x.youtube&&!M.earlier(data,x);}).slice(-1)[0],tour=M.published(n)?n:(existing||n);
     return '<section class="intro-view">'+crumb('home','All projects')+'<div class="intro-heading"><p class="eyebrow">Will Cook</p><h1 tabindex="-1">The work, and how it fits together.</h1><p>'+esc(data.owner.lede)+'</p></div><div class="intro-films"><article><h2>A short introduction</h2>'+filmVisual(f,false)+'<p>'+esc(f.takeaway)+'</p></article><article><h2>The full tour</h2>'+filmVisual(tour,false)+'<p>'+esc(tour===n?n.takeaway:tour.title)+'</p></article></div>'+(existing&&tour!==existing?'<p class="published-intro">Already available: '+filmAction(existing,existing.title+' · '+clock(existing),'inline-action')+'</p>':'')+'</section>';
   }
+  function prose(t){return esc(t).replace(/\[([^\]]+)\]\(([^)]+)\)/g,function(_,text,to){if(/^(https?:|mailto:)/.test(to))return '<a href="'+to+'"'+(/^mailto:/.test(to)?'':' target="_blank" rel="noopener"')+'>'+text+'</a>';return '<a href="#'+to+'" data-route="'+to+'">'+text+'</a>';});}
   function aboutView(){
-    var a=data.config.about||{},intro=data.films['short-introduction'];
-    var mail=data.owner.contact.find(function(c){return /^mailto:/.test(c.href);});
-    var contact='<ul class="about-contact">'+data.owner.contact.map(function(c){var seg=c.href.replace(/\/+$/,'').split('/').pop(),shown=/^mailto:/.test(c.href)?c.href.slice(7):/linkedin/.test(c.href)?'Will Cook':/^@/.test(seg)?seg:/x\.com/.test(c.href)?'@'+seg:seg;return '<li><span>'+esc(c.label)+'</span><a href="'+esc(c.href)+'"'+(/^mailto:/.test(c.href)?'':' target="_blank" rel="noopener"')+'>'+esc(shown)+(/^mailto:/.test(c.href)?'':' <span aria-hidden="true">↗</span>')+'</a></li>';}).join('')+'</ul>';
-    var made='<ul class="about-made">'+(a.made||[]).map(function(m){return '<li>'+routeLink(m[0],esc(m[1])+' <span aria-hidden="true">→</span>','about-made__link')+'</li>';}).join('')+'</ul>';
-    var contributions='<ul class="about-list">'+data.contributions.map(function(c){return '<li>'+external('https://github.com/wcook04/'+c.repo,esc(c.upstream))+'<p>'+esc(c.what)+(c.evidence?' '+external(c.evidence.href,esc(c.evidence.label)):'')+'</p></li>';}).join('')+'</ul>';
-    var earlier='<ul class="about-list">'+data.earlier.map(function(x){return '<li>'+external(x.href,esc(x.name))+'<p>'+esc(x.note)+'</p></li>';}).join('')+'</ul>';
-    return '<section class="about-view about-view--v2">'+crumb('home','All projects')
-      +'<div class="about-top"><div class="about-text"><p class="about-kicker">About me</p><h1 tabindex="-1">'+esc(a.heading||'Will Cook')+'</h1><p class="about-intro">'+esc(a.intro||data.owner.lede)+'</p>'+contact+'</div>'
-      +(intro?'<div class="about-video">'+filmVisual(intro,false)+'<p class="vcap"><span class="vkind">Short introduction · '+clock(intro)+'</span>'+esc(intro.takeaway||'')+'</p></div>':'')+'</div>'
-      +'<div class="about-section"><h2>What I\'ve made this year</h2>'+made+'</div>'
-      +'<div class="about-pair"><div class="about-section"><h2>What I\'m good at</h2><p>'+esc(a.good_at||'')+'</p></div><div class="about-section"><h2>What I\'m looking for</h2><p>'+esc(a.looking_for||data.owner.availability)+'</p>'+(mail?'<p><a class="about-mail" href="'+esc(mail.href)+'">Email me</a></p>':'')+'</div></div>'
-      +'<div class="about-section"><h2>Contributions to other projects</h2>'+contributions+'</div>'
-      +'<div class="about-section"><h2>Earlier work</h2>'+earlier+'</div></section>';
+    var a=data.config.about||{},intro=data.films['short-introduction'],paras=a.paragraphs||[data.owner.lede];
+    var contact='<p class="about-contact">'+data.owner.contact.map(function(c){var mail=/^mailto:/.test(c.href);return '<a href="'+esc(c.href)+'"'+(mail?'':' target="_blank" rel="noopener"')+'>'+esc(mail?c.href.slice(7):c.label)+'</a>';}).join('<span aria-hidden="true"> · </span>')+'</p>';
+    var contributions='<ul class="about-contrib">'+(a.contributions||[]).map(function(c){var prs='https://github.com/'+c.upstream+'/pulls?q=is%3Apr+author%3Awcook04';return '<li class="tier-'+(c.tier||3)+'"><img src="assets/logos/'+esc(c.logo)+'.webp" width="40" height="40" alt="" loading="lazy"><div><a class="about-contrib__name" href="https://github.com/'+esc(c.upstream)+'" target="_blank" rel="noopener">'+esc(c.upstream)+'</a><p>'+esc(c.what)+'</p><p class="about-contrib__prs"><a href="'+prs+'" target="_blank" rel="noopener">'+esc(c.prs)+'</a>'+(c.extra?' · <a href="'+esc(c.extra.href)+'" target="_blank" rel="noopener">'+esc(c.extra.label)+'</a>':'')+'</p></div></li>';}).join('')+'</ul>';
+    var earlier='<ul class="about-earlier">'+data.earlier.map(function(x){return '<li>'+external(x.href,esc(x.name))+' <span>'+esc(x.note)+'</span></li>';}).join('')+'</ul>';
+    return '<section class="about-view about-view--v3">'+crumb('home','All projects')
+      +'<div class="about-top"><div><h1 tabindex="-1">'+esc(a.heading||'Will Cook')+'</h1><p class="about-lead">'+prose(paras[0])+'</p>'+contact+'</div>'
+      +(intro?'<div class="about-video">'+filmVisual(intro,false)+'</div>':'')+'</div>'
+      +'<div class="about-essay">'+paras.slice(1).map(function(t){return '<p>'+prose(t)+'</p>';}).join('')+'</div>'
+      +'<h2 class="about-h2">Contributions to other projects</h2>'+contributions
+      +'<h2 class="about-h2">Earlier work</h2>'+earlier+'</section>';
   }
+
   function termRows(query){return data.terms.filter(function(t){return M.fold([t.term,...(t.aliases||[])].join(' ')).includes(M.fold(query));}).sort(function(a,b){return a.term.localeCompare(b.term);}).map(function(t){return '<details class="term-definition" id="term-'+esc(t.id)+'"><summary>'+esc(t.term)+' <span aria-hidden="true">+</span></summary><p>'+esc(t.preview)+'</p><p>'+esc(t.detail)+'</p></details>';}).join('');}
   function termsView(){return '<section class="terms-view">'+crumb('home','All projects')+'<div class="index-heading"><h1 tabindex="-1">A word in context.</h1><label class="search-label">Find a term<input type="search" id="term-search" placeholder="Try Lean, query or commit…"></label></div><div id="term-results">'+termRows('')+'</div></section>';}
   function asset(path){return (data.embeddedAssets||{})[path]||path;}

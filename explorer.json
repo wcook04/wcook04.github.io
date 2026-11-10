@@ -225,38 +225,83 @@
   },
   "about": {
     "heading": "I'm Will Cook.",
-    "intro": "I'm an economics undergraduate in Bristol taking a year out. This year I've been using AI agents to do mathematics research and build software, and building the websites and videos that make what they produce understandable.",
-    "made": [
-      [
-        "d=research",
-        "Lean 4 proofs of partial results on eight Erdős problems, with a research record and a paper for each, including a 1968 case of problem #257."
-      ],
-      [
-        "p=quartic",
-        "A Lean 4 formalisation of OpenAI's nearly quartic separation between randomized and quantum query complexity, with a reader that links each paragraph of the paper to its Lean declarations."
-      ],
-      [
-        "p=proof-reader",
-        "Proof Reader for Contextual Embeddings (PLDI 2026), made after one of its authors, Samantha Frohlich, asked me to apply the approach to her paper."
-      ],
-      [
-        "p=atlas",
-        "An index of OpenAI's 719 maths papers with their Lean statement files and the coverage labels outside reviewers gave them."
-      ],
-      [
-        "d=assistants",
-        "Tools for coding agents: a viewer for Claude Code and Codex session logs, a way to commit one agent's patch while others keep editing, and hooks that enforce a rulebook."
-      ],
-      [
-        "d=code",
-        "A bridge from Python call graphs to NVIDIA Auto Ontology's text-to-SQL agent, and an experiment in which showing DeepSeek V4.1 Flash the bugs it missed raised its mean test score from 69.2% to 77.0%."
-      ],
-      [
-        "films",
-        "A short and a full video for each project, scripted, recorded and animated through my own pipeline."
-      ]
+    "paragraphs": [
+      "I'm an economics undergraduate in Bristol, taking a year out. I'm spending it seeing how far I can push AI agents on hard technical work, mostly mathematics and the software around it, and then making what they produce understandable to people.",
+      "Everything here comes from two ideas. AI already writes more than anyone can read: long Lean proofs, papers, whole codebases. So the first idea is to use AI to make that output easier to understand at every level of detail, from a two-minute video down to the exact Lean declaration behind one sentence of a paper. The second is to build things that get better as the models get better, so each new model improves the work instead of making it obsolete.",
+      "On the maths side, that's meant Lean 4 proofs of partial results on [eight Erdős problems](d=research), including a 1968 case of problem #257, and a Lean formalisation of [OpenAI's nearly quartic gap between randomized and quantum query complexity](p=quartic). I build readers where clicking a sentence of a paper opens the Lean it states. One of the authors of Contextual Embeddings, Samantha Frohlich, asked me to make [one for her paper](p=proof-reader), so I did. There's also an [index of OpenAI's 719 maths papers](p=atlas) with their Lean statement files.",
+      "On the software side, I built the tools I needed to run several coding agents at once: [a viewer](p=agent-trace) for what Claude Code and Codex actually ran, [a way to commit one agent's fix](p=one-checkout) while another is halfway through editing the same files, and [hooks that enforce rules](p=safety-core) rather than just writing them down. I've connected Python codebases to [NVIDIA Auto Ontology](p=code-ontology-bridge), and run [experiments](p=zenith) such as showing a model the bugs it missed, which raised its score from 69% to 77%, although about half of that came from timeouts.",
+      "I explain all of it in [videos](films) that I script and record, then animate through a pipeline I also built. They're meant to be correct rather than viral: you can stop after the two-minute version or keep going into the half-hour one.",
+      "I don't have a maths degree. What I do have is a year of working out how to get reliable results out of agents, how to check those results against something precise, and how to explain them to people who didn't do the work.",
+      "I'm looking for a job, internship, fellowship or research collaboration where that's useful: research engineering, research software, technical demos or developer relations, at an AI lab or anywhere applying AI to its own problems. If you have a problem you think I should work on, [email me](mailto:williamwkcook@gmail.com). And if you think one of the videos gets something wrong, I'd like to hear that too."
     ],
-    "good_at": "Getting AI agents to do hard technical work, checking what they produce against a precise record such as a Lean proof, and explaining the result at the level each reader needs: a specialist paper, an exposition for someone learning the subject, or a two-minute video.",
-    "looking_for": "A job, internship, fellowship or research collaboration where AI agents do real technical work and someone has to check and explain the results. That could be research engineering, research software, technical demonstrations or developer relations, in an AI lab or in a company applying AI to its own field. If there's a problem you think I should work on, email me."
+    "contributions": [
+      {
+        "upstream": "google-deepmind/formal-conjectures",
+        "logo": "google-deepmind",
+        "what": "Lean statements of Erdős problems, corrections and links to external proofs.",
+        "prs": "7 merged pull requests, 14 open",
+        "extra": {
+          "label": "Crosswalk",
+          "href": "https://github.com/wcook04/plectis-erdos/blob/main/docs/verification/FORMAL_CONJECTURES_CROSSWALK.md"
+        },
+        "tier": 1
+      },
+      {
+        "upstream": "PalomarRegistry/PalomarSubmission",
+        "logo": "PalomarRegistry",
+        "what": "Mechanical verification and Lean build diagnostics for a proof registry.",
+        "prs": "1 merged pull request",
+        "tier": 2
+      },
+      {
+        "upstream": "xMaxos/hidden-ai-society-discovery",
+        "logo": "xMaxos",
+        "what": "Python reader tests, bounded retries and runtime evidence examples.",
+        "prs": "6 merged pull requests",
+        "tier": 2
+      },
+      {
+        "upstream": "elvmp/agent-commons-connect",
+        "logo": "elvmp",
+        "what": "Onboarding diagnostic fixtures and offline snapshot review tests.",
+        "prs": "2 merged pull requests",
+        "tier": 2
+      },
+      {
+        "upstream": "yigitisik/whataifound",
+        "logo": "yigitisik",
+        "what": "Dated checker-report records for a registry of AI-assisted results.",
+        "prs": "1 merged pull request",
+        "tier": 3
+      },
+      {
+        "upstream": "o8-run/o8",
+        "logo": "o8-run",
+        "what": "Shared-checkout fixes for a control room for coding agents.",
+        "prs": "1 merged pull request",
+        "tier": 3
+      },
+      {
+        "upstream": "drevendev/HungryCrab",
+        "logo": "drevendev",
+        "what": "A fix to a repository-analysis command-line tool.",
+        "prs": "1 merged pull request",
+        "tier": 3
+      },
+      {
+        "upstream": "betalgo/pocodex-fight",
+        "logo": "betalgo",
+        "what": "Pet arena visuals with shared rooms and tournaments for a hackathon game.",
+        "prs": "1 merged pull request",
+        "tier": 3
+      },
+      {
+        "upstream": "aseel1/agent-changes",
+        "logo": "aseel1",
+        "what": "macOS regression tests of sequential agent commits in one checkout.",
+        "prs": "1 open pull request",
+        "tier": 3
+      }
+    ]
   }
 }
