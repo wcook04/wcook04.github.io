@@ -679,7 +679,6 @@
       "description": "Erdős #257: a case from 1968, proved and checked in Lean",
       "format": "short",
       "poster": "assets/films/next/short-mathematics",
-      "poster_provisional": true,
       "cut_seconds": 101,
       "takeaway": "Introduces the Lean-checked proof of Erdős’s 1968 case of problem #257, removing his extra restriction.",
       "id": "film:short-mathematics",
@@ -693,8 +692,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=BIcqIDc7wK4",
+          "duration_seconds": 101,
+          "thumbnail_stem": "assets/films/next/short-mathematics"
         }
       ],
       "chapters": [],
@@ -714,7 +715,6 @@
       "description": "Maths Map: eight Erdős problems and their papers",
       "format": "short",
       "poster": "assets/films/next/short-mathematics-overview",
-      "poster_provisional": true,
       "cut_seconds": 109,
       "takeaway": "Find a theorem on Maths Map, open its paper, and see the available Lean and Comparator checks.",
       "id": "film:short-mathematics-overview",
@@ -728,8 +728,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=IrHU2btIfjc",
+          "duration_seconds": 109,
+          "thumbnail_stem": "assets/films/next/short-mathematics-overview"
         }
       ],
       "chapters": [],
@@ -755,7 +757,6 @@
       "description": "Spin glasses: two nearly best answers, half the arrows differ",
       "format": "short",
       "poster": "assets/films/next/short-sk-no-gap",
-      "poster_provisional": true,
       "cut_seconds": 98,
       "takeaway": "Explains why large random Sherrington–Kirkpatrick models almost certainly contain two near-best arrangements differing in about half their spins.",
       "id": "film:short-sk-no-gap",
@@ -769,8 +770,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=FU7RT6glvSQ",
+          "duration_seconds": 98,
+          "thumbnail_stem": "assets/films/next/short-sk-no-gap"
         }
       ],
       "chapters": [],
@@ -783,7 +786,6 @@
       "description": "Atlas: two groups, two labels for one maths paper",
       "format": "short",
       "poster": "assets/films/next/short-atlas",
-      "poster_provisional": true,
       "cut_seconds": 102,
       "takeaway": "Find OpenAI’s maths papers in Plectis Atlas, then compare MathVet and cert-machine’s different coverage labels for one paper about π.",
       "id": "film:short-atlas",
@@ -797,8 +799,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=e-lPHr7FlPM",
+          "duration_seconds": 102,
+          "thumbnail_stem": "assets/films/next/short-atlas"
         }
       ],
       "chapters": [],
@@ -811,7 +815,6 @@
       "description": "Formal verification: what one proof covers",
       "format": "short",
       "poster": "assets/films/next/short-plectis-verification",
-      "poster_provisional": true,
       "cut_seconds": 116,
       "takeaway": "Explore an 88-component software map and see exactly which calculations have Dafny proofs.",
       "id": "film:short-plectis-verification",
@@ -825,8 +828,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=6FefCiy4gn8",
+          "duration_seconds": 117,
+          "thumbnail_stem": "assets/films/next/short-plectis-verification"
         }
       ],
       "chapters": [],
@@ -846,7 +851,6 @@
       "description": "CodeMap: a map of my code from AI-written descriptions",
       "format": "short",
       "poster": "assets/films/next/short-codemap",
-      "poster_provisional": true,
       "cut_seconds": 129,
       "takeaway": "Explore CodeMap’s file boxes and the descriptions coding agents saved in the code; fetch those same descriptions as text.",
       "id": "film:short-codemap",
@@ -860,8 +864,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=92vGDw_R0Bw",
+          "duration_seconds": 130,
+          "thumbnail_stem": "assets/films/next/short-codemap"
         }
       ],
       "chapters": [],
@@ -881,7 +887,6 @@
       "description": "One Checkout: commit one fix while another AI keeps editing",
       "format": "short",
       "poster": "assets/films/next/short-one-checkout",
-      "poster_provisional": true,
       "cut_seconds": 86,
       "takeaway": "Commit one agent’s Git patch while another agent’s unfinished edits stay in the same file.",
       "id": "film:short-one-checkout",
@@ -895,8 +900,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=tZWZUXm_hPk",
+          "duration_seconds": 88,
+          "thumbnail_stem": "assets/films/next/short-one-checkout"
         }
       ],
       "chapters": [],
@@ -916,7 +923,6 @@
       "description": "Safety Core: a written rule let 6 of 10 runs commit",
       "format": "short",
       "poster": "assets/films/next/short-safety-core",
-      "poster_provisional": true,
       "cut_seconds": 83,
       "takeaway": "In one retry test, a made-up setting reached a commit in 10 of 10 runs, six under written rules, none under hooks.",
       "id": "film:short-safety-core",
@@ -930,8 +936,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=cSyHu-JFse8",
+          "duration_seconds": 85,
+          "thumbnail_stem": "assets/films/next/short-safety-core"
         }
       ],
       "chapters": [],
@@ -944,7 +952,6 @@
       "description": "Zenith: showing an AI tester the bugs it missed",
       "format": "short",
       "poster": "assets/films/next/short-zenith",
-      "poster_provisional": true,
       "cut_seconds": 113,
       "takeaway": "On 58 held-out problems, showing DeepSeek V4.1 Flash its missed bugs raised its average score from 69% to 77%.",
       "id": "film:short-zenith",
@@ -958,8 +965,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=RlpGkniCxHE",
+          "duration_seconds": 114,
+          "thumbnail_stem": "assets/films/next/short-zenith"
         }
       ],
       "chapters": [],
@@ -979,7 +988,6 @@
       "description": "OpenAI's quantum fourth-power result, proved again in Lean",
       "format": "short",
       "poster": "assets/films/next/short-quartic",
-      "poster_provisional": true,
       "cut_seconds": 110,
       "takeaway": "Explains OpenAI’s nearly quartic gap between randomized and quantum query complexity, and the new Lean proof.",
       "id": "film:short-quartic",
@@ -993,8 +1001,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=4LOeBi5BF3A",
+          "duration_seconds": 110,
+          "thumbnail_stem": "assets/films/next/short-quartic"
         }
       ],
       "chapters": [],
@@ -1020,7 +1030,6 @@
       "description": "How I turn AI-written maths into papers and a video",
       "format": "short",
       "poster": "assets/films/next/short-funnel",
-      "poster_provisional": true,
       "cut_seconds": 131,
       "takeaway": "Follow a Lean proof of a case of Erdős #257 into a research record, specialist paper, exposition and video.",
       "id": "film:short-funnel",
@@ -1034,8 +1043,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=hEekS6r0sTA",
+          "duration_seconds": 132,
+          "thumbnail_stem": "assets/films/next/short-funnel"
         }
       ],
       "chapters": [],
@@ -1074,12 +1085,11 @@
       ]
     },
     {
-      "title": "The funnel: from a Lean proof to papers, a video and a reader",
+      "title": "The funnel: how AI-written maths becomes papers, a video and a reader website",
       "short": "The funnel",
       "description": "The funnel: from a Lean proof to papers, a video and a reader",
       "format": "long",
       "poster": "assets/films/next/long-funnel",
-      "poster_provisional": true,
       "cut_seconds": 721,
       "takeaway": "Walk through Erdős #257 at each level, then explore the OpenAI reader websites and the proposed feedback loop for improving the instructions.",
       "id": "film:long-funnel",
@@ -1093,8 +1103,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=B716l0s8iwQ",
+          "duration_seconds": 729,
+          "thumbnail_stem": "assets/films/next/long-funnel"
         }
       ],
       "chapters": [],
@@ -1109,12 +1121,11 @@
       ]
     },
     {
-      "title": "Making AI-written maths and code easier to understand",
+      "title": "Introduction: Making AI-written maths and code easier to understand",
       "short": "Introduction",
       "description": "Making AI-written maths and code easier to understand",
       "format": "short",
       "poster": "assets/films/next/short-introduction",
-      "poster_provisional": true,
       "cut_seconds": 95,
       "takeaway": "Meet the maths funnel, Code Ontology Bridge for NVIDIA Auto Ontology, and Agent Trace: three ways to make AI output easier to follow.",
       "id": "film:short-introduction",
@@ -1128,8 +1139,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=VwqOrXl2YmU",
+          "duration_seconds": 97,
+          "thumbnail_stem": "assets/films/next/short-introduction"
         }
       ],
       "chapters": [],
@@ -1144,12 +1157,11 @@
       ]
     },
     {
-      "title": "How all my videos fit together, and where to start",
+      "title": "Introduction (V4): How all my videos fit together, and where to start",
       "short": "Introduction",
       "description": "How all my videos fit together, and where to start",
       "format": "long",
       "poster": "assets/films/next/long-introduction",
-      "poster_provisional": true,
       "cut_seconds": 630,
       "takeaway": "Tour the maths, software and explanation projects, see how they connect, and choose a first video.",
       "id": "film:long-introduction",
@@ -1163,8 +1175,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=Ttrd9DJEUMU",
+          "duration_seconds": 631,
+          "thumbnail_stem": "assets/films/next/long-introduction"
         }
       ],
       "chapters": [],
@@ -1172,12 +1186,11 @@
       "term_refs": []
     },
     {
-      "title": "SK Reader: read the spin-glass paper beside its Lean proof",
+      "title": "Read OpenAI's spin glass proof beside its Lean",
       "short": "SK Reader",
       "description": "SK Reader: read the spin-glass paper beside its Lean proof",
       "format": "short",
       "poster": "assets/films/next/short-sk-website",
-      "poster_provisional": true,
       "cut_seconds": 92,
       "takeaway": "Click a statement in SK Reader’s papers to open the linked part of OpenAI’s Sherrington–Kirkpatrick Lean proof.",
       "id": "film:short-sk-website",
@@ -1191,8 +1204,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=f8EY_85zsw4",
+          "duration_seconds": 92,
+          "thumbnail_stem": "assets/films/next/short-sk-website"
         }
       ],
       "chapters": [],
@@ -1207,12 +1222,11 @@
       ]
     },
     {
-      "title": "Quartic Reader: the quantum query paper beside its Lean proof",
+      "title": "OpenAI's quantum paper beside its Lean proof",
       "short": "Quartic Reader",
       "description": "Quartic Reader: the quantum query paper beside its Lean proof",
       "format": "short",
       "poster": "assets/films/next/short-quartic-reader",
-      "poster_provisional": true,
       "cut_seconds": 87,
       "takeaway": "Follow a passage in Quartic Reader to its linked Lean statements and the labels describing how they match.",
       "id": "film:short-quartic-reader",
@@ -1226,8 +1240,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=CS1VYv4n7cQ",
+          "duration_seconds": 87,
+          "thumbnail_stem": "assets/films/next/short-quartic-reader"
         }
       ],
       "chapters": [],
@@ -1242,12 +1258,11 @@
       ]
     },
     {
-      "title": "General Reader: click a paper’s sentence to open its Lean proof",
+      "title": "Click a paper's sentence to open its Lean proof",
       "short": "General Reader",
       "description": "General Reader: click a paper’s sentence to open its Lean proof",
       "format": "short",
       "poster": "assets/films/next/short-proof-reader",
-      "poster_provisional": true,
       "cut_seconds": 90,
       "takeaway": "Try General Reader on Contextual Embeddings: click a sentence to open the corresponding lines of the authors’ Lean proof.",
       "id": "film:short-proof-reader",
@@ -1261,8 +1276,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=r-E0m_j0WwU",
+          "duration_seconds": 90,
+          "thumbnail_stem": "assets/films/next/short-proof-reader"
         }
       ],
       "chapters": [],
@@ -1277,12 +1294,11 @@
       ]
     },
     {
-      "title": "Read a maths paper beside its Lean proof",
+      "title": "Read a Maths Paper Beside Its Lean Proof",
       "short": "Three reader websites",
       "description": "Read a maths paper beside its Lean proof",
       "format": "long",
       "poster": "assets/films/next/long-lean-readers",
-      "poster_provisional": true,
       "cut_seconds": 290,
       "takeaway": "Compare SK Reader, Quartic Reader and General Reader: paper links, argument maps, formal dependency graphs and the Lean behind them.",
       "id": "film:long-lean-readers",
@@ -1296,8 +1312,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=hbnsl3LvhZE",
+          "duration_seconds": 298,
+          "thumbnail_stem": "assets/films/next/long-lean-readers"
         }
       ],
       "chapters": [],
@@ -1324,12 +1342,11 @@
       ]
     },
     {
-      "title": "NVIDIA Auto Ontology answering questions about its own code",
+      "title": "NVIDIA's Auto Ontology answering questions about its own code",
       "short": "Code Ontology Bridge",
       "description": "NVIDIA Auto Ontology answering questions about its own code",
       "format": "short",
       "poster": "assets/films/next/short-code-ontology",
-      "poster_provisional": true,
       "cut_seconds": 94,
       "takeaway": "With a DuckDB code database, NVIDIA Auto Ontology using DeepSeek averaged 10.3 correct answers out of 12; DeepSeek alone averaged 3.2.",
       "id": "film:short-code-ontology",
@@ -1343,8 +1360,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=LmzHZfqUQtc",
+          "duration_seconds": 95,
+          "thumbnail_stem": "assets/films/next/short-code-ontology"
         }
       ],
       "chapters": [],
@@ -1365,12 +1384,11 @@
       ]
     },
     {
-      "title": "Asking NVIDIA Auto Ontology about its own code",
+      "title": "Asking NVIDIA's Auto Ontology about its own code",
       "short": "Code Ontology Bridge",
       "description": "Asking NVIDIA Auto Ontology about its own code",
       "format": "long",
       "poster": "assets/films/next/long-code-ontology",
-      "poster_provisional": true,
       "cut_seconds": 270,
       "takeaway": "Follow NVIDIA Auto Ontology’s recursive SQL query through four functions, including a callback, then explore the wider code-question study.",
       "id": "film:long-code-ontology",
@@ -1384,8 +1402,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=odGZTdAiCLY",
+          "duration_seconds": 278,
+          "thumbnail_stem": "assets/films/next/long-code-ontology"
         }
       ],
       "chapters": [],
@@ -1417,7 +1437,6 @@
       "description": "Agent Trace: read what your AI coding assistant ran",
       "format": "short",
       "poster": "assets/films/next/short-agent-trace",
-      "poster_provisional": true,
       "cut_seconds": 144,
       "takeaway": "Inspect saved Claude Code and Codex sessions, see commands beside their output, and copy selected context into another chat.",
       "id": "film:short-agent-trace",
@@ -1431,8 +1450,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=IkigUWBQK5k",
+          "duration_seconds": 145,
+          "thumbnail_stem": "assets/films/next/short-agent-trace"
         }
       ],
       "chapters": [],
@@ -1440,12 +1461,11 @@
       "term_refs": []
     },
     {
-      "title": "Agent Trace: inspect coding sessions and copy context into ChatGPT",
+      "title": "Agent Trace: read and copy what Claude Code and Codex ran",
       "short": "Agent Trace",
       "description": "Agent Trace: inspect coding sessions and copy context into ChatGPT",
       "format": "long",
       "poster": "assets/films/next/long-agent-trace",
-      "poster_provisional": true,
       "cut_seconds": 432,
       "takeaway": "Follow a failed test, its fix and a passing rerun, then choose how much of the saved session to copy into ChatGPT.",
       "id": "film:long-agent-trace",
@@ -1459,8 +1479,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=i1xO_SSnE4A",
+          "duration_seconds": 440,
+          "thumbnail_stem": "assets/films/next/long-agent-trace"
         }
       ],
       "chapters": [],
@@ -1473,7 +1495,6 @@
       "description": "Narration IR: plan what each sentence means, then animate",
       "format": "short",
       "poster": "assets/films/next/short-narration-ir",
-      "poster_provisional": true,
       "cut_seconds": 139,
       "takeaway": "Plan what one spin-glass sentence means, attach an arrow’s turn to spoken words, and locate its source quotations.",
       "id": "film:short-narration-ir",
@@ -1487,8 +1508,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=C1bhw-33OKg",
+          "duration_seconds": 140,
+          "thumbnail_stem": "assets/films/next/short-narration-ir"
         }
       ],
       "chapters": [],
@@ -1503,12 +1526,11 @@
       ]
     },
     {
-      "title": "Narration IR: what each picture needs to explain",
+      "title": "Narration IR: timing an animation to the spoken word",
       "short": "Narration IR",
       "description": "Narration IR: what each picture needs to explain",
       "format": "long",
       "poster": "assets/films/next/long-narration-ir",
-      "poster_provisional": true,
       "cut_seconds": 652,
       "takeaway": "Expand a narration into the meaning each picture should convey, with source context, before deciding how to draw it.",
       "id": "film:long-narration-ir",
@@ -1522,8 +1544,10 @@
         {
           "id": "youtube",
           "platform": "youtube",
-          "state": "in_preparation",
-          "url": null
+          "state": "published",
+          "url": "https://www.youtube.com/watch?v=-Jx8-Hpj5-E",
+          "duration_seconds": 653,
+          "thumbnail_stem": "assets/films/next/long-narration-ir"
         }
       ],
       "chapters": [],
@@ -1555,12 +1579,13 @@
       ],
       "chapters": [],
       "aliases": [],
-      "term_refs": []
+      "term_refs": [],
+      "edition": "earlier"
     },
     {
       "title": "Introduction (V1, older version): How the projects fit together",
       "short": "Introduction (V1, older version)",
-      "description": "An older introduction. Watch the latest Introduction (V3) from the home page. I go through the maths, the code map, how I make these videos, and the tools I use to manage the agents. Then some research into how the agents could improve their own way of working.",
+      "description": "An older introduction. Watch the latest Introduction (V4) from the home page. I go through the maths, the code map, how I make these videos, and the tools I use to manage the agents. Then some research into how the agents could improve their own way of working.",
       "format": "long",
       "edition": "earlier",
       "takeaway": "An earlier tour of CodeMap, One Checkout, the maths funnel, Atlas, Demo Take, Safety Core and Zenith.",
@@ -1918,7 +1943,7 @@
     {
       "title": "Introduction (V2, older version): Using AI for maths research and software",
       "short": "Introduction (V2, older version)",
-      "description": "An older introduction. Watch the latest Introduction (V3) from the home page. In this video I introduce the projects and explain how they fit together, from computer-checked proofs and papers to maps and videos you can follow yourself.",
+      "description": "An older introduction. Watch the latest Introduction (V4) from the home page. In this video I introduce the projects and explain how they fit together, from computer-checked proofs and papers to maps and videos you can follow yourself.",
       "format": "long",
       "edition": "earlier",
       "takeaway": "An earlier introduction to Will’s AI-assisted maths research and software projects.",

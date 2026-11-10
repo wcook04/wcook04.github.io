@@ -46,8 +46,10 @@ class HubTests(unittest.TestCase):
         finally:
             CHECK.BUILD.PREVIEW = old
         videos = [n for n in json.loads(before)["nodes"] if n["type"] == "video"]
-        self.assertEqual(sum(n["publicly_available"] for n in videos), 14)
-        self.assertEqual(sum(not n["publicly_available"] for n in videos), 24)
+        canonical_videos = [r for r in self.canonical["resources"] if r["type"] == "video"]
+        published = sum(bool(CHECK.CATALOGUE.public_location(r, "youtube")) for r in canonical_videos)
+        self.assertEqual(sum(n["publicly_available"] for n in videos), published)
+        self.assertEqual(len(videos), len(canonical_videos))
 
     def test_the_portable_package_matches_its_sources_and_links(self):
         self.assertEqual(CHECK.validate(self.files, prototype=True), [])
@@ -97,10 +99,13 @@ class HubTests(unittest.TestCase):
 
     def test_a_planned_video_cannot_gain_a_fake_playable_url_in_the_view(self):
         bad = deepcopy(self.view)
-        planned = next(f for f in bad["films"].values() if not f.get("youtube"))
-        planned["youtube"] = "https://www.youtube.com/watch?v=AAAAAAAAAAA"
+        canonical = deepcopy(self.canonical)
+        planned = next(r for r in canonical["resources"] if r["id"] == "film:short-quartic")
+        youtube = next(p for p in planned["publications"] if p["platform"] == "youtube")
+        youtube.update(state="in_preparation", url=None)
+        bad["films"]["short-quartic"]["youtube"] = "https://www.youtube.com/watch?v=AAAAAAAAAAA"
         self.assertTrue(any("invented or changed public video URL" in error
-                            for error in CHECK.validate_projection(bad, self.canonical)))
+                            for error in CHECK.validate_projection(bad, canonical)))
 
     def test_a_dropped_continuation_is_detected(self):
         bad = deepcopy(self.view)
@@ -190,8 +195,8 @@ for (const alias of Object.keys(d.config.topic_aliases)) assert.notEqual(M.resol
 for (const [name,id] of [['Proof Reader','proof-reader'],['Lean Exposition','lean-exposition'],['Plectis Mathematics','maths'],['Code Map','codemap']]) {
   assert(M.search(d,name).some(p=>p.id===id));
 }
-assert.equal(M.published(d.films['short-quartic']),false);
-assert.equal(M.earlier(d,d.films['introduction']),false);
+assert.equal(M.published(d.films['short-quartic']),true);
+assert.equal(M.earlier(d,d.films['introduction']),true);
 assert.equal(M.earlier(d,d.films['introduction-v2']),true);
 process.stdout.write('shared/result/deep routes, all continuations, aliases and live states passed\n');
 '''
