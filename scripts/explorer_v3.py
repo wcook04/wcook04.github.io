@@ -279,13 +279,14 @@ def _video_line(f: dict, pid: str, door: str, route: str = "") -> str:
     route = route or f"p={pid}&via={door}&film={f['id']}"
     return (f'<li><a class="vline" href="#{e(route)}" data-route="{e(route)}">'
             f'<span class="vline__thumb">{img}<span class="yt__time">{_clock(f)}</span></span>'
-            f'<span class="vline__text"><span class="vline__kind">{kind}</span>'
+            f'<span class="vline__text"><span class="vkind">{kind}</span>'
             f'<span class="vline__what">{e(f.get("takeaway") or f.get("description") or "")}</span></span></a></li>')
 
 
 def _project_row(view: dict, pid: str, door: dict) -> str:
-    """One project inside an opened topic: its short video plays here, with
-    one plain line; a second chevron opens its full videos, website and code."""
+    """One project inside an opened topic, all of it visible: its short video
+    plays here; beside it the project in one line, its other videos (each
+    described by what it shows), its code, and its website."""
     p = view["projects"][pid]
     keys = view["config"]["project_keywords"].get(pid, "")
     films = _current_films(view, pid)
@@ -294,34 +295,29 @@ def _project_row(view: dict, pid: str, door: dict) -> str:
     watch = ""
     if lead:
         watch = (f'<div class="prow__watch">{_player(lead)}'
-                 f'<p class="prow__vwhat"><span class="vline__kind">Short video · {_clock(lead)}</span>{e(lead.get("takeaway") or "")}</p></div>')
+                 f'<p class="vcap"><span class="vkind">Short video · {_clock(lead)}</span>{e(lead.get("takeaway") or "")}</p></div>')
+    videos = (f'<div class="prow__part"><h4>More videos</h4><ul class="vlines">{"".join(_video_line(f, pid, door["id"]) for f in rest)}</ul></div>') if rest else ""
     repos = p["repo_records"]
     code = "".join(f'<li><a href="{e(r["href"])}" target="_blank" rel="noopener">{e(r["name"])} <span aria-hidden="true">↗</span></a>'
                    f'<span>{e(r.get("description") or "")}</span></li>' for r in repos)
-    code = f'<h4>Code</h4><ul class="codes">{code}</ul>' if code else '<h4>Code</h4><p class="prow__vwhat">The code is not public.</p>'
-    site, site_link = "", ""
+    code = (f'<div class="prow__part"><h4>Code</h4><ul class="codes">{code}</ul></div>' if code
+            else '<div class="prow__part"><h4>Code</h4><p class="codes__none">Not public.</p></div>')
+    site = ""
     if p.get("url"):
         cap = p.get("capture")
-        pics = (f'<img class="when-light" src="{e(cap)}-light-720.webp" width="720" height="405" alt="" loading="lazy" decoding="async">'
-                f'<img class="when-dark" src="{e(cap)}-dark-720.webp" width="720" height="405" alt="" loading="lazy" decoding="async">') if cap else ""
-        site = (f'<h4>Website</h4><a class="prow__site" href="{e(p["url"])}" target="_blank" rel="noopener">{pics}'
-                f'<span class="prow__sitelabel">Open {e(p["name"])} <span aria-hidden="true">↗</span></span></a>')
-        site_link = f'<a class="prow__quick" href="{e(p["url"])}" target="_blank" rel="noopener">Open the website <span aria-hidden="true">↗</span></a>'
-    counts = []
-    if rest: counts.append(f'{len(rest)} more video' + ("s" if len(rest) > 1 else ""))
-    if p.get("url"): counts.append("the website")
-    counts.append(f'{len(repos)} code repositor' + ("ies" if len(repos) != 1 else "y") if repos else "code")
-    label = ", ".join(counts[:-1]) + (" and " if len(counts) > 1 else "") + counts[-1]
-    videos = f'<h4>Videos</h4><ul class="vlines">{"".join(_video_line(f, pid, door["id"]) for f in rest)}</ul>' if rest else ""
+        pics = (f'<img class="when-light" src="{e(cap)}-light-1440.webp" width="1440" height="810" alt="" loading="lazy" decoding="async">'
+                f'<img class="when-dark" src="{e(cap)}-dark-1440.webp" width="1440" height="810" alt="" loading="lazy" decoding="async">') if cap else ""
+        site = (f'<a class="prow__site" href="{e(p["url"])}" target="_blank" rel="noopener">{pics}'
+                f'<span>Open the website <span aria-hidden="true">↗</span></span></a>')
     return f'''<article class="prow ink-{e(p['area'])}" id="project-{e(pid)}">
       {watch}
       <div class="prow__body">
         <h3><a href="all.html#project-{e(pid)}" data-route="p={e(pid)}" data-parent="{e(door['id'])}">{e(p['name'])}</a></h3>
         <p class="prow__keys">{e(keys)}</p>
         <p class="prow__line">{e(p.get('line') or p.get('plain') or '')}</p>
-        {site_link}
-        <details class="more"><summary><span class="when-shut">Show {e(label)}</span><span class="when-open">Hide {e(label)}</span><span class="chev" aria-hidden="true"></span></summary>
-          <div class="more__body"><div>{videos}{code}</div><div>{site}</div></div></details>
+        {site}
+        {videos}
+        {code}
       </div>
     </article>'''
 
@@ -356,7 +352,7 @@ def home_markup(view: dict) -> str:
     intro = ""
     if short:
         intro = (f'<div class="hero__intro">{_player(short, "yt--big")}'
-                 f'<p class="prow__vwhat"><span class="vline__kind">Short introduction · {_clock(short)}</span>{e(short.get("takeaway") or "")}</p>'
+                 f'<p class="vcap"><span class="vkind">Short introduction · {_clock(short)}</span>{e(short.get("takeaway") or "")}</p>'
                  + (f'<ul class="vlines">{_video_line(full, "", "", "intro")}</ul>' if full else "")
                  + '</div>')
     return f'''<section class="home-view home-view--merged" aria-labelledby="home-heading">

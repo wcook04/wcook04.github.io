@@ -1,7 +1,7 @@
 {
   "version": 1,
   "title": "Use AI to make what AI produces easier to understand, at every level of detail. Build things that get better as AI models get better.",
-  "subtitle": "Open a topic to see its projects. Each project has a short video of about two minutes that plays on this page; open the project for its full videos, website and code.",
+  "subtitle": "Open a topic to see its projects. Each project has a short video of about two minutes that plays on this page, with its full videos, website and code beside it.",
   "doors": [
     {
       "id": "research",
