@@ -280,6 +280,7 @@ def _video_line(f: dict, pid: str, door: str, route: str = "") -> str:
     return (f'<li><a class="vline" href="#{e(route)}" data-route="{e(route)}">'
             f'<span class="vline__thumb">{img}<span class="yt__time">{_clock(f)}</span></span>'
             f'<span class="vline__text"><span class="vkind">{kind}</span>'
+            f'<span class="vline__title">{e(f["title"])}</span>'
             f'<span class="vline__what">{e(f.get("takeaway") or f.get("description") or "")}</span></span></a></li>')
 
 
@@ -295,7 +296,7 @@ def _project_row(view: dict, pid: str, door: dict, skip: frozenset = frozenset()
     watch = ""
     if lead:
         watch = (f'<div class="prow__watch">{_player(lead)}'
-                 f'<p class="vcap"><span class="vkind">Short video · {_clock(lead)}</span>{e(lead.get("takeaway") or "")}</p></div>')
+                 f'<p class="vcap"><span class="vkind">Short video · {_clock(lead)}</span><span class="vcap__title">{e(lead["title"])}</span>{e(lead.get("takeaway") or "")}</p></div>')
     videos = (f'<div class="prow__part"><h4>More videos</h4><ul class="vlines">{"".join(_video_line(f, pid, door["id"]) for f in rest)}</ul></div>') if rest else ""
     repos = p["repo_records"]
     code = "".join(f'<li><a href="{e(r["href"])}" target="_blank" rel="noopener">{e(r["name"])} <span aria-hidden="true">↗</span></a>'
@@ -372,7 +373,7 @@ def home_markup(view: dict) -> str:
     intro = ""
     if short:
         intro = (f'<div class="hero__intro">{_player(short, "yt--big")}'
-                 f'<p class="vcap"><span class="vkind">Short introduction · {_clock(short)}</span>{e(short.get("takeaway") or "")}</p>'
+                 f'<p class="vcap"><span class="vkind">Short introduction · {_clock(short)}</span><span class="vcap__title">{e(short["title"])}</span>{e(short.get("takeaway") or "")}</p>'
                  + (f'<ul class="vlines">{_video_line(full, "", "", "intro")}</ul>' if full else "")
                  + '</div>')
     return f'''<section class="home-view home-view--merged" aria-labelledby="home-heading">

@@ -629,3 +629,10 @@
 .about-view--v3 .about-top p.about-contact { margin:28px 0 0; }
 .about-view--v3 h2.about-h2 { margin:80px 0 28px;font-family:var(--font-serif);font-size:30px;font-weight:400; }
 .about-view--v3 .about-essay p { margin:0 0 24px; }
+
+/* Video title, then what it shows */
+.vline__title, .vcap__title { display:block;font-family:var(--font-sans);font-size:15.5px;font-weight:650;line-height:1.35;color:var(--text);margin:0 0 6px; }
+.vcap__title { font-size:17px; }
+.vline__what, .vcap { color:var(--quiet); }
+.home-view--merged .vcap { font-size:14.5px;line-height:1.55; }
+.vline__what { font-size:14px;line-height:1.5; }

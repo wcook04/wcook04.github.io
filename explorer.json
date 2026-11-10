@@ -226,19 +226,18 @@
   "about": {
     "heading": "I'm Will Cook.",
     "paragraphs": [
-      "I'm an economics undergraduate in Bristol, taking a year out. I'm spending it seeing how far I can push AI agents on hard technical work, mostly mathematics and the software around it, and then making what they produce understandable to people.",
-      "Everything here comes from two ideas. AI already writes more than anyone can read: long Lean proofs, papers, whole codebases. So the first idea is to use AI to make that output easier to understand at every level of detail, from a two-minute video down to the exact Lean declaration behind one sentence of a paper. The second is to build things that get better as the models get better, so each new model improves the work instead of making it obsolete.",
-      "On the maths side, that's meant Lean 4 proofs of partial results on [eight Erdős problems](d=research), including a 1968 case of problem #257, and a Lean formalisation of [OpenAI's nearly quartic gap between randomized and quantum query complexity](p=quartic). I build readers where clicking a sentence of a paper opens the Lean it states. One of the authors of Contextual Embeddings, Samantha Frohlich, asked me to make [one for her paper](p=proof-reader), so I did. There's also an [index of OpenAI's 719 maths papers](p=atlas) with their Lean statement files.",
-      "On the software side, I built the tools I needed to run several coding agents at once: [a viewer](p=agent-trace) for what Claude Code and Codex actually ran, [a way to commit one agent's fix](p=one-checkout) while another is halfway through editing the same files, and [hooks that enforce rules](p=safety-core) rather than just writing them down. I've connected Python codebases to [NVIDIA Auto Ontology](p=code-ontology-bridge), and run [experiments](p=zenith) such as showing a model the bugs it missed, which raised its score from 69% to 77%, although about half of that came from timeouts.",
-      "I explain all of it in [videos](films) that I script and record, then animate through a pipeline I also built. They're meant to be correct rather than viral: you can stop after the two-minute version or keep going into the half-hour one.",
-      "I don't have a maths degree. What I do have is a year of working out how to get reliable results out of agents, how to check those results against something precise, and how to explain them to people who didn't do the work.",
-      "I'm looking for a job, internship, fellowship or research collaboration where that's useful: research engineering, research software, technical demos or developer relations, at an AI lab or anywhere applying AI to its own problems. If you have a problem you think I should work on, [email me](mailto:williamwkcook@gmail.com). And if you think one of the videos gets something wrong, I'd like to hear that too."
+      "I'm an economics undergraduate in Bristol, taking a year out. I'm using it to do mathematics research and build software with AI agents, and to make what the agents produce easier for people to understand.",
+      "Every project here follows two ideas. AI models now produce more Lean proofs, papers and code than anyone can read, so I use AI to explain that output at every level of detail, from a two-minute video down to the Lean declaration behind one sentence of a paper. And I build each pipeline so that running it with a newer model gives a better result.",
+      "In maths, I've written Lean 4 proofs of partial results on [eight Erdős problems](d=research), including a 1968 case of problem #257, and a Lean formalisation of [OpenAI's nearly quartic gap between randomized and quantum query complexity](p=quartic). I also build websites where clicking a sentence of a paper opens the Lean declarations it states. Samantha Frohlich, one of the authors of Contextual Embeddings, asked me to [make one for her paper](p=proof-reader).",
+      "For coding agents, I've built [a viewer](p=agent-trace) for the commands Claude Code and Codex ran, [a way to commit one agent's fix](p=one-checkout) while another agent is still editing the same files, and [Claude Code hooks](p=safety-core) that block commands breaking a written rule. I've also connected Python codebases to [NVIDIA Auto Ontology](p=code-ontology-bridge). I explain each project in a short and a full [video](films), which I script and record and then animate through a pipeline I built.",
+      "I don't have a maths degree. I've spent this year learning how to get reliable work out of agents, have Lean check the proofs they write, and explain the results to people who didn't do the work.",
+      "I'm looking for a job, internship, fellowship or research collaboration in research engineering, research software, technical demos or developer relations, at an AI lab or a company applying AI to its own field. If you have a problem you think I should work on, [email me](mailto:williamwkcook@gmail.com). If you think one of the videos gets something wrong, I'd like to hear that too."
     ],
     "contributions": [
       {
         "upstream": "google-deepmind/formal-conjectures",
         "logo": "google-deepmind",
-        "what": "Lean statements of Erdős problems, corrections and links to external proofs.",
+        "what": "Lean statements and links to formal proofs for Erdős problems 257, 258, 1041 and 1049, including marking #1041 solved. I'm listed in its AUTHORS file.",
         "prs": "7 merged pull requests, 14 open",
         "extra": {
           "label": "Crosswalk",
@@ -249,56 +248,56 @@
       {
         "upstream": "PalomarRegistry/PalomarSubmission",
         "logo": "PalomarRegistry",
-        "what": "Mechanical verification and Lean build diagnostics for a proof registry.",
+        "what": "Removed a redundant Lean kernel recheck of type stand-ins from the registry's core-notation audit.",
         "prs": "1 merged pull request",
         "tier": 2
       },
       {
         "upstream": "xMaxos/hidden-ai-society-discovery",
         "logo": "xMaxos",
-        "what": "Python reader tests, bounded retries and runtime evidence examples.",
+        "what": "Tests and documentation for a Python reader's retry limits and cursor boundaries, and a fix that rejects Windows junction paths.",
         "prs": "6 merged pull requests",
         "tier": 2
       },
       {
         "upstream": "elvmp/agent-commons-connect",
         "logo": "elvmp",
-        "what": "Onboarding diagnostic fixtures and offline snapshot review tests.",
+        "what": "Tests of the checker's file boundaries, and a fix to a temporary-directory test fixture on macOS.",
         "prs": "2 merged pull requests",
         "tier": 2
       },
       {
         "upstream": "yigitisik/whataifound",
         "logo": "yigitisik",
-        "what": "Dated checker-report records for a registry of AI-assisted results.",
+        "what": "Updated the OpenAI mathematics entry with dated reports from external proof checkers.",
         "prs": "1 merged pull request",
         "tier": 3
       },
       {
         "upstream": "o8-run/o8",
         "logo": "o8-run",
-        "what": "Shared-checkout fixes for a control room for coding agents.",
+        "what": "Fixed shared-checkout baselines so that they record staged entries.",
         "prs": "1 merged pull request",
         "tier": 3
       },
       {
         "upstream": "drevendev/HungryCrab",
         "logo": "drevendev",
-        "what": "A fix to a repository-analysis command-line tool.",
+        "what": "Made a release tag wait until the configured merge checks have passed.",
         "prs": "1 merged pull request",
         "tier": 3
       },
       {
         "upstream": "betalgo/pocodex-fight",
         "logo": "betalgo",
-        "what": "Pet arena visuals with shared rooms and tournaments for a hackathon game.",
+        "what": "Pet arena visuals, shared rooms and tournaments for a hackathon game.",
         "prs": "1 merged pull request",
         "tier": 3
       },
       {
         "upstream": "aseel1/agent-changes",
         "logo": "aseel1",
-        "what": "macOS regression tests of sequential agent commits in one checkout.",
+        "what": "A test of sequential commits by different owners after a tracker is reopened.",
         "prs": "1 open pull request",
         "tier": 3
       }
