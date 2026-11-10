@@ -320,7 +320,7 @@ def _project_row(view: dict, pid: str, door: dict) -> str:
         <p class="prow__keys">{e(keys)}</p>
         <p class="prow__line">{e(p.get('line') or p.get('plain') or '')}</p>
         {site_link}
-        <details class="more"><summary><span class="chev" aria-hidden="true"></span>{e(label[0].upper() + label[1:])}</summary>
+        <details class="more"><summary><span class="when-shut">Show {e(label)}</span><span class="when-open">Hide {e(label)}</span><span class="chev" aria-hidden="true"></span></summary>
           <div class="more__body"><div>{videos}{code}</div><div>{site}</div></div></details>
       </div>
     </article>'''
@@ -348,8 +348,9 @@ def home_markup(view: dict) -> str:
         names = " · ".join(projects[pid]["name"] for pid in pids)
         rows = "".join(_project_row(view, pid, d) for pid in pids)
         topics.append(f'''<details class="topic ink-{e(d["ink"])}" id="group-{e(d["id"])}"><summary>
-          <span class="chev" aria-hidden="true"></span><span class="topic__text"><span class="topic__name">{e(d.get("keyword") or d["question"])}</span>
-          <span class="topic__projects">{e(names)}</span></span><span class="topic__thumbs" aria-hidden="true">{thumbs}</span></summary>
+          <span class="topic__text"><span class="topic__name">{e(d.get("keyword") or d["question"])}</span>
+          <span class="topic__projects">{e(names)}</span></span><span class="topic__thumbs" aria-hidden="true">{thumbs}</span>
+          <span class="topic__toggle"><span class="when-shut">{"Show the project" if len(pids) == 1 else f"Show {len(pids)} projects"}</span><span class="when-open">Hide</span><span class="chev-ring" aria-hidden="true"><span class="chev"></span></span></span></summary>
           <div class="topic__body">{rows}</div></details>''')
     short, full = films.get("short-introduction"), films.get("long-introduction")
     intro = ""
@@ -364,7 +365,7 @@ def home_markup(view: dict) -> str:
         <p class="scene-intro">{e(cfg['subtitle'])}</p></div>
       {intro}
     </div>
-    <h2 class="topics-heading">The projects, by topic</h2>
+    <h2 class="topics-heading">Projects by topic</h2>
     <div class="topics">{''.join(topics)}</div>
     <div class="scene-footer"><a href="#films" data-route="films">Every video, including earlier editions <span aria-hidden="true">→</span></a><a href="all.html" data-route="all">Search all the work <span aria-hidden="true">→</span></a><a href="#terms" data-route="terms">Glossary of terms <span aria-hidden="true">→</span></a></div>
     </section>'''

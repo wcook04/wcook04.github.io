@@ -567,3 +567,33 @@ details[open] > summary > .chev { transform:rotate(45deg); }
   .topic__body .prow__watch { order:1;margin:12px 0 6px; }
   .topic__body .prow__body > details.more { order:2; }
 }
+
+/* Refinement: topics as cards that read as openable; no rule lines */
+.hero { border-bottom:0;padding-bottom:20px; }
+.topics-heading { margin:34px 0 14px;font-family:var(--font-serif);font-size:26px;font-weight:400;letter-spacing:-.01em;text-transform:none;color:var(--text); }
+.topics { border-top:0;display:grid;gap:12px; }
+.topic { border:0;border-radius:12px;background:var(--panel);box-shadow:inset 0 0 0 1px var(--hairline);transition:box-shadow .15s, background .15s; }
+.topic:hover { box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--object-ink, var(--blue)) 55%, transparent); }
+.topic[open] { box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--object-ink, var(--blue)) 40%, transparent); }
+.topic > summary { gap:26px;padding:18px 20px 18px 26px; }
+.topic__name { font-size:26px; }
+.topic__thumbs img { width:104px;height:58px; }
+.topic__toggle { flex:none;display:flex;align-items:center;gap:12px;min-width:170px;justify-content:flex-end;font-size:14px;font-weight:650;color:var(--object-ink, var(--blue)); }
+.chev-ring { width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb, var(--object-ink, var(--blue)) 16%, transparent); }
+.chev-ring .chev { transform:rotate(45deg);margin-top:-4px;opacity:1; }
+.topic[open] > summary .chev-ring .chev { transform:rotate(225deg);margin-top:4px; }
+.when-open { display:none; }
+details[open] > summary > .when-open, details[open] > summary .when-open { display:inline; }
+details[open] > summary > .when-shut, details[open] > summary .when-shut { display:none; }
+.topic[open] .topic__thumbs { display:none; }
+.topic__body { padding:4px 26px 22px; }
+.topic__body .prow { border-top:0;padding:22px 0;gap:32px; }
+.topic__body .prow + .prow { border-top:1px solid color-mix(in srgb, var(--hairline) 60%, transparent); }
+.topic__body .prow:first-child { padding-top:8px; }
+.more > summary { display:inline-flex;gap:10px;padding:6px 0;font-size:14.5px;font-weight:650;color:var(--blue); }
+.more > summary .chev { width:7px;height:7px;transform:rotate(45deg);margin-top:-3px;opacity:1; }
+.more[open] > summary .chev { transform:rotate(225deg);margin-top:3px; }
+.more > summary:hover { text-decoration:underline;text-underline-offset:3px; }
+.prow__quick { color:var(--text); }
+.home-view--merged .scene-footer { border-top:0;margin-top:28px;padding-top:0;justify-content:flex-start; }
+@media (max-width:800px) { .topic > summary { padding:16px;gap:12px;flex-wrap:wrap; } .topic__toggle { min-width:0; } .topic__body { padding:0 16px 16px; } }
