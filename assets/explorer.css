@@ -586,3 +586,4 @@
 .hero { padding:72px 0 88px; }
 .home-view--merged h2.umbrella { font-family:var(--font-serif);font-size:30px;font-weight:400; }
 .home-view--merged .hero__intro p.vcap, .home-view--merged .prow__watch p.vcap { margin-top:20px; }
+.prow__site--still { color:var(--quiet);font-weight:500; }

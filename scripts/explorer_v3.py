@@ -309,6 +309,13 @@ def _project_row(view: dict, pid: str, door: dict, skip: frozenset = frozenset()
                 f'<img class="when-dark" src="{e(cap)}-dark-1440.webp" width="1440" height="810" alt="" loading="lazy" decoding="async">') if cap else ""
         site = (f'<a class="prow__site" href="{e(p["url"])}" target="_blank" rel="noopener">{pics}'
                 f'<span>Open the website <span aria-hidden="true">↗</span></span></a>')
+    elif (Path(__file__).resolve().parents[1] / f"assets/sites/repo-{pid}-1440.webp").is_file():
+        pic = f'<img src="assets/sites/repo-{e(pid)}-1440.webp" width="1440" height="810" alt="" loading="lazy" decoding="async">'
+        if repos:
+            site = (f'<a class="prow__site" href="{e(repos[0]["href"])}" target="_blank" rel="noopener">{pic}'
+                    f'<span>Open the code on GitHub <span aria-hidden="true">↗</span></span></a>')
+        else:
+            site = f'<div class="prow__site prow__site--still">{pic}<span>Not released; the videos show it in use.</span></div>'
     return f'''<article class="prow ink-{e(p['area'])}" id="project-{e(pid)}">
       {watch}
       <div class="prow__body">
