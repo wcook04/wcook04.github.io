@@ -237,39 +237,144 @@ def video_tile(film: dict | None, *, name: str, keys: str, href: str, route: str
             f'<span class="vtile__name">{e(name)}</span><span class="vtile__keys">{e(keys)}</span></a>')
 
 
+def _clock(f: dict) -> str:
+    secs = f.get("duration_seconds") or f.get("cut_seconds") or 0
+    return f"{secs // 60}:{secs % 60:02d}" if secs else ""
+
+
+def _current_films(view: dict, pid: str) -> list[dict]:
+    """A project's videos without earlier editions, short videos first."""
+    films = view["films"]
+    out = []
+    for fid in view["projects"][pid]["films"]:
+        f = films.get(fid)
+        if not f or f.get("edition") == "earlier":
+            continue
+        newer = f.get("superseded_by")
+        if newer and films.get(newer, {}).get("youtube"):
+            continue
+        out.append(f)
+    return sorted(out, key=lambda f: 0 if f.get("format") == "short" else 1)
+
+
+def _player(f: dict, cls: str = "") -> str:
+    """A published video as a link to YouTube; the page's script swaps it for
+    YouTube's player, so it plays here. Without the script it opens YouTube."""
+    stem = f.get("still") or f.get("poster")
+    img = f'<img src="{e(stem)}-1280.webp" width="1280" height="720" alt="" loading="lazy" decoding="async">' if stem else ""
+    if not f.get("youtube"):
+        return f'<span class="yt {cls}">{img}</span>'
+    vid = f["youtube"].split("v=")[1].split("&")[0]
+    return (f'<a class="yt {cls}" href="{e(f["youtube"])}" target="_blank" rel="noopener" data-yt="{e(vid)}" '
+            f'data-title="{e(f["title"])}" aria-label="Play {e(f["title"])}">{img}'
+            f'<span class="yt__play" aria-hidden="true">▶</span><span class="yt__time">{_clock(f)}</span></a>')
+
+
+def _video_line(f: dict, pid: str, door: str, route: str = "") -> str:
+    """A full or extra video: thumbnail, its YouTube title and what it shows.
+    It opens the project's page with that video in the player."""
+    stem = f.get("still") or f.get("poster")
+    img = f'<img src="{e(stem)}-640.webp" width="640" height="360" alt="" loading="lazy" decoding="async">' if stem else ""
+    kind = ("Short video" if f.get("format") == "short" else "Full video") + f" · {_clock(f)}"
+    route = route or f"p={pid}&via={door}&film={f['id']}"
+    return (f'<li><a class="vline" href="#{e(route)}" data-route="{e(route)}">'
+            f'<span class="vline__thumb">{img}<span class="yt__time">{_clock(f)}</span></span>'
+            f'<span class="vline__text"><span class="vline__kind">{kind}</span>'
+            f'<span class="vline__what">{e(f.get("takeaway") or f.get("description") or "")}</span></span></a></li>')
+
+
+def _project_row(view: dict, pid: str, door: dict) -> str:
+    """One project inside an opened topic: its short video plays here, with
+    one plain line; a second chevron opens its full videos, website and code."""
+    p = view["projects"][pid]
+    keys = view["config"]["project_keywords"].get(pid, "")
+    films = _current_films(view, pid)
+    lead = lead_short(view, pid, door["id"]) or (films[0] if films else None)
+    rest = [f for f in films if lead is None or f["id"] != lead["id"]]
+    watch = ""
+    if lead:
+        watch = (f'<div class="prow__watch">{_player(lead)}'
+                 f'<p class="prow__vwhat"><span class="vline__kind">Short video · {_clock(lead)}</span>{e(lead.get("takeaway") or "")}</p></div>')
+    repos = p["repo_records"]
+    code = "".join(f'<li><a href="{e(r["href"])}" target="_blank" rel="noopener">{e(r["name"])} <span aria-hidden="true">↗</span></a>'
+                   f'<span>{e(r.get("description") or "")}</span></li>' for r in repos)
+    code = f'<h4>Code</h4><ul class="codes">{code}</ul>' if code else '<h4>Code</h4><p class="prow__vwhat">The code is not public.</p>'
+    site, site_link = "", ""
+    if p.get("url"):
+        cap = p.get("capture")
+        pics = (f'<img class="when-light" src="{e(cap)}-light-720.webp" width="720" height="405" alt="" loading="lazy" decoding="async">'
+                f'<img class="when-dark" src="{e(cap)}-dark-720.webp" width="720" height="405" alt="" loading="lazy" decoding="async">') if cap else ""
+        site = (f'<h4>Website</h4><a class="prow__site" href="{e(p["url"])}" target="_blank" rel="noopener">{pics}'
+                f'<span class="prow__sitelabel">Open {e(p["name"])} <span aria-hidden="true">↗</span></span></a>')
+        site_link = f'<a class="prow__quick" href="{e(p["url"])}" target="_blank" rel="noopener">Open the website <span aria-hidden="true">↗</span></a>'
+    counts = []
+    if rest: counts.append(f'{len(rest)} more video' + ("s" if len(rest) > 1 else ""))
+    if p.get("url"): counts.append("the website")
+    counts.append(f'{len(repos)} code repositor' + ("ies" if len(repos) != 1 else "y") if repos else "code")
+    label = ", ".join(counts[:-1]) + (" and " if len(counts) > 1 else "") + counts[-1]
+    videos = f'<h4>Videos</h4><ul class="vlines">{"".join(_video_line(f, pid, door["id"]) for f in rest)}</ul>' if rest else ""
+    return f'''<article class="prow ink-{e(p['area'])}" id="project-{e(pid)}">
+      {watch}
+      <div class="prow__body">
+        <h3><a href="all.html#project-{e(pid)}" data-route="p={e(pid)}" data-parent="{e(door['id'])}">{e(p['name'])}</a></h3>
+        <p class="prow__keys">{e(keys)}</p>
+        <p class="prow__line">{e(p.get('line') or p.get('plain') or '')}</p>
+        {site_link}
+        <details class="more"><summary><span class="chev" aria-hidden="true"></span>{e(label[0].upper() + label[1:])}</summary>
+          <div class="more__body"><div>{videos}{code}</div><div>{site}</div></div></details>
+      </div>
+    </article>'''
+
+
 def home_markup(view: dict) -> str:
-    """Short videos first: the introduction, then one tile per project.
-    A tile opens the project page, which has the video, its drawing, the full
-    video, the website and the code."""
+    """The two principles and the introduction, then six topics. A topic opens
+    to its projects, each with its short video; a project opens to its full
+    videos, website and code."""
     cfg, films, projects = view["config"], view["films"], view["projects"]
-    keys = cfg["project_keywords"]
-    intro = films.get("short-introduction")
-    tiles = [video_tile(intro, name="Introduction", keys=cfg["intro_keywords"], href="all.html#introductions",
-                        route="intro", ink="explain", cls="vtile--intro")]
-    seen = set()
-    for d in cfg["doors"]:
-        for pid in d["projects"]:
-            if pid in seen:
-                continue
-            seen.add(pid)
-            p = projects[pid]
-            tiles.append(video_tile(lead_short(view, pid, d["id"]), name=p["name"], keys=keys[pid],
-                                    href=f"all.html#project-{pid}", route=f"p={pid}", parent=d["id"], ink=p["area"]))
     principles = "".join(f'<span class="principle"><span class="principle__n" aria-hidden="true">{i}</span>{e(t)}</span>'
                          for i, t in enumerate(cfg["principles"], 1))
-    return f'''<section class="home-view home-view--videos" aria-labelledby="home-heading">
-    <div class="scene-heading"><div class="principles"><h1 id="home-heading" tabindex="-1">{principles}</h1>
-    <p class="scene-intro">{e(cfg['subtitle'])}</p></div></div>
-    <div class="vgrid">{''.join(tiles)}</div>
-    <div class="scene-footer"><a href="#index" data-scroll="index">Everything, project by project <span aria-hidden="true">↓</span></a><a href="all.html" data-route="all">Search all the work <span aria-hidden="true">→</span></a></div>
-    </section>{index_markup(view)}'''
+    seen, topics = set(), []
+    for d in cfg["doors"]:
+        pids = [pid for pid in d["projects"] if pid not in seen]
+        seen.update(pids)
+        if not pids:
+            continue
+        thumbs = ""
+        for pid in pids:
+            lead = lead_short(view, pid, d["id"])
+            stem = lead and (lead.get("still") or lead.get("poster"))
+            if stem:
+                thumbs += f'<img src="{e(stem)}-640.webp" width="640" height="360" alt="" loading="lazy" decoding="async">'
+        names = " · ".join(projects[pid]["name"] for pid in pids)
+        rows = "".join(_project_row(view, pid, d) for pid in pids)
+        topics.append(f'''<details class="topic ink-{e(d["ink"])}" id="group-{e(d["id"])}"><summary>
+          <span class="chev" aria-hidden="true"></span><span class="topic__text"><span class="topic__name">{e(d.get("keyword") or d["question"])}</span>
+          <span class="topic__projects">{e(names)}</span></span><span class="topic__thumbs" aria-hidden="true">{thumbs}</span></summary>
+          <div class="topic__body">{rows}</div></details>''')
+    short, full = films.get("short-introduction"), films.get("long-introduction")
+    intro = ""
+    if short:
+        intro = (f'<div class="hero__intro">{_player(short, "yt--big")}'
+                 f'<p class="prow__vwhat"><span class="vline__kind">Short introduction · {_clock(short)}</span>{e(short.get("takeaway") or "")}</p>'
+                 + (f'<ul class="vlines">{_video_line(full, "", "", "intro")}</ul>' if full else "")
+                 + '</div>')
+    return f'''<section class="home-view home-view--merged" aria-labelledby="home-heading">
+    <div class="hero">
+      <div class="hero__text"><h1 id="home-heading" tabindex="-1">{principles}</h1>
+        <p class="scene-intro">{e(cfg['subtitle'])}</p></div>
+      {intro}
+    </div>
+    <h2 class="topics-heading">The projects, by topic</h2>
+    <div class="topics">{''.join(topics)}</div>
+    <div class="scene-footer"><a href="#films" data-route="films">Every video, including earlier editions <span aria-hidden="true">→</span></a><a href="all.html" data-route="all">Search all the work <span aria-hidden="true">→</span></a><a href="#terms" data-route="terms">Glossary of terms <span aria-hidden="true">→</span></a></div>
+    </section>'''
 
 
 def render_page(registry: dict, glossary: dict, root: Path, structured: str) -> str:
     v=build_view(registry,glossary,root)
     data=json.dumps(v,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c')
     return f'''<!doctype html>
-<html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src https://www.youtube.com">
 <title>Will Cook — follow the work</title><meta name="description" content="Explore AI-assisted mathematics, tools for coding assistants, and ways to make the work understandable.">
 <link rel="canonical" href="https://wcook04.github.io/"><meta name="robots" content="index, follow">
