@@ -179,7 +179,7 @@ assert.equal(Object.values(d.films).reduce((n,f)=>n+M.onward(d,f).length,0),18);
 const multiple=JSON.parse(JSON.stringify(d));
 multiple.films['short-quartic'].leads_to.push('long-funnel');
 assert.equal(M.onward(multiple,multiple.films['short-quartic']).length,2);
-assert.equal(M.lead(d,M.resolve(d,'#p=quartic&via=research')).id,'short-quartic');
+assert.equal(M.lead(d,M.resolve(d,'#p=quartic&film=short-quartic')).id,'short-quartic');
 assert.equal(M.lead(d,M.resolve(d,'#p=quartic&via=proofs')).id,'short-quartic-reader');
 for (const [pid,expected] of [['quartic','short-quartic-reader'],['lean-exposition','short-sk-website'],['proof-reader','short-proof-reader']]) {
   const state=M.resolve(d,M.routeForFilm(d,pid,'long-lean-readers'));
@@ -187,10 +187,10 @@ for (const [pid,expected] of [['quartic','short-quartic-reader'],['lean-expositi
 }
 for (const [pid,fid,taster] of [['quartic','quartic-query','short-quartic'],['lean-exposition','sk-no-gap','short-sk-no-gap']]) {
   const state=M.resolve(d,M.routeForFilm(d,pid,fid));
-  assert.equal(state.via,'research'); assert.equal(M.lead(d,state).id,taster);
+  assert.equal(state.via,'proofs'); assert.equal(M.lead(d,state).id,taster);
 }
 assert.equal(M.resolve(d,'#t=quantum').id,'quartic');
-assert.equal(M.resolve(d,'#d=testing').id,'zenith');
+assert.equal(M.resolve(d,'#d=testing').view,'door'); assert.equal(M.resolve(d,'#d=research').id,'maths');
 for (const alias of Object.keys(d.config.topic_aliases)) assert.notEqual(M.resolve(d,'#t='+alias).view,'home');
 for (const [name,id] of [['Proof Reader','proof-reader'],['Lean Exposition','lean-exposition'],['Plectis Mathematics','maths'],['Code Map','codemap']]) {
   assert(M.search(d,name).some(p=>p.id===id));

@@ -571,3 +571,18 @@
   .prow__watch { order:1;margin-top:20px; }
   .prow__site, .prow__part { order:2; }
 }
+
+/* One type system: serif for every heading, sans for text, plain small labels */
+.prow__body h3, .topic__name, .umbrella, .hero__text h1 { font-family:var(--font-serif); }
+.prow__body h3 { font-size:30px;font-weight:400;letter-spacing:-.01em; }
+.vkind, .prow__part h4, .shared h4 { font-family:var(--font-sans);font-size:13px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--quiet);margin:0 0 8px; }
+.prow__part h4, .shared h4 { font-size:14px;color:var(--text);margin-bottom:16px; }
+.vcap { margin-top:20px; }
+.umbrella { margin:0 0 24px;font-size:30px;font-weight:400;line-height:1.2;color:var(--text);display:flex;align-items:center;gap:14px; }
+.umbrella::before { content:"";width:10px;height:10px;border-radius:50%;background:var(--object-ink, var(--blue)); }
+.topics > .umbrella:not(:first-child) { margin-top:64px; }
+.shared { padding:32px 0 8px; }
+.prow__keys { font-weight:600; }
+.hero { padding:72px 0 88px; }
+.home-view--merged h2.umbrella { font-family:var(--font-serif);font-size:30px;font-weight:400; }
+.home-view--merged .hero__intro p.vcap, .home-view--merged .prow__watch p.vcap { margin-top:20px; }

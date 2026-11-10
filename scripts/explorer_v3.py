@@ -283,15 +283,15 @@ def _video_line(f: dict, pid: str, door: str, route: str = "") -> str:
             f'<span class="vline__what">{e(f.get("takeaway") or f.get("description") or "")}</span></span></a></li>')
 
 
-def _project_row(view: dict, pid: str, door: dict) -> str:
+def _project_row(view: dict, pid: str, door: dict, skip: frozenset = frozenset()) -> str:
     """One project inside an opened topic, all of it visible: its short video
-    plays here; beside it the project in one line, its other videos (each
+    plays here; next to it the project in one line, its other videos (each
     described by what it shows), its code, and its website."""
     p = view["projects"][pid]
     keys = view["config"]["project_keywords"].get(pid, "")
     films = _current_films(view, pid)
     lead = lead_short(view, pid, door["id"]) or (films[0] if films else None)
-    rest = [f for f in films if lead is None or f["id"] != lead["id"]]
+    rest = [f for f in films if (lead is None or f["id"] != lead["id"]) and f["id"] not in skip]
     watch = ""
     if lead:
         watch = (f'<div class="prow__watch">{_player(lead)}'
@@ -314,7 +314,7 @@ def _project_row(view: dict, pid: str, door: dict) -> str:
       <div class="prow__body">
         <h3><a href="all.html#project-{e(pid)}" data-route="p={e(pid)}" data-parent="{e(door['id'])}">{e(p['name'])}</a></h3>
         <p class="prow__keys">{e(keys)}</p>
-        <p class="prow__line">{e(p.get('line') or p.get('plain') or '')}</p>
+        <p class="prow__line">{e(view['config'].get('project_home_lines', {}).get(pid) or p.get('line') or p.get('plain') or '')}</p>
         {site}
         {videos}
         {code}
@@ -329,12 +329,12 @@ def home_markup(view: dict) -> str:
     cfg, films, projects = view["config"], view["films"], view["projects"]
     principles = "".join(f'<span class="principle"><span class="principle__n" aria-hidden="true">{i}</span>{e(t)}</span>'
                          for i, t in enumerate(cfg["principles"], 1))
-    seen, topics = set(), []
+    topics, group = [], None
     for d in cfg["doors"]:
-        pids = [pid for pid in d["projects"] if pid not in seen]
-        seen.update(pids)
-        if not pids:
-            continue
+        pids = list(d["projects"])
+        if d.get("group") != group:
+            group = d.get("group")
+            topics.append(f'<h2 class="umbrella ink-{e(d["ink"])}">{e(group or "")}</h2>')
         thumbs = ""
         for pid in pids:
             lead = lead_short(view, pid, d["id"])
@@ -342,12 +342,25 @@ def home_markup(view: dict) -> str:
             if stem:
                 thumbs += f'<img src="{e(stem)}-640.webp" width="640" height="360" alt="" loading="lazy" decoding="async">'
         names = " · ".join(projects[pid]["name"] for pid in pids)
-        rows = "".join(_project_row(view, pid, d) for pid in pids)
+        # A video that belongs to several projects in this topic is shown once, above them.
+        owners: dict[str, list[str]] = {}
+        for pid in pids:
+            for f in _current_films(view, pid):
+                owners.setdefault(f["id"], []).append(pid)
+        shared = [fid for fid, who in owners.items() if len(who) > 1]
+        shared_html = ""
+        if shared:
+            who = owners[shared[0]]
+            label = ", ".join(projects[x]["name"] for x in who[:-1]) + " and " + projects[who[-1]]["name"]
+            shared_html = (f'<div class="shared"><h4>One video covers {e(label)}</h4><ul class="vlines">'
+                           + "".join(_video_line(films[fid], who[0], d["id"]) for fid in shared) + '</ul></div>')
+        rows = "".join(_project_row(view, pid, d, frozenset(shared)) for pid in pids)
+        toggle = "Show the project" if len(pids) == 1 else f"Show {len(pids)} projects"
         topics.append(f'''<details class="topic ink-{e(d["ink"])}" id="group-{e(d["id"])}"><summary>
           <span class="topic__text"><span class="topic__name">{e(d.get("keyword") or d["question"])}</span>
           <span class="topic__projects">{e(names)}</span></span><span class="topic__thumbs" aria-hidden="true">{thumbs}</span>
-          <span class="topic__toggle"><span class="when-shut">{"Show the project" if len(pids) == 1 else f"Show {len(pids)} projects"}</span><span class="when-open">Hide</span><span class="chev-ring" aria-hidden="true"><span class="chev"></span></span></span></summary>
-          <div class="topic__body">{rows}</div></details>''')
+          <span class="topic__toggle"><span class="when-shut">{toggle}</span><span class="when-open">Hide</span><span class="chev-ring" aria-hidden="true"><span class="chev"></span></span></span></summary>
+          <div class="topic__body">{shared_html}{rows}</div></details>''')
     short, full = films.get("short-introduction"), films.get("long-introduction")
     intro = ""
     if short:
@@ -358,10 +371,9 @@ def home_markup(view: dict) -> str:
     return f'''<section class="home-view home-view--merged" aria-labelledby="home-heading">
     <div class="hero">
       <div class="hero__text"><h1 id="home-heading" tabindex="-1">{principles}</h1>
-        <p class="scene-intro">{e(cfg['subtitle'])}</p></div>
+</div>
       {intro}
     </div>
-    <h2 class="topics-heading">Projects by topic</h2>
     <div class="topics">{''.join(topics)}</div>
     <div class="scene-footer"><a href="#films" data-route="films">Every video, including earlier editions <span aria-hidden="true">→</span></a><a href="all.html" data-route="all">Search all the work <span aria-hidden="true">→</span></a><a href="#terms" data-route="terms">Glossary of terms <span aria-hidden="true">→</span></a></div>
     </section>'''
@@ -373,7 +385,7 @@ def render_page(registry: dict, glossary: dict, root: Path, structured: str) -> 
     return f'''<!doctype html>
 <html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src https://www.youtube.com">
-<title>Will Cook — follow the work</title><meta name="description" content="Explore AI-assisted mathematics, tools for coding assistants, and ways to make the work understandable.">
+<title>Will Cook</title><meta name="description" content="Explore AI-assisted mathematics, tools for coding assistants, and ways to make the work understandable.">
 <link rel="canonical" href="https://wcook04.github.io/"><meta name="robots" content="index, follow">
 <meta name="color-scheme" content="light dark"><link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/hub.css"><link rel="stylesheet" href="assets/explorer.css"><link rel="stylesheet" href="assets/door-art.css"><script src="assets/explore-model.js" defer></script><script src="assets/explore.js" defer></script>

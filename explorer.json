@@ -1,24 +1,41 @@
 {
   "version": 1,
   "title": "Use AI to make what AI produces easier to understand, at every level of detail. Build things that get better as AI models get better.",
-  "subtitle": "Open a topic to see its projects. Each project has a short video of about two minutes that plays on this page, with its full videos, website and code beside it.",
+  "subtitle": "Two principles, and the projects built on them.",
   "doors": [
     {
       "id": "research",
       "question": "What has AI proved that Lean has checked?",
-      "caption": "A case of an Erdős problem from 1968, OpenAI's quantum query bound and a spin-glass theorem, each with a Lean proof.",
+      "caption": "Research records, papers and Lean 4 proofs of partial results on eight Erdős problems, with Comparator results where they exist.",
       "object": "research",
       "ink": "maths",
       "projects": [
-        "maths",
-        "quartic",
-        "lean-exposition"
+        "maths"
       ],
       "shortcuts": [
         {
           "project": "maths",
           "label": "Erdős problems"
-        },
+        }
+      ],
+      "keyword": "Erdős problems: AI-assisted proofs in Lean 4",
+      "group": "Mathematics"
+    },
+    {
+      "id": "proofs",
+      "question": "Which sentences of a paper does its Lean proof formalise?",
+      "caption": "Click a sentence of a paper to open the Lean 4 declarations it states; compare the coverage labels outside reviewers gave OpenAI's papers.",
+      "object": "proofs",
+      "ink": "maths",
+      "projects": [
+        "quartic",
+        "lean-exposition",
+        "proof-reader",
+        "atlas"
+      ],
+      "keyword": "Maths papers linked to their Lean 4 formalisations",
+      "group": "Mathematics",
+      "shortcuts": [
         {
           "project": "quartic",
           "label": "Quantum query complexity"
@@ -27,28 +44,26 @@
           "project": "lean-exposition",
           "label": "Spin glasses"
         }
-      ],
-      "keyword": "Maths proved with AI"
+      ]
     },
     {
-      "id": "proofs",
-      "question": "Which sentences in a paper does its Lean proof cover?",
-      "caption": "Click a sentence to open the Lean lines it describes, and see which statements each proof covers in full.",
-      "object": "proofs",
+      "id": "explaining",
+      "question": "How does one Lean proof become papers and a video?",
+      "caption": "One Lean proof becomes a 152-page research record, a 26-page specialist paper, a 16-page exposition and a video whose pictures are timed to spoken words.",
+      "object": "explaining",
       "ink": "maths",
       "projects": [
-        "proof-reader",
-        "quartic",
-        "lean-exposition",
-        "atlas",
-        "formal-verification"
+        "funnel",
+        "narration-ir"
       ],
-      "keyword": "Papers beside their proofs"
+      "keyword": "From one Lean proof to papers and a narrated video",
+      "group": "Mathematics",
+      "shortcuts": []
     },
     {
       "id": "assistants",
       "question": "What did the coding agent run, change and commit?",
-      "caption": "Claude Code and Codex sessions: each command beside its output, one agent's commit beside another's edits, a hook that blocks a commit.",
+      "caption": "Read every tool call a coding agent made with its output, commit one agent's patch while another agent's edits stay in place, and block a command with a hook.",
       "object": "assistants",
       "ink": "code",
       "projects": [
@@ -56,49 +71,44 @@
         "one-checkout",
         "safety-core"
       ],
-      "keyword": "Coding agents"
-    },
-    {
-      "id": "explaining",
-      "question": "How does one Lean proof become papers and a video?",
-      "caption": "One proof becomes a 152-page research record, a 26-page paper, a 16-page exposition and a video, each picture timed to a spoken word.",
-      "object": "explaining",
-      "ink": "explain",
-      "projects": [
-        "funnel",
-        "narration-ir"
-      ],
-      "keyword": "Proofs into papers and videos"
+      "keyword": "Claude Code and Codex: session logs, Git commits and hooks",
+      "group": "Software",
+      "shortcuts": []
     },
     {
       "id": "code",
       "question": "Which function calls this one, and what does each file do?",
-      "caption": "A map of the descriptions agents write in each file, and a database of calls that NVIDIA Auto Ontology queries in SQL.",
+      "caption": "Docstrings agents write in a fixed format, shown as a code map, and Python call graphs exported to DuckDB for NVIDIA Auto Ontology's text-to-SQL agent.",
       "object": "code",
       "ink": "code",
       "projects": [
         "codemap",
         "code-ontology-bridge"
       ],
-      "keyword": "Understanding code"
+      "keyword": "Codebase maps and the NVIDIA Auto Ontology bridge",
+      "group": "Software",
+      "shortcuts": []
     },
     {
       "id": "testing",
-      "question": "Do a model's tests catch more bugs when its prompt lists the bugs it missed?",
-      "caption": "On 58 new problems, DeepSeek V4.1 Flash caught 77% of bugs instead of 69%.",
+      "question": "Do LLM-written tests catch more bugs when the prompt lists bugs the model missed?",
+      "caption": "On 58 held-out HumanEval problems, DeepSeek V4.1 Flash's mean fault-detection score rose from 69.2% to 77.0%; separately, Dafny proofs for 16 computations in a Python toolkit.",
       "object": "testing",
       "ink": "code",
       "projects": [
-        "zenith"
+        "zenith",
+        "formal-verification"
       ],
-      "keyword": "Testing AI"
+      "keyword": "Experiments: LLM-written tests and Dafny-verified code",
+      "group": "Software",
+      "shortcuts": []
     }
   ],
   "bridges": [
     {
       "from": "research",
       "to": "proofs",
-      "label": "The same results, read beside their Lean proofs"
+      "label": "The same results, linked to their Lean 4 proofs"
     },
     {
       "from": "research",
@@ -113,8 +123,8 @@
   ],
   "topic_aliases": {
     "erdos": "research",
-    "magnets": "research",
-    "quantum": "research",
+    "magnets": "proofs",
+    "quantum": "proofs",
     "proofs": "proofs",
     "checking": "proofs",
     "assistants": "assistants",
@@ -164,7 +174,7 @@
     "maths": "Explore eight Erdős problems",
     "quartic": "Understand a quantum speedup",
     "lean-exposition": "Explore near-best arrangements of magnets",
-    "proof-reader": "Read a paper beside its Lean proof",
+    "proof-reader": "Read a paper linked sentence by sentence to its Lean proof",
     "atlas": "Compare outside assessments of maths papers",
     "formal-verification": "See which software components have proofs",
     "agent-trace": "See the commands and their outputs",
@@ -182,19 +192,35 @@
   ],
   "intro_keywords": "Start here: the two ideas and every project",
   "project_keywords": {
-    "maths": "Erdős problems · Lean",
-    "quartic": "Quantum query complexity · Lean",
-    "lean-exposition": "Spin glasses · Lean",
-    "proof-reader": "Any paper beside its Lean proof",
-    "atlas": "OpenAI's 719 maths papers",
-    "formal-verification": "Dafny · software proofs",
-    "agent-trace": "Claude Code · Codex sessions",
+    "maths": "Erdős problems · Lean 4 · Comparator",
+    "quartic": "Quantum query complexity · Lean 4",
+    "lean-exposition": "Sherrington–Kirkpatrick spin glass · Lean 4",
+    "proof-reader": "PLDI 2026 paper · Lean 4",
+    "atlas": "OpenAI's 719 maths papers · Lean statements",
+    "formal-verification": "Dafny · Python",
+    "agent-trace": "Claude Code · Codex · MCP",
     "one-checkout": "Git · parallel coding agents",
-    "safety-core": "Agent rules · Claude Code hooks",
-    "funnel": "Lean proof → papers → video",
-    "narration-ir": "Narration → animation plans",
-    "codemap": "Codebase map · docstrings",
-    "code-ontology-bridge": "NVIDIA Auto Ontology · SQL",
-    "zenith": "AI test generation · missed bugs"
+    "safety-core": "AGENTS.md · CLAUDE.md · Claude Code hooks",
+    "funnel": "Lean 4 → papers → video",
+    "narration-ir": "Narration → animation plan",
+    "codemap": "Docstrings · call graphs",
+    "code-ontology-bridge": "NVIDIA Auto Ontology · DuckDB · SQL",
+    "zenith": "LLM test generation · DeepSeek · HumanEval"
+  },
+  "project_home_lines": {
+    "maths": "AI-assisted research on eight Erdős problems: a research record and paper for each, Lean 4 proofs of partial results, and Comparator results where they exist.",
+    "quartic": "OpenAI's nearly quartic separation between randomized and quantum query complexity, formalised in Lean 4. Each paragraph of the paper links to the Lean declarations it states.",
+    "lean-exposition": "Three expositions of OpenAI's full-support theorem for Sherrington–Kirkpatrick spin-glass minimisers. Each passage links to the Lean 4 declarations of OpenAI's proof.",
+    "proof-reader": "Contextual Embeddings (PLDI 2026), each sentence linked to the authors' Lean proof, with a declaration dependency graph and the axioms used. Any paper with public Lean code can be added.",
+    "atlas": "An index of OpenAI's 719 maths papers in 372 families, with their Lean statement files and the coverage labels outside reviewers such as MathVet and cert-machine assigned.",
+    "formal-verification": "Dafny proofs for 16 computations in an 88-component Python research toolkit, compiled to Python, with maps of which components each proof covers.",
+    "funnel": "A worked example of turning one Lean proof, a 1968 case of Erdős #257, into a research record, a specialist paper, an exposition and a video.",
+    "narration-ir": "An intermediate representation between a narration script and its animation: what each sentence must explain, its source quotations, and picture changes timed to spoken words.",
+    "agent-trace": "A local viewer for Claude Code and Codex session logs: every tool call with its output, export of a chosen level of detail to another chat, and an optional MCP server.",
+    "one-checkout": "Commits one agent's reviewed Git patch on top of HEAD while other agents' staged and unstaged edits stay in the working tree, including edits to the same files.",
+    "safety-core": "Generates AGENTS.md, CLAUDE.md and Claude Code hooks from one rulebook, so selected rules are enforced before a command runs rather than only written as instructions.",
+    "codemap": "A code browser built from docstrings that agents write in a fixed format: a description of every file and links along function calls, readable by people and by coding agents. Not released.",
+    "code-ontology-bridge": "Static analysis exports Python functions and call relations to DuckDB with recursive SQL views, so NVIDIA Auto Ontology's text-to-SQL agent can answer questions about a codebase.",
+    "zenith": "Experiments on whether a record of missed bugs improves LLM-written unit tests: DeepSeek V4.1 Flash's mean fault-detection score rose from 69.2% to 77.0% on 58 held-out HumanEval problems; about half the gain came from timeouts."
   }
 }
