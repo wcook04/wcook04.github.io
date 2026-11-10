@@ -222,5 +222,41 @@
     "codemap": "A code browser built from docstrings that agents write in a fixed format: a description of every file and links along function calls, readable by people and by coding agents. Not released.",
     "code-ontology-bridge": "Static analysis exports Python functions and call relations to DuckDB with recursive SQL views, so NVIDIA Auto Ontology's text-to-SQL agent can answer questions about a codebase.",
     "zenith": "Experiments on whether a record of missed bugs improves LLM-written unit tests: DeepSeek V4.1 Flash's mean fault-detection score rose from 69.2% to 77.0% on 58 held-out HumanEval problems; about half the gain came from timeouts."
+  },
+  "about": {
+    "heading": "I'm Will Cook.",
+    "intro": "I'm an economics undergraduate in Bristol taking a year out. This year I've been using AI agents to do mathematics research and build software, and building the websites and videos that make what they produce understandable.",
+    "made": [
+      [
+        "d=research",
+        "Lean 4 proofs of partial results on eight Erdős problems, with a research record and a paper for each, including a 1968 case of problem #257."
+      ],
+      [
+        "p=quartic",
+        "A Lean 4 formalisation of OpenAI's nearly quartic separation between randomized and quantum query complexity, with a reader that links each paragraph of the paper to its Lean declarations."
+      ],
+      [
+        "p=proof-reader",
+        "Proof Reader for Contextual Embeddings (PLDI 2026), made after one of its authors, Samantha Frohlich, asked me to apply the approach to her paper."
+      ],
+      [
+        "p=atlas",
+        "An index of OpenAI's 719 maths papers with their Lean statement files and the coverage labels outside reviewers gave them."
+      ],
+      [
+        "d=assistants",
+        "Tools for coding agents: a viewer for Claude Code and Codex session logs, a way to commit one agent's patch while others keep editing, and hooks that enforce a rulebook."
+      ],
+      [
+        "d=code",
+        "A bridge from Python call graphs to NVIDIA Auto Ontology's text-to-SQL agent, and an experiment in which showing DeepSeek V4.1 Flash the bugs it missed raised its mean test score from 69.2% to 77.0%."
+      ],
+      [
+        "films",
+        "A short and a full video for each project, scripted, recorded and animated through my own pipeline."
+      ]
+    ],
+    "good_at": "Getting AI agents to do hard technical work, checking what they produce against a precise record such as a Lean proof, and explaining the result at the level each reader needs: a specialist paper, an exposition for someone learning the subject, or a two-minute video.",
+    "looking_for": "A job, internship, fellowship or research collaboration where AI agents do real technical work and someone has to check and explain the results. That could be research engineering, research software, technical demonstrations or developer relations, in an AI lab or in a company applying AI to its own field. If there's a problem you think I should work on, email me."
   }
 }
