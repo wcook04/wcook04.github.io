@@ -116,7 +116,7 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 .strip--7 { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 16px 16px; }
 .stop { position: relative; min-width: 0; scroll-margin-top: 100vh; }
 .stop__main { display: block; text-decoration: none; }
-.stop__pic { display: block; position: relative; aspect-ratio: 16 / 10; border-radius: 6px; overflow: hidden; background: var(--raise); outline: 1px solid var(--line); outline-offset: -1px; }
+.stop__pic { display: block; position: relative; aspect-ratio: 16 / 9; border-radius: 6px; overflow: hidden; background: var(--raise); outline: 1px solid var(--line); outline-offset: -1px; }
 .stop__pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: left top; }
 .stop--video .stop__pic img { object-position: center; }
 .stop__blank { position: absolute; inset: 0; display: grid; place-items: center; padding: 12px; text-align: center; font: 700 clamp(17px, 1.5vw, 22px)/1.1 var(--display); color: var(--muted); }
