@@ -58,7 +58,9 @@ class HubTests(unittest.TestCase):
         outputs = CHECK.BUILD.outputs(self.registry, self.glossary, include_redirects=False)
         self.assertTrue({"index.html", "all.html", "catalogue.json", "structured-data.jsonld"}.issubset(outputs))
         static = CHECK.Page(outputs["all.html"])
-        self.assertEqual(sum(x.startswith("project-") for x in static.ids), 14)
+        # One row per project page, and every project id the earlier page used is still an anchor.
+        self.assertTrue({"project-" + p["slug"] for p in self.canonical["projects"]} <= set(static.ids))
+        self.assertTrue({"project-" + e["slug"] for e in json.loads(self.files["front.json"])["entries"]} <= set(static.ids))
         self.assertEqual(sum(x.startswith("film-") for x in static.ids), 38)
         self.assertEqual(sum(x.startswith("term-") for x in static.ids), 61)
         self.assertFalse(any(path.startswith("plectis/") for path in outputs))

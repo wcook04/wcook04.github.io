@@ -33,6 +33,7 @@ REQUIRED = {
     "sitemap-home.xml", "favicon.ico", "assets/hub.css", "assets/explorer.css",
     "assets/explore.js", "assets/explore-model.js", "assets/redirect.js", "assets/door-art.css",
     "front.json", "assets/front.css", "assets/front.js", "assets/front-init.js", "scripts/front.py",
+    "assets/register.css", "scripts/register.py",
     "assets/favicon.svg", "scripts/build_hub.py", "scripts/check_hub_site.py",
     "scripts/catalogue_v3.py", "scripts/explorer_v3.py", "scripts/door_art.py", "scripts/sites.schema.json",
     "scripts/glossary.schema.json", "tests/test_hub_site.py",

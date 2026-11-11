@@ -1,0 +1,140 @@
+/* all.html, the register of every link, and 404.html. Loaded after front.css and uses its tokens:
+   --ground, --raise, --line, --ink, --muted, --paper, --steel, --serif, --text, --display.
+   Built by scripts/register.py. No script is needed; nothing here animates. */
+
+/* ------------------------------------------------------------ the register */
+.reg { padding-block: clamp(10px, 2.4vh, 28px) 56px; }
+.reg__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 26px; margin-bottom: 22px; }
+.reg__title { font: 700 clamp(42px, 4.7vw, 64px)/.96 var(--display); letter-spacing: -.005em; }
+.reg__note { color: var(--muted); font-size: 16px; max-width: 30em; text-wrap: balance; }
+.reg__jump { display: flex; flex-wrap: wrap; gap: 0 22px; margin-left: auto; }
+
+/* The same axis as the strip on a project page, over the seven kinds. */
+.reg__axis { margin-left: 17%; margin-bottom: 4px; }
+
+.reg__table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 15px; line-height: 1.35; }
+.reg__w--name { width: 17%; }
+.reg__w--short, .reg__w--long { width: 7.2%; }
+.reg__w--site { width: 16%; }
+.reg__w--paper { width: 16.4%; }
+.reg__w--proof { width: 14.4%; }
+.reg__w--code { width: 12.6%; }
+.reg__w--study { width: 9.2%; }
+
+.reg__table th, .reg__table td { text-align: left; vertical-align: baseline; font-weight: 400; padding: 0; }
+.reg__col { position: sticky; top: 0; z-index: 1; background: var(--ground); color: var(--ink); font: 600 14px/1.2 var(--text); padding: 10px 14px 10px 0; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.reg__col--name { color: var(--muted); font-weight: 400; }
+
+/* A group: its number and name, as on the map. */
+.reg__band th { padding: 30px 0 0; }
+.reg__group--intro + .reg__group .reg__band th { padding-top: 26px; }
+.reg__bandname { font: 700 20px/1.1 var(--display); padding-bottom: 9px; border-bottom: 1px solid var(--line); }
+
+/* A project: its name leads the row. */
+.reg__row > * { padding: 13px 14px 13px 0; border-bottom: 1px solid var(--line); }
+.reg__row > :last-child { padding-right: 0; }
+.reg__group--intro .reg__row > * { border-bottom: 0; padding-bottom: 4px; }
+.reg__name a { font: 700 22px/1.1 var(--display); text-decoration: none; display: block; padding-block: 1px; }
+.reg__name a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.reg__line { display: block; color: var(--muted); font-size: 13.5px; line-height: 1.35; margin-top: 3px; text-wrap: pretty; }
+.reg__row { scroll-margin-top: 48px; }
+.reg__row:target > .reg__name, .reg__row:has(.anchor:target) > .reg__name { box-shadow: inset 3px 0 0 var(--paper); padding-left: 12px; }
+
+.reg__kind { display: none; }
+.reg__cell ul { margin: 0; }
+.reg__cell li + li { margin-top: 3px; }
+.reg__cell li.reg__extra { margin-top: 0; font-size: 14px; }
+/* A link is a block, so a name that wraps keeps its first line on the row's baseline, and no target is under 24px tall. */
+.reg__cell a { color: var(--steel); text-decoration: none; display: block; padding-block: 2px; min-height: 24px; overflow-wrap: anywhere; }
+.reg__cell a:hover .reg__what, .reg__cell a:hover .reg__time, .reg__extra a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.reg__cell a:hover { color: var(--ink); }
+.reg__detail { color: var(--muted); font-size: 13.5px; }
+.reg__cell a:hover .reg__detail { color: var(--muted); }
+
+/* A video is its length, with the play mark the strip uses. */
+.reg__play { white-space: nowrap; }
+.reg__play::before { content: ""; display: inline-block; margin-right: 7px; border-left: 8px solid currentColor; border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+.reg__sub { display: block; color: var(--muted); font-size: 13px; line-height: 1.3; }
+
+@media (hover: hover) and (pointer: fine) {
+  .reg__row:hover > * { background: var(--raise); }
+  .reg__row:hover > :first-child { box-shadow: -12px 0 0 var(--raise); }
+  .reg__row > :last-child { padding-right: 8px; }
+}
+
+/* ------------------------------------------------------------ the sections under it */
+.reg-sec { border-top: 1px solid var(--line); padding-block: 34px 52px; }
+.reg-sec__title { font: 700 clamp(26px, 2.3vw, 32px)/1 var(--display); margin-bottom: 8px; }
+.reg-sec__title--next { margin-top: 40px; }
+.reg-sec__note { color: var(--muted); font-size: 15.5px; margin-bottom: 18px; }
+.reg-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px var(--gap); margin-top: 16px; }
+.reg-list--plain { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px var(--gap); font-size: 15.5px; }
+.reg-list--plain a, .reg-item a { color: var(--steel); display: inline-block; padding-block: 3px; }
+.reg-list--plain a:hover, .reg-item a:hover { color: var(--ink); }
+.reg-item__name { font-weight: 600; font-size: 16px; overflow-wrap: anywhere; }
+.reg-item__what { color: var(--ink); font-size: 15px; line-height: 1.4; margin-top: 1px; max-width: 30em; text-wrap: pretty; }
+.reg-item__links { display: flex; flex-wrap: wrap; gap: 0 18px; font-size: 14.5px; margin-top: 2px; }
+.reg-sec .about__contact { margin-top: 6px; }
+
+/* The glossary: three columns of short entries, read down each column. */
+.reg-terms { columns: 3; column-gap: calc(var(--gap) * 2); margin: 0; }
+.reg-term { break-inside: avoid; padding-bottom: 20px; scroll-margin-top: 24px; }
+.reg-term dt { font: 600 17px/1.25 var(--text); }
+.reg-term dd { margin: 2px 0 0; }
+.reg-term__short { font-size: 15px; line-height: 1.42; }
+.reg-term__more { color: var(--muted); font-size: 14px; line-height: 1.42; margin-top: 4px; }
+.reg-term:target dt { box-shadow: -12px 0 0 var(--ground), -15px 0 0 var(--paper); }
+
+/* ------------------------------------------------------------ 404 */
+.lost { padding-block: clamp(20px, 6vh, 64px) clamp(28px, 6vh, 56px); }
+.lost__say { font: 400 clamp(30px, 3.45vw, 54px)/1.08 var(--serif); letter-spacing: -.012em; text-wrap: balance; }
+.lost__ways { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 26px; margin-top: 22px; }
+.lost__home { display: inline-block; background: var(--paper); color: var(--ground); font: 700 23px/1 var(--display); padding: 13px 20px; border-radius: 3px; text-decoration: none; transition: transform .12s var(--arrive); }
+.lost__home:active { transform: scale(.97); }
+.lost__note { color: var(--muted); font-size: 15px; margin-top: 18px; max-width: 44em; }
+.lost__note a { color: var(--steel); }
+.lost__note a:hover { color: var(--ink); }
+
+/* ------------------------------------------------------------ widths */
+@media (max-width: 1180px) {
+  .reg-terms { columns: 2; }
+  .reg-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Below this width a row is a block: the project's name, then one line for each kind it has. */
+@media (max-width: 1040px) {
+  .reg__axis, .reg__table thead, .reg__table colgroup { display: none; }
+  .reg__table, .reg__table tbody, .reg__table tr, .reg__table th, .reg__table td { display: block; }
+  .reg__jump { margin-left: 0; width: 100%; }
+  .reg__band th { padding-top: 30px; }
+  .reg__row { padding-block: 14px 12px; border-bottom: 1px solid var(--line); }
+  .reg__group--intro .reg__row { border-bottom: 0; padding-bottom: 0; }
+  .reg__row > * { padding: 0; border-bottom: 0; }
+  .reg__name { margin-bottom: 8px; }
+  .reg__name a { font-size: 24px; padding-block: 3px; }
+  .reg__line { font-size: 14px; }
+  .reg__table .reg__cell { display: grid; grid-template-columns: 92px minmax(0, 1fr); column-gap: 14px; padding-block: 1px; font-size: 15.5px; }
+  .reg__table .reg__cell.is-empty { display: none; }
+  .reg__kind { display: block; color: var(--muted); font-size: 14px; line-height: 1.35; padding-top: 7px; }
+  .reg__cell a { padding-block: 5px; min-height: 30px; }
+  .reg__cell li + li { margin-top: 0; }
+  .reg__cell li.reg__extra { margin-top: 0; font-size: 14.5px; }
+  .reg__sub { display: inline; margin-left: 10px; font-size: 14px; }
+  .reg__row:target > .reg__name, .reg__row:has(.anchor:target) > .reg__name { padding-left: 12px; }
+}
+@media (max-width: 860px) {
+  .reg__head { margin-bottom: 4px; }
+  .reg__title { font-size: clamp(40px, 12vw, 60px); }
+  .reg-sec { padding-block: 28px 40px; }
+  .reg-list, .reg-list--plain { grid-template-columns: minmax(0, 1fr); }
+  .reg-terms { columns: 1; }
+  .lost__home { font-size: 21px; }
+}
+
+@media (forced-colors: active) {
+  .lost__home { border: 1px solid CanvasText; }
+  .reg__row:target > .reg__name { border-left: 3px solid CanvasText; }
+}
+@media print {
+  .reg__col { position: static; }
+}

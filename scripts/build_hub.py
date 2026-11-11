@@ -925,8 +925,11 @@ def front_pages(registry: dict) -> dict[str, str]:
 
 
 def render_static_catalogue(registry: dict, glossary: dict | None = None) -> str:
-    from explorer_v3 import render_static
-    return render_static(registry, glossary or load_glossary(), ROOT)
+    """all.html: every link in one table. Written by scripts/register.py."""
+    from types import SimpleNamespace
+    import register
+    return register.render(registry, glossary or load_glossary(), ROOT, SimpleNamespace(versioned=versioned))
+
 
 def render_catalogue(registry: dict, glossary: dict) -> str:
     """Nodes (areas, projects, websites, films, repositories, contributions,
@@ -997,28 +1000,10 @@ def render_catalogue(registry: dict, glossary: dict) -> str:
 
 
 def render_404(registry: dict) -> str:
-    rows = "".join(f'<li><a href="{e(site["url"])}">{e(site["name"])}</a></li>' for site in registry["sites"])
-    head = page_head(title="Page not found: Will Cook", description="This address has no page.",
-                     canonical=None, robots="noindex, follow")
-    return f'''{head}
-  <script src="{versioned("/assets/redirect.js")}"></script>
-</head>
-<body class="hub hub--missing">
-  {header(current=False)}
-
-  <main id="main">
-    <section class="hub-missing">
-      <div class="wrap">
-        <h1 class="hub-title hub-title--small">This address has no page</h1>
-        <p class="hub-lede">The Plectis website moved from <code>/plectis/</code> to <a href="{HOME}practical-formal-verification/">/practical-formal-verification/</a>. Old addresses that start with <code>/plectis/</code> forward there by themselves.</p>
-        <p class="hub-orient">Or go to one of the websites:</p>
-        <ul class="hub-missing__list" role="list">{rows}<li><a href="/">All projects and videos</a></li></ul>
-      </div>
-    </section>
-  </main>
-</body>
-</html>
-'''
+    """404.html: says the address has no page and shows the map. Written by scripts/register.py."""
+    from types import SimpleNamespace
+    import register
+    return register.render_404(registry, ROOT, SimpleNamespace(versioned=versioned))
 
 
 def render_llms(registry: dict) -> str:
