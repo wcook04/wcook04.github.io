@@ -134,10 +134,17 @@ class HubTests(unittest.TestCase):
     def test_no_page_frames_a_player(self):
         page = self.files["index.html"].decode()
         self.assertEqual(CHECK.validate_page("index.html", page, prototype=True), [])
-        for name in ("index.html", "all.html", "work/zenith/index.html"):
+        for name in ("all.html", "work/zenith/index.html"):
             framed = self.files[name].decode().replace("frame-src 'none'", "frame-src https://www.youtube.com")
             self.assertTrue(any("frame-src 'none'" in error
                                 for error in CHECK.validate_page(name, framed, prototype=True)))
+        # The home page frames YouTube's player for the introduction, and nothing else.
+        self.assertEqual(page.count("<iframe"), 1)
+        self.assertIn('<iframe src="https://www.youtube.com/embed/', page)
+        other = page.replace("frame-src https://www.youtube.com", "frame-src https://example.org")
+        self.assertTrue(any("content security policy" in error for error in CHECK.validate_page("index.html", other, prototype=True)))
+        second = page.replace("</main>", '<iframe src="https://www.youtube.com/embed/AAAAAAAAAAA?rel=0"></iframe></main>')
+        self.assertTrue(any("embedded player" in error for error in CHECK.validate_page("index.html", second, prototype=True)))
 
     def test_home_and_project_pages_reach_every_current_video_website_and_repository(self):
         self.assertEqual(CHECK.validate_landing(self.files, self.view), [])
@@ -155,7 +162,6 @@ class HubTests(unittest.TestCase):
         self.assertEqual(len(tiles), 15)
         self.assertTrue(all(href.lstrip("/") + "index.html" in self.files for href in tiles))
         self.assertNotIn("ytimg", page)
-        self.assertNotIn("youtube.com/embed", page)
 
     def test_every_video_has_a_page_and_a_stop_to_arrive_at(self):
         front = json.loads(self.files["front.json"])

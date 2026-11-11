@@ -84,7 +84,6 @@ All under `assets/front/`, all this repository's own files:
 - `cards/<slug>.png`: the 1200 by 630 picture a link to each page unfurls with (PNG, because some readers refuse WebP).
 - `plates/<name>-640|1280.webp`: the first page of a paper, or the real website,
   proof file or repository page a stop opens.
-- `intro/short-introduction.mp4`: the short introduction, with its captions in the picture.
 
 The checker fails the build if a page names a file that is missing, or if a file
 in these folders is used by no page.
@@ -95,8 +94,9 @@ in these folders is used by no page.
   site states it, with its stated limit beside it. The limit is always visible
   text, marked with a brick rule.
 - Words, never symbols: a stop says "Short video, 1:41" or "Paper, PDF, 26 pages".
-- Nothing loads from another host and no page holds a frame. Only the short
-  introduction plays in the page; every other video opens on YouTube.
+- Nothing loads from another host, with one exception: the home page frames the short
+  introduction in YouTube's own player, so a play there counts as a view on YouTube.
+  Every other video opens on YouTube.
 - The static pages hold no `<video>` element. The script creates one where it is
   needed and removes it afterwards, so at most one clip is loaded.
 - Complete without JavaScript: every tile and stop is a link.

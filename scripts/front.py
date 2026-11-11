@@ -23,6 +23,8 @@ HOME = "https://wcook04.github.io/"
 CSP = ("default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self'; "
        "style-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'none'; "
        "frame-src 'none'; child-src 'none'")
+# The home page frames one thing: the introduction, in YouTube's own player, so a play there counts on YouTube.
+CSP_HOME = CSP.replace("frame-src 'none'; child-src 'none'", "frame-src https://www.youtube.com; child-src https://www.youtube.com")
 VIDEO_KINDS = ("short", "long")
 NAMED_KINDS = ("code", "issue")   # shown by the repository's own name, since every GitHub page looks alike at this size
 
@@ -187,7 +189,7 @@ def img(picture: dict | None, *, sizes: str, alt: str = "", eager: bool = False,
             f'width="16" height="9"{lazy}>')
 
 
-def head(hub, *, title: str, description: str, canonical: str, picture: str | None, alt: str = "", structured: str = "") -> str:
+def head(hub, *, title: str, description: str, canonical: str, picture: str | None, alt: str = "", structured: str = "", frames: bool = False) -> str:
     v = hub.versioned
     card = (f'\n  <meta property="og:image" content="{e(HOME + picture)}">'
             f'\n  <meta property="og:image:width" content="1200">\n  <meta property="og:image:height" content="630">'
@@ -201,8 +203,8 @@ def head(hub, *, title: str, description: str, canonical: str, picture: str | No
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="format-detection" content="telephone=no">
-  <!-- Nothing loads from another host. The introduction plays from this repository; other videos open on YouTube. -->
-  <meta http-equiv="Content-Security-Policy" content="{CSP}">
+  <!-- Nothing loads from another host, except the introduction on the home page, which plays in YouTube's player. -->
+  <meta http-equiv="Content-Security-Policy" content="{CSP_HOME if frames else CSP}">
   <title>{e(title)}</title>
   <meta name="description" content="{e(description)}">
   <meta name="robots" content="index, follow">
@@ -313,17 +315,17 @@ def render_home(model: dict, registry: dict, hub, structured: str, book: Book) -
     intro = model["intro"]
     owner = registry["owner"]
     short, long = intro["short"], intro["long"]
-    idle_clip = "assets/front/loops/hero-l.mp4"
-    loop_attrs = f' data-idle="/{idle_clip}"' if book.has(idle_clip) else ""
-    narrow = "".join(f'<source media="(max-width: 1180px)" srcset="/assets/front/posters/hero-n-480.webp 480w, /assets/front/posters/hero-n-960.webp 960w" sizes="(min-width: 861px) 56vw, 100vw">'
-                     for _ in [0] if book.has("assets/front/posters/hero-n-480.webp") and book.has("assets/front/posters/hero-n-960.webp"))
+    found = re.search(r"[?&]v=([A-Za-z0-9_-]{11})", short["href"])
+    if not found:
+        raise ValueError("the short introduction has no YouTube address to embed")
+    embed = f"https://www.youtube.com/embed/{found.group(1)}?rel=0"
     contact = "".join(f'<li><a href="{e(c["href"])}"{off(c["href"])}>{e(c["label"])}</a></li>' for c in owner["contact"])
     # The hero has already said what he does; this part says what he is looking for and how to reach him.
     asks = [typeset(text, "lede") for text in owner.get("invitation", [])]
     lead = e(asks[0]) if asks else ""
     invitation = "".join(f"<p>{e(text)}</p>" for text in asks[1:])
     aliases = '<span class="anchor" id="p-intro"></span><span class="anchor" id="work"></span>'
-    return f'''{head(hub, title=intro["title"], description=intro["description"], canonical=HOME, picture=card_of("home", book), alt=intro.get("card_alt", ""), structured=structured)}
+    return f'''{head(hub, title=intro["title"], description=intro["description"], canonical=HOME, picture=card_of("home", book), alt=intro.get("card_alt", ""), structured=structured, frames=True)}
 <body class="home">
   {header(home=True)}
   <main id="main">
@@ -334,12 +336,12 @@ def render_home(model: dict, registry: dict, hub, structured: str, book: Book) -
         <p class="lede lede--second">{e(intro["second"])}</p>
       </div>
       <div class="stage__show">
-        <div class="player" id="player" data-film="/{e(short["file"])}"{loop_attrs}>
-          <div class="player__screen"><picture>{narrow}{img(intro.get("poster"), sizes="(min-width: 900px) 58vw, 100vw", alt=intro["idle"]["alt"], eager=True, cls="player__poster")}</picture></div>
+        <div class="player" id="player">
+          <div class="player__screen player__screen--embed"><iframe src="{e(embed)}" title="{e(short["label"])}, {e(clock(short["seconds"]))}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
           <div class="player__bar">
-            <a class="play" href="{e(short["href"])}"{off(short["href"])} data-play><span class="play__mark" aria-hidden="true"></span><span class="play__what">Play {e(short["label"])}</span><span class="play__len">{e(clock(short["seconds"]))}</span></a>
+            <span class="player__what">{e(short["label"])}, {e(clock(short["seconds"]))}</span>
             <a class="quiet" href="{e(long["href"])}"{off(long["href"])}>{e(long["label"])}, {e(clock(long["seconds"]))}</a>
-            <a class="quiet" href="{e(short["href"])}"{off(short["href"])} data-youtube>Watch on YouTube</a>
+            <a class="quiet" href="{e(short["href"])}"{off(short["href"])} data-youtube>Open on YouTube</a>
           </div>
         </div>
       </div>

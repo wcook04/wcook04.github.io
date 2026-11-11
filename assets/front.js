@@ -121,8 +121,10 @@
   }
 
   /* ---- the home page's stage: the introduction ---- */
+  /* Since the introduction moved into YouTube's own player (so a play counts there), the stage needs no script;
+     this block only runs for a stage that still has its own Play control. */
   var player = document.getElementById("player");
-  if (player) {
+  if (player && one("[data-play]", player)) {
     var stage = one(".player__screen", player);
     var bar = one(".player__bar", player);
     var play = one("[data-play]", player);

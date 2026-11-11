@@ -7,6 +7,7 @@ staged deletions, and never substitutes working-tree content.
 """
 from __future__ import annotations
 
+import re
 import argparse
 from html.parser import HTMLParser
 import importlib.util
@@ -204,7 +205,12 @@ def same_origin(url: str) -> bool:
 def validate_page(name: str, text: str, *, prototype: bool = False, redirect: bool = False) -> list[str]:
     page = Page(text)
     errors = []
+    # One frame is allowed on the whole site: the introduction on the home page, in YouTube's own player.
+    home = name == "index.html"
+    embeds = [a.get("src", "") for a in page.all("iframe")]
     for tag in ("iframe", "object", "embed", "video", "audio", "frame"):
+        if tag == "iframe" and home and len(embeds) == 1 and re.fullmatch(r"https://www\.youtube\.com/embed/[A-Za-z0-9_-]{11}\?rel=0", embeds[0]):
+            continue
         if tag in page.tags: errors.append(f"{name}: no embedded player or frame ({tag})")
     for tag, key in (("img", "src"), ("script", "src"), ("link", "href"), ("source", "src")):
         for attrs in page.all(tag):
@@ -216,8 +222,8 @@ def validate_page(name: str, text: str, *, prototype: bool = False, redirect: bo
             url = part.strip().split(" ")[0]
             if url and not same_origin(url): errors.append(f"{name}: image source loads from another host: {url}")
     csp = [m.get("content", "") for m in page.all("meta") if m.get("http-equiv", "").lower() == "content-security-policy"]
-    # No page frames anything: films open on YouTube, and the home page's previews are its own files.
-    frames = "frame-src 'none'"
+    # Only the home page frames anything, and only YouTube; every other video opens on YouTube.
+    frames = "frame-src https://www.youtube.com" if home and embeds else "frame-src 'none'"
     rules = [r.strip() for r in csp[0].split(";")] if len(csp) == 1 else []
     if any(rule not in rules for rule in (frames, "connect-src 'none'", "script-src 'self'")):
         errors.append(f"{name}: preserve the same-origin content security policy ({frames})")

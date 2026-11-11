@@ -8,8 +8,7 @@
     "second": "I build the tools so they get better as AI models get better.",
     "short": {
       "res": "film:short-introduction",
-      "label": "Introduction (V4)",
-      "file": "assets/front/intro/short-introduction.mp4"
+      "label": "Introduction (V4)"
     },
     "long": {
       "res": "film:long-introduction",
