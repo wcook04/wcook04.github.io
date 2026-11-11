@@ -69,7 +69,21 @@
   function tileOff(tile) {
     if (tileClip && tileClip.parentNode === one(".tile__pic", tile)) { drop(tileClip); tileClip = null; }
   }
+  var fetched = {};
+  function ahead(tile) {
+    /* Fetch the project page while the visitor is deciding, so the picture has somewhere to travel to at once. */
+    var href = tile.getAttribute("href");
+    if (fetched[href] || saving) return;
+    fetched[href] = true;
+    var link = document.createElement("link");
+    link.rel = "prefetch";
+    link.href = href;
+    document.head.appendChild(link);
+  }
   all(".tile").forEach(function (tile) {
+    tile.addEventListener("pointerenter", function () { ahead(tile); });
+    tile.addEventListener("focus", function () { ahead(tile); });
+    tile.addEventListener("touchstart", function () { ahead(tile); }, { passive: true });
     tile.addEventListener("pointerenter", function () { tileOn(tile); });
     tile.addEventListener("pointerleave", function () { tileOff(tile); });
     tile.addEventListener("focus", function () { tileOn(tile); });
