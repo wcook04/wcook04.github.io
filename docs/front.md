@@ -42,14 +42,21 @@ sits on the page with no edge.
 
 A stop is one of: short video, full video, website, paper, proof, code, study,
 issue. A project lists only the kinds it has, ordered from the quickest look to
-the most detail. A stop may carry up to three small extra links.
+the most detail, and the axis above the strip ends over the last stop. A stop
+may carry up to three small extra links. A video stop says it opens on YouTube.
+A paper's first page is printed on the page's bone colour, never pure white. A
+repository or an issue is shown by its own name, because every GitHub page looks
+the same at this size.
 
 ## Data
 
 `front.json`:
 
 - `intro`: the home page's sentence, lede, the two introduction videos and the idle clip.
-- `bands`: the five groups, numbered as the full introduction numbers them.
+- `terms`: one plain sentence for each word a newcomer may not know (Lean,
+  Dafny). A project page that uses the word prints the sentence under its credit.
+- `bands`: the five groups, numbered as the full introduction numbers them. A
+  group may carry a `note`, printed at the right of its rule.
 - `entries`: one per project. `slug`, `name`, `band`, `line` (the tile's line),
   `claim`, `limit`, optional `credit`, `loop` (the stem of its pictures and
   clips), `aliases` (ids the earlier home page used) and `stops`.
@@ -66,9 +73,11 @@ All under `assets/front/`, all this repository's own files:
 - `posters/<stem>-480|960|1600.webp`: a still from the video, chosen and cropped
   to read at tile size with no words cut by the frame.
 - `loops/<stem>-s.mp4` (480 wide) and `-l.mp4` (1280 wide): a silent clip of a
-  few seconds from the video that ends on the still. A tile plays its clip while
-  the pointer or the keyboard is on it. A project page plays its clip twice while
-  it is in view, then rests on the still.
+  few seconds from the video. Every clip opens on the still and ends on it, so
+  starting or stopping one never makes the picture jump. A tile plays its clip
+  while the pointer or the keyboard rests on it; a project page's large picture
+  plays its clip while the pointer is on it. No clip on a project page starts by
+  itself, because several count up to the number the sentence beside them states.
 - `loops/hero-l.mp4`: the two-ideas scene of the short introduction (19.6 s to 27.95 s), cut
   to leave out the caption strip. It plays once, only where the whole scene is shown (wider than 1180px), and rests on its last frame, which is also the poster.
   `posters/hero-n-*.webp` is that last frame cropped to its four cards, shown still at 1180px and narrower so the labels can be read.
@@ -93,11 +102,17 @@ in these folders is used by no page.
 - Complete without JavaScript: every tile and stop is a link.
 - Colour is state, never category: cream is the thing to press and "you are
   here"; steel is a link; brick is a stated limit.
-- Motion has a purpose and stops: the idle clip plays once; a tile's clip plays
-  only under the pointer or focus; the picture travels between the map and a
-  project page (cross-document view transition); the strip's line draws once.
-  Under reduced motion or Save-Data nothing moves and posters remain. Anything
-  that moves by itself has a Pause button, which leaves when the motion stops.
+- Motion has a purpose and stops: the home page's scene plays once, building
+  from nothing (the visitors who get it are not first shown its finished still);
+  a clip plays only under the pointer or focus, after a short dwell; the picture
+  travels between the map and a project page (cross-document view transition),
+  opaque, while the old page leaves before the new one arrives; the strip's line
+  draws once. Under reduced motion or Save-Data nothing moves and the stills
+  remain. The one thing that moves by itself has a Pause button, which leaves
+  when the motion stops. Pressing Play changes the layout in one step.
+- Arriving from a video on a phone, the watched stop and the next one are on the
+  first screen: the large picture and the credit are left out for that arrival,
+  since the visitor has just watched the picture.
 - A stage frame is blended into the page with `mix-blend-mode: lighten` on the whole frame. The videos' encoded
   ground is a shade darker than `#1c1526`, so the page's ground shows wherever the frame is darker and the frame has
   no edge. Blend the frame, never the picture and the clip separately, or a clip doubles over its poster.
@@ -109,4 +124,6 @@ in these folders is used by no page.
 
 The earlier home page used `#p-<id>` anchors and `#p=<id>`, `#d=<group>`,
 `#t=<topic>` and `#intro` fragments. Every old project id is still an anchor on
-the home page (on the matching tile), and the script forwards the other forms.
+the home page (on the matching tile), and the script forwards the other forms,
+including `#h-<id>`, `#t-<term>`, `#terms` and `#more`, which now live on
+`all.html`.
