@@ -63,13 +63,15 @@ the most detail. A stop may carry up to three small extra links.
 
 All under `assets/front/`, all this repository's own files:
 
-- `posters/<stem>-480|960|1600.webp`: a still from the video.
-- `loops/<stem>-s.mp4` (480 wide) and `-l.mp4` (1280 wide): a silent clip of
-  five or six seconds from the video. A tile plays its clip while the pointer or
-  the keyboard is on it. A project page plays its clip while it is in view.
-- `loops/hero-l.mp4` and `hero-n.mp4`: the two-ideas scene of the short introduction (19.6 s to 27.95 s), cut
-  to leave out the caption strip. It plays once and rests on its last frame, which is also the poster. `hero-n` and
-  `posters/hero-n-*.webp` are the same scene cropped to its four cards, used below 1180px so the labels can be read.
+- `posters/<stem>-480|960|1600.webp`: a still from the video, chosen and cropped
+  to read at tile size with no words cut by the frame.
+- `loops/<stem>-s.mp4` (480 wide) and `-l.mp4` (1280 wide): a silent clip of a
+  few seconds from the video that ends on the still. A tile plays its clip while
+  the pointer or the keyboard is on it. A project page plays its clip twice while
+  it is in view, then rests on the still.
+- `loops/hero-l.mp4`: the two-ideas scene of the short introduction (19.6 s to 27.95 s), cut
+  to leave out the caption strip. It plays once, only where the whole scene is shown (wider than 1180px), and rests on its last frame, which is also the poster.
+  `posters/hero-n-*.webp` is that last frame cropped to its four cards, shown still at 1180px and narrower so the labels can be read.
 - `cards/<slug>.png`: the 1200 by 630 picture a link to each page unfurls with (PNG, because some readers refuse WebP).
 - `plates/<name>-640|1280.webp`: the first page of a paper, or the real website,
   proof file or repository page a stop opens.
@@ -95,7 +97,7 @@ in these folders is used by no page.
   only under the pointer or focus; the picture travels between the map and a
   project page (cross-document view transition); the strip's line draws once.
   Under reduced motion or Save-Data nothing moves and posters remain. Anything
-  that moves by itself has a Pause button.
+  that moves by itself has a Pause button, which leaves when the motion stops.
 - A stage frame is blended into the page with `mix-blend-mode: lighten` on the whole frame. The videos' encoded
   ground is a shade darker than `#1c1526`, so the page's ground shows wherever the frame is darker and the frame has
   no edge. Blend the frame, never the picture and the clip separately, or a clip doubles over its poster.

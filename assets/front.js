@@ -103,43 +103,47 @@
     if (screen) screen.classList.remove("no-travel");
   });
 
-  /* ---- a pause control for anything that moves by itself ---- */
-  function control(host, video, repeat) {
+  /* ---- a pause control for anything that moves by itself; it leaves when the motion has stopped ---- */
+  function control(host, video) {
     var button = document.createElement("button");
     button.type = "button";
     button.className = "ctl";
-    function label() { button.textContent = video.ended ? "Replay" : (video.paused ? "Play preview" : "Pause"); }
+    function label() { button.textContent = video.paused ? "Play" : "Pause"; }
     button.addEventListener("click", function (event) {
       event.stopPropagation();
-      if (video.ended) { video.currentTime = 0; start(video); }
-      else if (video.paused) start(video);
-      else video.pause();
+      if (video.paused) { video.dataset.held = ""; start(video); }
+      else { video.dataset.held = "1"; video.pause(); }
     });
-    ["playing", "pause", "ended"].forEach(function (name) { video.addEventListener(name, label); });
+    video.addEventListener("playing", label);
+    video.addEventListener("pause", label);
     label();
     host.appendChild(button);
-    return button;
+    return { remove: function () { if (button.parentNode) button.parentNode.removeChild(button); } };
   }
   function wide() { return window.innerWidth >= 700; }
 
-  /* ---- a project page's stage: the video's own loop ---- */
+  /* ---- a project page's stage: the video's own clip ---- */
   var screen = document.getElementById("screen");
   if (screen && moving() && screen.getAttribute("data-loop-l")) {
-    /* Twice through, then it rests on its last frame: motion beside reading text should stop. */
+    /* Twice through, then it rests on its last frame, which is the poster: motion beside reading text should stop. */
     var loop = clip(screen.getAttribute(wide() ? "data-loop-l" : "data-loop-s"), false);
-    var rounds = 0;
-    loop.addEventListener("ended", function () { rounds += 1; if (rounds < 2 && !loop.dataset.held) { loop.currentTime = 0; start(loop); } });
+    var rounds = 0, rested = false;
     screen.appendChild(loop);
-    control(screen, loop, false);
+    var loopControl = control(screen, loop);
+    loop.addEventListener("ended", function () {
+      rounds += 1;
+      if (rounds < 2) { loop.currentTime = 0; start(loop); }
+      else { rested = true; loopControl.remove(); }
+    });
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
-          if (entry.isIntersecting && !loop.dataset.held && !loop.ended) start(loop); else if (!loop.ended) loop.pause();
+          if (rested) return;
+          if (entry.isIntersecting) { if (!loop.dataset.held) start(loop); } else loop.pause();
         });
       }, { threshold: 0.4 }).observe(screen);
     } else start(loop);
-    one(".ctl", screen).addEventListener("click", function () { loop.dataset.held = loop.paused ? "" : "1"; });
-    document.addEventListener("visibilitychange", function () { if (document.hidden) loop.pause(); });
+    document.addEventListener("visibilitychange", function () { if (document.hidden && !rested) loop.pause(); });
   }
 
   /* ---- the home page's stage: the introduction ---- */
@@ -151,16 +155,17 @@
     var idle = null, idleControl = null, film = null, close = null;
 
     function idleStart() {
-      if (!moving() || film || idle || !player.getAttribute("data-idle-l")) return;
-      idle = clip(player.getAttribute(window.innerWidth > 1180 ? "data-idle-l" : "data-idle-n"), false);
+      /* Only where the whole scene is shown. Narrower layouts show its last frame, cropped to the four cards. */
+      if (!moving() || film || idle || window.innerWidth <= 1180 || !player.getAttribute("data-idle")) return;
+      idle = clip(player.getAttribute("data-idle"), false);
       stage.appendChild(idle);
-      idleControl = control(bar, idle, false);
-      idleControl.classList.add("ctl--bar");
+      idleControl = control(stage, idle);
+      idle.addEventListener("ended", function () { if (idleControl) idleControl.remove(); idleControl = null; });
       start(idle);
     }
     function idleStop() {
       drop(idle); idle = null;
-      if (idleControl && idleControl.parentNode) idleControl.parentNode.removeChild(idleControl);
+      if (idleControl) idleControl.remove();
       idleControl = null;
     }
     function shift(change) {

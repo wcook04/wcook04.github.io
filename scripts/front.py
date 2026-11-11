@@ -288,9 +288,8 @@ def render_home(model: dict, registry: dict, hub, structured: str, book: Book) -
     intro = model["intro"]
     owner = registry["owner"]
     short, long = intro["short"], intro["long"]
-    wide_clip, narrow_clip = "assets/front/loops/hero-l.mp4", "assets/front/loops/hero-n.mp4"
-    loop_attrs = (f' data-idle-l="/{wide_clip}" data-idle-n="/{narrow_clip}"'
-                  if book.has(wide_clip) and book.has(narrow_clip) else "")
+    idle_clip = "assets/front/loops/hero-l.mp4"
+    loop_attrs = f' data-idle="/{idle_clip}"' if book.has(idle_clip) else ""
     narrow = "".join(f'<source media="(max-width: 1180px)" srcset="/assets/front/posters/hero-n-480.webp 480w, /assets/front/posters/hero-n-960.webp 960w" sizes="(min-width: 861px) 56vw, 100vw">'
                      for _ in [0] if book.has("assets/front/posters/hero-n-480.webp") and book.has("assets/front/posters/hero-n-960.webp"))
     contact = "".join(f'<li><a href="{e(c["href"])}" rel="noopener">{e(c["label"])}</a></li>' for c in owner["contact"])
