@@ -204,8 +204,8 @@
         close = null;
         player.classList.remove("is-playing");
         root.classList.remove("is-cinema");
+        play.focus({ preventScroll: true });   /* after the button is shown again, or it cannot take focus */
       });
-      play.focus({ preventScroll: true });
     }
     play.addEventListener("click", function (event) {
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button) return;

@@ -241,7 +241,7 @@ def tile(entry: dict, *, here: bool, home: bool) -> str:
     names = f'<span class="tile__names">{e(entry["names"])}</span>' if entry.get("names") else ""
     return (f'<li class="tiles__item">{ids}<a class="tile" href="/{e(entry["path"])}"{current}{loop} data-entry="{e(entry["slug"])}">'
             f'<span class="tile__pic">{img(entry["poster"], sizes="(min-width: 900px) 16vw, 46vw")}{mark}</span>'
-            f'<span class="tile__name">{e(entry["name"])}</span>'
+            f'<span class="tile__name">{e(entry["name"])}</span><span class="vh">: </span>'
             f'<span class="tile__line">{e(entry["line"])}</span>{names}</a></li>')
 
 
@@ -274,7 +274,7 @@ def stop_markup(stop: dict) -> str:
             f'<span class="stop__flag stop__flag--here">{flag}</span><span class="stop__flag stop__flag--next">Next</span>'
             f'<a class="stop__main" href="{e(stop["href"])}"{off(stop["href"])}>'
             f'<span class="stop__pic">{picture}{play}</span>'
-            f'<span class="stop__kind">{e(stop["label"])}</span>'
+            f'<span class="stop__kind">{e(stop["label"])}</span><span class="vh">, </span>'
             f'<span class="stop__detail">{e(stop["detail"])}</span></a>{more}</li>')
 
 
