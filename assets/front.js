@@ -111,13 +111,16 @@
   /* ---- a project page's stage: the video's own loop ---- */
   var screen = document.getElementById("screen");
   if (screen && moving() && screen.getAttribute("data-loop-l")) {
-    var loop = clip(screen.getAttribute(wide() ? "data-loop-l" : "data-loop-s"), true);
+    /* Twice through, then it rests on its last frame: motion beside reading text should stop. */
+    var loop = clip(screen.getAttribute(wide() ? "data-loop-l" : "data-loop-s"), false);
+    var rounds = 0;
+    loop.addEventListener("ended", function () { rounds += 1; if (rounds < 2 && !loop.dataset.held) { loop.currentTime = 0; start(loop); } });
     screen.appendChild(loop);
-    control(screen, loop, true);
+    control(screen, loop, false);
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
-          if (entry.isIntersecting && !loop.dataset.held) start(loop); else loop.pause();
+          if (entry.isIntersecting && !loop.dataset.held && !loop.ended) start(loop); else if (!loop.ended) loop.pause();
         });
       }, { threshold: 0.4 }).observe(screen);
     } else start(loop);

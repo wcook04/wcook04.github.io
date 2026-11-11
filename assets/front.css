@@ -237,10 +237,16 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 @view-transition { navigation: auto; }
 ::view-transition-group(pic), ::view-transition-group(player) { animation-duration: .36s; animation-timing-function: var(--move); }
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .22s; }
+/* The travelling picture keeps the picture it left with until it has nearly arrived; the new page's larger
+   picture may still be decoding when the move starts. */
+::view-transition-old(pic) { animation: none; }
+::view-transition-new(pic) { animation: show .14s linear .22s both; }
+::view-transition-old(pic), ::view-transition-new(pic) { height: 100%; object-fit: cover; }
 @media (prefers-reduced-motion: no-preference) {
   .js .work .levels__axis::before { animation: draw .7s var(--arrive) .15s both; }
   .js .stop__flag { animation: settle .32s var(--arrive) .5s both; }
 }
+@keyframes show { from { opacity: 0; } to { opacity: 1; } }
 @keyframes draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes settle { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {

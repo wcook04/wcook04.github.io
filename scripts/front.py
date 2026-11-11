@@ -147,10 +147,10 @@ def img(picture: dict | None, *, sizes: str, alt: str = "", eager: bool = False,
     if not picture:
         return ""
     srcset = ", ".join(f"/{path} {width}w" for width, path in picture["set"])
-    lazy = ' fetchpriority="high"' if eager else ' loading="lazy"'
+    lazy = ' decoding="sync" fetchpriority="high"' if eager else ' decoding="async" loading="lazy"'
     klass = f' class="{cls}"' if cls else ""
     return (f'<img{klass} src="/{e(picture["src"])}" srcset="{e(srcset)}" sizes="{e(sizes)}" alt="{e(alt)}" '
-            f'width="16" height="9" decoding="async"{lazy}>')
+            f'width="16" height="9"{lazy}>')
 
 
 def head(hub, *, title: str, description: str, canonical: str, picture: str | None, alt: str = "", structured: str = "") -> str:
