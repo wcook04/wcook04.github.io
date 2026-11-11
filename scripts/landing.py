@@ -213,14 +213,15 @@ def weave(rows: list[dict], config: dict) -> str:
     return (f'<nav class="weave" aria-labelledby="weave-title"><h2 class="weave__title" id="weave-title">Every project, at every level of detail</h2>'
             f'<ol class="weave__rows" role="list">{"".join(out)}</ol>'
             f'<p class="weave__note">{e(landing["weave_note"])} '
-            f'<span class="weave__key"><span class="key key--maths"></span>{e(key[0])}. <span class="key key--code"></span>{e(key[1])}</span></p></nav>')
+            f'<span class="weave__key"><span class="key key--maths"></span>{e(key[0])}.</span> <span class="weave__key"><span class="key key--code"></span>{e(key[1])}</span></p></nav>')
 
 
 def picture(r: dict, *, sizes: str, eager: bool = False, cls: str = "") -> str:
     if not r.get("img"):
         return f'<span class="blank{(" " + cls) if cls else ""}"><span class="blank__name">{e(r["title"])}</span><span class="blank__note">{e(r.get("note") or "")}</span></span>'
     high = ' fetchpriority="high"' if eager else ""
-    return (f'<img{(" class=" + chr(34) + cls + chr(34)) if cls else ""} src="{e(r["img"])}" srcset="{e(r["img"])} 720w, {e(r["img2"])} 1440w" sizes="{e(sizes)}" '
+    small, large = (640, 1280) if r["col"] in ("short", "full") else (720, 1440)
+    return (f'<img{(" class=" + chr(34) + cls + chr(34)) if cls else ""} src="{e(r["img"])}" srcset="{e(r["img"])} {small}w, {e(r["img2"])} {large}w" sizes="{e(sizes)}" '
             f'alt="" width="1280" height="720" loading="{"eager" if eager else "lazy"}" decoding="async"{high}>')
 
 
@@ -243,9 +244,9 @@ def article(row: dict, terms, *, first: bool) -> str:
     credit = f'<p class="proj__credit">{terms.link(row["credit"])}</p>' if row.get("credit") else ""
     name = f'<p class="proj__name">{e(row["name"])}</p>' if row["name"] != row["question"] else ""
     return (f'<article class="proj" id="p-{e(row["id"])}" data-row="{e(row["id"])}" data-ink="{e(row["ink"])}" aria-labelledby="h-{e(row["id"])}">'
-            f'{frame}<div class="proj__text">{name}<h3 class="proj__q" id="h-{e(row["id"])}">{e(row["question"])}</h3>'
-            f'<p class="proj__line">{terms.link(row["line"])}</p>{credit}</div>'
-            f'<ol class="strip" role="list" aria-label="{e(row["name"])}, from the short film to the source">{tiles}</ol>{extra}</article>')
+            f'{frame}<div class="proj__head">{name}<h3 class="proj__q" id="h-{e(row["id"])}">{e(row["question"])}</h3></div>'
+            f'<ol class="strip" role="list" aria-label="{e(row["name"])}, from the short film to the source">{tiles}</ol>'
+            f'<div class="proj__text"><p class="proj__line">{terms.link(row["line"])}</p>{credit}{extra}</div></article>')
 
 
 def render(registry: dict, glossary: dict, root: Path, structured: str, hub) -> str:

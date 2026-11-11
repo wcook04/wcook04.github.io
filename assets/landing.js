@@ -59,7 +59,8 @@
     if (tile.dataset.img) {
       next = document.createElement('img');
       next.alt = ''; next.width = 1280; next.height = 720; next.decoding = 'async';
-      next.srcset = tile.dataset.img + ' 720w, ' + tile.dataset.img2 + ' 1440w';
+      var film = tile.dataset.col === 'short' || tile.dataset.col === 'full';
+      next.srcset = tile.dataset.img + (film ? ' 640w, ' : ' 720w, ') + tile.dataset.img2 + (film ? ' 1280w' : ' 1440w');
       next.sizes = '(min-width: 1100px) 760px, 100vw';
       next.src = tile.dataset.img;
     } else {

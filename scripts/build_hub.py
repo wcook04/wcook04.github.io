@@ -914,9 +914,10 @@ def render_checkpoint_index(registry: dict, glossary: dict | None = None) -> str
 # ---------------------------------------------------------------- the catalogue as a graph
 
 def render_index(registry: dict, glossary: dict | None = None) -> str:
-    import sys
+    from types import SimpleNamespace
     import landing
-    return landing.render(registry, glossary or load_glossary(), ROOT, structured_data(registry), sys.modules[__name__])
+    hub = SimpleNamespace(versioned=versioned, Terms=Terms, render_more=render_more, render_terms=render_terms)
+    return landing.render(registry, glossary or load_glossary(), ROOT, structured_data(registry), hub)
 
 
 def render_static_catalogue(registry: dict, glossary: dict | None = None) -> str:

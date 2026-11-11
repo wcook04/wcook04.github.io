@@ -27,7 +27,7 @@ class HubTests(unittest.TestCase):
         cls.canonical = json.loads(cls.files["sites.json"])
         cls.glossary = json.loads(cls.files["glossary.json"])
         cls.registry = CHECK.BUILD.load_registry(ROOT)
-        cls.view = CHECK.embedded_view(cls.files["index.html"].decode())
+        cls.view = CHECK.site_view(ROOT)
 
     def test_v3_load_retains_the_canonical_record(self):
         self.assertEqual(self.registry["_canonical_v3"], self.canonical)
@@ -123,20 +123,37 @@ class HubTests(unittest.TestCase):
 
     def test_remote_assets_and_embedded_players_are_rejected(self):
         page = self.files["index.html"].decode().replace("</main>", '<iframe src="https://example.org/player"></iframe></main>')
-        page = page.replace('src="assets/explore.js"', 'src="https://example.org/explore.js"')
+        self.assertIn('src="/assets/landing.js?', page)
+        page = page.replace('src="/assets/landing.js?', 'src="https://example.org/landing.js?')
         errors = CHECK.validate_page("index.html", page, prototype=True)
         self.assertTrue(any("embedded player" in error for error in errors))
         self.assertTrue(any("another host" in error for error in errors))
 
-    def test_home_page_frames_only_the_youtube_player(self):
+    def test_no_page_frames_a_player(self):
         page = self.files["index.html"].decode()
         self.assertEqual(CHECK.validate_page("index.html", page, prototype=True), [])
-        other = page.replace("frame-src https://www.youtube.com", "frame-src https://example.org")
-        self.assertTrue(any("frame-src https://www.youtube.com" in error
-                            for error in CHECK.validate_page("index.html", other, prototype=True)))
-        catalogue = self.files["all.html"].decode().replace("frame-src 'none'", "frame-src https://www.youtube.com")
-        self.assertTrue(any("frame-src 'none'" in error
-                            for error in CHECK.validate_page("all.html", catalogue, prototype=True)))
+        for name in ("index.html", "all.html"):
+            framed = self.files[name].decode().replace("frame-src 'none'", "frame-src https://www.youtube.com")
+            self.assertTrue(any("frame-src 'none'" in error
+                                for error in CHECK.validate_page(name, framed, prototype=True)))
+
+    def test_home_page_rows_reach_every_current_film_website_and_repository(self):
+        page = self.files["index.html"].decode()
+        self.assertEqual(CHECK.validate_landing(page, self.view, self.files), [])
+        short = self.view["films"]["short-quartic"]["youtube"]
+        self.assertTrue(any("current video not linked: short-quartic" in error
+                            for error in CHECK.validate_landing(page.replace(short, "#gone"), self.view, self.files)))
+        extra = dict(self.files)
+        extra["assets/films/loops/unused.mp4"] = b""
+        self.assertTrue(any("does not use" in error for error in CHECK.validate_landing(page, self.view, extra)))
+        # The page is a readable list without its script: every row is a link to an article on the page,
+        # and no film preview depends on YouTube (posters and loops are this repository's own files).
+        parsed = CHECK.Page(page)
+        rows = [a.get("href") for a in parsed.all("a") if a.get("class") == "row__label"]
+        self.assertEqual(len(rows), 15)
+        self.assertTrue(all(href[1:] in parsed.ids for href in rows))
+        self.assertNotIn("ytimg", page)
+        self.assertNotIn("youtube.com/embed", page)
 
     def test_host_wide_crawling_and_project_ownership_are_preserved(self):
         files = dict(self.files)

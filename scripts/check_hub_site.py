@@ -32,6 +32,7 @@ REQUIRED = {
     "llms.txt", "agent-guide.md", "plectis-paths.txt", "robots.txt", "sitemap.xml",
     "sitemap-home.xml", "favicon.ico", "assets/hub.css", "assets/explorer.css",
     "assets/explore.js", "assets/explore-model.js", "assets/redirect.js", "assets/door-art.css",
+    "assets/landing.css", "assets/landing.js", "assets/landing-init.js", "scripts/landing.py",
     "assets/favicon.svg", "scripts/build_hub.py", "scripts/check_hub_site.py",
     "scripts/catalogue_v3.py", "scripts/explorer_v3.py", "scripts/door_art.py", "scripts/sites.schema.json",
     "scripts/glossary.schema.json", "tests/test_hub_site.py",
@@ -40,7 +41,7 @@ PRODUCTION_REQUIRED = {".github/workflows/public-site.yml", ".gitignore"}
 ALLOWED = REQUIRED | PRODUCTION_REQUIRED | {
     "assets/hub.js", "assets/theme-init.js", "assets/family/family.css",
     "assets/favicon-32.png", "assets/apple-touch-icon.png", "scripts/capture_cards.py",
-    "scripts/check_explorer_model.js", "scripts/build_portable.py", "tests/__init__.py", "requirements.txt",
+    "scripts/check_explorer_model.js", "scripts/cut_loops.py", "scripts/build_portable.py", "tests/__init__.py", "requirements.txt",
 }
 ALLOWED_DIRS = ("assets/fonts/", "assets/films/", "assets/sites/", "assets/logos/", "assets/family/marks/",
                 "content/transcripts/", "docs/")
@@ -104,11 +105,35 @@ class Page(HTMLParser):
         return [attrs["id"] for _, attrs in self.attrs if attrs.get("id")]
 
 
-def embedded_view(text: str) -> dict:
-    candidates = [script for script in Page(text).scripts
-                  if script["attrs"].get("id") == "explorer-data"]
-    if len(candidates) != 1: raise ValueError("index.html needs exactly one embedded explorer-data record")
-    return json.loads(candidates[0]["text"])
+def site_view(root: Path) -> dict:
+    """The view both pages are rendered from, rebuilt from the files under root."""
+    import explorer_v3
+    glossary = json.loads((root / "glossary.json").read_text(encoding="utf-8"))
+    return explorer_v3.build_view(BUILD.load_registry(root), glossary, root)
+
+
+def validate_landing(text: str, view: dict, files) -> list[str]:
+    """The home page reaches every current film, website and first repository
+    from a row, and shows every preview loop it ships (and no missing one)."""
+    page = Page(text)
+    hrefs = {a.get("href") for a in page.all("a")}
+    errors = []
+    films = view["films"]
+    for fid, film in films.items():
+        newer = film.get("superseded_by")
+        earlier = film.get("edition") == "earlier" or bool(newer and films.get(newer, {}).get("youtube"))
+        if film.get("youtube") and not earlier and film["youtube"] not in hrefs:
+            errors.append("index.html: current video not linked: " + fid)
+    for pid, project in view["projects"].items():
+        if "p-" + pid not in page.ids: errors.append("index.html: project has no row: " + pid)
+        if project.get("url") and project["url"] not in hrefs: errors.append("index.html: website not linked: " + pid)
+        for repo in project.get("repo_records", [])[:1]:
+            if repo["href"] not in hrefs: errors.append("index.html: repository not linked: " + repo["id"])
+    loops = {a.get("data-loop") for a in page.all("a") if a.get("data-loop")}
+    shipped = {name for name in files if name.startswith("assets/films/loops/") and name.endswith(".mp4")}
+    for name in sorted(loops - shipped): errors.append("index.html: preview loop is not in the repository: " + name)
+    for name in sorted(shipped - loops): errors.append("preview loop the home page does not use: " + name)
+    return errors
 
 
 def same_origin(url: str) -> bool:
@@ -130,8 +155,8 @@ def validate_page(name: str, text: str, *, prototype: bool = False, redirect: bo
             url = part.strip().split(" ")[0]
             if url and not same_origin(url): errors.append(f"{name}: image source loads from another host: {url}")
     csp = [m.get("content", "") for m in page.all("meta") if m.get("http-equiv", "").lower() == "content-security-policy"]
-    # The explorer page (index.html) may frame YouTube's player and nothing else; every other page frames nothing.
-    frames = "frame-src https://www.youtube.com" if name == "index.html" else "frame-src 'none'"
+    # No page frames anything: films open on YouTube, and the home page's previews are its own files.
+    frames = "frame-src 'none'"
     rules = [r.strip() for r in csp[0].split(";")] if len(csp) == 1 else []
     if any(rule not in rules for rule in (frames, "connect-src 'none'", "script-src 'self'")):
         errors.append(f"{name}: preserve the same-origin content security policy ({frames})")
@@ -191,6 +216,7 @@ def validate_projection(view: dict, canonical: dict) -> list[str]:
 def validate(files: dict[str, bytes], *, prototype: bool = False, check_generated: bool = True) -> list[str]:
     """Validate one immutable snapshot, including renderer inputs and outputs."""
     errors = []
+    view = None
     required = REQUIRED | (set() if prototype else PRODUCTION_REQUIRED)
     missing = required - files.keys()
     if missing: errors.append("missing maintained files: " + ", ".join(sorted(missing)))
@@ -218,6 +244,10 @@ def validate(files: dict[str, bytes], *, prototype: bool = False, check_generate
         if shape: return errors + ["sites.json: " + item for item in shape]
         legacy = BUILD.validate_registry(CATALOGUE.adapt_v3_to_v2(canonical), exists=lambda p: p in files)
         if legacy: return errors + ["rendering view: " + item for item in legacy]
+        try:
+            view = site_view(root)
+        except (ValueError, KeyError, TypeError, OSError) as exc:
+            errors.append("explorer data: " + str(exc))
         if check_generated and "scripts/build_hub.py" in files:
             # Builder, modules, config, transcripts, glossary and assets all
             # come from this snapshot, including when it is the Git index.
@@ -228,16 +258,12 @@ def validate(files: dict[str, bytes], *, prototype: bool = False, check_generate
     for name in ("index.html", "all.html"):
         if name in files: errors += validate_page(name, files[name].decode(), prototype=prototype)
     if "404.html" in files: errors += validate_page("404.html", files["404.html"].decode(), prototype=prototype, redirect=True)
-    if "index.html" in files:
-        try:
-            view = embedded_view(files["index.html"].decode())
-            errors += validate_projection(view, canonical)
-            if {t["id"] for t in view.get("terms", [])} != {t["id"] for t in glossary["terms"]}: errors.append("explorer: embedded glossary lost a definition")
-        except (ValueError, KeyError, TypeError) as exc:
-            errors.append("explorer data: " + str(exc))
+    if "index.html" in files and view is not None:
+        errors += validate_projection(view, canonical)
+        if {t["id"] for t in view.get("terms", [])} != {t["id"] for t in glossary["terms"]}: errors.append("explorer: the view lost a glossary definition")
+        errors += validate_landing(files["index.html"].decode(), view, files)
         scripts = Page(files["index.html"].decode()).all("script")
-        for name in ("assets/explore.js", "assets/explore-model.js"):
-            if not any((s.get("src") or "").split("?")[0].lstrip("/") == name and "defer" in s for s in scripts): errors.append("index.html: load the deferred same-origin " + name)
+        if not any((s.get("src") or "").split("?")[0].lstrip("/") == "assets/landing.js" and "defer" in s for s in scripts): errors.append("index.html: load the deferred same-origin assets/landing.js")
     if "all.html" in files:
         page = Page(files["all.html"].decode())
         hrefs = {a.get("href") for a in page.all("a")}
