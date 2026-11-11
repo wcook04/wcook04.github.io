@@ -174,6 +174,26 @@ def validate_landing(files, view: dict) -> list[str]:
     shipped = {name for name in files if name.startswith(FRONT_MEDIA)}
     for name in sorted(n for n in named if n.startswith("assets/") and n not in files): errors.append("a page names a file that is not in the repository: " + name)
     for name in sorted(shipped - named): errors.append("picture or clip no page uses: " + name)
+    for name in ("assets/front.css", "assets/register.css"):
+        errors += stylesheet_errors(name, files.get(name, b"").decode())
+    return errors
+
+
+def stylesheet_errors(name: str, text: str) -> list[str]:
+    """A stray brace makes a browser drop the rule after it without a word (it once dropped the page
+    transition). Braces must balance, never close below the top level, and the transition rule must be there."""
+    import re
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
+    text = re.sub(r'"[^"\n]*"', '""', text)
+    depth, errors = 0, []
+    for number, line in enumerate(text.splitlines(), 1):
+        for char in line:
+            depth += (char == "{") - (char == "}")
+            if depth < 0:
+                return [f"{name}: line {number} closes a block that was never opened"]
+    if depth: errors.append(f"{name}: {depth} block(s) are never closed")
+    if name == "assets/front.css" and not re.search(r"(?m)^@view-transition\s*\{\s*navigation:\s*auto", text):
+        errors.append(name + ": the page-to-page transition rule (@view-transition) must stand at the top level")
     return errors
 
 

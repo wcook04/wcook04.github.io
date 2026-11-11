@@ -271,7 +271,6 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
   .top__nav { gap: 12px; }
   .top__nav a { font-size: 14.5px; }
 }
-}
 
 /* ------------------------------------------------------------ motion */
 @view-transition { navigation: auto; }

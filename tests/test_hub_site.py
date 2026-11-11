@@ -171,6 +171,15 @@ class HubTests(unittest.TestCase):
         for pid in self.view["projects"]:
             self.assertIn("p-" + pid, home.ids)
 
+    def test_a_stray_brace_in_the_stylesheet_is_caught(self):
+        sheet = self.files["assets/front.css"].decode()
+        self.assertEqual(CHECK.stylesheet_errors("assets/front.css", sheet), [])
+        # A stray closing brace once made browsers drop the rule after it: the page-to-page transition.
+        broken = sheet.replace("@view-transition { navigation: auto; }", "}\n@view-transition { navigation: auto; }", 1)
+        self.assertTrue(any("never opened" in error for error in CHECK.stylesheet_errors("assets/front.css", broken)))
+        self.assertTrue(any("@view-transition" in error
+                            for error in CHECK.stylesheet_errors("assets/front.css", sheet.replace("@view-transition { navigation: auto; }", "", 1))))
+
     def test_host_wide_crawling_and_project_ownership_are_preserved(self):
         files = dict(self.files)
         files["robots.txt"] += b"Disallow: /plectis-atlas/\n"
