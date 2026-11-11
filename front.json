@@ -21,12 +21,16 @@
       "alt": "From the introduction: what AI produces goes through an AI model and comes out as a paper for experts, a website with the paper beside its proof, a map where you click any theorem, and a video for anyone. With a better model, each of these is redrawn."
     },
     "map_title": "The projects",
-    "map_note": "Fifteen projects, in the five groups of the full introduction.",
+    "map_note": "Fifteen projects in five groups. Each opens from a short video down to the proof or the code.",
     "card_alt": "Will Cook: I use AI to make AI-written maths and code easier to understand. A frame from the introduction video."
   },
   "kinds": {"short": "Short video", "long": "Full video", "site": "Website", "paper": "Paper", "proof": "Lean proof", "code": "Code", "study": "Study", "issue": "Issue"},
+  "terms": {
+    "Lean": "Lean is a program that checks mathematical proofs.",
+    "Dafny": "Dafny is a programming language and verifier that checks code against written specifications."
+  },
   "bands": [
-    {"id": "maths", "n": 1, "name": "Maths"},
+    {"id": "maths", "n": 1, "name": "Maths", "note": "Lean is a program that checks mathematical proofs."},
     {"id": "checks", "n": 2, "name": "What a check covers"},
     {"id": "code", "n": 3, "name": "Code"},
     {"id": "assistants", "n": 4, "name": "AI coding assistants at work"},
@@ -41,7 +45,7 @@
       "loop": "short-funnel",
       "line": "How a Lean proof becomes papers and a video",
       "claim": "The funnel is a set of written instructions that AI follows to turn a proof Lean has accepted into shorter and shorter versions for different readers. For one Erdős problem that is 152 pages, then 26, then 16, then a half-hour video.",
-      "limit": "Lean checks the proof. An expert still has to judge whether each paper and video says the same mathematics.",
+      "limit": "Lean checks the proof. An expert still has to judge whether each paper and video says the same maths.",
       "page_title": "The funnel: how a Lean proof becomes papers and a video",
       "description": "Written instructions that AI follows to turn a proof Lean has accepted into shorter versions for different readers. For one Erdős problem that is 152 pages, then 26, then 16, then a half-hour video. Lean checks the proof. The papers and the video still need an expert’s reading.",
       "card_alt": "The funnel: How a Lean proof becomes papers and a video. A frame from the project’s video.",
@@ -50,6 +54,28 @@
         {"id": "long", "kind": "long", "res": "film:long-funnel"},
         {"id": "example", "kind": "site", "label": "Example", "detail": "one problem, every version", "href": "https://wcook04.github.io/practical-formal-verification/maths/problems/erdos_257.html", "plate": "p257-page", "fallback": "assets/sites/maths-dark-720.webp"},
         {"id": "code", "kind": "code", "res": "repo:lean-exposition", "detail": "writing guides and reader tools", "plate": "repo-lean-exposition", "fallback": "assets/sites/repo-funnel-720.webp"}
+      ]
+    },
+    {
+      "slug": "maths-map",
+      "name": "Maths Map",
+      "band": "maths",
+      "aliases": ["maths"],
+      "loop": "short-mathematics-overview",
+      "line": "Eight Erdős problems on one map",
+      "claim": "Maths Map is a website with one map of every theorem from my research on eight Erdős problems. Click a theorem and you go straight to where it is written up, in the long research record or the short paper for experts.",
+      "limit": "Lean checks only some of the theorems, and the papers are written with AI, so an expert still needs to read them. Seven of the eight questions remain open. For #1041, a formal version of the statement is refuted.",
+      "credit": "The #1041 formal-statement counterexample is due to ani.",
+      "page_title": "Maths Map: eight Erdős problems on one map",
+      "description": "A website with one map of every theorem from my research on eight Erdős problems. Click a theorem to open where it is written up. Lean checks some of the theorems, the papers are written with AI, and seven of the eight questions remain open.",
+      "card_alt": "Maths Map: Eight Erdős problems on one map. A frame from the project’s video.",
+      "stops": [
+        {"id": "short", "kind": "short", "res": "film:short-mathematics-overview"},
+        {"id": "long", "kind": "long", "res": "film:mathematics-overview"},
+        {"id": "site", "kind": "site", "res": "link:maths-maths-map", "label": "Website", "detail": "the map", "plate": "maths-universe", "fallback": "assets/sites/maths-dark-720.webp", "more": [{"label": "The eight problems", "res": "link:maths-the-eight-problems"}, {"label": "Front page", "res": "site:maths"}]},
+        {"id": "papers", "kind": "paper", "res": "link:maths-the-papers", "label": "Papers", "detail": "the full list", "plate": "maths-papers"},
+        {"id": "proof", "kind": "proof", "res": "repo:plectis-erdos-lean", "label": "Lean proofs", "detail": "on GitHub", "plate": "repo-plectis-erdos-lean"},
+        {"id": "code", "kind": "code", "res": "repo:plectis-erdos", "label": "Papers and records", "detail": "on GitHub", "plate": "repo-plectis-erdos"}
       ]
     },
     {
@@ -73,28 +99,6 @@
         {"id": "paper", "kind": "paper", "label": "Paper for experts", "detail": "PDF, 26 pages", "href": "https://wcook04.github.io/practical-formal-verification/papers/erdos-257-mersenne-support-subseries.pdf", "plate": "p257-paper"},
         {"id": "record", "kind": "paper", "label": "Research record", "detail": "PDF, 152 pages", "href": "https://wcook04.github.io/practical-formal-verification/papers/erdos257-mersenne-reasoning-surface.pdf", "plate": "p257-record"},
         {"id": "proof", "kind": "proof", "label": "Lean proof", "detail": "the 1968 case", "href": "https://github.com/wcook04/plectis-erdos-lean/blob/ec92e5ce12c6117a24e4b532ea565ba332a1df7b/verification/FC257ReciprocalSupport/verification/Solutions/FC257Subtype.lean#L10-L17", "plate": "p257-lean", "more": [{"label": "All the Lean proofs", "res": "repo:plectis-erdos-lean"}]}
-      ]
-    },
-    {
-      "slug": "maths-map",
-      "name": "Maths Map",
-      "band": "maths",
-      "aliases": ["maths"],
-      "loop": "short-mathematics-overview",
-      "line": "Eight Erdős problems on one map",
-      "claim": "Maths Map is a website with one map of every theorem from my research on eight Erdős problems. Click a theorem and you go straight to where it is written up, in the long research record or the short paper for experts.",
-      "limit": "Lean checks only some of the theorems, and the papers are written with AI, so an expert still needs to read them. Seven of the eight questions remain open. For #1041, a formal version of the statement is refuted.",
-      "credit": "The #1041 formal-statement counterexample is due to ani.",
-      "page_title": "Maths Map: eight Erdős problems on one map",
-      "description": "A website with one map of every theorem from my research on eight Erdős problems. Click a theorem to open where it is written up. Lean checks some of the theorems, the papers are written with AI, and seven of the eight questions remain open.",
-      "card_alt": "Maths Map: Eight Erdős problems on one map. A frame from the project’s video.",
-      "stops": [
-        {"id": "short", "kind": "short", "res": "film:short-mathematics-overview"},
-        {"id": "long", "kind": "long", "res": "film:mathematics-overview"},
-        {"id": "site", "kind": "site", "res": "link:maths-maths-map", "label": "Website", "detail": "the map", "plate": "maths-universe", "fallback": "assets/sites/maths-dark-720.webp", "more": [{"label": "The eight problems", "res": "link:maths-the-eight-problems"}, {"label": "Front page", "res": "site:maths"}]},
-        {"id": "papers", "kind": "paper", "res": "link:maths-the-papers", "label": "Papers", "detail": "the full list", "plate": "maths-papers"},
-        {"id": "proof", "kind": "proof", "res": "repo:plectis-erdos-lean", "label": "Lean proofs", "detail": "on GitHub", "plate": "repo-plectis-erdos-lean"},
-        {"id": "code", "kind": "code", "res": "repo:plectis-erdos", "label": "Papers and records", "detail": "on GitHub", "plate": "repo-plectis-erdos"}
       ]
     },
     {
@@ -190,12 +194,12 @@
       "band": "checks",
       "aliases": ["formal-verification"],
       "loop": "short-plectis-verification",
-      "line": "What one proof covers, across 88 components",
+      "line": "What one proof covers, in a toolkit of 88 components",
       "claim": "A map of the 88 components of my public toolkit. Rings around each component show which kinds of evidence it has. Sixteen calculations are proved with Dafny for every input: the twelve marked on the map, and four shared by the whole toolkit.",
       "limit": "Each proof covers one stated calculation. The outer ring shows how much of a component's whole claim has been checked, and it reads unknown for every component.",
-      "page_title": "Verification map: what one proof covers, across 88 components",
+      "page_title": "Verification map: what one proof covers, in a toolkit of 88 components",
       "description": "A map of the 88 components of my public toolkit. Rings around each component show which kinds of evidence it has, and sixteen calculations are proved with Dafny for every input. Each proof covers one stated calculation.",
-      "card_alt": "Verification map: What one proof covers, across 88 components. A frame from the project’s video.",
+      "card_alt": "Verification map: What one proof covers, in a toolkit of 88 components. A frame from the project’s video.",
       "stops": [
         {"id": "short", "kind": "short", "res": "film:short-plectis-verification"},
         {"id": "long", "kind": "long", "res": "film:plectis-verification"},
@@ -269,12 +273,12 @@
       "band": "assistants",
       "aliases": ["safety-core"],
       "loop": "short-safety-core",
-      "line": "A written rule let 6 of 10 runs commit. A check let 0.",
+      "line": "A written rule let 6 of 10 AI runs commit a made-up value. A check let 0.",
       "claim": "Safety Core is one file of rules for AI coding assistants, each rule labelled with how it is enforced. In one test an assistant made up a setting value so a failing test passed, then committed: in 10 runs of 10 with no rules, 6 of 10 with written rules, and 0 of 10 when a check held the command for approval.",
       "limit": "One model, Claude Haiku 4.5, on one small project, ten runs per setup. The check was written after this failure was first seen, and nobody was present to approve.",
-      "page_title": "Safety Core: a written rule let 6 of 10 runs commit. A check let 0.",
+      "page_title": "Safety Core: a written rule let 6 of 10 AI runs commit a made-up value. A check let 0.",
       "description": "In one test an AI coding assistant made up a setting value so a failing test passed, then committed it: in 10 runs of 10 with no rules, 6 of 10 with written rules, and 0 of 10 when a check held the command for approval. One model, one small project, ten runs per setup.",
-      "card_alt": "Safety Core: A written rule let 6 of 10 runs commit. A check let 0. A frame from the project’s video.",
+      "card_alt": "Safety Core: A written rule let 6 of 10 AI runs commit a made-up value. A check let 0. A frame from the project’s video.",
       "stops": [
         {"id": "short", "kind": "short", "res": "film:short-safety-core"},
         {"id": "long", "kind": "long", "res": "film:safety-core"},

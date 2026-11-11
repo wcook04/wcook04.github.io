@@ -24,6 +24,7 @@ CSP = ("default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'non
        "style-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'none'; "
        "frame-src 'none'; child-src 'none'")
 VIDEO_KINDS = ("short", "long")
+NAMED_KINDS = ("code", "issue")   # shown by the repository's own name, since every GitHub page looks alike at this size
 
 
 def clock(seconds: int | None) -> str:
@@ -126,14 +127,14 @@ def resolve(front: dict, book: Book) -> dict:
             detail = stop.get("detail", "")
             picture = None
             if kind in VIDEO_KINDS:
-                detail = stop.get("detail_prefix", "") + clock(place["seconds"])
+                detail = stop.get("detail_prefix", "") + clock(place["seconds"]) + " on YouTube"
                 picture = book.poster(place["slug"], place["stem"])
-            else:
+            elif kind not in NAMED_KINDS:
                 picture = book.plate(stop.get("plate"), stop.get("fallback"))
             href = place["href"] if place else stop["href"]
             stops.append({"id": stop["id"], "kind": kind, "label": label, "detail": detail, "href": href,
                           "res": stop.get("res"), "picture": picture, "video": kind in VIDEO_KINDS,
-                          "watched": stop.get("watched"),
+                          "watched": stop.get("watched"), "named": named(href) if kind in NAMED_KINDS else None,
                           "more": [link(m) for m in stop.get("more", [])]})
         lead = next((s for s in stops if s["video"]), None)
         entries.append({**entry, "stops": stops, "band_name": bands[entry["band"]]["name"], "band_n": bands[entry["band"]]["n"],
@@ -143,7 +144,23 @@ def resolve(front: dict, book: Book) -> dict:
     for key in ("short", "long"):
         intro[key] = {**intro[key], **book.place(intro[key]["res"])}
     intro["poster"] = book.poster(intro["idle"]["loop"])
-    return {"intro": intro, "bands": front["bands"], "entries": entries, "videos": front["videos"]}
+    return {"intro": intro, "bands": front["bands"], "entries": entries, "videos": front["videos"],
+            "terms": front.get("terms", {})}
+
+
+def named(href: str) -> tuple[str, str]:
+    """A repository or issue is shown by its own name: ("wcook04/", "safety-core") or ("NVIDIA/auto-ontology", "#431")."""
+    parts = href.split("github.com/", 1)[-1].strip("/").split("/")
+    if len(parts) >= 4 and parts[2] == "issues":
+        return f"{parts[0]}/{parts[1]}", "#" + parts[3]
+    return parts[0] + "/", parts[1] if len(parts) > 1 else ""
+
+
+def glosses(entry: dict, terms: dict) -> list[str]:
+    """One plain sentence for each term this page uses and a newcomer may not know."""
+    words = " ".join([entry["claim"], entry["limit"], entry.get("credit", "")] +
+                     [f'{s["label"]} {s["detail"]}' for s in entry["stops"]])
+    return [text for term, text in terms.items() if re.search(rf"\b{re.escape(term)}\b", words)]
 
 
 # ------------------------------------------------------------------ markup
@@ -158,11 +175,13 @@ def off(href: str) -> str:
     return ' target="_blank" rel="noopener noreferrer"' if href.startswith("http") and not href.startswith(HOME) else ""
 
 
-def img(picture: dict | None, *, sizes: str, alt: str = "", eager: bool = False, cls: str = "") -> str:
+def img(picture: dict | None, *, sizes: str, alt: str = "", eager: bool = False, soon: bool = False, cls: str = "") -> str:
+    """eager: the page's main picture. soon: on the first screen, so not lazy. Otherwise loaded when scrolled to."""
     if not picture:
         return ""
     srcset = ", ".join(f"/{path} {width}w" for width, path in picture["set"])
-    lazy = ' decoding="sync" fetchpriority="high"' if eager else ' decoding="async" loading="lazy"'
+    lazy = (' decoding="sync" fetchpriority="high"' if eager else ' decoding="async"' if soon
+            else ' decoding="async" loading="lazy"')
     klass = f' class="{cls}"' if cls else ""
     return (f'<img{klass} src="/{e(picture["src"])}" srcset="{e(srcset)}" sizes="{e(sizes)}" alt="{e(alt)}" '
             f'width="16" height="9"{lazy}>')
@@ -229,7 +248,7 @@ def footer() -> str:
     return '''<footer class="foot wrap">
     <a href="/all.html">Every video, paper, website and repository on one page</a>
     <a href="/all.html#terms">Glossary</a>
-    <a href="https://github.com/wcook04/wcook04.github.io" rel="noopener">This site’s source</a>
+    <a href="https://github.com/wcook04/wcook04.github.io" target="_blank" rel="noopener noreferrer">This site’s source</a>
   </footer>'''
 
 
@@ -250,8 +269,9 @@ def project_map(model: dict, *, current: str | None, title: str, note: str) -> s
     bands = []
     for band in model["bands"]:
         tiles = "".join(tile(x, here=x["slug"] == current, home=home) for x in model["entries"] if x["band"] == band["id"])
+        aside = f'<p class="band__note">{e(band["note"])}</p>' if band.get("note") else ""
         bands.append(f'<section class="band band--{e(band["id"])}" aria-labelledby="band-{e(band["id"])}">'
-                     f'<h3 class="band__name" id="band-{e(band["id"])}"><span class="band__n">{band["n"]}</span> {e(band["name"])}</h3>'
+                     f'<div class="band__head"><h3 class="band__name" id="band-{e(band["id"])}"><span class="band__n">{band["n"]}</span> {e(band["name"])}</h3>{aside}</div>'
                      f'<ul class="tiles" role="list">{tiles}</ul></section>')
     lead = f'<p class="map__note">{e(note)}</p>' if note else ""
     old = '<span class="anchor" id="projects"></span><span class="anchor" id="explore"></span><span class="anchor" id="films"></span>' if home else ""
@@ -262,14 +282,19 @@ def project_map(model: dict, *, current: str | None, title: str, note: str) -> s
 
 def stop_markup(stop: dict) -> str:
     kind = stop["kind"]
-    picture = (img(stop["picture"], sizes="(min-width: 900px) 15vw, 30vw")
-               if stop["picture"] else f'<span class="stop__blank">{e(stop["label"])}</span>')
+    if stop.get("named"):
+        owner, name = stop["named"]
+        picture = f'<span class="stop__named"><span class="stop__owner">{e(owner)}</span><span class="stop__repo">{e(name)}</span></span>'
+    elif stop["picture"]:
+        picture = img(stop["picture"], sizes="(min-width: 900px) 15vw, 30vw", soon=True)
+    else:
+        picture = f'<span class="stop__named"><span class="stop__repo">{e(stop["label"])}</span></span>'
     play = '<span class="stop__play" aria-hidden="true"></span>' if stop["video"] else ""
     more = ""
     if stop["more"]:
         more = '<ul class="stop__more" role="list">' + "".join(
             f'<li><a href="{e(m["href"])}"{off(m["href"])}>{e(m["label"])}</a></li>' for m in stop["more"]) + "</ul>"
-    flag = "You watched this" if stop["video"] else "You saw this"
+    flag = "You watched this" if stop["video"] else "The video showed this"
     return (f'<li class="stop stop--{e(kind)}{" stop--video" if stop["video"] else ""}" id="{e(stop["id"])}">'
             f'<span class="stop__flag stop__flag--here">{flag}</span><span class="stop__flag stop__flag--next">Next</span>'
             f'<a class="stop__main" href="{e(stop["href"])}"{off(stop["href"])}>'
@@ -292,8 +317,11 @@ def render_home(model: dict, registry: dict, hub, structured: str, book: Book) -
     loop_attrs = f' data-idle="/{idle_clip}"' if book.has(idle_clip) else ""
     narrow = "".join(f'<source media="(max-width: 1180px)" srcset="/assets/front/posters/hero-n-480.webp 480w, /assets/front/posters/hero-n-960.webp 960w" sizes="(min-width: 861px) 56vw, 100vw">'
                      for _ in [0] if book.has("assets/front/posters/hero-n-480.webp") and book.has("assets/front/posters/hero-n-960.webp"))
-    contact = "".join(f'<li><a href="{e(c["href"])}" rel="noopener">{e(c["label"])}</a></li>' for c in owner["contact"])
-    invitation = "".join(f"<p>{e(text)}</p>" for text in owner.get("invitation", []))
+    contact = "".join(f'<li><a href="{e(c["href"])}"{off(c["href"])}>{e(c["label"])}</a></li>' for c in owner["contact"])
+    # The hero has already said what he does; this part says what he is looking for and how to reach him.
+    asks = [typeset(text, "lede") for text in owner.get("invitation", [])]
+    lead = e(asks[0]) if asks else ""
+    invitation = "".join(f"<p>{e(text)}</p>" for text in asks[1:])
     aliases = '<span class="anchor" id="p-intro"></span><span class="anchor" id="work"></span>'
     return f'''{head(hub, title=intro["title"], description=intro["description"], canonical=HOME, picture=card_of("home", book), alt=intro.get("card_alt", ""), structured=structured)}
 <body class="home">
@@ -322,7 +350,7 @@ def render_home(model: dict, registry: dict, hub, structured: str, book: Book) -
       <h2 class="about__title" id="about-title">About</h2>
       <div class="about__body">
         <div class="about__words">
-          <p class="say say--small">{e(owner["lede"])}</p>
+          <p class="say say--small">{lead}</p>
           {invitation}
         </div>
         <div class="about__reach">
@@ -341,8 +369,9 @@ def render_home(model: dict, registry: dict, hub, structured: str, book: Book) -
 def render_entry(model: dict, entry: dict, hub, book: Book) -> str:
     stops = "".join(stop_markup(s) for s in entry["stops"])
     credit = f'<p class="credit">{e(entry["credit"])}</p>' if entry.get("credit") else ""
+    gloss = "".join(f'<p class="credit credit--term">{e(text)}</p>' for text in glosses(entry, model["terms"]))
     loops = entry.get("loops") or {}
-    loop_attrs = f' data-loop-s="/{e(loops["s"])}" data-loop-l="/{e(loops["l"])}"' if loops else ""
+    loop_attrs = f' data-loop-l="/{e(loops["l"])}"' if loops else ""
     count = len(entry["stops"])
     return f'''{head(hub, title=entry["page_title"] + " | Will Cook", description=entry["description"], canonical=HOME + entry["path"], picture=card_of(entry["slug"], book), alt=entry.get("card_alt", ""))}
 <body class="work" data-entry="{e(entry["slug"])}">
@@ -353,14 +382,14 @@ def render_entry(model: dict, entry: dict, hub, book: Book) -> str:
         <p class="stage__band"><a href="#map">Projects</a><span aria-hidden="true">/</span>{e(entry["band_name"])}</p>
         <h1 class="name" id="name">{e(entry["name"])}</h1>
         <p class="say say--claim">{e(entry["claim"])}</p>
-        <p class="limit"><span class="vh">Stated limit: </span>{e(entry["limit"])}</p>
-        {credit}
+        <p class="limit"><strong class="limit__label">Limits:</strong> {e(entry["limit"])}</p>
+        {credit}{gloss}
       </div>
       <div class="stage__show">
         <div class="screen" id="screen"{loop_attrs}>{img(entry["poster"], sizes="(min-width: 900px) 58vw, 100vw", eager=True)}</div>
       </div>
     </article>
-    <nav class="levels wrap" aria-labelledby="levels-title">
+    <nav class="levels levels--{count} wrap" aria-labelledby="levels-title">
       <h2 class="levels__title" id="levels-title">{e(entry["name"])}, from the quickest look to the most detail</h2>
       <p class="levels__axis" aria-hidden="true"><span>Quickest</span><span>Most detail</span></p>
       <ol class="strip strip--{count}" role="list">{stops}</ol>

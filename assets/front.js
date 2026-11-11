@@ -1,7 +1,7 @@
 /* Behaviour for the home page and the project pages. The pages are complete without this file:
    every tile and stop is a link, and the stop a visitor arrived from is marked by CSS :target.
-   This adds: the introduction playing in the page, silent preview loops, the picture that travels
-   between the map and a project page, and forwarding for the old page's addresses. */
+   This adds: the introduction playing in the page, silent previews under the pointer, the picture
+   that travels between the map and a project page, and forwarding for the old page's addresses. */
 (function () {
   "use strict";
   var root = document.documentElement;
@@ -12,7 +12,7 @@
   function one(selector, scope) { return (scope || document).querySelector(selector); }
   function all(selector, scope) { return Array.prototype.slice.call((scope || document).querySelectorAll(selector)); }
 
-  /* ---- old addresses: #p=<id>, #intro, #d=<group>, #t=<topic> ---- */
+  /* ---- addresses the earlier home page used ---- */
   function forward() {
     var hash = location.hash;
     var named = hash.match(/^#p=([a-z0-9-]+)/);
@@ -22,13 +22,20 @@
       if (tile) { location.replace(tile.getAttribute("href")); return; }
       if (anchor) { location.replace("#p-" + named[1]); return; }
     }
-    if (/^#(d|t)=/.test(hash) && document.getElementById("map")) location.replace("#map");
-    if (hash === "#intro") location.replace("#p-intro");
+    if (!document.getElementById("map") || !one(".home")) return;
+    var heading = hash.match(/^#h-([a-z0-9-]+)$/);
+    var term = hash.match(/^#t-([a-z0-9-]+)$/);
+    if (/^#(d|t)=/.test(hash)) location.replace("#map");
+    else if (hash === "#intro") location.replace("#p-intro");
+    else if (heading && document.getElementById("p-" + heading[1])) location.replace("#p-" + heading[1]);
+    else if (term) location.replace("/all.html#term-" + term[1]);
+    else if (hash === "#terms") location.replace("/all.html#terms");
+    else if (hash === "#more") location.replace("/all.html#about");
   }
   forward();
   window.addEventListener("hashchange", forward);
 
-  /* ---- one silent loop at a time ---- */
+  /* ---- silent clips ---- */
   function clip(src, repeat) {
     var video = document.createElement("video");
     video.muted = true;
@@ -54,20 +61,23 @@
     if (attempt && attempt.catch) attempt.catch(function () {});
   }
 
-  /* ---- map tiles: the loop plays while the pointer or the keyboard is on the tile ---- */
-  var tileClip = null;
-  function tileOn(tile) {
-    if (!moving() || !fine.matches) return;
-    var src = tile.getAttribute("data-loop");
-    var pic = one(".tile__pic", tile);
-    if (!src || !pic || (tileClip && tileClip.parentNode === pic)) return;
-    drop(tileClip);
-    tileClip = clip(src, true);
-    pic.appendChild(tileClip);
-    start(tileClip);
+  /* ---- previews: a picture plays its clip while the pointer or the keyboard rests on it.
+     Every clip opens on the still it covers and ends on it, so nothing jumps. One clip at a time. ---- */
+  var showing = null, showingIn = null, waiting = 0;
+  function previewOn(pic, src) {
+    if (!moving() || !fine.matches || !src || !pic || showingIn === pic) return;
+    clearTimeout(waiting);
+    waiting = setTimeout(function () {      /* a short dwell, so sweeping along a row starts nothing */
+      drop(showing);
+      showing = clip(src, true);
+      showingIn = pic;
+      pic.appendChild(showing);
+      start(showing);
+    }, 120);
   }
-  function tileOff(tile) {
-    if (tileClip && tileClip.parentNode === one(".tile__pic", tile)) { drop(tileClip); tileClip = null; }
+  function previewOff(pic) {
+    clearTimeout(waiting);
+    if (showingIn === pic) { drop(showing); showing = null; showingIn = null; }
   }
   var fetched = {};
   function ahead(tile) {
@@ -81,69 +91,33 @@
     document.head.appendChild(link);
   }
   all(".tile").forEach(function (tile) {
-    tile.addEventListener("pointerenter", function () { ahead(tile); });
-    tile.addEventListener("focus", function () { ahead(tile); });
+    var pic = one(".tile__pic", tile);
+    var src = tile.getAttribute("data-loop");
+    tile.addEventListener("pointerenter", function () { ahead(tile); previewOn(pic, src); });
+    tile.addEventListener("pointerleave", function () { previewOff(pic); });
+    tile.addEventListener("focus", function () { ahead(tile); previewOn(pic, src); });
+    tile.addEventListener("blur", function () { previewOff(pic); });
     tile.addEventListener("touchstart", function () { ahead(tile); }, { passive: true });
-    tile.addEventListener("pointerenter", function () { tileOn(tile); });
-    tile.addEventListener("pointerleave", function () { tileOff(tile); });
-    tile.addEventListener("focus", function () { tileOn(tile); });
-    tile.addEventListener("blur", function () { tileOff(tile); });
     /* The picture travels to the project page's stage (cross-document view transition). */
     tile.addEventListener("click", function () {
-      var pic = one(".tile__pic", tile);
-      var screen = document.getElementById("screen");
+      var stage = document.getElementById("screen");
       all(".is-travelling").forEach(function (el) { el.classList.remove("is-travelling"); });
-      if (screen) screen.classList.add("no-travel");
+      if (stage) stage.classList.add("no-travel");
       if (pic) pic.classList.add("is-travelling");
     });
   });
   window.addEventListener("pageshow", function () {
     all(".is-travelling").forEach(function (el) { el.classList.remove("is-travelling"); });
-    var screen = document.getElementById("screen");
-    if (screen) screen.classList.remove("no-travel");
+    var stage = document.getElementById("screen");
+    if (stage) stage.classList.remove("no-travel");
   });
 
-  /* ---- a pause control for anything that moves by itself; it leaves when the motion has stopped ---- */
-  function control(host, video) {
-    var button = document.createElement("button");
-    button.type = "button";
-    button.className = "ctl";
-    function label() { button.textContent = video.paused ? "Play" : "Pause"; }
-    button.addEventListener("click", function (event) {
-      event.stopPropagation();
-      if (video.paused) { video.dataset.held = ""; start(video); }
-      else { video.dataset.held = "1"; video.pause(); }
-    });
-    video.addEventListener("playing", label);
-    video.addEventListener("pause", label);
-    label();
-    host.appendChild(button);
-    return { remove: function () { if (button.parentNode) button.parentNode.removeChild(button); } };
-  }
-  function wide() { return window.innerWidth >= 700; }
-
-  /* ---- a project page's stage: the video's own clip ---- */
+  /* ---- a project page's stage: the same preview, larger. It never starts by itself, because several
+     clips count up to the number the sentence beside them states. ---- */
   var screen = document.getElementById("screen");
-  if (screen && moving() && screen.getAttribute("data-loop-l")) {
-    /* Twice through, then it rests on its last frame, which is the poster: motion beside reading text should stop. */
-    var loop = clip(screen.getAttribute(wide() ? "data-loop-l" : "data-loop-s"), false);
-    var rounds = 0, rested = false;
-    screen.appendChild(loop);
-    var loopControl = control(screen, loop);
-    loop.addEventListener("ended", function () {
-      rounds += 1;
-      if (rounds < 2) { loop.currentTime = 0; start(loop); }
-      else { rested = true; loopControl.remove(); }
-    });
-    if ("IntersectionObserver" in window) {
-      new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (rested) return;
-          if (entry.isIntersecting) { if (!loop.dataset.held) start(loop); } else loop.pause();
-        });
-      }, { threshold: 0.4 }).observe(screen);
-    } else start(loop);
-    document.addEventListener("visibilitychange", function () { if (document.hidden && !rested) loop.pause(); });
+  if (screen && screen.getAttribute("data-loop-l")) {
+    screen.addEventListener("pointerenter", function () { previewOn(screen, screen.getAttribute("data-loop-l")); });
+    screen.addEventListener("pointerleave", function () { previewOff(screen); });
   }
 
   /* ---- the home page's stage: the introduction ---- */
@@ -152,46 +126,64 @@
     var stage = one(".player__screen", player);
     var bar = one(".player__bar", player);
     var play = one("[data-play]", player);
-    var idle = null, idleControl = null, film = null, close = null;
+    var idle = null, pause = null, film = null, close = null;
 
+    /* The idle scene: plays once where the whole scene is shown, and rests on its last frame, which is the still.
+       front-init.js hid the still for these visitors (class "moves"), so the scene builds from nothing once. */
     function idleStart() {
-      /* Only where the whole scene is shown. Narrower layouts show its last frame, cropped to the four cards. */
-      if (!moving() || film || idle || window.innerWidth <= 1180 || !player.getAttribute("data-idle")) return;
+      if (!moving() || film || idle || window.innerWidth <= 1180 || !player.getAttribute("data-idle")) { root.classList.remove("moves"); return; }
       idle = clip(player.getAttribute("data-idle"), false);
+      idle.addEventListener("error", function () { root.classList.remove("moves"); });
       stage.appendChild(idle);
-      idleControl = control(stage, idle);
-      idle.addEventListener("ended", function () { if (idleControl) idleControl.remove(); idleControl = null; });
+      pause = document.createElement("button");
+      pause.type = "button";
+      pause.className = "ctl";
+      function label() { pause.textContent = idle && idle.paused ? "Play" : "Pause"; }
+      pause.addEventListener("click", function (event) {
+        event.stopPropagation();
+        if (idle.paused) start(idle); else idle.pause();
+      });
+      idle.addEventListener("playing", label);
+      idle.addEventListener("pause", label);
+      idle.addEventListener("ended", function () { if (pause && pause.parentNode) pause.parentNode.removeChild(pause); pause = null; });
+      label();
+      stage.appendChild(pause);
       start(idle);
     }
     function idleStop() {
       drop(idle); idle = null;
-      if (idleControl) idleControl.remove();
-      idleControl = null;
+      if (pause && pause.parentNode) pause.parentNode.removeChild(pause);
+      pause = null;
+      root.classList.remove("moves");       /* the still is the picture again */
     }
     function shift(change) {
       if (document.startViewTransition && !calm.matches) document.startViewTransition(change); else change();
     }
     function open() {
       if (film) return;
-      idleStop();
       film = document.createElement("video");
       film.controls = true;
       film.playsInline = true;
       film.preload = "auto";
-      film.className = "is-live";
       film.setAttribute("aria-label", "Introduction, with captions in the picture");
+      /* The still stays under the video until its first frame exists. */
+      film.addEventListener("playing", function () { if (film) film.classList.add("is-live"); });
+      film.addEventListener("ended", shut);
       film.src = player.getAttribute("data-film");
-      stage.appendChild(film);
-      start(film);                       /* inside the click, so sound is allowed */
+      start(film);                           /* inside the click, so sound is allowed */
       close = document.createElement("button");
       close.type = "button";
       close.className = "close";
       close.textContent = "Close the video";
       close.addEventListener("click", shut);
-      bar.insertBefore(close, bar.firstChild);
-      film.addEventListener("ended", shut);
-      shift(function () { player.classList.add("is-playing"); root.classList.add("is-cinema"); });
-      film.focus({ preventScroll: true });
+      shift(function () {                    /* one change of layout, with nothing shown half way */
+        idleStop();
+        stage.appendChild(film);
+        bar.insertBefore(close, bar.firstChild);
+        player.classList.add("is-playing");
+        root.classList.add("is-cinema");
+        film.focus({ preventScroll: true });
+      });
     }
     function shut() {
       if (!film) return;
@@ -214,15 +206,13 @@
     });
     stage.addEventListener("click", function () { if (!film) open(); });
     document.addEventListener("keydown", function (event) { if (event.key === "Escape" && film) shut(); });
-    function idleWhenSeen() {
-      /* A visitor who arrives at the map (#map) has not seen the stage: start the scene when they scroll up to it. */
-      if (!("IntersectionObserver" in window)) { idleStart(); return; }
+    /* A visitor who arrives at the map (#map) has not seen the stage: the scene starts when it is in view. */
+    if ("IntersectionObserver" in window) {
       var watch = new IntersectionObserver(function (entries) {
         if (entries.some(function (entry) { return entry.isIntersecting; })) { watch.disconnect(); idleStart(); }
       }, { threshold: 0.5 });
       watch.observe(stage);
-    }
-    if (document.readyState === "complete") idleWhenSeen(); else window.addEventListener("load", idleWhenSeen);
-    document.addEventListener("visibilitychange", function () { if (document.hidden && idle) idle.pause(); });
-  }
+    } else idleStart();
+    document.addEventListener("visibilitychange", function () { if (document.hidden && idle && !idle.ended) idle.pause(); });
+  } else root.classList.remove("moves");
 })();

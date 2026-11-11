@@ -71,6 +71,9 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 .player__screen, .screen { mix-blend-mode: lighten; }
 .is-playing .player__screen { mix-blend-mode: normal; }
 .js .player__screen { cursor: pointer; }
+/* Visitors who get the idle scene do not first see its finished still. It comes back by itself after two
+   seconds (under the clip, where it cannot be seen), so a clip that never arrives leaves no empty frame. */
+.moves .player__poster { opacity: 0; animation: show .2s linear 2s forwards; }
 .player__bar, .stage__after { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 26px; margin-top: 16px; }
 .play { display: inline-flex; align-items: center; gap: 12px; background: var(--paper); color: var(--ground); font: 700 23px/1 var(--display); padding: 13px 20px 13px 16px; border-radius: 3px; text-decoration: none; transition: transform .12s var(--arrive); }
 .play:active { transform: scale(.97); }
@@ -100,6 +103,8 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 .name { font: 700 clamp(42px, 4.7vw, 76px)/.96 var(--display); letter-spacing: -.005em; margin: .08em 0 .28em; text-wrap: balance; }
 .say--claim { font-size: clamp(18px, 1.52vw, 23px); line-height: 1.38; letter-spacing: 0; text-wrap: pretty; margin-bottom: .9em; max-width: 27em; }
 .limit { border-left: 2px solid var(--brick); padding-left: 14px; font-size: 16px; line-height: 1.45; max-width: 33em; text-wrap: pretty; }
+.limit__label { color: var(--brick); font-weight: 600; }
+.credit--term { margin-top: 6px; }
 .credit { margin-top: 14px; padding-left: 16px; color: var(--muted); font-size: 14.5px; line-height: 1.45; max-width: 36em; }
 /* The same object as its tile, larger: the same hairline. (The home page's scene has no edge.) */
 .screen { view-transition-name: pic; outline: 1px solid var(--line); outline-offset: -1px; }
@@ -108,7 +113,15 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 /* ------------------------------------------------------------ the strip of levels */
 .levels { padding-block: 4px 56px; }
 .levels__title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.levels__axis { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 13.5px; margin-bottom: 12px; }
+/* The axis runs as far as the stops do, so "Most detail" stands over the last thing there is. */
+.levels { --cols: 5; --n: var(--cols); }
+.levels--2 { --n: 2; }
+.levels--3 { --n: 3; }
+.levels--4 { --n: 4; }
+.levels--6 { --cols: 6; }
+.levels--7 { --cols: 7; --gap: 16px; }
+.levels__axis { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 13.5px; margin-bottom: 36px;
+  width: calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols) * var(--n) + (var(--n) - 1) * var(--gap)); }
 .levels__axis span:first-child::after { content: ""; }
 .levels__axis::before { content: ""; order: 1; flex: 1; height: 1px; background: var(--line); transform-origin: left center; }
 .levels__axis span:last-child { order: 2; }
@@ -116,12 +129,18 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 .strip--6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 .strip--7 { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 16px 16px; }
 /* Arriving at a stop keeps the page where it is when the stop is already on the first screen. */
-.stop { position: relative; min-width: 0; scroll-margin-top: calc(100vh - 190px); }
+.stop { position: relative; min-width: 0; scroll-margin-top: calc(100vh - 270px); }
 .stop__main { display: block; text-decoration: none; }
 .stop__pic { display: block; position: relative; aspect-ratio: 16 / 9; border-radius: 6px; overflow: hidden; background: var(--raise); outline: 1px solid var(--line); outline-offset: -1px; }
 .stop__pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: left top; }
 .stop--video .stop__pic img { object-position: center; }
-.stop__blank { position: absolute; inset: 0; display: grid; place-items: center; padding: 12px; text-align: center; font: 700 clamp(17px, 1.5vw, 22px)/1.1 var(--display); color: var(--muted); }
+/* A repository or an issue is shown by its own name. */
+.stop__named { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 2px; padding: 12px 14px; overflow-wrap: anywhere; }
+.stop__owner { color: var(--muted); font-size: 13.5px; line-height: 1.2; }
+.stop__repo { font: 700 clamp(17px, 1.45vw, 21px)/1.08 var(--display); color: var(--ink); }
+/* A paper's first page is printed on the page's own bone, never on pure white. */
+.stop--paper .stop__pic:has(img) { background: var(--ink); }
+.stop--paper .stop__pic img { mix-blend-mode: multiply; }
 .stop__play { position: absolute; left: 8px; bottom: 8px; width: 30px; height: 30px; border-radius: 3px; background: var(--paper); }
 .stop__play::after { content: ""; position: absolute; left: 11px; top: 8px; border-left: 11px solid var(--ground); border-top: 7px solid transparent; border-bottom: 7px solid transparent; }
 .stop__kind { display: block; font: 700 clamp(18px, 1.5vw, 22px)/1.1 var(--display); margin-top: 10px; }
@@ -132,7 +151,7 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 .stop__more li + li { margin-top: 3px; }
 .stop__more a { color: var(--steel); display: inline-block; padding-block: 3px; }
 .stop__more a:hover { color: var(--ink); }
-.stop__flag { display: none; position: absolute; z-index: 1; left: -1px; top: -11px; background: var(--paper); color: var(--ground); font: 700 15px/1 var(--display); padding: 5px 9px 4px; border-radius: 3px; white-space: nowrap; }
+.stop__flag { display: none; position: absolute; z-index: 1; left: 0; top: -28px; background: var(--paper); color: var(--ground); font: 700 15px/1 var(--display); padding: 5px 9px 4px; border-radius: 3px; white-space: nowrap; }
 .stop:target .stop__flag--here { display: block; }
 .stop:target .stop__pic { outline: 2px solid var(--paper); outline-offset: -2px; }
 .stop--video:target + .stop .stop__flag--next { display: block; background: var(--ground); color: var(--paper); outline: 1px solid var(--paper); outline-offset: -1px; }
@@ -147,15 +166,18 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 .bands { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 30px var(--gap); }
 .band { min-width: 0; }
 .band--maths { grid-column: span 6; }
-.band--checks, .band--code { grid-column: span 2; }
+/* The last group of each row runs to the container's edge, so every row's rule ends on one line. */
+.band--checks { grid-column: span 2; }
+.band--code { grid-column: span 4; }
 .band--assistants { grid-column: span 4; }
-.band--videos { grid-column: span 1; }
-.band__name { font: 700 20px/1.1 var(--display); padding-bottom: 9px; margin-bottom: 14px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.band--videos { grid-column: span 2; }
+.band__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 20px; padding-bottom: 9px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
+.band__name { font: 700 20px/1.1 var(--display); white-space: nowrap; }
+.band__note { color: var(--muted); font-size: 14.5px; }
 .band__n { color: var(--muted); margin-right: 4px; }
 .tiles { display: grid; gap: 24px var(--gap); grid-template-columns: repeat(6, minmax(0, 1fr)); }
-.band--checks .tiles, .band--code .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.band--assistants .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.band--videos .tiles { grid-template-columns: minmax(0, 1fr); }
+.band--checks .tiles, .band--videos .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.band--assistants .tiles, .band--code .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .tiles__item { min-width: 0; }
 .tile { display: block; text-decoration: none; }
 .tile__pic { display: block; position: relative; aspect-ratio: 16 / 9; border-radius: 6px; overflow: hidden; background: var(--raise); outline: 1px solid var(--line); outline-offset: -1px; }
@@ -179,7 +201,7 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 .about__words p + p { margin-top: .8em; }
 .say--small { font-size: clamp(21px, 1.9vw, 27px); line-height: 1.25; margin-bottom: .7em; }
 .about__contact { display: grid; gap: 2px; margin-top: 4px; }
-.about__contact a { color: var(--steel); display: inline-block; padding-block: 7px; font: 700 22px/1.1 var(--display); text-decoration-color: var(--line); }
+.about__contact a { color: var(--steel); display: inline-block; min-width: 44px; padding-block: 7px; font: 700 22px/1.1 var(--display); text-decoration-color: var(--line); }
 .about__contact a:hover, .about__more a:hover { color: var(--ink); }
 .about__more { margin-top: 14px; }
 .about__more a { color: var(--steel); }
@@ -195,9 +217,12 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 @media (max-width: 1180px) {
   .player__screen { aspect-ratio: 1224 / 786; }
   .bands { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .band--maths, .band--assistants { grid-column: span 4; }
-  .band--maths .tiles, .band--assistants .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .strip, .strip--6, .strip--7 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px var(--gap); }
+  .band--maths, .band--assistants, .band--videos { grid-column: span 4; }
+  .band--code { grid-column: span 2; }
+  .band--maths .tiles, .band--assistants .tiles, .band--videos .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .band--code .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .levels, .levels--6, .levels--7 { --cols: 4; --gap: 20px; }
+  .strip, .strip--6, .strip--7 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 44px var(--gap); }
 }
 @media (max-width: 860px) {
   :root { --gutter: 16px; --gap: 14px; }
@@ -222,6 +247,13 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
   .tile__name { font-size: 20px; }
   .tile__line { font-size: 14px; }
   .levels__axis { display: none; }
+  /* Arriving from a video on a phone: the watched stop and the next one are on the first screen. The visitor has
+     just watched the picture, so the name, the sentence and its limit come first and the strip follows. */
+  .stop { scroll-margin-top: calc(100svh - 250px); }
+  .work:has(.stop--video:target) .stage__show, .work:has(.stop--video:target) .credit { display: none; }
+  .stop__pic:has(.stop__named) { aspect-ratio: auto; }
+  .stop__named { position: static; min-height: 70px; padding: 8px 10px; }
+  .stop__repo { font-size: 16px; }
   .strip, .strip--6, .strip--7 { grid-template-columns: minmax(0, 1fr); gap: 0; border-top: 1px solid var(--line); }
   .stop { display: grid; grid-template-columns: 124px minmax(0, 1fr); column-gap: 14px; padding-block: 14px; border-bottom: 1px solid var(--line); align-items: start; }
   .stop__main { display: contents; }
@@ -235,24 +267,29 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
   .stop__play::after { left: 9px; top: 6px; border-left-width: 9px; border-top-width: 6px; border-bottom-width: 6px; }
 }
 @media (max-width: 380px) {
-  .top__nav a:last-child { display: none; }
+  .brand img { display: none; }
+  .top__nav { gap: 12px; }
+  .top__nav a { font-size: 14.5px; }
+}
 }
 
 /* ------------------------------------------------------------ motion */
 @view-transition { navigation: auto; }
 ::view-transition-group(pic), ::view-transition-group(player) { animation-duration: .36s; animation-timing-function: var(--move); }
-::view-transition-old(root), ::view-transition-new(root) { animation-duration: .22s; }
+/* The old page leaves before the new one arrives, so two pages of words never lie over each other. */
+::view-transition-old(root) { animation: hide .09s linear both; }
+::view-transition-new(root) { animation: show .18s linear .09s both; }
 /* The travelling picture keeps the picture it left with until it has nearly arrived; the new page's larger
    picture may still be decoding when the move starts. */
 ::view-transition-old(pic) { animation: none; }
 ::view-transition-new(pic) { animation: show .14s linear .22s both; }
 ::view-transition-old(pic), ::view-transition-new(pic) { height: 100%; object-fit: cover; }
-::view-transition-group(pic), ::view-transition-group(player) { mix-blend-mode: lighten; }
 @media (prefers-reduced-motion: no-preference) {
   .js .work .levels__axis::before { animation: draw .7s var(--arrive) .15s both; }
   .js .stop__flag { animation: settle .32s var(--arrive) .5s both; }
 }
 @keyframes show { from { opacity: 0; } to { opacity: 1; } }
+@keyframes hide { to { opacity: 0; } }
 @keyframes draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes settle { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {
