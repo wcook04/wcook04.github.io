@@ -101,7 +101,8 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 .say--claim { font-size: clamp(18px, 1.52vw, 23px); line-height: 1.38; letter-spacing: 0; text-wrap: pretty; margin-bottom: .9em; max-width: 27em; }
 .limit { border-left: 2px solid var(--brick); padding-left: 14px; font-size: 16px; line-height: 1.45; max-width: 33em; text-wrap: pretty; }
 .credit { margin-top: 14px; padding-left: 16px; color: var(--muted); font-size: 14.5px; line-height: 1.45; max-width: 36em; }
-.screen { view-transition-name: pic; }
+/* The same object as its tile, larger: the same hairline. (The home page's scene has no edge.) */
+.screen { view-transition-name: pic; outline: 1px solid var(--line); outline-offset: -1px; }
 .screen.no-travel { view-transition-name: none; }
 
 /* ------------------------------------------------------------ the strip of levels */
