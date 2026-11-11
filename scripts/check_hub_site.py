@@ -45,7 +45,7 @@ ALLOWED = REQUIRED | PRODUCTION_REQUIRED | {
 }
 ALLOWED_DIRS = ("assets/fonts/", "assets/films/", "assets/sites/", "assets/logos/", "assets/family/marks/",
                 "assets/front/", "content/transcripts/", "docs/", "work/")
-FRONT_MEDIA = ("assets/front/loops/", "assets/front/posters/", "assets/front/plates/", "assets/front/intro/")
+FRONT_MEDIA = ("assets/front/loops/", "assets/front/posters/", "assets/front/plates/", "assets/front/intro/", "assets/front/cards/")
 PROJECT_PATHS = ("plectis-atlas/", "plectis-zenith/", "practical-formal-verification/",
                  "lean-exposition-site/", "proof-reader/", "microcosm-substrate/",
                  "quartic-query-lean/", "plectis-erdos/")

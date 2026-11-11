@@ -128,7 +128,6 @@ def resolve(front: dict, book: Book) -> dict:
     for key in ("short", "long"):
         intro[key] = {**intro[key], **book.place(intro[key]["res"])}
     intro["poster"] = book.poster(intro["idle"]["loop"])
-    intro["loops"] = book.loop(intro["idle"]["loop"])
     return {"intro": intro, "bands": front["bands"], "entries": entries, "videos": front["videos"]}
 
 
@@ -154,9 +153,13 @@ def img(picture: dict | None, *, sizes: str, alt: str = "", eager: bool = False,
             f'width="16" height="9" decoding="async"{lazy}>')
 
 
-def head(hub, *, title: str, description: str, canonical: str, picture: str | None, structured: str = "") -> str:
+def head(hub, *, title: str, description: str, canonical: str, picture: str | None, alt: str = "", structured: str = "") -> str:
     v = hub.versioned
-    card = f'\n  <meta property="og:image" content="{e(HOME + picture)}">\n  <meta name="twitter:card" content="summary_large_image">' if picture else ""
+    card = (f'\n  <meta property="og:image" content="{e(HOME + picture)}">'
+            f'\n  <meta property="og:image:width" content="1200">\n  <meta property="og:image:height" content="630">'
+            f'\n  <meta property="og:image:alt" content="{e(alt)}">'
+            f'\n  <meta name="twitter:card" content="summary_large_image">'
+            f'\n  <meta name="twitter:image" content="{e(HOME + picture)}">') if picture else ""
     data = f'\n  <script type="application/ld+json">{structured}</script>' if structured else ""
     return f'''<!doctype html>
 <html lang="en">
@@ -171,6 +174,7 @@ def head(hub, *, title: str, description: str, canonical: str, picture: str | No
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="{e(canonical)}">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Will Cook">
   <meta property="og:title" content="{e(title)}">
   <meta property="og:description" content="{e(description)}">
   <meta property="og:url" content="{e(canonical)}">{card}
@@ -235,7 +239,8 @@ def project_map(model: dict, *, current: str | None, title: str, note: str) -> s
                      f'<h3 class="band__name" id="band-{e(band["id"])}"><span class="band__n">{band["n"]}</span> {e(band["name"])}</h3>'
                      f'<ul class="tiles" role="list">{tiles}</ul></section>')
     lead = f'<p class="map__note">{e(note)}</p>' if note else ""
-    return (f'<section class="map wrap" id="map" aria-labelledby="map-title">'
+    old = '<span class="anchor" id="projects"></span><span class="anchor" id="explore"></span><span class="anchor" id="films"></span>' if home else ""
+    return (f'<section class="map wrap" id="map" aria-labelledby="map-title">{old}'
             f'<div class="map__head"><h2 class="map__title" id="map-title">{e(title)}</h2>{lead}</div>'
             f'<div class="bands">{"".join(bands)}</div></section>')
 
@@ -258,16 +263,25 @@ def stop_markup(stop: dict) -> str:
             f'<span class="stop__detail">{e(stop["detail"])}</span></a>{more}</li>')
 
 
-def render_home(model: dict, registry: dict, hub, structured: str) -> str:
+def card_of(slug: str, book: Book) -> str | None:
+    """The picture a link to this page unfurls with: 1200 by 630, PNG (some readers refuse WebP)."""
+    path = f"assets/front/cards/{slug}.png"
+    return path if book.has(path) else None
+
+
+def render_home(model: dict, registry: dict, hub, structured: str, book: Book) -> str:
     intro = model["intro"]
     owner = registry["owner"]
     short, long = intro["short"], intro["long"]
-    loops = intro.get("loops") or {}
-    loop_attrs = f' data-idle-s="/{e(loops["s"])}" data-idle-l="/{e(loops["l"])}"' if loops else ""
+    wide_clip, narrow_clip = "assets/front/loops/hero-l.mp4", "assets/front/loops/hero-n.mp4"
+    loop_attrs = (f' data-idle-l="/{wide_clip}" data-idle-n="/{narrow_clip}"'
+                  if book.has(wide_clip) and book.has(narrow_clip) else "")
+    narrow = "".join(f'<source media="(max-width: 860px)" srcset="/assets/front/posters/hero-n-480.webp 480w, /assets/front/posters/hero-n-960.webp 960w" sizes="100vw">'
+                     for _ in [0] if book.has("assets/front/posters/hero-n-480.webp") and book.has("assets/front/posters/hero-n-960.webp"))
     contact = "".join(f'<li><a href="{e(c["href"])}" rel="noopener">{e(c["label"])}</a></li>' for c in owner["contact"])
     invitation = "".join(f"<p>{e(text)}</p>" for text in owner.get("invitation", []))
     aliases = '<span class="anchor" id="p-intro"></span><span class="anchor" id="work"></span>'
-    return f'''{head(hub, title=intro["title"], description=intro["description"], canonical=HOME, picture=intro["poster"]["set"][-1][1] if intro.get("poster") else None, structured=structured)}
+    return f'''{head(hub, title=intro["title"], description=intro["description"], canonical=HOME, picture=card_of("home", book), alt=intro.get("card_alt", ""), structured=structured)}
 <body class="home">
   {header(home=True)}
   <main id="main">
@@ -279,7 +293,7 @@ def render_home(model: dict, registry: dict, hub, structured: str) -> str:
       </div>
       <div class="stage__show">
         <div class="player" id="player" data-film="/{e(short["file"])}"{loop_attrs}>
-          <div class="player__screen">{img(intro.get("poster"), sizes="(min-width: 900px) 58vw, 100vw", alt=intro["idle"]["alt"], eager=True, cls="player__poster")}</div>
+          <div class="player__screen"><picture>{narrow}{img(intro.get("poster"), sizes="(min-width: 900px) 58vw, 100vw", alt=intro["idle"]["alt"], eager=True, cls="player__poster")}</picture></div>
           <div class="player__bar">
             <a class="play" href="{e(short["href"])}"{off(short["href"])} data-play><span class="play__mark" aria-hidden="true"></span><span class="play__what">Play the introduction</span><span class="play__len">{e(clock(short["seconds"]))}</span></a>
             <a class="quiet" href="{e(long["href"])}"{off(long["href"])}>{e(long["label"])}, {e(clock(long["seconds"]))}</a>
@@ -290,6 +304,7 @@ def render_home(model: dict, registry: dict, hub, structured: str) -> str:
     </section>
     {project_map(model, current=None, title=intro["map_title"], note=intro["map_note"])}
     <section class="about wrap" id="about" aria-labelledby="about-title">
+      <span class="anchor" id="contact"></span>
       <h2 class="about__title" id="about-title">About</h2>
       <div class="about__body">
         <p class="say say--small">{e(owner["lede"])}</p>
@@ -305,17 +320,13 @@ def render_home(model: dict, registry: dict, hub, structured: str) -> str:
 '''
 
 
-def render_entry(model: dict, entry: dict, hub) -> str:
+def render_entry(model: dict, entry: dict, hub, book: Book) -> str:
     stops = "".join(stop_markup(s) for s in entry["stops"])
     credit = f'<p class="credit">{e(entry["credit"])}</p>' if entry.get("credit") else ""
     loops = entry.get("loops") or {}
     loop_attrs = f' data-loop-s="/{e(loops["s"])}" data-loop-l="/{e(loops["l"])}"' if loops else ""
-    description = f'{entry["line"]}. {entry["claim"]}'
-    if len(description) > 300:
-        description = description[:297].rsplit(" ", 1)[0] + "…"
-    picture = entry["poster"]["set"][-1][1] if entry.get("poster") else None
     count = len(entry["stops"])
-    return f'''{head(hub, title=f'{entry["name"]}: {entry["line"]} | Will Cook', description=description, canonical=HOME + entry["path"], picture=picture)}
+    return f'''{head(hub, title=entry["page_title"] + " | Will Cook", description=entry["description"], canonical=HOME + entry["path"], picture=card_of(entry["slug"], book), alt=entry.get("card_alt", ""))}
 <body class="work" data-entry="{e(entry["slug"])}">
   {header(home=False)}
   <main id="main">
@@ -346,10 +357,11 @@ def render_entry(model: dict, entry: dict, hub) -> str:
 
 def pages(registry: dict, root: Path, structured: str, hub) -> dict[str, str]:
     """Every page this module owns, by path."""
-    model = resolve(load(root), Book(registry["_canonical_v3"], root))
-    out = {"index.html": render_home(model, registry, hub, structured)}
+    book = Book(registry["_canonical_v3"], root)
+    model = resolve(load(root), book)
+    out = {"index.html": render_home(model, registry, hub, structured, book)}
     for entry in model["entries"]:
-        out[entry["path"] + "index.html"] = render_entry(model, entry, hub)
+        out[entry["path"] + "index.html"] = render_entry(model, entry, hub, book)
     return out
 
 
