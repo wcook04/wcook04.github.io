@@ -47,6 +47,9 @@
     var frame = article.querySelector('.frame');
     if (!frame || !tile) return;
     [].forEach.call(article.querySelectorAll('.tile'), function (t) { t.classList.toggle('is-shown', t === tile); });
+    [].forEach.call(work.querySelectorAll('.knot.is-shown'), function (k) { k.classList.remove('is-shown'); });
+    var row = byId[article.dataset.row].row;
+    [].forEach.call(row.querySelectorAll('.knot'), function (k) { k.classList.toggle('is-shown', k.dataset.knot === tile.dataset.res); });
     if (frame.dataset.res === tile.dataset.res) { if (!live || live.parentNode !== frame) playLoop(frame); return; }
     frame.href = tile.href;
     frame.target = tile.target; frame.rel = tile.rel;

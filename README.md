@@ -4,11 +4,12 @@ This repository contains the code for [Will Cook's home page](https://wcook04.gi
 The page links his mathematics research, software and videos. The projects
 have their own repositories, listed below.
 
-The page opens on the two ideas from Will's introduction video, then the short
-videos of about two minutes: the introduction first, then one per project, each
-labelled with a few keywords. A video opens its project's page, with the full
-video, a drawing of the work, the website and the code. Below, the index lists
-every project in one row: short videos, full videos, website and code.
+The page opens on the two ideas from Will's introduction video. Under them is
+one picture of all the work: each project is a row, and each mark on the row is
+something you can open, from a short video of about 90 seconds on the left to
+the full video, the website, the paper and the source code on the right. Point
+at a row or a mark and the panel beside it shows what it leads to: a silent
+clip from the video, the website's first screen or the repository page.
 
 [![The home page, with an introduction video and links to the projects](assets/sites/home-light-1440.webp)](https://wcook04.github.io/)
 
@@ -105,10 +106,9 @@ including a fixed study revision. Keep collapsed project descriptions and credit
 under the 500-word review threshold across all projects; remove repeated
 labels before expanding the budget. Attribution and study limits still belong
 next to the claims they qualify.
-For visual audits, the first-screen choices are the fifteen `.vtile` video
-thumbnails: the introduction and one per project. They are intentional
-navigation, so retain them all if a generic call-to-action audit warns about
-more than two buttons.
+For visual audits, the rows of the weave are intentional navigation: fifteen
+row links and one mark per video, website, paper and repository. Retain them
+all if a generic call-to-action audit warns about the number of links.
 Then run the build, tests and checker again. Do not edit the generated
 `index.html` by hand.
 
@@ -119,26 +119,30 @@ Then run the build, tests and checker again. Do not edit the generated
 their resources: websites, videos, papers and code repositories, each with its
 publication records, and the typed relationships between them, such as which
 full video a short video leads to. [`glossary.json`](glossary.json) defines the
-technical terms and [`explorer.json`](explorer.json) the six questions on the
-first screen. [`scripts/build_hub.py`](scripts/build_hub.py) and
-[`scripts/explorer_v3.py`](scripts/explorer_v3.py) turn them into the home page,
-the static catalogue [`all.html`](all.html), the typed graph
+technical terms. [`explorer.json`](explorer.json) names the groups of projects,
+the plain-words label of each row and the two rows above the groups (the
+introduction and the funnel). [`scripts/build_hub.py`](scripts/build_hub.py)
+and [`scripts/landing.py`](scripts/landing.py) turn them into the home page;
+[`scripts/explorer_v3.py`](scripts/explorer_v3.py) writes the static catalogue
+[`all.html`](all.html), and the build also writes the typed graph
 [`catalogue.json`](catalogue.json), [`structured-data.jsonld`](structured-data.jsonld)
 and [`family.json`](family.json), the same list in the older v2 shape for the
-project websites. [`scripts/door_art.py`](scripts/door_art.py) draws the
-pictures for each question and project.
+project websites. [`docs/landing.md`](docs/landing.md) describes the home
+page's design and the rules it follows.
 
-Visitors can read the page, the index and every link without JavaScript. With
-JavaScript, [`assets/explore.js`](assets/explore.js) opens a question or project
-in place: [`/#d=proofs`](https://wcook04.github.io/#d=proofs) opens a question,
-[`/#p=zenith`](https://wcook04.github.io/#p=zenith) a project. Transcripts of
-videos still in preparation are in [`content/transcripts/`](content/transcripts/)
-and open from their video slots.
+Visitors can read the page and follow every link without JavaScript: the rows
+are links and every project is on the page. With JavaScript,
+[`assets/landing.js`](assets/landing.js) shows one project at a time beside the
+rows, plays the clips and, until the visitor touches the page, steps through
+the projects by itself. [`/#p=zenith`](https://wcook04.github.io/#p=zenith)
+opens on a project and [`/#d=proofs`](https://wcook04.github.io/#d=proofs) on
+a group. Transcripts of the videos are in
+[`content/transcripts/`](content/transcripts/).
 
-Videos open on YouTube in a new tab. The home page loads its images, fonts and
-scripts from this repository, without embedding a YouTube player. Earlier
-introductions appear separately from the current videos. A video still being
-made shows “In preparation” and has no link.
+Videos open on YouTube in a new tab. The home page loads its images, clips,
+fonts and scripts from this repository and embeds no player, so it shows the
+same pictures whether or not a video is public. Earlier introductions are
+listed in the catalogue, separately from the current videos.
 
 [`docs/family.md`](docs/family.md) describes the shared header, video cards
 and links between the websites. Each website keeps its own copy of
@@ -182,9 +186,16 @@ forwarding pages.
    cwebp -q 80 -m 6 -resize 1280 0 thumbnail.png -o assets/films/<id>-1280.webp
    ```
 
-3. Run the build, tests and repository check shown above. Review the result,
+3. Optionally cut a silent clip for the home page: add the finished video to
+   the folder named at the top of [`scripts/cut_loops.py`](scripts/cut_loops.py)
+   and run `python3 scripts/cut_loops.py`. It writes
+   `assets/films/loops/<id>.mp4` (6.5 seconds, 640 pixels wide, no sound) and
+   records the chosen start second in `scripts/loop_starts.json`; edit that
+   number and run it again with the video's id to choose another moment. A
+   video without a clip shows its thumbnail.
+4. Run the build, tests and repository check shown above. Review the result,
    then commit and push the change to `main` to publish the home page.
-4. Copy the generated `family.json` and the two thumbnails to the website
+5. Copy the generated `family.json` and the two thumbnails to the website
    that shows the video; rebuild and publish it so its video card updates too.
 
 When replacing a thumbnail, remove the old pair after changing `still` and
@@ -198,9 +209,11 @@ images for the earlier introductions, which are still listed on the page.
 - [`all.html`](all.html), [`catalogue.json`](catalogue.json), [`structured-data.jsonld`](structured-data.jsonld), [`family.json`](family.json): Generated catalogue, graph, search metadata and the list the project websites copy.
 - [`content/transcripts/`](content/transcripts/): Transcripts of the videos still in preparation.
 - [`index.html`](index.html), [`404.html`](404.html), [`plectis/`](plectis/): Generated pages; the latter two keep old project addresses working.
-- [`assets/hub.css`](assets/hub.css), [`assets/explorer.css`](assets/explorer.css), [`assets/door-art.css`](assets/door-art.css), [`assets/explore.js`](assets/explore.js), [`assets/explore-model.js`](assets/explore-model.js), [`assets/theme-init.js`](assets/theme-init.js): Page appearance, pictures, the question explorer and the light/dark switch.
+- [`assets/landing.css`](assets/landing.css), [`assets/landing.js`](assets/landing.js), [`assets/landing-init.js`](assets/landing-init.js), [`scripts/landing.py`](scripts/landing.py), [`docs/landing.md`](docs/landing.md): The home page's appearance, behaviour, builder and design notes.
+- [`assets/hub.css`](assets/hub.css), [`assets/explorer.css`](assets/explorer.css), [`assets/door-art.css`](assets/door-art.css), [`assets/explore.js`](assets/explore.js), [`assets/explore-model.js`](assets/explore-model.js), [`assets/theme-init.js`](assets/theme-init.js): The catalogue page's appearance and the earlier question explorer, whose address rules the tests still exercise.
+- [`scripts/cut_loops.py`](scripts/cut_loops.py), [`scripts/loop_starts.json`](scripts/loop_starts.json): Cut the silent clips the home page plays.
 - [`assets/family/family.css`](assets/family/family.css), [`docs/family.md`](docs/family.md): Shared website styles and instructions for using them.
-- [`assets/films/`](assets/films/), [`assets/sites/`](assets/sites/): Video thumbnails and website pictures, including this README's home page preview.
+- [`assets/films/`](assets/films/), [`assets/sites/`](assets/sites/): Video thumbnails, silent clips and website pictures, including this README's home page preview.
 - [`assets/fonts/`](assets/fonts/): Fonts and their licences.
 - [`llms.txt`](llms.txt), [`agent-guide.md`](agent-guide.md), [`robots.txt`](robots.txt), [`sitemap.xml`](sitemap.xml), [`sitemap-home.xml`](sitemap-home.xml): Guides for AI assistants and files that help search engines find the pages.
 - [`scripts/check_hub_site.py`](scripts/check_hub_site.py), [`tests/`](tests/): Checks run locally and by GitHub Actions.

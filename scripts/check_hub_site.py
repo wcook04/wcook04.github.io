@@ -41,7 +41,7 @@ PRODUCTION_REQUIRED = {".github/workflows/public-site.yml", ".gitignore"}
 ALLOWED = REQUIRED | PRODUCTION_REQUIRED | {
     "assets/hub.js", "assets/theme-init.js", "assets/family/family.css",
     "assets/favicon-32.png", "assets/apple-touch-icon.png", "scripts/capture_cards.py",
-    "scripts/check_explorer_model.js", "scripts/cut_loops.py", "scripts/build_portable.py", "tests/__init__.py", "requirements.txt",
+    "scripts/check_explorer_model.js", "scripts/cut_loops.py", "scripts/loop_starts.json", "scripts/build_portable.py", "tests/__init__.py", "requirements.txt",
 }
 ALLOWED_DIRS = ("assets/fonts/", "assets/films/", "assets/sites/", "assets/logos/", "assets/family/marks/",
                 "content/transcripts/", "docs/")

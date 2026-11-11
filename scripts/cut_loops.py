@@ -1,3 +1,8 @@
+"""Cut the silent preview loops the home page plays (assets/films/loops/<film>.mp4).
+
+Sources are the finished films on the media drive. Each loop is 6.5 s, 640x360, 12 fps, no
+sound. Run: python3 scripts/cut_loops.py [film-slug ...]  (slugs named are cut again).
+Heavy work goes through the shared render queue with two threads."""
 import subprocess, sys, os, glob, json
 from PIL import Image, ImageDraw
 SLOT="/Volumes/Demo Take Media/aiw-builds/film-set-20261109/shared/kit/slot.sh"
@@ -5,7 +10,11 @@ FINAL="/Volumes/Demo Take Media/aiw-builds/film-set-20261109/FINAL"
 OUT="/Users/willcook/src/wcook04.github.io/assets/films/loops"
 TMP="/Volumes/Demo Take Media/aiw-builds/film-set-20261109/edition2/landing/tmp_loops"
 os.makedirs(OUT,exist_ok=True); os.makedirs(TMP,exist_ok=True)
-OVERRIDE=json.load(open(sys.argv[1])) if len(sys.argv)>1 else {}
+# Start seconds already chosen (by the motion heuristic below, or by hand after looking at
+# the contact sheet). A film listed here is cut at that second; delete its entry to choose again.
+STARTS_FILE=os.path.join(os.path.dirname(os.path.abspath(__file__)),"loop_starts.json")
+OVERRIDE=json.load(open(STARTS_FILE)) if os.path.exists(STARTS_FILE) else {}
+REDO=set(sys.argv[1:])
 W,H=96,54
 rows=[]
 for src in sorted(glob.glob(FINAL+"/*.mp4")):
@@ -25,11 +34,16 @@ for src in sorted(glob.glob(FINAL+"/*.mp4")):
             if best is None or sc>best[0]: best=(sc,s)
         start=best[1] if best else int(dur*0.4)
     out=f"{OUT}/{slug}.mp4"
+    OVERRIDE[slug]=start
+    if os.path.exists(out) and slug not in REDO:
+        subprocess.run(["ffmpeg","-v","error","-y","-ss","3","-i",out,"-frames:v","1",f"{TMP}/{slug}.jpg"],check=True)
+        rows.append((slug,base,start,os.path.getsize(out))); continue
     for crf in (30,33,36):
         subprocess.run([SLOT,"ffmpeg","-v","error","-y","-threads","2","-ss",str(start),"-i",src,"-t","6.5","-an","-vf","fps=12,scale=640:360:flags=lanczos","-c:v","libx264","-preset","slow","-profile:v","main","-pix_fmt","yuv420p","-crf",str(crf),"-movflags","+faststart",out],check=True)
         if os.path.getsize(out)<240000: break
     subprocess.run(["ffmpeg","-v","error","-y","-ss","3","-i",out,"-frames:v","1",f"{TMP}/{slug}.jpg"],check=True)
     rows.append((slug,base,start,os.path.getsize(out))); print(rows[-1],flush=True)
+json.dump(OVERRIDE,open(STARTS_FILE,"w"),indent=1,sort_keys=True)
 open(os.path.dirname(TMP)+"/loops.tsv","w").write("slug\tsource\tstart_s\tbytes\n"+"".join(f"{a}\t{b}.mp4\t{c}\t{d}\n" for a,b,c,d in rows))
 sheet=Image.new("RGB",(480*6,290*4),(20,16,30)); dr=ImageDraw.Draw(sheet)
 for i,(slug,_,st,by) in enumerate(rows):

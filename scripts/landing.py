@@ -244,7 +244,7 @@ def article(row: dict, terms, *, first: bool) -> str:
     credit = f'<p class="proj__credit">{terms.link(row["credit"])}</p>' if row.get("credit") else ""
     name = f'<p class="proj__name">{e(row["name"])}</p>' if row["name"] != row["question"] else ""
     return (f'<article class="proj" id="p-{e(row["id"])}" data-row="{e(row["id"])}" data-ink="{e(row["ink"])}" aria-labelledby="h-{e(row["id"])}">'
-            f'{frame}<div class="proj__head">{name}<h3 class="proj__q" id="h-{e(row["id"])}">{e(row["question"])}</h3></div>'
+            f'{frame}<div class="proj__head">{name}<h2 class="proj__q" id="h-{e(row["id"])}">{e(row["question"])}</h2></div>'
             f'<ol class="strip" role="list" aria-label="{e(row["name"])}, from the short film to the source">{tiles}</ol>'
             f'<div class="proj__text"><p class="proj__line">{terms.link(row["line"])}</p>{credit}{extra}</div></article>')
 

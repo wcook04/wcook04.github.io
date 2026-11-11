@@ -25,7 +25,7 @@
     {
       "id": "proofs",
       "question": "Which sentences of a paper does its Lean proof formalise?",
-      "caption": "Click a sentence of a paper to open the Lean 4 declarations it states; compare the coverage labels outside reviewers gave OpenAI's papers.",
+      "caption": "Click a sentence of a paper to open the Lean 4 declarations it states; compare the coverage labels outside reviewers gave OpenAI’s papers.",
       "object": "proofs",
       "ink": "maths",
       "projects": [
@@ -66,7 +66,7 @@
     {
       "id": "assistants",
       "question": "What did the coding agent run, change and commit?",
-      "caption": "Read every tool call a coding agent made with its output, commit one agent's patch while another agent's edits stay in place, and block a command with a hook.",
+      "caption": "Read every tool call a coding agent made with its output, commit one agent’s patch while another agent’s edits stay in place, and block a command with a hook.",
       "object": "assistants",
       "ink": "code",
       "projects": [
@@ -82,7 +82,7 @@
     {
       "id": "code",
       "question": "Which function calls this one, and what does each file do?",
-      "caption": "Docstrings agents write in a fixed format, shown as a code map, and Python call graphs exported to DuckDB for NVIDIA Auto Ontology's text-to-SQL agent.",
+      "caption": "Docstrings agents write in a fixed format, shown as a code map, and Python call graphs exported to DuckDB for NVIDIA Auto Ontology’s text-to-SQL agent.",
       "object": "code",
       "ink": "code",
       "projects": [
@@ -97,7 +97,7 @@
     {
       "id": "testing",
       "question": "Do LLM-written tests catch more bugs when the prompt lists bugs the model missed?",
-      "caption": "On 58 held-out HumanEval problems, DeepSeek V4.1 Flash's mean fault-detection score rose from 69.2% to 77.0%; separately, Dafny proofs for 16 computations in a Python toolkit.",
+      "caption": "On 58 held-out HumanEval problems, DeepSeek V4.1 Flash’s mean fault-detection score rose from 69.2% to 77.0%; separately, Dafny proofs for 16 computations in a Python toolkit.",
       "object": "testing",
       "ink": "code",
       "projects": [
@@ -152,11 +152,11 @@
     "atlas": "How much of each OpenAI maths paper does its Lean statement cover?",
     "formal-verification": "Which calculations in this toolkit have Dafny proofs?",
     "agent-trace": "Which commands did the coding agent run, and what did each output?",
-    "one-checkout": "How do you commit one agent's fix while another agent is still editing the file?",
+    "one-checkout": "How do you commit one agent’s fix while another agent is still editing the file?",
     "safety-core": "How often did an agent commit with a made-up setting, with and without rules?",
     "codemap": "What does each file do, from the descriptions agents write in it?",
     "code-ontology-bridge": "How many code questions can NVIDIA Auto Ontology answer from a database of calls?",
-    "zenith": "Do a model's tests catch more bugs when its prompt lists the bugs it missed?",
+    "zenith": "Do a model’s tests catch more bugs when its prompt lists the bugs it missed?",
     "funnel": "How does one Lean proof become papers and a video?",
     "narration-ir": "Which spoken word times each change in the picture?"
   },
@@ -202,7 +202,7 @@
     "quartic": "Quantum query complexity · Lean 4",
     "lean-exposition": "Sherrington–Kirkpatrick spin glass · Lean 4",
     "proof-reader": "PLDI 2026 paper · Lean 4",
-    "atlas": "OpenAI's 719 maths papers · Lean statements",
+    "atlas": "OpenAI’s 719 maths papers · Lean statements",
     "formal-verification": "Dafny · Python",
     "agent-trace": "Claude Code · Codex · MCP",
     "one-checkout": "Git · parallel coding agents",
@@ -215,36 +215,36 @@
   },
   "project_home_lines": {
     "maths": "AI-assisted research on eight Erdős problems: a research record and paper for each, Lean 4 proofs of partial results, and Comparator results where they exist.",
-    "quartic": "OpenAI's nearly quartic separation between randomized and quantum query complexity, formalised in Lean 4. Each paragraph of the paper links to the Lean declarations it states.",
-    "lean-exposition": "Three expositions of OpenAI's full-support theorem for Sherrington–Kirkpatrick spin-glass minimisers. Each passage links to the Lean 4 declarations of OpenAI's proof.",
+    "quartic": "OpenAI’s nearly quartic separation between randomized and quantum query complexity, formalised in Lean 4. Each paragraph of the paper links to the Lean declarations it states.",
+    "lean-exposition": "Three expositions of OpenAI’s full-support theorem for Sherrington–Kirkpatrick spin-glass minimisers. Each passage links to the Lean 4 declarations of OpenAI’s proof.",
     "proof-reader": "Contextual Embeddings (PLDI 2026), each sentence linked to the authors' Lean proof, with a declaration dependency graph and the axioms used. Any paper with public Lean code can be added.",
-    "atlas": "An index of OpenAI's 719 maths papers in 372 families, with their Lean statement files and the coverage labels outside reviewers such as MathVet and cert-machine assigned.",
+    "atlas": "An index of OpenAI’s 719 maths papers in 372 families, with their Lean statement files and the coverage labels outside reviewers such as MathVet and cert-machine assigned.",
     "formal-verification": "Dafny proofs for 16 computations in an 88-component Python research toolkit, compiled to Python, with maps of which components each proof covers.",
     "funnel": "A worked example of turning one Lean proof, a 1968 case of Erdős #257, into a research record, a specialist paper, an exposition and a video.",
     "narration-ir": "An intermediate representation between a narration script and its animation: what each sentence must explain, its source quotations, and picture changes timed to spoken words.",
     "agent-trace": "A local viewer for Claude Code and Codex session logs: every tool call with its output, export of a chosen level of detail to another chat, and an optional MCP server.",
-    "one-checkout": "Commits one agent's reviewed Git patch on top of HEAD while other agents' staged and unstaged edits stay in the working tree, including edits to the same files.",
+    "one-checkout": "Commits one agent’s reviewed Git patch on top of HEAD while other agents' staged and unstaged edits stay in the working tree, including edits to the same files.",
     "safety-core": "Generates AGENTS.md, CLAUDE.md and Claude Code hooks from one rulebook, so selected rules are enforced before a command runs rather than only written as instructions.",
     "codemap": "A code browser built from docstrings that agents write in a fixed format: a description of every file and links along function calls, readable by people and by coding agents. Not released.",
-    "code-ontology-bridge": "Static analysis exports Python functions and call relations to DuckDB with recursive SQL views, so NVIDIA Auto Ontology's text-to-SQL agent can answer questions about a codebase.",
-    "zenith": "Experiments on whether a record of missed bugs improves LLM-written unit tests: DeepSeek V4.1 Flash's mean fault-detection score rose from 69.2% to 77.0% on 58 held-out HumanEval problems; about half the gain came from timeouts."
+    "code-ontology-bridge": "Static analysis exports Python functions and call relations to DuckDB with recursive SQL views, so NVIDIA Auto Ontology’s text-to-SQL agent can answer questions about a codebase.",
+    "zenith": "Experiments on whether a record of missed bugs improves LLM-written unit tests: DeepSeek V4.1 Flash’s mean fault-detection score rose from 69.2% to 77.0% on 58 held-out HumanEval problems; about half the gain came from timeouts."
   },
   "about": {
-    "heading": "I'm Will Cook.",
+    "heading": "I’m Will Cook.",
     "paragraphs": [
-      "I'm an economics undergraduate in Bristol, taking a year out. I've spent it directing AI systems to do mathematics research and write software, and building websites and videos so that people can read and check what those systems produce.",
+      "I’m an economics undergraduate in Bristol, taking a year out. I’ve spent it directing AI systems to do mathematics research and write software, and building websites and videos so that people can read and check what those systems produce.",
       "AI models now write more proofs and code than anyone has time to read. So I work from two ideas: use AI to make what AI produces easier to understand at every level of detail, and build things that get better as the models get better, so that rerunning a pipeline with a newer model gives a better result.",
       "For maths I built a [funnel](p=funnel). It takes a proof that Lean, a program that checks proofs, has accepted, and an AI model turns it into a full research record, a short paper for experts, an exposition for any mathematician and a video. For one Erdős problem that came to 152, 26 and 16 pages and a half-hour video. I think of it as pre-digestion: a mathematician can start at the level that suits them and decide whether the result is worth their time.",
-      "AI systems I direct proved a [1968 case of Erdős problem #257](d=research) without Erdős's extra restriction, and Google DeepMind's formal-conjectures catalogue now lists that case as solved. They also wrote a Lean proof of [OpenAI's quantum query result](p=quartic), about 29,000 lines. On my [reader websites](p=proof-reader), clicking a sentence of a paper opens the Lean it states. Samantha Frohlich asked me to build one for Contextual Embeddings, a paper she wrote with three coauthors.",
-      "For code, I gave NVIDIA's [Auto Ontology](p=code-ontology-bridge) a database of its own functions and calls built by my program, and it answered 10.3 of 12 questions about its code correctly on average, against 3.2 for the same DeepSeek model on its own. In one test, a coding assistant made up a setting so that a failing test passed, and committed the change in 10 runs out of 10. With [Safety Core](p=safety-core), a program reads each command before it runs, the commit needed a person's approval, and with nobody there to approve it the assistant committed none.",
-      "All of this is a prototype, and none of my papers has been peer reviewed yet. I don't have a maths degree, and I've done this on a student budget.",
-      "I'd like to work with people on problems like these, as a job, internship, fellowship or research collaboration, at an AI lab or anywhere applying AI to its own field. If you have a problem you think I should work on, or you think one of my videos gets something wrong, [email me](mailto:williamwkcook@gmail.com)."
+      "AI systems I direct proved a [1968 case of Erdős problem #257](d=research) without Erdős’s extra restriction, and Google DeepMind’s formal-conjectures catalogue now lists that case as solved. They also wrote a Lean proof of [OpenAI’s quantum query result](p=quartic), about 29,000 lines. On my [reader websites](p=proof-reader), clicking a sentence of a paper opens the Lean it states. Samantha Frohlich asked me to build one for Contextual Embeddings, a paper she wrote with three coauthors.",
+      "For code, I gave NVIDIA’s [Auto Ontology](p=code-ontology-bridge) a database of its own functions and calls built by my program, and it answered 10.3 of 12 questions about its code correctly on average, against 3.2 for the same DeepSeek model on its own. In one test, a coding assistant made up a setting so that a failing test passed, and committed the change in 10 runs out of 10. With [Safety Core](p=safety-core), a program reads each command before it runs, the commit needed a person’s approval, and with nobody there to approve it the assistant committed none.",
+      "All of this is a prototype, and none of my papers has been peer reviewed yet. I don’t have a maths degree, and I’ve done this on a student budget.",
+      "I’d like to work with people on problems like these, as a job, internship, fellowship or research collaboration, at an AI lab or anywhere applying AI to its own field. If you have a problem you think I should work on, or you think one of my videos gets something wrong, [email me](mailto:williamwkcook@gmail.com)."
     ],
     "contributions": [
       {
         "upstream": "google-deepmind/formal-conjectures",
         "logo": "google-deepmind",
-        "what": "Lean statements and links to formal proofs for Erdős problems 257, 258, 1041 and 1049, including marking #1041 solved. I'm listed in its AUTHORS file.",
+        "what": "Lean statements and links to formal proofs for Erdős problems 257, 258, 1041 and 1049, including marking #1041 solved. I’m listed in its AUTHORS file.",
         "prs": "7 merged pull requests, 14 open",
         "extra": {
           "label": "Crosswalk",
@@ -255,21 +255,21 @@
       {
         "upstream": "PalomarRegistry/PalomarSubmission",
         "logo": "PalomarRegistry",
-        "what": "Removed a redundant Lean kernel recheck of type stand-ins from the registry's core-notation audit.",
+        "what": "Removed a redundant Lean kernel recheck of type stand-ins from the registry’s core-notation audit.",
         "prs": "1 merged pull request",
         "tier": 2
       },
       {
         "upstream": "xMaxos/hidden-ai-society-discovery",
         "logo": "xMaxos",
-        "what": "Tests and documentation for a Python reader's retry limits and cursor boundaries, and a fix that rejects Windows junction paths.",
+        "what": "Tests and documentation for a Python reader’s retry limits and cursor boundaries, and a fix that rejects Windows junction paths.",
         "prs": "6 merged pull requests",
         "tier": 2
       },
       {
         "upstream": "elvmp/agent-commons-connect",
         "logo": "elvmp",
-        "what": "Tests of the checker's file boundaries, and a fix to a temporary-directory test fixture on macOS.",
+        "what": "Tests of the checker’s file boundaries, and a fix to a temporary-directory test fixture on macOS.",
         "prs": "2 merged pull requests",
         "tier": 2
       },
