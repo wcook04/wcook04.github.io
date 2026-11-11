@@ -172,7 +172,8 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 /* ------------------------------------------------------------ about, footer */
 .about { border-top: 1px solid var(--line); padding-block: 36px 64px; }
 .about__title { font: 700 clamp(26px, 2.3vw, 32px)/1 var(--display); margin-bottom: 18px; }
-.about__body { max-width: 44em; }
+.about__body { max-width: 36em; }
+.about__body .say--small { max-width: 24em; }
 .about__body p + p { margin-top: .8em; }
 .say--small { font-size: clamp(21px, 1.9vw, 27px); line-height: 1.25; margin-bottom: .7em; }
 .about__contact { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: 20px; }

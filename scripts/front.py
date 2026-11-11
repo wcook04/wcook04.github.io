@@ -40,8 +40,23 @@ def spoken(seconds: int | None) -> str:
     return " ".join(parts)
 
 
+WORDS = {"title", "description", "h1", "lede", "second", "label", "alt", "map_title", "map_note", "name", "line", "names",
+         "claim", "limit", "credit", "detail", "detail_prefix", "page_title", "card_alt"}
+
+
+def typeset(value, key: str = ""):
+    """front.json is typed with straight apostrophes; the pages print typographic ones."""
+    if isinstance(value, dict):
+        return {k: typeset(v, k) for k, v in value.items()}
+    if isinstance(value, list):
+        return [typeset(v, key) for v in value]
+    if isinstance(value, str) and (key in WORDS or key in {"short", "long", "site", "paper", "proof", "code", "study", "issue"}):
+        return value.replace("'", "\u2019")
+    return value
+
+
 def load(root: Path) -> dict:
-    return json.loads((root / "front.json").read_text(encoding="utf-8"))
+    return typeset(json.loads((root / "front.json").read_text(encoding="utf-8")))
 
 
 class Book:
@@ -214,7 +229,7 @@ def footer() -> str:
     return '''<footer class="foot wrap">
     <a href="/all.html">Every video, paper, website and repository on one page</a>
     <a href="/all.html#terms">Glossary</a>
-    <a href="https://github.com/wcook04/wcook04.github.io" rel="noopener">This site's source</a>
+    <a href="https://github.com/wcook04/wcook04.github.io" rel="noopener">This site’s source</a>
   </footer>'''
 
 
@@ -310,7 +325,7 @@ def render_home(model: dict, registry: dict, hub, structured: str, book: Book) -
         <p class="say say--small">{e(owner["lede"])}</p>
         {invitation}
         <ul class="about__contact" role="list">{contact}</ul>
-        <p class="about__more"><a href="/all.html#about">Contributions to other people's projects, and earlier work</a></p>
+        <p class="about__more"><a href="/all.html#about">Contributions to other people’s projects, and earlier work</a></p>
       </div>
     </section>
   </main>

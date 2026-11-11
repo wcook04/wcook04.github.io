@@ -209,7 +209,15 @@
     });
     stage.addEventListener("click", function () { if (!film) open(); });
     document.addEventListener("keydown", function (event) { if (event.key === "Escape" && film) shut(); });
-    if (document.readyState === "complete") idleStart(); else window.addEventListener("load", idleStart);
+    function idleWhenSeen() {
+      /* A visitor who arrives at the map (#map) has not seen the stage: start the scene when they scroll up to it. */
+      if (!("IntersectionObserver" in window)) { idleStart(); return; }
+      var watch = new IntersectionObserver(function (entries) {
+        if (entries.some(function (entry) { return entry.isIntersecting; })) { watch.disconnect(); idleStart(); }
+      }, { threshold: 0.5 });
+      watch.observe(stage);
+    }
+    if (document.readyState === "complete") idleWhenSeen(); else window.addEventListener("load", idleWhenSeen);
     document.addEventListener("visibilitychange", function () { if (document.hidden && idle) idle.pause(); });
   }
 })();
