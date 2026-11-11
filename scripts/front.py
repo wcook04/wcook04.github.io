@@ -127,7 +127,7 @@ def resolve(front: dict, book: Book) -> dict:
             detail = stop.get("detail", "")
             picture = None
             if kind in VIDEO_KINDS:
-                detail = stop.get("detail_prefix", "") + clock(place["seconds"]) + " on YouTube"
+                detail = stop.get("detail_prefix", "") + clock(place["seconds"])
                 picture = book.poster(place["slug"], place["stem"])
             elif kind not in NAMED_KINDS:
                 picture = book.plate(stop.get("plate"), stop.get("fallback"))
@@ -300,7 +300,7 @@ def stop_markup(stop: dict) -> str:
             f'<a class="stop__main" href="{e(stop["href"])}"{off(stop["href"])}>'
             f'<span class="stop__pic">{picture}{play}</span>'
             f'<span class="stop__kind">{e(stop["label"])}</span><span class="vh">, </span>'
-            f'<span class="stop__detail">{e(stop["detail"])}</span></a>{more}</li>')
+            f'<span class="stop__detail">{e(stop["detail"])}{" on YouTube" if stop["video"] else ""}</span></a>{more}</li>')
 
 
 def card_of(slug: str, book: Book) -> str | None:
