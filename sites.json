@@ -335,7 +335,7 @@
       "status": "The held-out study used DeepSeek V4.1 Flash. The earlier website and PDF describe separate studies, including program repairs rising from 259 to 365 of 576 tasks.",
       "capture": "assets/sites/zenith",
       "capture_caption": "The opening of the Zenith paper.",
-      "credit": "DeepSeek V4.1 Flash on 58 held-out HumanEval problems; roughly half the gain came from timeouts. The supplied checkpoint links to the unmerged study revision.",
+      "credit": "DeepSeek V4.1 Flash on 58 held-out HumanEval problems; roughly half the gain came from timeouts.",
       "front_label": "Website for the earlier studies",
       "label": "Zenith",
       "subject": "AI-generated tests",

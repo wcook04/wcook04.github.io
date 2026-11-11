@@ -902,7 +902,7 @@ def render_checkpoint_index(registry: dict, glossary: dict | None = None) -> str
 
   <footer class="hub-footer">
     <div class="wrap hub-footer__inner">
-      <p>This page lists every website, film and repository, and how they connect. Each website links back here from its header.</p>
+      <p>This page lists every website, video and repository, and how they connect. Each website links back here from its header.</p>
       <p><a href="https://github.com/wcook04/wcook04.github.io">Source of this page</a> <a href="/catalogue.json">The catalogue as a graph</a> <a href="/sites.json">The list as data</a> <a href="/glossary.json">The terms as data</a></p>
     </div>
   </footer>
@@ -1008,7 +1008,7 @@ def render_404(registry: dict) -> str:
 
 def render_llms(registry: dict) -> str:
     lines = ["# Will Cook's websites", "",
-             "This host's root page lists Will Cook's websites and films. Each website is its own project with its own source and its own agent entry where one exists.", ""]
+             "This host's root page lists Will Cook's projects, websites and videos. Each of the fifteen projects has a page at https://wcook04.github.io/work/<slug>/ with its videos, website, papers, proof and code in order from the quickest look to the most detail. Each website is its own project with its own source and its own agent entry where one exists.", ""]
     entries = {
         "maths": "https://wcook04.github.io/practical-formal-verification/llms.txt",
         "formal-verification": "https://wcook04.github.io/practical-formal-verification/llms.txt",
@@ -1022,7 +1022,7 @@ def render_llms(registry: dict) -> str:
         evidence = "".join(f" [{route['label']}]({route['href']})."
                            for route in site.get("routes", []) if route["href"].startswith(GITHUB))
         lines.append(f"- [{site['name']}]({site['url']}): {site['purpose']}{credit}{evidence}{tail}")
-    lines += ["", "Every website, film, repository and term, with how they connect, is in https://wcook04.github.io/catalogue.json (a graph of typed nodes and edges, generated from https://wcook04.github.io/sites.json and https://wcook04.github.io/glossary.json).",
+    lines += ["", "Every website, video, repository and term, with how they connect, is in https://wcook04.github.io/catalogue.json (a graph of typed nodes and edges, generated from https://wcook04.github.io/sites.json and https://wcook04.github.io/glossary.json).",
               "Use each site's own source links and stated limits when describing its findings.", ""]
     return "\n".join(lines)
 
@@ -1038,7 +1038,7 @@ def render_family(registry: dict) -> str:
 
 def render_agent_guide(registry: dict) -> str:
     lines = ["# Will Cook's websites", "",
-             "Start at the [home page](https://wcook04.github.io/) or read [sites.json](https://wcook04.github.io/sites.json), which lists every website, film and repository.", ""]
+             "Start at the [home page](https://wcook04.github.io/) or read [sites.json](https://wcook04.github.io/sites.json), which lists every website, video and repository.", ""]
     for site in registry["sites"]:
         repos = ", ".join(f"[{r['name']}]({r['href']})" for r in repos_of(registry, site))
         lines.append(f"- [{site['name']}]({site['url']}). Source: {repos}.")
