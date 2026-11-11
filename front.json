@@ -191,7 +191,7 @@
       "aliases": ["formal-verification"],
       "loop": "short-plectis-verification",
       "line": "What one proof covers, across 88 components",
-      "claim": "A map of the 88 components of my public toolkit. Rings around each component show which kinds of evidence it has, and sixteen calculations are proved with Dafny for every input.",
+      "claim": "A map of the 88 components of my public toolkit. Rings around each component show which kinds of evidence it has. Sixteen calculations are proved with Dafny for every input: the twelve marked on the map, and four shared by the whole toolkit.",
       "limit": "Each proof covers one stated calculation. The outer ring shows how much of a component's whole claim has been checked, and it reads unknown for every component.",
       "page_title": "Verification map: what one proof covers, across 88 components",
       "description": "A map of the 88 components of my public toolkit. Rings around each component show which kinds of evidence it has, and sixteen calculations are proved with Dafny for every input. Each proof covers one stated calculation.",
