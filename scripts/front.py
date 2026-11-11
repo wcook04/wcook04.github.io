@@ -337,7 +337,7 @@ def render_home(model: dict, registry: dict, hub, structured: str, book: Book) -
         <div class="player" id="player" data-film="/{e(short["file"])}"{loop_attrs}>
           <div class="player__screen"><picture>{narrow}{img(intro.get("poster"), sizes="(min-width: 900px) 58vw, 100vw", alt=intro["idle"]["alt"], eager=True, cls="player__poster")}</picture></div>
           <div class="player__bar">
-            <a class="play" href="{e(short["href"])}"{off(short["href"])} data-play><span class="play__mark" aria-hidden="true"></span><span class="play__what">Play the introduction</span><span class="play__len">{e(clock(short["seconds"]))}</span></a>
+            <a class="play" href="{e(short["href"])}"{off(short["href"])} data-play><span class="play__mark" aria-hidden="true"></span><span class="play__what">Play {e(short["label"])}</span><span class="play__len">{e(clock(short["seconds"]))}</span></a>
             <a class="quiet" href="{e(long["href"])}"{off(long["href"])}>{e(long["label"])}, {e(clock(long["seconds"]))}</a>
             <a class="quiet" href="{e(short["href"])}"{off(short["href"])} data-youtube>Watch on YouTube</a>
           </div>
