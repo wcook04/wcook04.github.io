@@ -21,7 +21,7 @@
       "alt": "From the introduction: what AI produces goes through an AI model and comes out as a paper for experts, a website with the paper beside its proof, a map where you click any theorem, and a video for anyone. With a better model, each of these is redrawn."
     },
     "map_title": "The projects",
-    "map_note": "Fifteen projects in five groups. Each opens from a short video down to the proof or the code.",
+    "map_note": "Fifteen projects in five groups. Each has its own page, from a short video down to the proof or the code.",
     "card_alt": "Will Cook: I use AI to make AI-written maths and code easier to understand. A frame from the introduction video."
   },
   "kinds": {"short": "Short video", "long": "Full video", "site": "Website", "paper": "Paper", "proof": "Lean proof", "code": "Code", "study": "Study", "issue": "Issue"},
