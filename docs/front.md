@@ -35,7 +35,10 @@ sits on the page with no edge.
 - `/`: header; stage (sentence, introduction); map (`#map`); about (`#about`); footer.
 - `/work/<slug>/`: header; stage (group, name, claim, stated limit, credit, the
   video's own loop); the strip of levels; the map with this project marked; footer.
-- `all.html` stays the complete register of every link and the glossary.
+- `all.html`: every link in one table, a row per project under the five groups and columns in the strip's order;
+  then earlier videos, contributions, contact and the glossary. `404.html`: says the address has no page and shows
+  the map. Both are written by [`scripts/register.py`](../scripts/register.py) with `assets/register.css`, on this
+  page's header, footer and tokens, and keep every id the earlier pages had.
 
 A stop is one of: short video, full video, website, paper, proof, code, study,
 issue. A project lists only the kinds it has, ordered from the quickest look to
@@ -64,8 +67,10 @@ All under `assets/front/`, all this repository's own files:
 - `loops/<stem>-s.mp4` (480 wide) and `-l.mp4` (1280 wide): a silent clip of
   five or six seconds from the video. A tile plays its clip while the pointer or
   the keyboard is on it. A project page plays its clip while it is in view.
-- `loops/hero-*.mp4`: the two-ideas scene of the short introduction. It plays
-  once and rests on its last frame, which is also the poster.
+- `loops/hero-l.mp4` and `hero-n.mp4`: the two-ideas scene of the short introduction (19.6 s to 27.95 s), cut
+  to leave out the caption strip. It plays once and rests on its last frame, which is also the poster. `hero-n` and
+  `posters/hero-n-*.webp` are the same scene cropped to its four cards, used below 1180px so the labels can be read.
+- `cards/<slug>.png`: the 1200 by 630 picture a link to each page unfurls with (PNG, because some readers refuse WebP).
 - `plates/<name>-640|1280.webp`: the first page of a paper, or the real website,
   proof file or repository page a stop opens.
 - `intro/short-introduction.mp4`: the short introduction, with its captions in the picture.
@@ -91,6 +96,10 @@ in these folders is used by no page.
   project page (cross-document view transition); the strip's line draws once.
   Under reduced motion or Save-Data nothing moves and posters remain. Anything
   that moves by itself has a Pause button.
+- A stage frame is blended into the page with `mix-blend-mode: lighten` on the whole frame. The videos' encoded
+  ground is a shade darker than `#1c1526`, so the page's ground shows wherever the frame is darker and the frame has
+  no edge. Blend the frame, never the picture and the clip separately, or a clip doubles over its poster.
+- A stop's picture is 16:9 and shows the whole capture, so no thumbnail's words are cut by the frame.
 - A still must not show private file names. The first seconds of the short
   introduction do, so no still or idle clip is cut from them.
 
