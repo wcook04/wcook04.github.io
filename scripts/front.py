@@ -322,10 +322,14 @@ def render_home(model: dict, registry: dict, hub, structured: str, book: Book) -
       <span class="anchor" id="contact"></span>
       <h2 class="about__title" id="about-title">About</h2>
       <div class="about__body">
-        <p class="say say--small">{e(owner["lede"])}</p>
-        {invitation}
-        <ul class="about__contact" role="list">{contact}</ul>
-        <p class="about__more"><a href="/all.html#about">Contributions to other people’s projects, and earlier work</a></p>
+        <div class="about__words">
+          <p class="say say--small">{e(owner["lede"])}</p>
+          {invitation}
+        </div>
+        <div class="about__reach">
+          <ul class="about__contact" role="list">{contact}</ul>
+          <p class="about__more"><a href="/all.html#about">Contributions to other people’s projects, and earlier work</a></p>
+        </div>
       </div>
     </section>
   </main>

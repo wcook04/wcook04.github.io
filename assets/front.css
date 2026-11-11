@@ -172,12 +172,13 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 /* ------------------------------------------------------------ about, footer */
 .about { border-top: 1px solid var(--line); padding-block: 36px 64px; }
 .about__title { font: 700 clamp(26px, 2.3vw, 32px)/1 var(--display); margin-bottom: 18px; }
-.about__body { max-width: 36em; }
-.about__body .say--small { max-width: 24em; }
-.about__body p + p { margin-top: .8em; }
+.about__body { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 24px clamp(32px, 6vw, 96px); align-items: start; }
+.about__words { max-width: 36em; }
+.about__words .say--small { max-width: 24em; }
+.about__words p + p { margin-top: .8em; }
 .say--small { font-size: clamp(21px, 1.9vw, 27px); line-height: 1.25; margin-bottom: .7em; }
-.about__contact { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: 20px; }
-.about__contact a { color: var(--steel); display: inline-block; padding-block: 8px; font-weight: 600; }
+.about__contact { display: grid; gap: 2px; margin-top: 4px; }
+.about__contact a { color: var(--steel); display: inline-block; padding-block: 7px; font: 700 22px/1.1 var(--display); text-decoration-color: var(--line); }
 .about__contact a:hover, .about__more a:hover { color: var(--ink); }
 .about__more { margin-top: 14px; }
 .about__more a { color: var(--steel); }
@@ -213,6 +214,8 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
   .player__screen { margin-inline: 0; }
   .is-playing .player__screen { margin-inline: calc(-1 * var(--gutter)); }
   .work .stage__show { order: -1; }
+  .about__body { grid-template-columns: minmax(0, 1fr); }
+  .about__contact { display: flex; flex-wrap: wrap; gap: 4px 22px; }
   .bands { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px var(--gap); }
   .band--maths, .band--assistants, .band--checks, .band--code, .band--videos { grid-column: span 2; }
   .tiles, .band--maths .tiles, .band--assistants .tiles, .band--checks .tiles, .band--code .tiles, .band--videos .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px var(--gap); }
