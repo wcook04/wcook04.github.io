@@ -4,7 +4,7 @@ This repository contains the code for [Will Cook's home page](https://wcook04.gi
 The page links his mathematics research, software and videos. The projects
 have their own repositories, listed below.
 
-The page opens on the two ideas from Will's [introduction video](https://www.youtube.com/watch?v=Yk_kUQUCylc). The [short introduction](https://www.youtube.com/watch?v=YQZtkFIGNBk) is a quick way to start. Under them is
+The page opens with the [short V4 introduction](https://www.youtube.com/watch?v=YQZtkFIGNBk), followed by the [full V4 introduction](https://www.youtube.com/watch?v=Yk_kUQUCylc). The [earlier introductions](https://wcook04.github.io/all.html#earlier-introductions) are in the catalogue. Under the two current introductions is
 one picture of all the work: each project is a row, and each mark on the row is
 something you can open, from a short video of about 90 seconds on the left to
 the full video, the website, the paper and the source code on the right. Point

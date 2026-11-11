@@ -412,12 +412,17 @@ def render_page(registry: dict, glossary: dict, root: Path, structured: str) -> 
 
 def render_static(registry:dict, glossary:dict, root:Path)->str:
     v=build_view(registry,glossary,root)
-    def film(f):
+    def film(f, heading='h3'):
         secs=f.get('duration_seconds') or f.get('cut_seconds')
         time=f' · {secs//60}:{secs%60:02}' if secs else ''
         title=f'<a href="{e(f["youtube"])}">{e(f["title"])}</a>' if f.get('youtube') else e(f['title'])+' — video in preparation'
         onwards=''.join(f'<li>Continue with <a href="#film-{e(x)}">{e(v["films"][x]["title"])}</a></li>' for x in f.get('leads_to',[]))
-        return f'<article id="film-{e(f["id"])}"><h3>{title}</h3><p>{e(f["format"])}{time}</p><p>{e(f.get("takeaway", ""))}</p><ul>{onwards}</ul></article>'
+        return f'<article id="film-{e(f["id"])}"><{heading}>{title}</{heading}><p>{e(f["format"])}{time}</p><p>{e(f.get("takeaway", ""))}</p><ul>{onwards}</ul></article>'
+    intro_ids = registry["intro"]["films"]
+    introductions = [v["films"][fid] for fid in intro_ids]
+    current_intro = "".join(film(f, "h4") for f in introductions if f.get("edition") != "earlier")
+    earlier_intro = "".join(film(f, "h4") for f in introductions if f.get("edition") == "earlier")
+    other_films = "".join(film(f) for f in registry["films"] if f["id"] not in intro_ids)
     projects=[]
     for pid,p in v['projects'].items():
         links=[]
@@ -434,4 +439,4 @@ def render_static(registry:dict, glossary:dict, root:Path)->str:
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Will Cook — complete catalogue</title>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'">
 <link rel="canonical" href="https://wcook04.github.io/all.html"><meta name="robots" content="index, follow">
-<link rel="stylesheet" href="assets/hub.css"><link rel="stylesheet" href="assets/explorer.css"><link rel="stylesheet" href="assets/door-art.css"></head><body class="question-studio static-index"><a class="studio-skip" href="#main">Skip to the catalogue</a><header class="studio-header"><a class="studio-brand" href="index.html">← Explore the work</a><nav aria-label="Catalogue"><a href="#projects">Projects</a><a href="#films">Videos</a><a href="#terms">Terms</a><a href="#about">Contact</a></nav></header><main id="main"><h1>All the work, in one place.</h1>{topics}<section id="projects">{''.join(projects)}</section><section id="films"><h2>Every video</h2><span id="introductions"></span>{''.join(film(f) for f in registry['films'])}</section><section><h2>Contributions</h2><ul>{contributions}</ul><h2>Earlier work</h2><ul>{older}</ul></section><section id="terms"><h2>Terms</h2>{terms}</section><section id="about"><h2>Will Cook</h2><p>{e(registry['owner']['lede'])}</p><p>{e(registry['owner']['availability'])}</p><p>{contacts}</p></section></main></body></html>'''
+<link rel="stylesheet" href="assets/hub.css"><link rel="stylesheet" href="assets/explorer.css"><link rel="stylesheet" href="assets/door-art.css"></head><body class="question-studio static-index"><a class="studio-skip" href="#main">Skip to the catalogue</a><header class="studio-header"><a class="studio-brand" href="index.html">← Explore the work</a><nav aria-label="Catalogue"><a href="#projects">Projects</a><a href="#films">Videos</a><a href="#terms">Terms</a><a href="#about">Contact</a></nav></header><main id="main"><h1>All the work, in one place.</h1>{topics}<section id="projects">{''.join(projects)}</section><section id="films"><h2>Every video</h2><section id="introductions"><h3>Introduction V4</h3>{current_intro}</section>{other_films}<section id="earlier-introductions"><h3>Earlier introductions</h3>{earlier_intro}</section></section><section><h2>Contributions</h2><ul>{contributions}</ul><h2>Earlier work</h2><ul>{older}</ul></section><section id="terms"><h2>Terms</h2>{terms}</section><section id="about"><h2>Will Cook</h2><p>{e(registry['owner']['lede'])}</p><p>{e(registry['owner']['availability'])}</p><p>{contacts}</p></section></main></body></html>'''

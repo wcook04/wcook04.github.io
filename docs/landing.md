@@ -22,10 +22,11 @@ runs from a 90-second film on the left to the source on the right.
 1. Skip link. Header, one line, 60px: logo mark + "Will Cook"; nav "Projects" (#work), "Every video" (all.html#films),
    "Every link" (all.html), "About and contact" (#about). No theme switch: this page has one scheme, the films' night ground
    (`color-scheme: dark`). Dropped on purpose: the page is the films' stage.
-2. Hero, text only, left-aligned on the container's left edge, two text elements (the sentence about
+2. Hero, left-aligned on the container's left edge, with two text elements (the sentence about
    the levels sits under the weave, where the marks are):
    - h1 (Will's first principle, verbatim): "Use AI to make what AI produces easier to understand, at every level of detail."
    - lede, large (his second principle): "Build things that get better as AI models get better."
+   - direct links to the short V4 introduction and then the full V4 introduction, with their runtimes.
 3. The instrument `#work`: the weave (a `<nav>`) and the stage (one `<article>` per row). Described below.
 4. `#about`: Will's lede, availability, invitation and contact links from `sites.json` `owner` (reuse the
    existing text and fields), the earlier introductions, contributions to other repositories and earlier work
@@ -38,7 +39,7 @@ runs from a 90-second film on the left to the source on the right.
 A ledger. Columns: group name | row label | Short film | Full film | Website | Paper | Code.
 Rows, top to bottom:
 
-- Start here (root, above every group): "Introduction" (short-introduction, long-introduction) and
+- Start here (root, above every group): "Introduction V4" (short-introduction, long-introduction) and
   "The funnel" (short-funnel, long-funnel, code: lean-exposition repo).
 - Then the six groups of `explorer.json` `doors`, in file order, each door's new `heading` in the group column
   spanning its rows: research "Erdős problems" (maths); proofs "Papers beside Lean proofs" (quartic,

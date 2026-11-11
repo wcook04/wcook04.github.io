@@ -172,6 +172,21 @@ def link_tail(r: dict) -> str:
     return ' target="_blank" rel="noopener noreferrer"' if r.get("external") else ' rel="noopener"'
 
 
+def introduction_links(row: dict) -> str:
+    """Put both current introductions before the project index."""
+    links = []
+    for resource in row["resources"]:
+        label = "Short introduction" if resource["col"] == "short" else "Full introduction"
+        duration = f'<span>{e(resource["detail"])}</span>' if resource["detail"] else ""
+        links.append(
+            f'<li><a href="{e(resource["href"])}"{link_tail(resource)} '
+            f'aria-label="{e(resource["aria"])}">{label}{duration}</a></li>'
+        )
+    return (f'<nav class="hero__intro" aria-labelledby="hero-intro-title">'
+            f'<h2 id="hero-intro-title">{e(row["name"])}</h2>'
+            f'<ol role="list">{"".join(links)}</ol></nav>')
+
+
 def data_attrs(r: dict) -> str:
     chip = r["kind"] + (f", {r['detail']}" if r["detail"] else "")
     out = f' data-res="{e(r["key"])}" data-col="{e(r["col"])}" data-chip="{e(chip)}"'
@@ -255,6 +270,7 @@ def render(registry: dict, glossary: dict, root: Path, structured: str, hub) -> 
     view = build_view(registry, glossary, root)
     config = view["config"]
     rows = build_rows(view, registry.get("_canonical_v3", {}), root)
+    intro = next(row for row in rows if row["id"] == "intro")
     protect = [p["name"] for p in view["projects"].values()] + [r["name"] for r in registry["repos"]]
     terms = hub.Terms(glossary, protect=protect)
     articles, previous = [], None
@@ -323,6 +339,7 @@ def render(registry: dict, glossary: dict, root: Path, structured: str, hub) -> 
       <h1 id="hero-title">{e(principles[0])}.</h1>
       <p class="hero__second">{e(principles[1])}</p>
       <p class="hero__note">AI now writes more mathematics and code than anyone has time to read. Each project below takes some of that output and shows it at several levels: a film of about 90&nbsp;seconds, a full film, a website, a paper and the source.</p>
+      {introduction_links(intro)}
     </section>
     <section class="work wrap" id="work" aria-label="Projects" data-topics="{topic_attr}">
       {weave(rows, config)}
@@ -346,7 +363,7 @@ def render(registry: dict, glossary: dict, root: Path, structured: str, hub) -> 
   </main>
   <footer class="foot wrap">
     <p><a href="all.html">Every project, video, paper and repository on one page</a></p>
-    <p><a href="all.html#films">Earlier videos and introductions</a></p>
+    <p><a href="all.html#earlier-introductions">Earlier introductions (V1–V3)</a></p>
     <p><a href="https://github.com/wcook04/wcook04.github.io" rel="noopener">This page’s source</a></p>
   </footer>
   <div class="termcard" id="termcard" role="tooltip" hidden></div>

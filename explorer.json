@@ -331,8 +331,8 @@
     "rows": [
       {
         "id": "intro",
-        "label": "Introduction",
-        "name": "Introduction",
+        "label": "Introduction V4",
+        "name": "Introduction V4",
         "question": "Where do I start?",
         "line": "I do mathematics research and build software with AI agents, and I build ways to inspect what the agents produce. The introduction says what each project makes easier to understand and which short film to try first.",
         "films": [
