@@ -74,7 +74,7 @@ ol[role="list"], ul[role="list"] { list-style: none; }
 .row__group { grid-column: 1; grid-row: 1; align-self: start; font: 700 16.5px/1.08 var(--display); color: var(--ink); padding: 6px 10px 0 0; height: 0; overflow: visible; text-wrap: balance; }
 .row__label { grid-column: 2; display: flex; align-items: baseline; gap: 10px; min-width: 0; text-decoration: none; padding: 4px 10px; margin-right: 14px; border-radius: 3px; font-weight: 600; font-size: 15.5px; line-height: 1.25; }
 .row__what { white-space: nowrap; }
-.row__name { display: none; color: var(--muted); font-weight: 400; font-size: 13.5px; white-space: nowrap; }
+.row__name { display: none; color: var(--muted); font-weight: 400; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .row__knots { grid-column: 3; display: flex; position: relative; color: var(--ink-row); }
 .row__knots::before { content: ""; position: absolute; left: -14px; top: 50%; height: 1px; width: calc((var(--n) + 0.5) * var(--slot) + 14px); background: currentColor; opacity: 0.38; transform-origin: left center; }
 .row[data-last="0"] { --n: 0; } .row[data-last="1"] { --n: 1; } .row[data-last="2"] { --n: 2; } .row[data-last="3"] { --n: 3; }
