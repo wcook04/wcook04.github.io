@@ -1415,8 +1415,8 @@
       "edition_state": "current"
     },
     {
-      "title": "Introduction: Making AI-written maths and code easier to understand",
-      "short": "Introduction",
+      "title": "Introduction: Making AI-written maths and code easier to understand (V4)",
+      "short": "Short introduction V4",
       "description": "Making AI-written maths and code easier to understand",
       "format": "short",
       "poster": "assets/films/next/short-introduction",
@@ -1454,8 +1454,8 @@
       "edition_state": "current"
     },
     {
-      "title": "Introduction: How all my videos fit together, and where to start",
-      "short": "Introduction",
+      "title": "Introduction: How all my videos fit together, and where to start (V4)",
+      "short": "Full introduction V4",
       "description": "How all my videos fit together, and where to start",
       "format": "long",
       "poster": "assets/films/next/long-introduction",
@@ -2019,7 +2019,7 @@
           "id": "youtube",
           "platform": "youtube",
           "state": "published",
-          "url": "https://www.youtube.com/watch?v=uWCqtRkJ8P0",
+          "url": "https://www.youtube.com/watch?v=VUSHyYSf1Ak",
           "duration_seconds": 1808,
           "thumbnail_stem": "assets/films/mathematics-v3"
         }
@@ -2034,7 +2034,7 @@
           "occurrence": 1
         }
       ],
-      "url": "https://www.youtube.com/watch?v=uWCqtRkJ8P0",
+      "url": "https://www.youtube.com/watch?v=VUSHyYSf1Ak",
       "publicly_available": true,
       "edition_state": "current"
     },
