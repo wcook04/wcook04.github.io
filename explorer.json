@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "title": "Use AI to make what AI produces easier to understand, at every level of detail. Build things that get better as AI models get better.",
   "subtitle": "Two principles, and the projects built on them.",
   "doors": [
@@ -19,7 +19,8 @@
         }
       ],
       "keyword": "Erdős problems: AI-assisted proofs in Lean 4",
-      "group": "Mathematics"
+      "group": "Mathematics",
+      "heading": "Erdős problems"
     },
     {
       "id": "proofs",
@@ -44,7 +45,8 @@
           "project": "lean-exposition",
           "label": "Spin glasses"
         }
-      ]
+      ],
+      "heading": "Papers beside Lean proofs"
     },
     {
       "id": "explaining",
@@ -58,7 +60,8 @@
       ],
       "keyword": "From one Lean proof to papers and a narrated video",
       "group": "Mathematics",
-      "shortcuts": []
+      "shortcuts": [],
+      "heading": "Making the films"
     },
     {
       "id": "assistants",
@@ -73,7 +76,8 @@
       ],
       "keyword": "Claude Code and Codex: session logs, Git commits and hooks",
       "group": "Software",
-      "shortcuts": []
+      "shortcuts": [],
+      "heading": "AI coding assistants"
     },
     {
       "id": "code",
@@ -87,7 +91,8 @@
       ],
       "keyword": "Codebase maps and the NVIDIA Auto Ontology bridge",
       "group": "Software",
-      "shortcuts": []
+      "shortcuts": [],
+      "heading": "Reading AI-written code"
     },
     {
       "id": "testing",
@@ -101,7 +106,8 @@
       ],
       "keyword": "Experiments: LLM-written tests and Dafny-verified code",
       "group": "Software",
-      "shortcuts": []
+      "shortcuts": [],
+      "heading": "Tests and proofs of code"
     }
   ],
   "bridges": [
@@ -303,5 +309,78 @@
         "tier": 3
       }
     ]
+  },
+  "row_labels": {
+    "maths": "Eight Erdős problems",
+    "quartic": "Quantum query complexity",
+    "lean-exposition": "Spin glasses",
+    "proof-reader": "A paper beside its Lean proof",
+    "atlas": "Reports on OpenAI’s maths",
+    "narration-ir": "Pictures timed to speech",
+    "agent-trace": "Claude Code and Codex sessions",
+    "one-checkout": "Several agents, one checkout",
+    "safety-core": "Rules and command checks",
+    "codemap": "A map of a codebase",
+    "code-ontology-bridge": "NVIDIA Auto Ontology",
+    "zenith": "AI-written tests",
+    "formal-verification": "Dafny proofs in a toolkit",
+    "funnel": "The funnel"
+  },
+  "root": {
+    "heading": "Start here",
+    "rows": [
+      {
+        "id": "intro",
+        "label": "Introduction",
+        "name": "Introduction",
+        "question": "Where do I start?",
+        "line": "I do mathematics research and build software with AI agents, and I build ways to inspect what the agents produce. The introduction says what each project makes easier to understand and which short film to try first.",
+        "films": [
+          "short-introduction",
+          "long-introduction"
+        ]
+      },
+      {
+        "id": "funnel",
+        "project": "funnel"
+      }
+    ]
+  },
+  "landing": {
+    "weave_note": "Each row is one project. Each mark opens something: a 90-second film on the left, then the full film, the website, the paper and the source code.",
+    "columns": [
+      [
+        "short",
+        "Short film",
+        "Short",
+        2
+      ],
+      [
+        "full",
+        "Full film",
+        "Full",
+        2
+      ],
+      [
+        "site",
+        "Site",
+        "Site",
+        1
+      ],
+      [
+        "paper",
+        "Paper",
+        "Paper",
+        1
+      ],
+      [
+        "code",
+        "Code",
+        "Code",
+        1
+      ]
+    ],
+    "key": "Red threads are mathematics. Blue threads are software.",
+    "shared_film_note": "One full film covers the three reader websites."
   }
 }

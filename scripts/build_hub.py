@@ -914,8 +914,9 @@ def render_checkpoint_index(registry: dict, glossary: dict | None = None) -> str
 # ---------------------------------------------------------------- the catalogue as a graph
 
 def render_index(registry: dict, glossary: dict | None = None) -> str:
-    from explorer_v3 import render_page
-    return render_page(registry, glossary or load_glossary(), ROOT, structured_data(registry))
+    import sys
+    import landing
+    return landing.render(registry, glossary or load_glossary(), ROOT, structured_data(registry), sys.modules[__name__])
 
 
 def render_static_catalogue(registry: dict, glossary: dict | None = None) -> str:
