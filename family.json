@@ -133,7 +133,7 @@
       "status": null,
       "capture": "assets/sites/proof-reader",
       "capture_caption": "Contextual Embeddings beside the dependency graph and linked lines of its authors’ Lean proof.",
-      "credit": "Paper and proof by Frohlich, Foster, Kavvos and Wang. I made the reader and links with AI; the authors have not reviewed the links.",
+      "credit": "Paper and Lean proof by Frohlich, Foster, Kavvos and Wang. I made the reader, links and notes with AI.",
       "aka": [
         "Proof Reader"
       ],
@@ -487,7 +487,7 @@
       "id": "proof-reader",
       "name": "proof-reader",
       "href": "https://github.com/wcook04/proof-reader",
-      "description": "Each paper is one folder, and any paper with public Lean can be added. A program compares the site’s text with the PDF word for word."
+      "description": "Add a paper by supplying its reusable PDF and Lean project, a reading copy and passage links. A program checks the reading copy against text extracted from the PDF; the original PDF is available for comparison."
     },
     {
       "id": "plectis-atlas",
