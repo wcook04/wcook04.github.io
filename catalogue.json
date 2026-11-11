@@ -2019,7 +2019,7 @@
           "id": "youtube",
           "platform": "youtube",
           "state": "published",
-          "url": "https://www.youtube.com/watch?v=uWCqtRkJ8P0",
+          "url": "https://www.youtube.com/watch?v=VUSHyYSf1Ak",
           "duration_seconds": 1808,
           "thumbnail_stem": "assets/films/mathematics-v3"
         }
@@ -2034,7 +2034,7 @@
           "occurrence": 1
         }
       ],
-      "url": "https://www.youtube.com/watch?v=uWCqtRkJ8P0",
+      "url": "https://www.youtube.com/watch?v=VUSHyYSf1Ak",
       "publicly_available": true,
       "edition_state": "current"
     },
