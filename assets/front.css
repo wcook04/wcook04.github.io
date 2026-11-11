@@ -211,9 +211,8 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
   .name { font-size: clamp(40px, 12vw, 60px); }
   .say--claim { font-size: 18.5px; }
   .play { font-size: 21px; }
-  .player__screen, .screen { margin-inline: calc(-1 * var(--gutter)); border-radius: 0; }
-  .player__screen { margin-inline: 0; }
-  .is-playing .player__screen { margin-inline: calc(-1 * var(--gutter)); }
+  /* Pictures keep the page's gutter, so nothing in them touches the screen's edge. Only the playing video runs edge to edge. */
+  .is-playing .player__screen { margin-inline: calc(-1 * var(--gutter)); border-radius: 0; }
   .work .stage__show { order: -1; }
   .about__body { grid-template-columns: minmax(0, 1fr); }
   .about__contact { display: flex; flex-wrap: wrap; gap: 4px 22px; }
