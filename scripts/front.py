@@ -345,7 +345,6 @@ def render_home(model: dict, registry: dict, hub, structured: str, book: Book) -
           <div class="player__bar">
             <a class="play" href="{e(short["href"])}"{off(short["href"])} data-play><span class="play__mark" aria-hidden="true"></span><span class="play__what">Play {e(short["label"])}</span><span class="play__len">{e(clock(short["seconds"]))}</span></a>
             <a class="quiet" href="{e(long["href"])}"{off(long["href"])}>{e(long["label"])}, {e(clock(long["seconds"]))}</a>
-            <a class="quiet" href="{e(short["href"])}"{off(short["href"])} data-youtube>Watch on YouTube</a>
           </div>
         </div>
       </div>
