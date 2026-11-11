@@ -914,10 +914,14 @@ def render_checkpoint_index(registry: dict, glossary: dict | None = None) -> str
 # ---------------------------------------------------------------- the catalogue as a graph
 
 def render_index(registry: dict, glossary: dict | None = None) -> str:
+    """The home page. It and the project pages are written by scripts/front.py."""
+    return front_pages(registry)["index.html"]
+
+
+def front_pages(registry: dict) -> dict[str, str]:
     from types import SimpleNamespace
-    import landing
-    hub = SimpleNamespace(versioned=versioned, Terms=Terms, render_more=render_more, render_terms=render_terms)
-    return landing.render(registry, glossary or load_glossary(), ROOT, structured_data(registry), hub)
+    import front
+    return front.pages(registry, ROOT, structured_data(registry), SimpleNamespace(versioned=versioned))
 
 
 def render_static_catalogue(registry: dict, glossary: dict | None = None) -> str:
@@ -1074,13 +1078,15 @@ def render_sitemap() -> str:
 
 
 def render_sitemap_home(registry: dict) -> str:
-    return f'''<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>{HOME}</loc>
+    import front
+    urls = "".join(f'''  <url>
+    <loc>{e(address)}</loc>
     <lastmod>{registry["updated"]}</lastmod>
   </url>
-</urlset>
+''' for address in front.addresses(ROOT))
+    return f'''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{urls}</urlset>
 '''
 
 
@@ -1126,8 +1132,8 @@ def render_plectis_forward(path: str) -> str:
 
 def outputs(registry: dict, glossary: dict | None = None, *, include_redirects: bool = True) -> dict[str, str]:
     glossary = glossary if glossary is not None else load_glossary()
-    pages = {
-        "index.html": render_index(registry, glossary),
+    pages = dict(front_pages(registry))
+    pages.update({
         "all.html": render_static_catalogue(registry, glossary),
         "structured-data.jsonld": structured_data(registry) + "\n",
         "catalogue.json": render_catalogue(registry, glossary),
@@ -1137,7 +1143,7 @@ def outputs(registry: dict, glossary: dict | None = None, *, include_redirects: 
         "agent-guide.md": render_agent_guide(registry),
         "sitemap.xml": render_sitemap(),
         "sitemap-home.xml": render_sitemap_home(registry),
-    }
+    })
     for path in plectis_paths() if include_redirects else []:
         pages["plectis/" + path] = render_plectis_forward(path)
     return pages

@@ -32,7 +32,7 @@ REQUIRED = {
     "llms.txt", "agent-guide.md", "plectis-paths.txt", "robots.txt", "sitemap.xml",
     "sitemap-home.xml", "favicon.ico", "assets/hub.css", "assets/explorer.css",
     "assets/explore.js", "assets/explore-model.js", "assets/redirect.js", "assets/door-art.css",
-    "assets/landing.css", "assets/landing.js", "assets/landing-init.js", "scripts/landing.py",
+    "front.json", "assets/front.css", "assets/front.js", "assets/front-init.js", "scripts/front.py",
     "assets/favicon.svg", "scripts/build_hub.py", "scripts/check_hub_site.py",
     "scripts/catalogue_v3.py", "scripts/explorer_v3.py", "scripts/door_art.py", "scripts/sites.schema.json",
     "scripts/glossary.schema.json", "tests/test_hub_site.py",
@@ -41,10 +41,11 @@ PRODUCTION_REQUIRED = {".github/workflows/public-site.yml", ".gitignore"}
 ALLOWED = REQUIRED | PRODUCTION_REQUIRED | {
     "assets/hub.js", "assets/theme-init.js", "assets/family/family.css",
     "assets/favicon-32.png", "assets/apple-touch-icon.png", "scripts/capture_cards.py",
-    "scripts/check_explorer_model.js", "scripts/cut_loops.py", "scripts/loop_starts.json", "scripts/build_portable.py", "tests/__init__.py", "requirements.txt",
+    "scripts/check_explorer_model.js", "scripts/build_portable.py", "tests/__init__.py", "requirements.txt",
 }
 ALLOWED_DIRS = ("assets/fonts/", "assets/films/", "assets/sites/", "assets/logos/", "assets/family/marks/",
-                "content/transcripts/", "docs/")
+                "assets/front/", "content/transcripts/", "docs/", "work/")
+FRONT_MEDIA = ("assets/front/loops/", "assets/front/posters/", "assets/front/plates/", "assets/front/intro/")
 PROJECT_PATHS = ("plectis-atlas/", "plectis-zenith/", "practical-formal-verification/",
                  "lean-exposition-site/", "proof-reader/", "microcosm-substrate/",
                  "quartic-query-lean/", "plectis-erdos/")
@@ -112,27 +113,66 @@ def site_view(root: Path) -> dict:
     return explorer_v3.build_view(BUILD.load_registry(root), glossary, root)
 
 
-def validate_landing(text: str, view: dict, files) -> list[str]:
-    """The home page reaches every current film, website and first repository
-    from a row, and shows every preview loop it ships (and no missing one)."""
+def front_pages(files) -> dict[str, str]:
+    """The home page and the project pages, as text, by path."""
+    return {name: files[name].decode() for name in sorted(files)
+            if name == "index.html" or (name.startswith("work/") and name.endswith("/index.html"))}
+
+
+def named_files(text: str) -> set[str]:
+    """Every file of this repository that a page names, in any attribute."""
     page = Page(text)
-    hrefs = {a.get("href") for a in page.all("a")}
+    found = set()
+    for _, attrs in page.attrs:
+        for key, value in attrs.items():
+            if not value:
+                continue
+            parts = [part.strip().split(" ")[0] for part in value.split(",")] if key == "srcset" else [value]
+            for part in parts:
+                if part.startswith(HOME): part = part[len(HOME) - 1:]
+                if part.startswith("/assets/"): found.add(part.split("?")[0].split("#")[0].lstrip("/"))
+    return found
+
+
+def validate_landing(files, view: dict) -> list[str]:
+    """The home page and the project pages together reach every current video,
+    website and first repository; every project page a tile or a video's link
+    names exists; and every picture and clip shipped for them is used."""
+    pages = front_pages(files)
+    if "index.html" not in pages: return ["index.html: missing"]
+    parsed = {name: Page(text) for name, text in pages.items()}
+    hrefs = {a.get("href") for page in parsed.values() for a in page.all("a")}
+    home = parsed["index.html"]
     errors = []
     films = view["films"]
     for fid, film in films.items():
         newer = film.get("superseded_by")
         earlier = film.get("edition") == "earlier" or bool(newer and films.get(newer, {}).get("youtube"))
         if film.get("youtube") and not earlier and film["youtube"] not in hrefs:
-            errors.append("index.html: current video not linked: " + fid)
+            errors.append("home and project pages: current video not linked: " + fid)
     for pid, project in view["projects"].items():
-        if "p-" + pid not in page.ids: errors.append("index.html: project has no row: " + pid)
-        if project.get("url") and project["url"] not in hrefs: errors.append("index.html: website not linked: " + pid)
+        if "p-" + pid not in home.ids: errors.append("index.html: project has no anchor: " + pid)
+        if project.get("url") and project["url"] not in hrefs: errors.append("home and project pages: website not linked: " + pid)
         for repo in project.get("repo_records", [])[:1]:
-            if repo["href"] not in hrefs: errors.append("index.html: repository not linked: " + repo["id"])
-    loops = {a.get("data-loop") for a in page.all("a") if a.get("data-loop")}
-    shipped = {name for name in files if name.startswith("assets/films/loops/") and name.endswith(".mp4")}
-    for name in sorted(loops - shipped): errors.append("index.html: preview loop is not in the repository: " + name)
-    for name in sorted(shipped - loops): errors.append("preview loop the home page does not use: " + name)
+            if repo["href"] not in hrefs: errors.append("home and project pages: repository not linked: " + repo["id"])
+    try:
+        front = json.loads(files["front.json"])
+    except (KeyError, ValueError) as exc:
+        return errors + ["front.json: " + str(exc)]
+    tiles = [a.get("href") for a in home.all("a") if a.get("class") == "tile"]
+    expected = ["/work/" + entry["slug"] + "/" for entry in front["entries"]]
+    if tiles != expected: errors.append("index.html: the map must hold one tile per project, in front.json's order")
+    for address in expected:
+        if address.lstrip("/") + "index.html" not in pages: errors.append("missing project page: " + address)
+    for video, address in front.get("videos", {}).items():
+        path, _, fragment = address.partition("#")
+        name = (path.lstrip("/") + "index.html") if path != "/" else "index.html"
+        if name not in parsed: errors.append(f"front.json: {video} points at a page that does not exist: {address}")
+        elif fragment and fragment not in parsed[name].ids: errors.append(f"front.json: {video} points at a missing stop: {address}")
+    named = set().union(*(named_files(text) for text in pages.values()))
+    shipped = {name for name in files if name.startswith(FRONT_MEDIA)}
+    for name in sorted(n for n in named if n.startswith("assets/") and n not in files): errors.append("a page names a file that is not in the repository: " + name)
+    for name in sorted(shipped - named): errors.append("picture or clip no page uses: " + name)
     return errors
 
 
@@ -169,9 +209,10 @@ def validate_page(name: str, text: str, *, prototype: bool = False, redirect: bo
         robots = [m.get("content", "") for m in page.all("meta") if m.get("name") == "robots"]
         expected = "noindex, follow" if redirect else "index, follow"
         if robots != [expected]: errors.append(f"{name}: robots must be {expected}")
-        if name == "index.html":
+        if name == "index.html" or name.startswith("work/"):
             canonical = [a.get("href") for a in page.all("link") if a.get("rel") == "canonical"]
-            if canonical != [HOME]: errors.append("index.html: canonical must identify the real home URL")
+            expected_url = HOME if name == "index.html" else HOME + name[: -len("index.html")]
+            if canonical != [expected_url]: errors.append(name + ": canonical must identify the page's real URL")
     if redirect:
         scripts = [(a.get("src") or "").split("?")[0] for a in page.all("script")]
         if "/assets/redirect.js" not in scripts: errors.append(f"{name}: legacy routes must use /assets/redirect.js")
@@ -255,15 +296,15 @@ def validate(files: dict[str, bytes], *, prototype: bool = False, check_generate
             if prototype: command.append("--prototype")
             result = subprocess.run(command, cwd=root, text=True, capture_output=True, timeout=45)
             if result.returncode: errors.append("generated outputs: " + (result.stderr or result.stdout).strip())
-    for name in ("index.html", "all.html"):
+    for name in ["all.html"] + list(front_pages(files)):
         if name in files: errors += validate_page(name, files[name].decode(), prototype=prototype)
     if "404.html" in files: errors += validate_page("404.html", files["404.html"].decode(), prototype=prototype, redirect=True)
     if "index.html" in files and view is not None:
         errors += validate_projection(view, canonical)
         if {t["id"] for t in view.get("terms", [])} != {t["id"] for t in glossary["terms"]}: errors.append("explorer: the view lost a glossary definition")
-        errors += validate_landing(files["index.html"].decode(), view, files)
+        errors += validate_landing(files, view)
         scripts = Page(files["index.html"].decode()).all("script")
-        if not any((s.get("src") or "").split("?")[0].lstrip("/") == "assets/landing.js" and "defer" in s for s in scripts): errors.append("index.html: load the deferred same-origin assets/landing.js")
+        if not any((s.get("src") or "").split("?")[0].lstrip("/") == "assets/front.js" and "defer" in s for s in scripts): errors.append("index.html: load the deferred same-origin assets/front.js")
     if "all.html" in files:
         page = Page(files["all.html"].decode())
         hrefs = {a.get("href") for a in page.all("a")}

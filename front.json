@@ -1,0 +1,348 @@
+{
+  "about": "The home page and the project pages. Words and order live here; addresses and video lengths are read from sites.json through each stop's res. See docs/front.md.",
+  "intro": {
+    "title": "Will Cook: AI-written maths and code, made easier to understand",
+    "description": "Will Cook uses AI to make AI-written maths and code easier to understand: Lean proofs, papers, reader websites and videos, each project at several levels of detail.",
+    "h1": "I use AI to make AI-written maths and code easier to understand.",
+    "lede": "I do maths research and build software with AI. Each project here can be followed at several levels of detail, from a short video down to the proof or the code.",
+    "second": "I build the tools so they get better as AI models get better.",
+    "short": {"res": "film:short-introduction", "label": "Introduction", "file": "assets/front/intro/short-introduction.mp4"},
+    "long": {"res": "film:long-introduction", "label": "Full introduction", "poster": "long-introduction"},
+    "idle": {"loop": "hero", "alt": "From the introduction: one Lean proof of a case of Erdős problem 257 beside its 152-page research record, a 26-page paper for experts, a 16-page exposition and a 30-minute video."},
+    "map_title": "The projects",
+    "map_note": "Fifteen projects, in the five groups of the full introduction."
+  },
+  "kinds": {
+    "short": "Short video",
+    "long": "Full video",
+    "site": "Website",
+    "paper": "Paper",
+    "proof": "Lean proof",
+    "code": "Code",
+    "study": "Study",
+    "issue": "Issue"
+  },
+  "bands": [
+    {"id": "maths", "n": 1, "name": "Maths"},
+    {"id": "checks", "n": 2, "name": "What a check covers"},
+    {"id": "code", "n": 3, "name": "Code"},
+    {"id": "assistants", "n": 4, "name": "AI coding assistants at work"},
+    {"id": "videos", "n": 5, "name": "How I make these videos"}
+  ],
+  "entries": [
+    {
+      "slug": "funnel",
+      "name": "The funnel",
+      "band": "maths",
+      "aliases": ["funnel"],
+      "loop": "short-funnel",
+      "line": "How a Lean proof becomes papers and a video",
+      "claim": "The funnel is a set of written instructions that AI follows. It takes a proof that Lean has accepted and turns it into shorter and shorter versions for different readers. For Erdős #257 that is 152 pages, then 26, then 16, then a half-hour video.",
+      "limit": "Lean checks the proof. An expert still has to judge whether each paper and video says the same mathematics.",
+      "stops": [
+        {"id": "short", "kind": "short", "res": "film:short-funnel"},
+        {"id": "long", "kind": "long", "res": "film:long-funnel"},
+        {"id": "example", "kind": "site", "label": "Example", "detail": "Erdős #257, every version", "href": "https://wcook04.github.io/practical-formal-verification/maths/problems/erdos_257.html", "plate": "p257-page", "fallback": "assets/sites/maths-dark-720.webp"},
+        {"id": "code", "kind": "code", "res": "repo:lean-exposition", "detail": "writing guides and reader tools", "plate": "repo-lean-exposition", "fallback": "assets/sites/repo-funnel-720.webp"}
+      ],
+      "see": ["erdos-257", "reader-websites"]
+    },
+    {
+      "slug": "erdos-257",
+      "name": "Erdős #257",
+      "band": "maths",
+      "aliases": [],
+      "loop": "short-mathematics",
+      "line": "A case from 1968, proved and checked in Lean",
+      "claim": "Erdős asked whether adding infinitely many of the fractions 1, 1/3, 1/7, 1/15 and so on always gives a total that cannot be written as a fraction. He stated one case in 1968 and proved it with an extra restriction. Here that case is proved without the restriction, and Lean accepts the proof.",
+      "limit": "The question Erdős asked, for every infinite choice, is still open. The papers are written with AI and are not peer reviewed.",
+      "credit": "Golomb proved one case in 1963 and Erdős stated more in 1968. Google DeepMind's Formal Conjectures lists the 1968 case as solved.",
+      "stops": [
+        {"id": "short", "kind": "short", "res": "film:short-mathematics"},
+        {"id": "long", "kind": "long", "res": "film:mathematics"},
+        {"id": "site", "kind": "site", "label": "Website", "detail": "the problem page", "href": "https://wcook04.github.io/practical-formal-verification/maths/problems/erdos_257.html", "plate": "p257-page", "fallback": "assets/sites/maths-dark-720.webp",
+          "more": [{"label": "The problem as Erdős stated it", "href": "https://www.erdosproblems.com/257"}]},
+        {"id": "exposition", "kind": "paper", "label": "Exposition", "detail": "PDF, 16 pages", "href": "https://wcook04.github.io/practical-formal-verification/papers/erdos257-expository-sums-never-fractions.pdf", "plate": "p257-exposition"},
+        {"id": "paper", "kind": "paper", "label": "Paper for experts", "detail": "PDF, 26 pages", "href": "https://wcook04.github.io/practical-formal-verification/papers/erdos-257-mersenne-support-subseries.pdf", "plate": "p257-paper"},
+        {"id": "record", "kind": "paper", "label": "Research record", "detail": "PDF, 152 pages", "href": "https://wcook04.github.io/practical-formal-verification/papers/erdos257-mersenne-reasoning-surface.pdf", "plate": "p257-record"},
+        {"id": "proof", "kind": "proof", "label": "Lean proof", "detail": "the 1968 case", "href": "https://github.com/wcook04/plectis-erdos-lean/blob/ec92e5ce12c6117a24e4b532ea565ba332a1df7b/verification/FC257ReciprocalSupport/verification/Solutions/FC257Subtype.lean#L10-L17", "plate": "p257-lean",
+          "more": [{"label": "All the Lean proofs", "res": "repo:plectis-erdos-lean"}]}
+      ],
+      "see": ["funnel", "maths-map"]
+    },
+    {
+      "slug": "maths-map",
+      "name": "Maths Map",
+      "band": "maths",
+      "aliases": ["maths"],
+      "loop": "short-mathematics-overview",
+      "line": "Eight Erdős problems on one map",
+      "claim": "Maths Map is a website where each theorem from my research on eight Erdős problems sits on one map. Click a theorem and you go straight to where it is written up, in the long research record or the short paper for experts.",
+      "limit": "Only some of the theorems are checked by Lean, and the papers are written with AI, so an expert still needs to read them. Seven of the original questions remain open.",
+      "credit": "The #1041 formal-statement counterexample is due to ani.",
+      "stops": [
+        {"id": "short", "kind": "short", "res": "film:short-mathematics-overview"},
+        {"id": "long", "kind": "long", "res": "film:mathematics-overview"},
+        {"id": "site", "kind": "site", "res": "link:maths-maths-map", "label": "Website", "detail": "the map", "plate": "maths-universe", "fallback": "assets/sites/maths-dark-720.webp",
+          "more": [{"label": "The eight problems", "res": "link:maths-the-eight-problems"}, {"label": "Front page", "res": "site:maths"}]},
+        {"id": "papers", "kind": "paper", "res": "link:maths-the-papers", "label": "Papers", "detail": "the full list", "plate": "maths-papers"},
+        {"id": "proof", "kind": "proof", "res": "repo:plectis-erdos-lean", "label": "Lean proofs", "detail": "on GitHub", "plate": "repo-plectis-erdos-lean"},
+        {"id": "code", "kind": "code", "res": "repo:plectis-erdos", "label": "Papers and records", "detail": "on GitHub", "plate": "repo-plectis-erdos"}
+      ],
+      "see": ["erdos-257", "funnel"]
+    },
+    {
+      "slug": "quantum-computers",
+      "name": "Quantum computers",
+      "band": "maths",
+      "aliases": ["quartic"],
+      "loop": "short-quartic",
+      "line": "OpenAI's fourth-power result, proved again in Lean",
+      "claim": "OpenAI answered an exact version of how much faster a quantum computer can be. Count how often each machine looks at its input: an ordinary computer never needs more than a fixed multiple of the quantum count to the fourth power, and no smaller power works. Lean checks that whole theorem here.",
+      "limit": "The count is of looks at the input, which is a different measure from running time. AI wrote the labels that compare each Lean statement with the paper, and no expert has reviewed them yet.",
+      "credit": "The result is OpenAI's, released in October 2026. It completes an upper bound proved in 2020.",
+      "stops": [
+        {"id": "short", "kind": "short", "res": "film:short-quartic"},
+        {"id": "long", "kind": "long", "res": "film:quartic-query"},
+        {"id": "site", "kind": "site", "res": "site:quartic", "label": "Website", "detail": "Quartic Reader", "plate": "quartic-site", "fallback": "assets/sites/quartic-dark-720.webp"},
+        {"id": "paper", "kind": "paper", "res": "paper:quartic-original", "label": "OpenAI's paper", "detail": "in the reader", "plate": "quartic-original", "fallback": "assets/sites/quartic-dark-720.webp",
+          "more": [{"label": "Exposition", "res": "paper:quartic-exposition"}, {"label": "OpenAI's PDF", "href": "https://github.com/openai/math/blob/main/preprints/A-Nearly-Quartic-Separation-Between-Randomized-and-Quantum-Query-Complexity-October-5-2026/quartic-query-separation.pdf"}]},
+        {"id": "proof", "kind": "proof", "label": "Lean proof", "detail": "the main theorem", "href": "https://github.com/wcook04/quartic-query-lean/blob/main/lean/QuarticQuery/Results/Unconditional.lean", "plate": "quartic-lean"},
+        {"id": "code", "kind": "code", "res": "repo:quartic-query-lean", "detail": "on GitHub", "plate": "repo-quartic-query-lean"}
+      ],
+      "see": ["reader-websites", "funnel"]
+    },
+    {
+      "slug": "spin-glass",
+      "name": "Spin glass",
+      "band": "maths",
+      "aliases": ["lean-exposition"],
+      "loop": "short-sk-no-gap",
+      "line": "Two nearly best answers, half the arrows differ",
+      "claim": "In a model of magnets, every arrow points up or down and every arrangement gets a score. Two arrangements can both score almost the best while about half their arrows differ. On random boards, the chance that such a pair exists approaches 100% as the number of arrows grows.",
+      "limit": "The Lean proofs are OpenAI's and cover OpenAI's theorem. They do not cover this result about two arrangements.",
+      "credit": "The result follows from a 2020 paper by Auffinger, Chen and Zeng and an OpenAI theorem released in October 2026.",
+      "stops": [
+        {"id": "short", "kind": "short", "res": "film:short-sk-no-gap"},
+        {"id": "long", "kind": "long", "res": "film:sk-no-gap"},
+        {"id": "site", "kind": "site", "res": "site:lean-exposition", "label": "Website", "detail": "Lean Exposition", "plate": "sk-site", "fallback": "assets/sites/lean-exposition-dark-720.webp"},
+        {"id": "paper", "kind": "paper", "res": "paper:sk-exposition", "label": "Exposition", "detail": "in the reader", "plate": "sk-exposition", "fallback": "assets/sites/lean-exposition-dark-720.webp",
+          "more": [{"label": "The papers as PDFs", "res": "link:lean-exposition-the-papers-as-pdfs"}, {"label": "OpenAI's paper", "href": "https://github.com/openai/math/blob/main/preprints/Full-support-of-the-zero-temperature-Sherrington-Kirkpatrick-order-parameter-September-27-2026/main.pdf"}]},
+        {"id": "proof", "kind": "proof", "label": "OpenAI's Lean proof", "detail": "the full-support theorem", "href": "https://github.com/wcook04/lean-exposition/blob/main/examples/qaoa-sk/upstream/lean/OAI/Probability/SKSupport/Main.lean#L35", "plate": "sk-lean"},
+        {"id": "code", "kind": "code", "res": "repo:lean-exposition", "detail": "on GitHub", "plate": "repo-lean-exposition", "fallback": "assets/sites/repo-funnel-720.webp"}
+      ],
+      "see": ["reader-websites", "funnel"]
+    },
+    {
+      "slug": "reader-websites",
+      "name": "Reader websites",
+      "band": "maths",
+      "aliases": ["proof-reader"],
+      "loop": "short-proof-reader",
+      "line": "Click a sentence in a paper, open its Lean proof",
+      "names": "Lean Exposition, Quartic Reader, Proof Reader",
+      "claim": "Three websites where you read a maths paper and click a linked sentence to open the Lean that proves it, beside the text. A map of the argument follows as you scroll.",
+      "limit": "Lean checks the code. Whether a sentence and the code say the same thing is for a person to judge, and I made the links with AI.",
+      "credit": "Lean Exposition and Quartic Reader show OpenAI's papers. Proof Reader shows Contextual Embeddings by Frohlich, Foster, Kavvos and Wang, with the authors' own Lean proof.",
+      "stops": [
+        {"id": "long", "kind": "long", "res": "film:long-lean-readers", "detail_prefix": "all three, "},
+        {"id": "lean-exposition", "kind": "site", "res": "site:lean-exposition", "label": "Lean Exposition", "detail": "OpenAI's spin-glass paper", "plate": "sk-site", "fallback": "assets/sites/lean-exposition-dark-720.webp", "watched": "film:short-sk-website",
+          "more": [{"label": "Short video", "res": "film:short-sk-website"}, {"label": "Map of the argument", "res": "link:lean-exposition-argument-map"}, {"label": "Code", "res": "repo:lean-exposition-site"}]},
+        {"id": "quartic-reader", "kind": "site", "res": "site:quartic", "label": "Quartic Reader", "detail": "OpenAI's quantum paper", "plate": "quartic-site", "fallback": "assets/sites/quartic-dark-720.webp", "watched": "film:short-quartic-reader",
+          "more": [{"label": "Short video", "res": "film:short-quartic-reader"}, {"label": "Code", "res": "repo:quartic-query-lean"}]},
+        {"id": "proof-reader", "kind": "site", "res": "site:proof-reader", "label": "Proof Reader", "detail": "Contextual Embeddings", "plate": "proof-reader-site", "fallback": "assets/sites/proof-reader-dark-720.webp", "watched": "film:short-proof-reader",
+          "more": [{"label": "Short video", "res": "film:short-proof-reader"}, {"label": "Open the paper", "res": "paper:contextual-embeddings"}, {"label": "Code", "res": "repo:proof-reader"}]}
+      ],
+      "see": ["quantum-computers", "spin-glass"]
+    },
+    {
+      "slug": "atlas",
+      "name": "Atlas",
+      "band": "checks",
+      "aliases": ["atlas"],
+      "loop": "short-atlas",
+      "line": "Two groups, two labels for one maths paper",
+      "claim": "Atlas is a website that lists the papers in OpenAI's October 2026 maths release, with other groups' checking reports linked beside each one. For the paper about π, two groups both report the proof accepted and label its coverage differently. Atlas shows the two labels side by side.",
+      "limit": "The labels and proof checks are each group's own reported results. Atlas links their reports and has not rerun their checks.",
+      "credit": "The two reports are by MathVet and by Carlos Toledo's cert-machine.",
+      "stops": [
+        {"id": "short", "kind": "short", "res": "film:short-atlas"},
+        {"id": "long", "kind": "long", "res": "film:atlas"},
+        {"id": "site", "kind": "site", "res": "site:atlas", "label": "Website", "detail": "the map of papers", "plate": "atlas-site", "fallback": "assets/sites/atlas-dark-720.webp",
+          "more": [{"label": "How to use it", "res": "link:atlas-how-to-use-the-atlas"}]},
+        {"id": "example", "kind": "site", "res": "link:atlas-example-two-reports-on-a-paper-about", "label": "Example", "detail": "the paper about π", "plate": "atlas-017", "fallback": "assets/sites/atlas-dark-720.webp"},
+        {"id": "statements", "kind": "proof", "res": "link:atlas-lean-statements", "label": "Lean statements", "detail": "the list", "plate": "atlas-statements", "fallback": "assets/sites/atlas-dark-720.webp"},
+        {"id": "code", "kind": "code", "res": "repo:plectis-atlas", "detail": "on GitHub", "plate": "repo-plectis-atlas"}
+      ],
+      "see": ["verification-map", "maths-map"]
+    },
+    {
+      "slug": "verification-map",
+      "name": "Verification map",
+      "band": "checks",
+      "aliases": ["formal-verification"],
+      "loop": "short-plectis-verification",
+      "line": "What one proof covers, across 88 components",
+      "claim": "A map of the 88 components of my public toolkit. Rings around each component show which kinds of evidence it has, and sixteen calculations are proved with Dafny for every input.",
+      "limit": "Each proof covers one stated calculation. The outer ring shows how much of a component's whole claim has been checked, and it reads unknown for every component.",
+      "stops": [
+        {"id": "short", "kind": "short", "res": "film:short-plectis-verification"},
+        {"id": "long", "kind": "long", "res": "film:plectis-verification"},
+        {"id": "site", "kind": "site", "res": "site:formal-verification", "label": "Website", "detail": "the map", "plate": "pfv-explorer", "fallback": "assets/sites/formal-verification-dark-720.webp",
+          "more": [{"label": "All 88 components", "res": "link:formal-verification-all-88-components"}, {"label": "Documentation", "res": "link:formal-verification-documentation"}]},
+        {"id": "coverage", "kind": "site", "res": "link:formal-verification-which-proofs-and-tests-cover-each-one", "label": "Coverage", "detail": "proofs and tests, by component", "plate": "pfv-coverage", "fallback": "assets/sites/formal-verification-dark-720.webp"},
+        {"id": "proof", "kind": "proof", "label": "Dafny proofs", "detail": "what each one covers", "href": "https://github.com/wcook04/practical-formal-verification/blob/main/formal/README.md", "plate": "repo-practical-formal-verification"},
+        {"id": "code", "kind": "code", "res": "repo:practical-formal-verification", "detail": "on GitHub", "plate": "repo-practical-formal-verification"}
+      ],
+      "see": ["atlas", "safety-core"]
+    },
+    {
+      "slug": "codemap",
+      "name": "CodeMap",
+      "band": "code",
+      "aliases": ["codemap"],
+      "loop": "short-codemap",
+      "line": "A map of my code from AI-written descriptions",
+      "claim": "Every file in my code is a box holding the short description written at the top of that file. The descriptions are updated when the code changes, so opening the map asks no AI to write anything.",
+      "limit": "CodeMap is private, and the videos show it in use. A description can be wrong or out of date, and nothing checks it against the code.",
+      "stops": [
+        {"id": "short", "kind": "short", "res": "film:short-codemap"},
+        {"id": "long", "kind": "long", "res": "film:codemap"}
+      ],
+      "see": ["code-ontology-bridge", "agent-trace"]
+    },
+    {
+      "slug": "code-ontology-bridge",
+      "name": "Code Ontology Bridge",
+      "band": "code",
+      "aliases": ["code-ontology-bridge"],
+      "loop": "short-code-ontology",
+      "line": "NVIDIA's Auto Ontology answers questions about its own code",
+      "claim": "A program that reads a Python project and writes a database of every function and which function calls which. Given that database of its own code, NVIDIA's Auto Ontology answered 10.3 of 12 questions correctly on average. The same AI model asked directly answered 3.2.",
+      "limit": "Twelve questions, written by AI models. The answer keys were corrected after the runs, which moved results in both directions.",
+      "credit": "Auto Ontology is NVIDIA's open-source project. This study is independent of NVIDIA.",
+      "stops": [
+        {"id": "short", "kind": "short", "res": "film:short-code-ontology"},
+        {"id": "long", "kind": "long", "res": "film:long-code-ontology"},
+        {"id": "site", "kind": "site", "res": "site:code-ontology-bridge", "label": "Website", "detail": "example and results", "plate": "cob-site", "fallback": "assets/sites/code-ontology-bridge-dark-720.webp",
+          "more": [{"label": "Follow one question", "res": "link:code-ontology-bridge-caller-example"}]},
+        {"id": "study", "kind": "study", "res": "link:code-ontology-bridge-the-study", "label": "The study", "detail": "every run, with the failures", "plate": "cob-study", "fallback": "assets/sites/code-ontology-bridge-dark-720.webp"},
+        {"id": "paper", "kind": "paper", "label": "Paper", "detail": "PDF", "href": "https://github.com/wcook04/code-ontology-bridge/blob/main/docs/case-study.pdf", "plate": "cob-paper"},
+        {"id": "code", "kind": "code", "res": "repo:code-ontology-bridge", "detail": "on GitHub", "plate": "repo-code-ontology-bridge"},
+        {"id": "issue", "kind": "issue", "label": "Issue", "detail": "on NVIDIA's repository", "href": "https://github.com/NVIDIA/auto-ontology/issues/431", "plate": "cob-issue",
+          "more": [{"label": "NVIDIA Auto Ontology", "href": "https://github.com/NVIDIA/auto-ontology"}]}
+      ],
+      "see": ["codemap", "zenith"]
+    },
+    {
+      "slug": "one-checkout",
+      "name": "One Checkout",
+      "band": "assistants",
+      "aliases": ["one-checkout"],
+      "loop": "short-one-checkout",
+      "line": "Commit one fix while another AI keeps editing",
+      "claim": "When two AI coding assistants edit the same file, saving one finished fix can also save the other's unfinished edits. One Checkout commits only the exact lines of the fix, and the shared file still holds both sets of edits.",
+      "limit": "It does not stop two assistants overwriting each other's edits. It turns off Git's usual checks for each commit, so the assistants have to run the project's checks themselves.",
+      "stops": [
+        {"id": "short", "kind": "short", "res": "film:short-one-checkout"},
+        {"id": "long", "kind": "long", "res": "film:one-checkout"},
+        {"id": "code", "kind": "code", "res": "repo:one-checkout", "detail": "with a demo you can run", "plate": "repo-one-checkout", "fallback": "assets/sites/repo-one-checkout-720.webp"}
+      ],
+      "see": ["agent-trace", "safety-core"]
+    },
+    {
+      "slug": "safety-core",
+      "name": "Safety Core",
+      "band": "assistants",
+      "aliases": ["safety-core"],
+      "loop": "short-safety-core",
+      "line": "A written rule let 6 of 10 runs commit. A check let 0.",
+      "claim": "Safety Core keeps the rules for AI coding assistants in one file, each rule labelled with how it is enforced. In one test an assistant made up a setting so a failing test passed, then committed it: in 10 runs of 10 with no rules, 6 of 10 with written rules, and 0 of 10 when a check held the command for approval.",
+      "limit": "One model, Claude Haiku 4.5, on one small project, ten runs per setup. The check was written after this failure was first seen, and nobody was present to approve.",
+      "stops": [
+        {"id": "short", "kind": "short", "res": "film:short-safety-core"},
+        {"id": "long", "kind": "long", "res": "film:safety-core"},
+        {"id": "code", "kind": "code", "res": "repo:safety-core", "detail": "with the run records", "plate": "repo-safety-core", "fallback": "assets/sites/repo-safety-core-720.webp"}
+      ],
+      "see": ["one-checkout", "agent-trace"]
+    },
+    {
+      "slug": "agent-trace",
+      "name": "Agent Trace",
+      "band": "assistants",
+      "aliases": ["agent-trace"],
+      "loop": "short-agent-trace",
+      "line": "Read what your AI coding assistant ran",
+      "claim": "Claude Code and Codex save every conversation as a file. Agent Trace lists those conversations as they run, shows each command beside what it returned, and copies the part you choose into another chat.",
+      "limit": "It shows only what the files recorded. Large outputs can be shortened, and it does not remove passwords from what it copies.",
+      "stops": [
+        {"id": "short", "kind": "short", "res": "film:short-agent-trace"},
+        {"id": "long", "kind": "long", "res": "film:long-agent-trace"},
+        {"id": "code", "kind": "code", "res": "repo:agent-trace-mechanism", "detail": "with install steps", "plate": "repo-agent-trace-mechanism", "fallback": "assets/sites/repo-agent-trace-720.webp"}
+      ],
+      "see": ["one-checkout", "safety-core"]
+    },
+    {
+      "slug": "zenith",
+      "name": "Zenith",
+      "band": "assistants",
+      "aliases": ["zenith"],
+      "loop": "short-zenith",
+      "line": "Showing an AI tester the bugs it missed",
+      "claim": "An AI model that tests code was shown the bugs it had missed on practice problems. On 58 new problems its average score rose from 69.2% to 77.0%.",
+      "limit": "About half of the rise came from timeouts. The study tested one model on short programs, and rules the model wrote from its own mistakes did not clearly raise the score.",
+      "stops": [
+        {"id": "short", "kind": "short", "res": "film:short-zenith"},
+        {"id": "long", "kind": "long", "res": "film:zenith"},
+        {"id": "study", "kind": "study", "label": "The study", "detail": "method, results and limits", "href": "https://github.com/wcook04/plectis-zenith/blob/2b325e2de0fb763d0998f2a4f61fac59001ded59/docs/studies/kept-experience/README.md", "plate": "zenith-study",
+          "more": [{"label": "Pull request #13", "res": "link:zenith-study-pull-request-13"}]},
+        {"id": "code", "kind": "code", "res": "repo:plectis-zenith", "detail": "on GitHub", "plate": "repo-plectis-zenith"},
+        {"id": "site", "kind": "site", "res": "site:zenith", "label": "Earlier studies", "detail": "website", "plate": "zenith-site", "fallback": "assets/sites/zenith-dark-720.webp",
+          "more": [{"label": "Earlier paper on program repair, PDF", "res": "paper:zenith-program-repair"}]}
+      ],
+      "see": ["safety-core", "code-ontology-bridge"]
+    },
+    {
+      "slug": "narration-ir",
+      "name": "Narration IR",
+      "band": "videos",
+      "aliases": ["narration-ir"],
+      "loop": "short-narration-ir",
+      "line": "Plan what each sentence means, then animate",
+      "claim": "Before AI writes any animation code, it writes a plan: what each spoken sentence means, and which spoken word each change in the picture is timed to. A program confirms that every quote is really in the script.",
+      "limit": "The program cannot tell whether a meaning is right, so I read each plan myself. Whether plans like this help a viewer understand has not been tested.",
+      "stops": [
+        {"id": "short", "kind": "short", "res": "film:short-narration-ir"},
+        {"id": "long", "kind": "long", "res": "film:long-narration-ir"},
+        {"id": "code", "kind": "code", "res": "repo:narration-ir", "detail": "instructions and a worked example", "plate": "repo-narration-ir", "fallback": "assets/sites/repo-narration-ir-720.webp"}
+      ],
+      "see": ["funnel", "spin-glass"]
+    }
+  ],
+  "videos": {
+    "sixty-introduction": "/",
+    "long-introduction": "/#map",
+    "sixty-funnel": "/work/funnel/#short",
+    "long-funnel": "/work/funnel/#long",
+    "sixty-mathematics": "/work/erdos-257/#short",
+    "sixty-mathematics-overview": "/work/maths-map/#short",
+    "sixty-quartic": "/work/quantum-computers/#short",
+    "sixty-sk-no-gap": "/work/spin-glass/#short",
+    "sixty-sk-website": "/work/reader-websites/#lean-exposition",
+    "sixty-quartic-reader": "/work/reader-websites/#quartic-reader",
+    "sixty-proof-reader": "/work/reader-websites/#proof-reader",
+    "long-lean-readers": "/work/reader-websites/#long",
+    "sixty-atlas": "/work/atlas/#short",
+    "sixty-plectis-verification": "/work/verification-map/#short",
+    "sixty-codemap": "/work/codemap/#short",
+    "sixty-code-ontology": "/work/code-ontology-bridge/#short",
+    "long-code-ontology": "/work/code-ontology-bridge/#long",
+    "sixty-one-checkout": "/work/one-checkout/#short",
+    "sixty-safety-core": "/work/safety-core/#short",
+    "sixty-agent-trace": "/work/agent-trace/#short",
+    "long-agent-trace": "/work/agent-trace/#long",
+    "sixty-zenith": "/work/zenith/#short",
+    "sixty-narration-ir": "/work/narration-ir/#short",
+    "long-narration-ir": "/work/narration-ir/#long"
+  }
+}

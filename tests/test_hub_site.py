@@ -123,8 +123,8 @@ class HubTests(unittest.TestCase):
 
     def test_remote_assets_and_embedded_players_are_rejected(self):
         page = self.files["index.html"].decode().replace("</main>", '<iframe src="https://example.org/player"></iframe></main>')
-        self.assertIn('src="/assets/landing.js?', page)
-        page = page.replace('src="/assets/landing.js?', 'src="https://example.org/landing.js?')
+        self.assertIn('src="/assets/front.js?', page)
+        page = page.replace('src="/assets/front.js?', 'src="https://example.org/front.js?')
         errors = CHECK.validate_page("index.html", page, prototype=True)
         self.assertTrue(any("embedded player" in error for error in errors))
         self.assertTrue(any("another host" in error for error in errors))
@@ -132,28 +132,42 @@ class HubTests(unittest.TestCase):
     def test_no_page_frames_a_player(self):
         page = self.files["index.html"].decode()
         self.assertEqual(CHECK.validate_page("index.html", page, prototype=True), [])
-        for name in ("index.html", "all.html"):
+        for name in ("index.html", "all.html", "work/zenith/index.html"):
             framed = self.files[name].decode().replace("frame-src 'none'", "frame-src https://www.youtube.com")
             self.assertTrue(any("frame-src 'none'" in error
                                 for error in CHECK.validate_page(name, framed, prototype=True)))
 
-    def test_home_page_rows_reach_every_current_film_website_and_repository(self):
-        page = self.files["index.html"].decode()
-        self.assertEqual(CHECK.validate_landing(page, self.view, self.files), [])
-        short = self.view["films"]["short-quartic"]["youtube"]
-        self.assertTrue(any("current video not linked: short-quartic" in error
-                            for error in CHECK.validate_landing(page.replace(short, "#gone"), self.view, self.files)))
+    def test_home_and_project_pages_reach_every_current_video_website_and_repository(self):
+        self.assertEqual(CHECK.validate_landing(self.files, self.view), [])
+        short = self.view["films"]["short-quartic"]["youtube"].encode()
+        broken = {name: (data.replace(short, b"#gone") if name.endswith(".html") else data) for name, data in self.files.items()}
+        self.assertTrue(any("current video not linked: short-quartic" in error for error in CHECK.validate_landing(broken, self.view)))
         extra = dict(self.files)
-        extra["assets/films/loops/unused.mp4"] = b""
-        self.assertTrue(any("does not use" in error for error in CHECK.validate_landing(page, self.view, extra)))
-        # The page is a readable list without its script: every row is a link to an article on the page,
-        # and no film preview depends on YouTube (posters and loops are this repository's own files).
+        extra["assets/front/loops/unused-s.mp4"] = b""
+        self.assertTrue(any("no page uses" in error for error in CHECK.validate_landing(extra, self.view)))
+        # The map is a list of links without its script: fifteen tiles, each to a project page that exists,
+        # and no picture depends on YouTube (posters, plates and loops are this repository's own files).
+        page = self.files["index.html"].decode()
         parsed = CHECK.Page(page)
-        rows = [a.get("href") for a in parsed.all("a") if a.get("class") == "row__label"]
-        self.assertEqual(len(rows), 15)
-        self.assertTrue(all(href[1:] in parsed.ids for href in rows))
+        tiles = [a.get("href") for a in parsed.all("a") if a.get("class") == "tile"]
+        self.assertEqual(len(tiles), 15)
+        self.assertTrue(all(href.lstrip("/") + "index.html" in self.files for href in tiles))
         self.assertNotIn("ytimg", page)
         self.assertNotIn("youtube.com/embed", page)
+
+    def test_every_video_has_a_page_and_a_stop_to_arrive_at(self):
+        front = json.loads(self.files["front.json"])
+        self.assertEqual(len(front["videos"]), 24)
+        missing = dict(self.files)
+        del missing["work/agent-trace/index.html"]
+        self.assertTrue(any("page that does not exist" in error for error in CHECK.validate_landing(missing, self.view)))
+        moved = dict(self.files)
+        moved["work/funnel/index.html"] = moved["work/funnel/index.html"].replace(b'id="long"', b'id="elsewhere"')
+        self.assertTrue(any("missing stop" in error for error in CHECK.validate_landing(moved, self.view)))
+        # Old addresses still land: every project the earlier page listed keeps its anchor on the home page.
+        home = CHECK.Page(self.files["index.html"].decode())
+        for pid in self.view["projects"]:
+            self.assertIn("p-" + pid, home.ids)
 
     def test_host_wide_crawling_and_project_ownership_are_preserved(self):
         files = dict(self.files)
