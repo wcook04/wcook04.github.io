@@ -139,12 +139,13 @@ class HubTests(unittest.TestCase):
             self.assertTrue(any("frame-src 'none'" in error
                                 for error in CHECK.validate_page(name, framed, prototype=True)))
         # The home page frames YouTube's player for the introduction, and nothing else.
-        self.assertEqual(page.count("<iframe"), 1)
-        self.assertIn('<iframe src="https://www.youtube.com/embed/', page)
+        # The home page's HTML holds no frame; its Play control names YouTube's player, which the script adds on a press.
+        self.assertEqual(page.count("<iframe"), 0)
+        self.assertIn('data-embed="https://www.youtube.com/embed/', page)
         other = page.replace("frame-src https://www.youtube.com", "frame-src https://example.org")
         self.assertTrue(any("content security policy" in error for error in CHECK.validate_page("index.html", other, prototype=True)))
-        second = page.replace("</main>", '<iframe src="https://www.youtube.com/embed/AAAAAAAAAAA?rel=0"></iframe></main>')
-        self.assertTrue(any("embedded player" in error for error in CHECK.validate_page("index.html", second, prototype=True)))
+        framed = page.replace("</main>", '<iframe src="https://www.youtube.com/embed/AAAAAAAAAAA?rel=0"></iframe></main>')
+        self.assertTrue(any("embedded player" in error for error in CHECK.validate_page("index.html", framed, prototype=True)))
 
     def test_home_and_project_pages_reach_every_current_video_website_and_repository(self):
         self.assertEqual(CHECK.validate_landing(self.files, self.view), [])

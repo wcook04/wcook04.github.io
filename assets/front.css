@@ -71,10 +71,8 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 .player__screen, .screen { mix-blend-mode: lighten; }
 .is-playing .player__screen { mix-blend-mode: normal; }
 .js .player__screen { cursor: pointer; }
-/* The introduction, in YouTube's player: a plain 16:9 frame, never blended, at every width. */
-.player .player__screen--embed { aspect-ratio: 16 / 9; mix-blend-mode: normal; cursor: default; outline: 1px solid var(--line); outline-offset: -1px; view-transition-name: none; }
+/* The introduction, in YouTube's player, fills the stage once Play is pressed. */
 .player__screen iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-.player__what { font: 700 20px/1.1 var(--display); }
 /* Visitors who get the idle scene do not first see its finished still. It comes back by itself after two
    seconds (under the clip, where it cannot be seen), so a clip that never arrives leaves no empty frame. */
 .moves .player__poster { opacity: 0; animation: show .2s linear 2s forwards; }

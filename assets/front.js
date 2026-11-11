@@ -121,10 +121,8 @@
   }
 
   /* ---- the home page's stage: the introduction ---- */
-  /* Since the introduction moved into YouTube's own player (so a play counts there), the stage needs no script;
-     this block only runs for a stage that still has its own Play control. */
   var player = document.getElementById("player");
-  if (player && one("[data-play]", player)) {
+  if (player) {
     var stage = one(".player__screen", player);
     var bar = one(".player__bar", player);
     var play = one("[data-play]", player);
@@ -163,16 +161,13 @@
     }
     function open() {
       if (film) return;
-      film = document.createElement("video");
-      film.controls = true;
-      film.playsInline = true;
-      film.preload = "auto";
-      film.setAttribute("aria-label", "Introduction, with captions in the picture");
-      /* The still stays under the video until its first frame exists. */
-      film.addEventListener("playing", function () { if (film) film.classList.add("is-live"); });
-      film.addEventListener("ended", shut);
-      film.src = player.getAttribute("data-film");
-      start(film);                           /* inside the click, so sound is allowed */
+      /* The introduction plays in YouTube's own player, in the place where the scene was. */
+      film = document.createElement("iframe");
+      film.title = player.getAttribute("data-embed-title") || "Introduction";
+      film.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
+      film.allowFullscreen = true;
+      film.referrerPolicy = "strict-origin-when-cross-origin";
+      film.src = player.getAttribute("data-embed");
       close = document.createElement("button");
       close.type = "button";
       close.className = "close";
@@ -191,9 +186,8 @@
       if (!film) return;
       var gone = film;
       film = null;
-      gone.pause();
       shift(function () {
-        drop(gone);
+        if (gone.parentNode) gone.parentNode.removeChild(gone);
         if (close && close.parentNode) close.parentNode.removeChild(close);
         close = null;
         player.classList.remove("is-playing");

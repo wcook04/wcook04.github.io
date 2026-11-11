@@ -94,8 +94,8 @@ in these folders is used by no page.
   site states it, with its stated limit beside it. The limit is always visible
   text, marked with a brick rule.
 - Words, never symbols: a stop says "Short video, 1:41" or "Paper, PDF, 26 pages".
-- Nothing loads from another host, with one exception: the home page frames the short
-  introduction in YouTube's own player, so a play there counts as a view on YouTube.
+- Nothing loads from another host, with one exception: when Play is pressed, the home page's script
+  puts the short introduction in YouTube's own player where the scene was.
   Every other video opens on YouTube.
 - The static pages hold no `<video>` element. The script creates one where it is
   needed and removes it afterwards, so at most one clip is loaded.

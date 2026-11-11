@@ -202,16 +202,19 @@ def same_origin(url: str) -> bool:
     return not url.startswith(("http://", "https://", "//"))
 
 
+def prototype_only_text(text: str) -> bool:
+    """True when the home page carries the introduction's embed address for its Play control."""
+    return bool(re.search(r'data-embed="https://www\.youtube\.com/embed/[A-Za-z0-9_-]{11}\?autoplay=1&amp;rel=0"', text))
+
+
 def validate_page(name: str, text: str, *, prototype: bool = False, redirect: bool = False) -> list[str]:
     page = Page(text)
     errors = []
-    # One frame is allowed on the whole site: the introduction on the home page, in YouTube's own player.
+    # No page holds a frame in its HTML. The home page's script adds one, YouTube's player, when Play is pressed.
     home = name == "index.html"
-    embeds = [a.get("src", "") for a in page.all("iframe")]
     for tag in ("iframe", "object", "embed", "video", "audio", "frame"):
-        if tag == "iframe" and home and len(embeds) == 1 and re.fullmatch(r"https://www\.youtube\.com/embed/[A-Za-z0-9_-]{11}\?rel=0", embeds[0]):
-            continue
         if tag in page.tags: errors.append(f"{name}: no embedded player or frame ({tag})")
+    if home and not prototype_only_text(text): errors.append(f"{name}: the Play control must name YouTube's embed address for the introduction")
     for tag, key in (("img", "src"), ("script", "src"), ("link", "href"), ("source", "src")):
         for attrs in page.all(tag):
             if tag == "link" and attrs.get("rel") == "canonical": continue
@@ -223,7 +226,7 @@ def validate_page(name: str, text: str, *, prototype: bool = False, redirect: bo
             if url and not same_origin(url): errors.append(f"{name}: image source loads from another host: {url}")
     csp = [m.get("content", "") for m in page.all("meta") if m.get("http-equiv", "").lower() == "content-security-policy"]
     # Only the home page frames anything, and only YouTube; every other video opens on YouTube.
-    frames = "frame-src https://www.youtube.com" if home and embeds else "frame-src 'none'"
+    frames = "frame-src https://www.youtube.com" if home else "frame-src 'none'"
     rules = [r.strip() for r in csp[0].split(";")] if len(csp) == 1 else []
     if any(rule not in rules for rule in (frames, "connect-src 'none'", "script-src 'self'")):
         errors.append(f"{name}: preserve the same-origin content security policy ({frames})")
