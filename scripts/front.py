@@ -254,7 +254,7 @@ def stop_markup(stop: dict) -> str:
     if stop["more"]:
         more = '<ul class="stop__more" role="list">' + "".join(
             f'<li><a href="{e(m["href"])}"{off(m["href"])}>{e(m["label"])}</a></li>' for m in stop["more"]) + "</ul>"
-    flag = "You watched this" if stop["video"] else "From your video"
+    flag = "You watched this" if stop["video"] else "You saw this"
     return (f'<li class="stop stop--{e(kind)}{" stop--video" if stop["video"] else ""}" id="{e(stop["id"])}">'
             f'<span class="stop__flag stop__flag--here">{flag}</span><span class="stop__flag stop__flag--next">Next</span>'
             f'<a class="stop__main" href="{e(stop["href"])}"{off(stop["href"])}>'
@@ -276,7 +276,7 @@ def render_home(model: dict, registry: dict, hub, structured: str, book: Book) -
     wide_clip, narrow_clip = "assets/front/loops/hero-l.mp4", "assets/front/loops/hero-n.mp4"
     loop_attrs = (f' data-idle-l="/{wide_clip}" data-idle-n="/{narrow_clip}"'
                   if book.has(wide_clip) and book.has(narrow_clip) else "")
-    narrow = "".join(f'<source media="(max-width: 860px)" srcset="/assets/front/posters/hero-n-480.webp 480w, /assets/front/posters/hero-n-960.webp 960w" sizes="100vw">'
+    narrow = "".join(f'<source media="(max-width: 1180px)" srcset="/assets/front/posters/hero-n-480.webp 480w, /assets/front/posters/hero-n-960.webp 960w" sizes="(min-width: 861px) 56vw, 100vw">'
                      for _ in [0] if book.has("assets/front/posters/hero-n-480.webp") and book.has("assets/front/posters/hero-n-960.webp"))
     contact = "".join(f'<li><a href="{e(c["href"])}" rel="noopener">{e(c["label"])}</a></li>' for c in owner["contact"])
     invitation = "".join(f"<p>{e(text)}</p>" for text in owner.get("invitation", []))

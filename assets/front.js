@@ -138,7 +138,7 @@
 
     function idleStart() {
       if (!moving() || film || idle || !player.getAttribute("data-idle-l")) return;
-      idle = clip(player.getAttribute(window.innerWidth > 860 ? "data-idle-l" : "data-idle-n"), false);
+      idle = clip(player.getAttribute(window.innerWidth > 1180 ? "data-idle-l" : "data-idle-n"), false);
       stage.appendChild(idle);
       idleControl = control(bar, idle, false);
       idleControl.classList.add("ctl--bar");

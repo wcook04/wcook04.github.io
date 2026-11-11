@@ -189,6 +189,7 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
   body { font-size: 18px; }
 }
 @media (max-width: 1180px) {
+  .player__screen { aspect-ratio: 1224 / 786; }
   .bands { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .band--maths, .band--assistants { grid-column: span 4; }
   .band--maths .tiles, .band--assistants .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -208,7 +209,7 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
   .say--claim { font-size: 18.5px; }
   .play { font-size: 21px; }
   .player__screen, .screen { margin-inline: calc(-1 * var(--gutter)); border-radius: 0; }
-  .player__screen { aspect-ratio: 1224 / 786; margin-inline: 0; }
+  .player__screen { margin-inline: 0; }
   .is-playing .player__screen { margin-inline: calc(-1 * var(--gutter)); }
   .work .stage__show { order: -1; }
   .bands { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px var(--gap); }
