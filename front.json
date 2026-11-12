@@ -321,7 +321,7 @@
     },
     {
       "slug": "zenith",
-      "primary": {"stop": "study", "label": "Read the study"},
+      "primary": {"stop": "study", "label": "Read the study report"},
       "name": "Zenith",
       "band": "assistants",
       "aliases": ["zenith"],
@@ -335,9 +335,9 @@
       "stops": [
         {"id": "short", "kind": "short", "res": "film:short-zenith"},
         {"id": "long", "kind": "long", "res": "film:zenith"},
-        {"id": "study", "kind": "study", "label": "The study", "detail": "method, results and limits", "href": "https://github.com/wcook04/plectis-zenith/blob/2b325e2de0fb763d0998f2a4f61fac59001ded59/docs/studies/kept-experience/README.md", "plate": "zenith-study", "more": [{"label": "Pull request #13", "res": "link:zenith-study-pull-request-13"}]},
+        {"id": "study", "kind": "study", "label": "Study report", "detail": "method, results and limits", "res": "site:zenith", "plate": "zenith-study", "more": [{"label": "Study source on GitHub", "href": "https://github.com/wcook04/plectis-zenith/blob/2b325e2de0fb763d0998f2a4f61fac59001ded59/docs/studies/kept-experience/README.md"}, {"label": "Pull request #13", "res": "link:zenith-study-pull-request-13"}]},
         {"id": "code", "kind": "code", "res": "repo:plectis-zenith", "detail": "on GitHub", "plate": "repo-plectis-zenith"},
-        {"id": "site", "kind": "site", "res": "site:zenith", "label": "Earlier studies", "detail": "website", "plate": "zenith-site", "fallback": "assets/sites/zenith-dark-720.webp", "more": [{"label": "Earlier paper on program repair, PDF", "res": "paper:zenith-program-repair"}]}
+        {"id": "site", "kind": "site", "href": "https://wcook04.github.io/plectis-zenith/?studies=earlier", "label": "Earlier studies", "detail": "website", "plate": "zenith-site", "fallback": "assets/sites/zenith-dark-720.webp", "more": [{"label": "Earlier paper on program repair, PDF", "res": "paper:zenith-program-repair"}]}
       ]
     },
     {
