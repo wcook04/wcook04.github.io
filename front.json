@@ -140,15 +140,15 @@
       "line": "Two nearly best answers, half the arrows differ",
       "claim": "In a model of magnets, every arrow points up or down and every arrangement gets a score. Two arrangements can both score almost the best while about half their arrows differ. When the scoring is random, the chance that such a pair exists approaches 100% as the number of arrows grows.",
       "limit": "The Lean proofs are OpenAI's and cover OpenAI's theorem. They do not cover this result about two arrangements.",
-      "credit": "The result follows from a 2020 paper by Auffinger, Chen and Zeng and an OpenAI theorem released in October 2026.",
+      "credit": "The result follows from a 2020 paper by Auffinger, Chen and Zeng and an OpenAI theorem released in October 2026. Full support, the part of that theorem the result uses, was first proved in a July 2026 paper by Hong-Bin Chen. OpenAI's proof is quantitative and also gives a strictly positive density.",
       "page_title": "Spin glass: two nearly best answers, half the arrows differ",
-      "description": "In a model of magnets, two arrangements can both score almost the best while about half their arrows differ. The result follows from a 2020 paper by Auffinger, Chen and Zeng and an OpenAI theorem. The Lean proofs are OpenAI’s and cover OpenAI’s theorem only.",
+      "description": "In a model of magnets, two arrangements can both score almost the best while about half their arrows differ. The result follows from a 2020 paper by Auffinger, Chen and Zeng and an OpenAI theorem. Full support was first proved in a July 2026 paper by Hong-Bin Chen. The Lean proofs are OpenAI’s and cover OpenAI’s theorem only.",
       "card_alt": "Spin glass: Two nearly best answers, half the arrows differ. A frame from the project’s video.",
       "stops": [
         {"id": "short", "kind": "short", "res": "film:short-sk-no-gap"},
         {"id": "long", "kind": "long", "res": "film:sk-no-gap"},
         {"id": "site", "kind": "site", "res": "site:lean-exposition", "label": "Website", "detail": "Lean Exposition", "plate": "sk-site", "fallback": "assets/sites/lean-exposition-dark-720.webp"},
-        {"id": "paper", "kind": "paper", "res": "paper:sk-exposition", "label": "Exposition", "detail": "in the reader", "plate": "sk-exposition", "fallback": "assets/sites/lean-exposition-dark-720.webp", "more": [{"label": "The papers as PDFs", "res": "link:lean-exposition-the-papers-as-pdfs"}, {"label": "OpenAI's paper", "href": "https://github.com/openai/math/blob/main/preprints/Full-support-of-the-zero-temperature-Sherrington-Kirkpatrick-order-parameter-September-27-2026/main.pdf"}]},
+        {"id": "paper", "kind": "paper", "res": "paper:sk-exposition", "label": "Exposition", "detail": "in the reader", "plate": "sk-exposition", "fallback": "assets/sites/lean-exposition-dark-720.webp", "more": [{"label": "The papers as PDFs", "res": "link:lean-exposition-the-papers-as-pdfs"}, {"label": "OpenAI's paper", "href": "https://github.com/openai/math/blob/main/preprints/Full-support-of-the-zero-temperature-Sherrington-Kirkpatrick-order-parameter-September-27-2026/main.pdf"}, {"label": "Hong-Bin Chen's paper", "href": "https://arxiv.org/abs/2607.18032"}]},
         {"id": "proof", "kind": "proof", "label": "OpenAI's Lean proof", "detail": "the full-support theorem", "href": "https://github.com/wcook04/lean-exposition/blob/main/examples/qaoa-sk/upstream/lean/OAI/Probability/SKSupport/Main.lean#L35", "plate": "sk-lean"},
         {"id": "code", "kind": "code", "res": "repo:lean-exposition", "detail": "on GitHub", "plate": "repo-lean-exposition", "fallback": "assets/sites/repo-funnel-720.webp"}
       ]
