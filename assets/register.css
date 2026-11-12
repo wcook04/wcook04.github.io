@@ -35,8 +35,9 @@
 .reg__table .reg__row > * { padding: 20px 22px 20px 0; border-bottom: 1px solid var(--line); }
 .reg__table .reg__row > :last-child { padding-right: 0; }
 .reg__table .reg__group--intro .reg__row > * { border-bottom: 0; padding-top: 24px; padding-bottom: 4px; }
-.reg__name a { font: 700 24px/1.1 var(--display); text-decoration: none; display: block; padding-block: 1px; }
-.reg__name a:hover { text-decoration: underline; text-underline-offset: 3px; }
+/* A project's name opens its own page; the faint underline says it is a link. */
+.reg__name a { font: 700 24px/1.1 var(--display); text-decoration: underline; text-decoration-color: var(--line); text-decoration-thickness: 1px; text-underline-offset: 4px; display: block; padding-block: 1px; }
+.reg__name a:hover { text-decoration-color: currentColor; }
 .reg__line { display: block; color: var(--muted); font-size: 14px; line-height: 1.4; margin-top: 5px; text-wrap: pretty; }
 .reg__row { scroll-margin-top: 56px; }
 .reg__row:target > .reg__name, .reg__row:has(.anchor:target) > .reg__name { box-shadow: inset 3px 0 0 var(--paper); padding-left: 12px; }

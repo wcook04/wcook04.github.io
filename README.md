@@ -5,9 +5,9 @@ The page links his mathematics research, software and videos. The projects
 have their own repositories, listed below.
 
 The page opens with one sentence and the [short introduction](https://www.youtube.com/watch?v=YQZtkFIGNBk)
-video, which plays in the page in YouTube's player once Play is pressed. Under it is a map of the work: fifteen projects
-in five groups, as the [full introduction](https://www.youtube.com/watch?v=Yk_kUQUCylc)
-draws them. Each project has its own page. It opens with a strip of levels,
+video, which plays in the page in YouTube's player once Play is pressed. Under it are three projects to start with,
+then all fifteen in five groups, as the [full introduction](https://www.youtube.com/watch?v=Yk_kUQUCylc)
+orders them. Each project has its own page, with links back to the whole list and to the projects either side. It opens with a strip of levels,
 from a short video on the left to the full video, the website, the paper, the
 proof and the code on the right, so a visitor chooses how deep to go.
 

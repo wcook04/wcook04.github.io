@@ -44,7 +44,7 @@ def spoken(seconds: int | None) -> str:
 
 
 WORDS = {"title", "description", "h1", "lede", "second", "label", "alt", "map_title", "map_note", "name", "line", "names",
-         "claim", "limit", "credit", "detail", "detail_prefix", "page_title", "card_alt"}
+         "claim", "limit", "credit", "detail", "detail_prefix", "page_title", "card_alt", "about", "start_title", "start_note", "all_title"}
 
 
 def typeset(value, key: str = ""):
@@ -139,9 +139,17 @@ def resolve(front: dict, book: Book) -> dict:
                           "watched": stop.get("watched"), "named": named(href) if kind in NAMED_KINDS else None,
                           "more": [link(m) for m in stop.get("more", [])]})
         lead = next((s for s in stops if s["video"]), None)
+        primary = None
+        if entry.get("primary"):
+            # The thing itself (the website, the study, the repository): one of this project's own stops, so its address cannot drift.
+            target = next(s for s in stops if s["id"] == entry["primary"]["stop"])
+            primary = {"label": entry["primary"]["label"], "href": target["href"]}
         entries.append({**entry, "stops": stops, "band_name": bands[entry["band"]]["name"], "band_n": bands[entry["band"]]["n"],
                         "poster": book.poster(entry["loop"]), "loops": book.loop(entry["loop"]),
-                        "path": f"work/{entry['slug']}/", "lead": lead})
+                        "path": f"work/{entry['slug']}/", "lead": lead, "primary": primary})
+    for i, entry in enumerate(entries):   # the map's order is the order a visitor steps through
+        entry["prev"] = entries[i - 1] if i else None
+        entry["next"] = entries[i + 1] if i + 1 < len(entries) else None
     intro = dict(front["intro"])
     for key in ("short", "long"):
         intro[key] = {**intro[key], **book.place(intro[key]["res"])}
@@ -230,16 +238,18 @@ def head(hub, *, title: str, description: str, canonical: str, picture: str | No
 </head>'''
 
 
-def header(*, home: bool) -> str:
+def header(*, home: bool, project: bool = False) -> str:
+    """The same header on every page. Projects always opens the map on the home page, so it means one thing everywhere."""
     current = ' aria-current="page"' if home else ""
-    about = "#about" if home else "/#about"
+    there = "" if home else "/"
+    inside = ' aria-current="true"' if project else ""
     return f'''<a class="skip" href="#main">Skip to the content</a>
   <header class="top">
     <div class="wrap top__in">
       <a class="brand" href="/"{current}><img src="/assets/favicon.svg" alt="" width="28" height="28"><span translate="no">Will Cook</span></a>
       <nav class="top__nav" aria-label="Main">
-        <a href="#map">Projects</a>
-        <a href="{about}">About</a>
+        <a href="{there}#map"{inside}>Projects</a>
+        <a href="{there}#about">About</a>
         <a href="/all.html">Every link</a>
       </nav>
     </div>
@@ -254,31 +264,61 @@ def footer() -> str:
   </footer>'''
 
 
-def tile(entry: dict, *, here: bool, home: bool) -> str:
+def tile(entry: dict, *, here: bool, home: bool, plain: bool = False, kicker: str = "", rel: str = "") -> str:
+    """One project as a link: a small picture, its name and its line. plain: no picture (the index under a project page)."""
     ids = "".join(f'<span class="anchor" id="p-{e(a)}"></span>' for a in entry.get("aliases", [])) if home else ""
-    loop = f' data-loop="/{e(entry["loops"]["s"])}"' if entry.get("loops") else ""
+    loop = f' data-loop="/{e(entry["loops"]["s"])}"' if entry.get("loops") and not plain else ""
     current = ' aria-current="page"' if here else ""
     mark = '<span class="tile__here">You are here</span>' if here else ""
     names = f'<span class="tile__names">{e(entry["names"])}</span>' if entry.get("names") else ""
-    return (f'<li class="tiles__item">{ids}<a class="tile" href="/{e(entry["path"])}"{current}{loop} data-entry="{e(entry["slug"])}">'
-            f'<span class="tile__pic">{img(entry["poster"], sizes="(min-width: 900px) 16vw, 46vw")}{mark}</span>'
-            f'<span class="tile__name">{e(entry["name"])}</span><span class="vh">: </span>'
-            f'<span class="tile__line">{e(entry["line"])}</span>{names}</a></li>')
+    klass = "tile" + (" tile--plain" if plain else "") + (" tile--step" if kicker else "")
+    pic = "" if plain else f'<span class="tile__pic">{img(entry["poster"], sizes="(min-width: 861px) 150px, 34vw")}{mark}</span>'
+    said = f'<span class="tile__kicker">{e(kicker)}</span><span class="vh">: </span>' if kicker else ""
+    flag = mark if plain else ""
+    return (f'<li class="tiles__item">{ids}<a class="{klass}" href="/{e(entry["path"])}"{current}{loop}{rel} data-entry="{e(entry["slug"])}">'
+            f'{pic}{said}<span class="tile__name">{e(entry["name"])}</span><span class="vh">: </span>'
+            f'<span class="tile__line">{e(entry["line"])}</span>{names}{flag}</a></li>')
+
+
+def lead_card(entry: dict) -> str:
+    """A project the introduction uses as an example, shown large: the place a newcomer can start."""
+    loop = f' data-loop="/{e(entry["loops"]["s"])}"' if entry.get("loops") else ""
+    first = entry["lead"]
+    meta = f'<span class="lead__meta">{e(first["label"])}, {e(first["detail"])}</span>' if first else ""
+    return (f'<li class="leads__item"><a class="lead" href="/{e(entry["path"])}"{loop} data-entry="{e(entry["slug"])}">'
+            f'<span class="tile__pic lead__pic">{img(entry["poster"], sizes="(min-width: 861px) 30vw, 92vw", soon=True)}</span>'
+            f'<span class="lead__band">{e(entry["band_name"])}</span><span class="vh">: </span>'
+            f'<span class="lead__name">{e(entry["name"])}</span><span class="vh">: </span>'
+            f'<span class="lead__line">{e(entry["line"])}</span>{meta}</a></li>')
 
 
 def project_map(model: dict, *, current: str | None, title: str, note: str) -> str:
+    """Home: three places to start, then all fifteen by group with pictures. A project page: the fifteen as a plain index."""
     home = current is None
+    level = "h4" if home else "h3"
     bands = []
     for band in model["bands"]:
-        tiles = "".join(tile(x, here=x["slug"] == current, home=home) for x in model["entries"] if x["band"] == band["id"])
-        aside = f'<p class="band__note">{e(band["note"])}</p>' if band.get("note") else ""
+        tiles = "".join(tile(x, here=x["slug"] == current, home=home, plain=not home) for x in model["entries"] if x["band"] == band["id"])
+        about = f'<p class="band__about">{e(band["about"])}</p>' if home and band.get("about") else ""
+        aside = f'<p class="band__note">{e(band["note"])}</p>' if home and band.get("note") else ""
+        # A group's heading opens that group on the home page from anywhere; on the home page it is the anchor itself.
+        name = f'<span class="band__n">{band["n"]}</span> {e(band["name"])}'
+        if not home:
+            name = f'<a href="/#band-{e(band["id"])}">{name}</a>'
         bands.append(f'<section class="band band--{e(band["id"])}" aria-labelledby="band-{e(band["id"])}">'
-                     f'<div class="band__head"><h3 class="band__name" id="band-{e(band["id"])}"><span class="band__n">{band["n"]}</span> {e(band["name"])}</h3>{aside}</div>'
+                     f'<div class="band__head"><{level} class="band__name" id="band-{e(band["id"])}">{name}</{level}>{about}{aside}</div>'
                      f'<ul class="tiles" role="list">{tiles}</ul></section>')
     lead = f'<p class="map__note">{e(note)}</p>' if note else ""
     old = '<span class="anchor" id="projects"></span><span class="anchor" id="explore"></span><span class="anchor" id="films"></span>' if home else ""
-    return (f'<section class="map wrap" id="map" aria-labelledby="map-title">{old}'
-            f'<div class="map__head"><h2 class="map__title" id="map-title">{e(title)}</h2>{lead}</div>'
+    starts = ""
+    if home:
+        intro = model["intro"]
+        cards = "".join(lead_card(x) for x in model["entries"] if x.get("start"))
+        starts = (f'<div class="starts" id="start"><div class="starts__head"><h3 class="starts__title">{e(intro["start_title"])}</h3>'
+                  f'<p class="starts__note">{e(intro["start_note"])}</p></div><ul class="leads" role="list">{cards}</ul></div>'
+                  f'<h3 class="map__all" id="all">{e(intro["all_title"])}</h3>')
+    return (f'<section class="map{"" if home else " map--index"} wrap" id="map" aria-labelledby="map-title">{old}'
+            f'<div class="map__head"><h2 class="map__title" id="map-title">{e(title)}</h2>{lead}</div>{starts}'
             f'<div class="bands">{"".join(bands)}</div></section>')
 
 
@@ -296,7 +336,7 @@ def stop_markup(stop: dict) -> str:
     if stop["more"]:
         more = '<ul class="stop__more" role="list">' + "".join(
             f'<li><a href="{e(m["href"])}"{off(m["href"])}>{e(m["label"])}</a></li>' for m in stop["more"]) + "</ul>"
-    flag = "You watched this" if stop["video"] else "The video showed this"
+    flag = "You watched this" if stop["video"] else "In the video"
     return (f'<li class="stop stop--{e(kind)}{" stop--video" if stop["video"] else ""}" id="{e(stop["id"])}">'
             f'<span class="stop__flag stop__flag--here">{flag}</span><span class="stop__flag stop__flag--next">Next</span>'
             f'<a class="stop__main" href="{e(stop["href"])}"{off(stop["href"])}>'
@@ -378,17 +418,31 @@ def render_entry(model: dict, entry: dict, hub, book: Book) -> str:
     loops = entry.get("loops") or {}
     loop_attrs = f' data-loop-l="/{e(loops["l"])}"' if loops else ""
     count = len(entry["stops"])
+    intro = model["intro"]
+    before, after = entry["prev"], entry["next"]
+    # The same two steps at the top of the page (as words) and at its foot (with pictures).
+    step = "".join(f'<a href="/{e(x["path"])}" rel="{rel}"><span class="where__dir">{word}:</span> {e(x["name"])}</a>'
+                   for x, rel, word in ((before, "prev", "Previous"), (after, "next", "Next")) if x)
+    cards = "".join(tile(x, here=False, home=False, kicker=word, rel=f' rel="{rel}"') if x else '<li class="tiles__item"></li>'
+                    for x, rel, word in ((before, "prev", "Previous project"), (after, "next", "Next project")))
+    go = ""
+    if entry["primary"]:
+        href = entry["primary"]["href"]
+        go = f'<p class="go"><a class="go__main" href="{e(href)}"{off(href)}>{e(entry["primary"]["label"])}</a></p>'
     return f'''{head(hub, title=entry["page_title"] + " | Will Cook", description=entry["description"], canonical=HOME + entry["path"], picture=card_of(entry["slug"], book), alt=entry.get("card_alt", ""))}
 <body class="work" data-entry="{e(entry["slug"])}">
-  {header(home=False)}
+  {header(home=False, project=True)}
   <main id="main">
+    <nav class="where wrap" aria-label="Where this page is">
+      <p class="where__trail"><a href="/#map">All projects</a><span aria-hidden="true">/</span><a href="/#band-{e(entry["band"])}">{e(entry["band_name"])}</a></p>
+      <p class="where__step">{step}</p>
+    </nav>
     <article class="stage stage--work wrap" aria-labelledby="name">
       <div class="stage__text">
-        <p class="stage__band"><a href="#map">Projects</a><span aria-hidden="true">/</span>{e(entry["band_name"])}</p>
         <h1 class="name" id="name">{e(entry["name"])}</h1>
         <p class="say say--claim">{e(entry["claim"])}</p>
         <p class="limit"><strong class="limit__label">Limits:</strong> {e(entry["limit"])}</p>
-        {credit}{gloss}
+        {credit}{gloss}{go}
       </div>
       <div class="stage__show">
         <div class="screen" id="screen"{loop_attrs}>{img(entry["poster"], sizes="(min-width: 900px) 58vw, 100vw", eager=True)}</div>
@@ -399,6 +453,13 @@ def render_entry(model: dict, entry: dict, hub, book: Book) -> str:
       <p class="levels__axis" aria-hidden="true"><span>Quickest</span><span>Most detail</span></p>
       <ol class="strip strip--{count}" role="list">{stops}</ol>
     </nav>
+    <nav class="pager wrap" aria-label="Previous and next project">
+      <ul class="pager__in" role="list">{cards}</ul>
+    </nav>
+    <section class="whole wrap" aria-label="About this site">
+      <p class="whole__say">{e(intro["h1"])}</p>
+      <p class="whole__links"><a href="/">Home page and introduction, {e(clock(intro["short"]["seconds"]))}</a><a href="/#about">About and contact</a></p>
+    </section>
     {project_map(model, current=entry["slug"], title="All fifteen projects", note="")}
   </main>
   {footer()}

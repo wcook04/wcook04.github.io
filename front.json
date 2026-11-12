@@ -21,6 +21,9 @@
     },
     "map_title": "The projects",
     "map_note": "Fifteen projects in five groups. Each has its own page, from a short video down to the proof or the code.",
+    "start_title": "Three places to start",
+    "start_note": "These three are my examples in the introduction, one each from maths, code and working with AI coding assistants.",
+    "all_title": "All fifteen, by group",
     "card_alt": "Will Cook: I use AI to make AI-written maths and code easier to understand. A frame from the introduction video."
   },
   "kinds": {"short": "Short video", "long": "Full video", "site": "Website", "paper": "Paper", "proof": "Lean proof", "code": "Code", "study": "Study", "issue": "Issue"},
@@ -29,15 +32,17 @@
     "Dafny": "Dafny is a programming language and verifier that checks code against written specifications."
   },
   "bands": [
-    {"id": "maths", "n": 1, "name": "Maths", "note": "Lean is a program that checks mathematical proofs."},
-    {"id": "checks", "n": 2, "name": "What a check covers"},
-    {"id": "code", "n": 3, "name": "Code"},
-    {"id": "assistants", "n": 4, "name": "AI coding assistants at work"},
-    {"id": "videos", "n": 5, "name": "How I make these videos"}
+    {"id": "maths", "n": 1, "name": "Maths", "about": "Research on Erdős problems and on two of OpenAI's results, as papers, websites and proofs in Lean.", "note": "Lean is a program that checks mathematical proofs."},
+    {"id": "checks", "n": 2, "name": "What a check covers", "about": "Which statement a proof or a report covers, and what it leaves out."},
+    {"id": "code", "n": 3, "name": "Code", "about": "Code turned into a map, and into a database that an AI model can search."},
+    {"id": "assistants", "n": 4, "name": "AI coding assistants at work", "about": "Tools for working with AI coding assistants, and experiments on what they do."},
+    {"id": "videos", "n": 5, "name": "How I make these videos", "about": "The plan I write before AI draws any animation."}
   ],
   "entries": [
     {
       "slug": "funnel",
+      "start": true,
+      "primary": {"stop": "example", "label": "Open the example"},
       "name": "The funnel",
       "band": "maths",
       "aliases": ["funnel"],
@@ -57,6 +62,7 @@
     },
     {
       "slug": "maths-map",
+      "primary": {"stop": "site", "label": "Open the map"},
       "name": "Maths Map",
       "band": "maths",
       "aliases": ["maths"],
@@ -79,6 +85,7 @@
     },
     {
       "slug": "erdos-257",
+      "primary": {"stop": "site", "label": "Open the problem page"},
       "name": "Erdős #257",
       "band": "maths",
       "aliases": [],
@@ -102,6 +109,7 @@
     },
     {
       "slug": "quantum-computers",
+      "primary": {"stop": "site", "label": "Open Quartic Reader"},
       "name": "Quantum computers",
       "band": "maths",
       "aliases": ["quartic"],
@@ -124,6 +132,7 @@
     },
     {
       "slug": "spin-glass",
+      "primary": {"stop": "site", "label": "Open Lean Exposition"},
       "name": "Spin glass",
       "band": "maths",
       "aliases": ["lean-exposition"],
@@ -167,6 +176,7 @@
     },
     {
       "slug": "atlas",
+      "primary": {"stop": "site", "label": "Open the map of papers"},
       "name": "Atlas",
       "band": "checks",
       "aliases": ["atlas"],
@@ -189,6 +199,7 @@
     },
     {
       "slug": "verification-map",
+      "primary": {"stop": "site", "label": "Open the map"},
       "name": "Verification map",
       "band": "checks",
       "aliases": ["formal-verification"],
@@ -227,6 +238,8 @@
     },
     {
       "slug": "code-ontology-bridge",
+      "start": true,
+      "primary": {"stop": "site", "label": "Open the website"},
       "name": "Code Ontology Bridge",
       "band": "code",
       "aliases": ["code-ontology-bridge"],
@@ -250,6 +263,7 @@
     },
     {
       "slug": "one-checkout",
+      "primary": {"stop": "code", "label": "Code on GitHub"},
       "name": "One Checkout",
       "band": "assistants",
       "aliases": ["one-checkout"],
@@ -268,6 +282,7 @@
     },
     {
       "slug": "safety-core",
+      "primary": {"stop": "code", "label": "Code on GitHub"},
       "name": "Safety Core",
       "band": "assistants",
       "aliases": ["safety-core"],
@@ -286,6 +301,8 @@
     },
     {
       "slug": "agent-trace",
+      "start": true,
+      "primary": {"stop": "code", "label": "Code on GitHub"},
       "name": "Agent Trace",
       "band": "assistants",
       "aliases": ["agent-trace"],
@@ -304,6 +321,7 @@
     },
     {
       "slug": "zenith",
+      "primary": {"stop": "study", "label": "Read the study"},
       "name": "Zenith",
       "band": "assistants",
       "aliases": ["zenith"],
@@ -324,6 +342,7 @@
     },
     {
       "slug": "narration-ir",
+      "primary": {"stop": "code", "label": "Code on GitHub"},
       "name": "Narration IR",
       "band": "videos",
       "aliases": ["narration-ir"],

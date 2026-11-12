@@ -32,9 +32,12 @@ sits on the page with no edge.
 
 ## Pages
 
-- `/`: header; stage (sentence, introduction); map (`#map`); about (`#about`); footer.
-- `/work/<slug>/`: header; stage (group, name, claim, stated limit, credit, the
-  video's own loop); the strip of levels; the map with this project marked; footer.
+- `/`: header; stage (sentence, introduction); map (`#map`): three places to start (`#start`), then all fifteen
+  by group (`#all`, each group at `#band-<id>`); about (`#about`); footer.
+- `/work/<slug>/`: header; where the page is (All projects, the group, and the previous and next project);
+  stage (name, claim, stated limit, credit, one filled control that opens the thing itself, the video's own loop);
+  the strip of levels; the previous and next project with pictures; the site in one sentence with links home;
+  all fifteen projects as words with this one marked (`#map`); footer.
 - `all.html`: every link in one table, a row per project under the five groups and columns in the strip's order;
   then earlier videos, contributions, contact and the glossary. `404.html`: says the address has no page and shows
   the map. Both are written by [`scripts/register.py`](../scripts/register.py) with `assets/register.css`, on this
@@ -48,6 +51,26 @@ A paper's first page is printed on the page's bone colour, never pure white. A
 repository or an issue is shown by its own name, because every GitHub page looks
 the same at this size.
 
+## Finding the way
+
+Most visitors arrive on one project page, from a video's description or an email, so every page answers three
+questions the same way.
+
+- **Whose site is this, and how do I get back?** The header is the same on every page and stays at the top of the
+  window. Projects always opens the map on the home page, so the word means one thing everywhere. On a project page
+  it is underlined, and the line under the header reads All projects, then the group, each a link.
+- **What is next to this?** Previous and Next step through the fifteen in the map's order: as words at the top of a
+  project page (wider than a phone) and as two pictures under the strip.
+- **What else is there?** Three sizes say what leads. The home page shows three places to start with large pictures
+  (the three projects the introduction uses as its examples, marked `start` in `front.json`), then every project in
+  its group with a small picture and one sentence about the group. Under a project page the same fifteen are words
+  only. No single project is given a larger place than the other two starts.
+
+A project page has one filled control. It opens the thing itself (the website, the study or the repository), named
+in `front.json` as `primary`: a stop's id and the control's words. The address is read from that stop, so the two
+cannot differ. Reader websites and CodeMap have none: the first is three websites of equal standing, and CodeMap's
+code is private.
+
 ## Data
 
 `front.json`:
@@ -55,10 +78,10 @@ the same at this size.
 - `intro`: the home page's sentence, lede, the two introduction videos and the idle clip.
 - `terms`: one plain sentence for each word a newcomer may not know (Lean,
   Dafny). A project page that uses the word prints the sentence under its credit.
-- `bands`: the five groups, numbered as the full introduction numbers them. A
-  group may carry a `note`, printed at the right of its rule.
+- `bands`: the five groups, numbered as the full introduction numbers them. Each has `about`, one sentence on
+  what the group is, printed beside it on the home page. A group may carry a `note`, printed under that sentence.
 - `entries`: one per project. `slug`, `name`, `band`, `line` (the tile's line),
-  `claim`, `limit`, optional `credit`, `loop` (the stem of its pictures and
+  `claim`, `limit`, optional `credit`, optional `start` and `primary` (see Finding the way), `loop` (the stem of its pictures and
   clips), `aliases` (ids the earlier home page used) and `stops`.
 - A stop has `id` (its fragment), `kind`, and either `res` (a resource id in
   `sites.json`; the address and length are read from there) or `href`. Optional
@@ -111,8 +134,8 @@ in these folders is used by no page.
   remain. The one thing that moves by itself has a Pause button, which leaves
   when the motion stops. Pressing Play changes the layout in one step.
 - Arriving from a video on a phone, the watched stop and the next one are on the
-  first screen: the large picture and the credit are left out for that arrival,
-  since the visitor has just watched the picture.
+  first screen: the large picture is left out for that arrival,
+  since the visitor has just watched it. The credit and the plain sentence for each term stay.
 - A stage frame is blended into the page with `mix-blend-mode: lighten` on the whole frame. The videos' encoded
   ground is a shade darker than `#1c1526`, so the page's ground shows wherever the frame is darker and the frame has
   no edge. Blend the frame, never the picture and the clip separately, or a clip doubles over its poster.

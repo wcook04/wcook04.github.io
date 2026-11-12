@@ -310,10 +310,8 @@ def with_sheet(head: str, hub) -> str:
 def header() -> str:
     """front.py's header, with Every link marked as this page."""
     top = front.header(home=False)
-    # "Projects" goes to the map on the home page; this page has no map of its own.
-    if '<a href="#map">Projects</a>' not in top:
-        raise ValueError("front.header() no longer links Projects to #map")
-    top = top.replace('<a href="#map">Projects</a>', '<a href="/#map">Projects</a>')
+    if '<a href="/all.html">' not in top:
+        raise ValueError("front.header() no longer links Every link to /all.html")
     return top.replace('<a href="/all.html">', '<a href="/all.html" aria-current="page">')
 
 
