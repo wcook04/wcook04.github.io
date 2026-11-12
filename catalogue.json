@@ -1833,7 +1833,7 @@
           "id": "youtube",
           "platform": "youtube",
           "state": "published",
-          "url": "https://www.youtube.com/watch?v=mnkOsETFeTU",
+          "url": "https://www.youtube.com/watch?v=6GLPHDdR13c",
           "duration_seconds": 140,
           "thumbnail_stem": "assets/films/next/short-narration-ir"
         }
@@ -1848,7 +1848,7 @@
           "occurrence": 1
         }
       ],
-      "url": "https://www.youtube.com/watch?v=mnkOsETFeTU",
+      "url": "https://www.youtube.com/watch?v=6GLPHDdR13c",
       "publicly_available": true,
       "edition_state": "current"
     },
@@ -1872,7 +1872,7 @@
           "id": "youtube",
           "platform": "youtube",
           "state": "published",
-          "url": "https://www.youtube.com/watch?v=ccfceIwmWfY",
+          "url": "https://www.youtube.com/watch?v=b8xZ3-XYXqw",
           "duration_seconds": 653,
           "thumbnail_stem": "assets/films/next/long-narration-ir"
         }
@@ -1880,7 +1880,7 @@
       "chapters": [],
       "aliases": [],
       "term_refs": [],
-      "url": "https://www.youtube.com/watch?v=ccfceIwmWfY",
+      "url": "https://www.youtube.com/watch?v=b8xZ3-XYXqw",
       "publicly_available": true,
       "edition_state": "current"
     },
