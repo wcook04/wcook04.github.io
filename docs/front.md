@@ -134,8 +134,8 @@ in these folders is used by no page.
   remain. The one thing that moves by itself has a Pause button, which leaves
   when the motion stops. Pressing Play changes the layout in one step.
 - Arriving from a video on a phone, the watched stop and the next one are on the
-  first screen: the large picture and the credit are left out for that arrival,
-  since the visitor has just watched the picture.
+  first screen: the large picture is left out for that arrival,
+  since the visitor has just watched it. The credit and the plain sentence for each term stay.
 - A stage frame is blended into the page with `mix-blend-mode: lighten` on the whole frame. The videos' encoded
   ground is a shade darker than `#1c1526`, so the page's ground shows wherever the frame is darker and the frame has
   no edge. Blend the frame, never the picture and the clip separately, or a clip doubles over its poster.

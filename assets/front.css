@@ -113,6 +113,8 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 /* A project page's stage */
 .stage--work { padding-bottom: clamp(16px, 2.4vh, 28px); }
 .stage--work { padding-top: clamp(8px, 1.6vh, 20px); }
+/* The picture leaves room for the strip under it: on a laptop the stops and their words are on the first screen. */
+.stage--work .stage__show { width: 100%; max-width: calc(46vh * 16 / 9); justify-self: end; }
 /* The thing itself: the website, the study or the repository. The one filled control on a project page. */
 .go { margin-top: 20px; }
 .go__main { display: inline-flex; align-items: center; background: var(--paper); color: var(--ground); font: 700 21px/1 var(--display); padding: 12px 18px; border-radius: 3px; text-decoration: none; transition: transform .12s var(--arrive); }
@@ -167,7 +169,7 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 .stop__main:hover .stop__pic { outline-color: var(--muted); }
 .stop__more { margin-top: 6px; font-size: 14.5px; line-height: 1.35; }
 .stop__more li + li { margin-top: 3px; }
-.stop__more a { color: var(--steel); display: inline-block; padding-block: 3px; }
+.stop__more a { color: var(--steel); display: inline-block; padding-block: 3px; text-wrap: balance; }
 .stop__more a:hover { color: var(--ink); }
 .stop__flag { display: none; position: absolute; z-index: 1; left: 0; top: -28px; background: var(--paper); color: var(--ground); font: 700 15px/1 var(--display); padding: 5px 9px 4px; border-radius: 3px; white-space: nowrap; }
 .stop:target .stop__flag--here { display: block; }
@@ -297,7 +299,8 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
   .play { font-size: 21px; }
   /* Pictures keep the page's gutter, so nothing in them touches the screen's edge. Only the playing video runs edge to edge. */
   .is-playing .player__screen { margin-inline: calc(-1 * var(--gutter)); border-radius: 0; }
-  .work .stage__show { order: -1; }
+  .work .stage__show { order: -1; max-width: none; }
+  .levels { padding-bottom: 28px; }
   .about__body { grid-template-columns: minmax(0, 1fr); }
   .about__contact { display: flex; flex-wrap: wrap; gap: 4px 22px; }
   .leads { grid-template-columns: minmax(0, 1fr); gap: 22px; }
@@ -313,14 +316,13 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
   .pager .tile, .pager .tiles__item:last-child .tile { grid-template-columns: 112px minmax(0, 1fr); text-align: left; column-gap: 12px; }
   .pager .tiles__item:last-child .tile > .tile__pic { grid-column: 1; }
   .pager .tiles__item:last-child .tile > :not(.tile__pic):not(.vh) { grid-column: 2; }
-  .pager .tiles__item:last-child { order: -1; }
   .pager .tile__name { font-size: 22px; }
   .map--index .bands { grid-template-columns: minmax(0, 1fr); }
   .levels__axis { display: none; }
   /* Arriving from a video on a phone: the watched stop and the next one are on the first screen. The visitor has
      just watched the picture, so the name, the sentence and its limit come first and the strip follows. */
   .stop { scroll-margin-top: calc(100svh - 322px); }
-  .work:has(.stop--video:target) .stage__show, .work:has(.stop--video:target) .credit { display: none; }
+  .work:has(.stop--video:target) .stage__show { display: none; }
   .stop__pic:has(.stop__named) { aspect-ratio: auto; }
   .stop__named { position: static; min-height: 70px; padding: 8px 10px; }
   .stop__repo { font-size: 16px; }

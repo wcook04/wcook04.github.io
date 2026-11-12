@@ -336,7 +336,7 @@ def stop_markup(stop: dict) -> str:
     if stop["more"]:
         more = '<ul class="stop__more" role="list">' + "".join(
             f'<li><a href="{e(m["href"])}"{off(m["href"])}>{e(m["label"])}</a></li>' for m in stop["more"]) + "</ul>"
-    flag = "You watched this" if stop["video"] else "The video showed this"
+    flag = "You watched this" if stop["video"] else "In the video"
     return (f'<li class="stop stop--{e(kind)}{" stop--video" if stop["video"] else ""}" id="{e(stop["id"])}">'
             f'<span class="stop__flag stop__flag--here">{flag}</span><span class="stop__flag stop__flag--next">Next</span>'
             f'<a class="stop__main" href="{e(stop["href"])}"{off(stop["href"])}>'
