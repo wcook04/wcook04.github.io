@@ -164,6 +164,31 @@ class HubTests(unittest.TestCase):
         self.assertTrue(all(href.lstrip("/") + "index.html" in self.files for href in tiles))
         self.assertNotIn("ytimg", page)
 
+    def test_every_project_page_has_the_same_way_back_and_around(self):
+        front = json.loads(self.files["front.json"])
+        slugs = [entry["slug"] for entry in front["entries"]]
+        home = CHECK.Page(self.files["index.html"].decode())
+        # The home page leads with the three projects the introduction uses, then lists all fifteen by group.
+        leads = [a.get("href") for a in home.all("a") if a.get("class") == "lead"]
+        self.assertEqual(leads, ["/work/" + e["slug"] + "/" for e in front["entries"] if e.get("start")])
+        self.assertEqual(len(leads), 3)
+        for band in front["bands"]:
+            self.assertIn("band-" + band["id"], home.ids)
+        for index, entry in enumerate(front["entries"]):
+            page = CHECK.Page(self.files["work/" + entry["slug"] + "/index.html"].decode())
+            hrefs = [a.get("href") for a in page.all("a")]
+            # Back to the whole map, to this project's group, and to the projects either side, in the map's order.
+            self.assertIn("/#map", hrefs)
+            self.assertIn("/#band-" + entry["band"], hrefs)
+            steps = {a.get("rel"): a.get("href") for a in page.all("a") if a.get("rel") in {"prev", "next"}}
+            self.assertEqual(steps.get("prev"), "/work/" + slugs[index - 1] + "/" if index else None)
+            self.assertEqual(steps.get("next"), "/work/" + slugs[index + 1] + "/" if index + 1 < len(slugs) else None)
+            # Every other project is one link away, and the filled control opens one of this project's own stops.
+            self.assertTrue({"/work/" + slug + "/" for slug in slugs} <= set(hrefs))
+            main = [a.get("href") for a in page.all("a") if a.get("class") == "go__main"]
+            self.assertEqual(len(main), 1 if entry.get("primary") else 0)
+            self.assertTrue(all(hrefs.count(href) >= 2 for href in main))
+
     def test_every_video_has_a_page_and_a_stop_to_arrive_at(self):
         front = json.loads(self.files["front.json"])
         self.assertEqual(len(front["videos"]), 24)

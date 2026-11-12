@@ -90,7 +90,7 @@
     link.href = href;
     document.head.appendChild(link);
   }
-  all(".tile").forEach(function (tile) {
+  all(".tile, .lead").forEach(function (tile) {
     var pic = one(".tile__pic", tile);
     var src = tile.getAttribute("data-loop");
     tile.addEventListener("pointerenter", function () { ahead(tile); previewOn(pic, src); });
