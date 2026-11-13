@@ -4,9 +4,9 @@ This repository contains the code for [Will Cook's home page](https://wcook04.gi
 The page links his mathematics research, software and videos. The projects
 have their own repositories, listed below.
 
-The page opens with one sentence and the [short introduction](https://www.youtube.com/watch?v=YQZtkFIGNBk)
+The page opens with one sentence and the [short introduction](https://www.youtube.com/watch?v=f7VD4vebw-c)
 video, which plays in the page in YouTube's player once Play is pressed. Under it are three projects to start with,
-then all fifteen in five groups, as the [full introduction](https://www.youtube.com/watch?v=Yk_kUQUCylc)
+then all fifteen in five groups, as the [full introduction](https://www.youtube.com/watch?v=FwgaZYH2otY)
 orders them. Each project has its own page, with links back to the whole list and to the projects either side. It opens with a strip of levels,
 from a short video on the left to the full video, the website, the paper, the
 proof and the code on the right, so a visitor chooses how deep to go.
@@ -39,7 +39,7 @@ and proofs that a computer can check.
   query complexity, with two explanations of its proof. A Lean proof beside
   the text follows each paragraph as you read.
   Code: [quartic-query-lean](https://github.com/wcook04/quartic-query-lean).
-  Video: [How much faster can a quantum computer be?](https://www.youtube.com/watch?v=CBHPBKcx2ck) (34:02).
+  Video: [How much faster can a quantum computer be?](https://www.youtube.com/watch?v=u6iRqc1ToZ0) (34:02).
 
 - **[Plectis Atlas](https://wcook04.github.io/plectis-atlas/)**.
   Read OpenAI's mathematics papers beside reports written about them by other
@@ -67,8 +67,8 @@ and proofs that a computer can check.
   the words mean, what viewers need to understand and when visual events should
   happen, giving an animation agent context for generating visuals. Includes a
   worked example and optional Python tools. The workflow grew out of the
-  [Quartic film](https://www.youtube.com/watch?v=CBHPBKcx2ck); its
-  [final section](https://www.youtube.com/watch?v=CBHPBKcx2ck&t=1789s) explains how it was made.
+  [Quartic film](https://www.youtube.com/watch?v=u6iRqc1ToZ0); its
+  [final section](https://www.youtube.com/watch?v=u6iRqc1ToZ0&t=1789s) explains how it was made.
 
 The page also links to [Safety Core](https://github.com/wcook04/safety-core),
 which supplies rules and command checks for AI programs that edit code, and
