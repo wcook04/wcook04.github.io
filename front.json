@@ -222,7 +222,7 @@
       "credit": "Atlas also uses Neal McBurnett's Lean tooling.",
       "page_title": "Atlas: a map of every result in OpenAI's maths release",
       "description": "A map of OpenAI's mathematics release: 719 papers on 372 results. Each dot is one result. Click it to read what the paper claims, the Lean statement OpenAI chose, and what two outside groups report about both. Atlas has not rerun the groups' checks.",
-      "card_alt": "Atlas: a map of every result in OpenAI's maths release. Circles of dots, one circle for each subject and one dot for each result.",
+      "card_alt": "Atlas: a map of every result in OpenAI's maths release. The whole map: eighteen circles of dots, one circle for each subject and one dot for each result.",
       "stops": [
         {"id": "short", "kind": "short", "res": "film:short-atlas"},
         {"id": "long", "kind": "long", "res": "film:atlas"},
