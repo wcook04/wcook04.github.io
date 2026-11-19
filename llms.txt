@@ -20,7 +20,7 @@ This host's root page lists Will Cook's projects, websites and videos. Each of t
 - [Spin glass](https://wcook04.github.io/work/spin-glass/): Two nearly best answers, half the arrows differ
 - [PCP theorem](https://wcook04.github.io/work/pcp-theorem/): Troy Lee’s Lean proof, explained at three lengths
 - [Reader websites](https://wcook04.github.io/work/reader-websites/): Click a linked sentence, open the Lean beside it
-- [Atlas](https://wcook04.github.io/work/atlas/): Two groups, two labels for one maths paper
+- [Atlas](https://wcook04.github.io/work/atlas/): A map of every result in OpenAI’s maths release
 - [Verification map](https://wcook04.github.io/work/verification-map/): What one proof covers, in a toolkit of 88 components
 - [MedAgentBench study](https://wcook04.github.io/work/medagentbench/): A script that reads one page of results passes all 30 released cases
 - [FaithformBench Reader](https://wcook04.github.io/work/faithformbench/): A wrong step adds a number. In two thirds of false positives, the Lean omits it.
