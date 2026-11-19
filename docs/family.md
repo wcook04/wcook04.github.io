@@ -51,11 +51,12 @@ Copy the file unchanged and map the site's tokens onto its `--fam-*` names:
 The start of every site's header is the **lockup**, which replaces the older
 "Will Cook / site" ladder:
 
-    [Plectis plait] | [site mark] Site name
+    [Plectis plait] Will Cook | [site mark] Site name
 
-- The **Plectis plait** links to the home page, <https://wcook04.github.io/>,
-  which lists every project and video. Its accessible name is "Will Cook: all
-  projects and videos". Copy [`assets/family/marks/plectis.svg`](../assets/family/marks/plectis.svg)
+- The **Plectis plait and the name "Will Cook"** link to the home page,
+  <https://wcook04.github.io/>, which lists every project and video and opens
+  with "I'm Will Cook". The name is visible text (since 19 November 2026), so
+  the image's `alt` is empty and the link's name is "Will Cook". Copy [`assets/family/marks/plectis.svg`](../assets/family/marks/plectis.svg)
   beside the site and show it as an `<img>`; it carries its own day and night
   palettes.
 - A short upright **rule** separates the two links.
@@ -73,7 +74,8 @@ previews every mark and lockup in both themes.
 ```html
 <span class="fam-lockup">
   <a class="fam-lockup__home" href="https://wcook04.github.io/" rel="author" title="All of Will Cook's projects and videos">
-    <img src="assets/plectis.svg" alt="Will Cook: all projects and videos" width="26" height="26">
+    <img src="assets/plectis.svg" alt="" width="26" height="26">
+    <span class="fam-lockup__owner" translate="no">Will Cook</span>
   </a>
   <span class="fam-lockup__rule" aria-hidden="true"></span>
   <a class="fam-lockup__site" href="./">
