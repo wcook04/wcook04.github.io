@@ -1,7 +1,7 @@
 """The home page and the project pages.
 
-The home page is the map the full introduction draws: fifteen projects in five
-groups. Every project has its own page at work/<slug>/, and every project page
+The home page is the map the full introduction draws, five groups of projects,
+with the projects made since then added to their groups. Every project has its own page at work/<slug>/, and every project page
 opens the same way: a strip of levels from a short video on the left down to
 the proof or the code on the right.
 
@@ -44,7 +44,7 @@ def spoken(seconds: int | None) -> str:
 
 
 WORDS = {"title", "description", "h1", "lede", "second", "label", "alt", "map_title", "map_note", "name", "line", "names",
-         "claim", "limit", "credit", "detail", "detail_prefix", "page_title", "card_alt", "about", "start_title", "start_note", "all_title"}
+         "claim", "limit", "credit", "by", "theirs", "mine", "detail", "detail_prefix", "page_title", "card_alt", "about", "start_title", "start_note", "all_title"}
 
 
 def typeset(value, key: str = ""):
@@ -58,8 +58,24 @@ def typeset(value, key: str = ""):
     return value
 
 
+NUMBERS = ("zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen "
+           "eighteen nineteen twenty twenty-one twenty-two twenty-three twenty-four twenty-five twenty-six twenty-seven "
+           "twenty-eight twenty-nine thirty").split()
+
+
+def count_word(n: int) -> str:
+    """How many projects there are, as the pages say it."""
+    return NUMBERS[n] if n < len(NUMBERS) else str(n)
+
+
 def load(root: Path) -> dict:
-    return typeset(json.loads((root / "front.json").read_text(encoding="utf-8")))
+    """front.json, with {count} and {Count} in the introduction's words replaced by the number of projects."""
+    front = typeset(json.loads((root / "front.json").read_text(encoding="utf-8")))
+    word = count_word(len(front["entries"]))
+    front["intro"] = {k: v.replace("{count}", word).replace("{Count}", word.capitalize()) if isinstance(v, str) else v
+                      for k, v in front["intro"].items()}
+    front["count_word"] = word
+    return front
 
 
 class Book:
@@ -146,6 +162,8 @@ def resolve(front: dict, book: Book) -> dict:
             primary = {"label": entry["primary"]["label"], "href": target["href"]}
         entries.append({**entry, "stops": stops, "band_name": bands[entry["band"]]["name"], "band_n": bands[entry["band"]]["n"],
                         "poster": book.poster(entry["loop"]), "loops": book.loop(entry["loop"]),
+                        # A tile may have its own, tighter cut of the picture, so one object still reads at tile size.
+                        "tile_poster": book.poster(entry.get("tile") or entry["loop"]),
                         "path": f"work/{entry['slug']}/", "lead": lead, "primary": primary})
     for i, entry in enumerate(entries):   # the map's order is the order a visitor steps through
         entry["prev"] = entries[i - 1] if i else None
@@ -155,7 +173,7 @@ def resolve(front: dict, book: Book) -> dict:
         intro[key] = {**intro[key], **book.place(intro[key]["res"])}
     intro["poster"] = book.poster(intro["idle"]["loop"])
     return {"intro": intro, "bands": front["bands"], "entries": entries, "videos": front["videos"],
-            "terms": front.get("terms", {})}
+            "terms": front.get("terms", {}), "count_word": front["count_word"]}
 
 
 def named(href: str) -> tuple[str, str]:
@@ -168,7 +186,7 @@ def named(href: str) -> tuple[str, str]:
 
 def glosses(entry: dict, terms: dict) -> list[str]:
     """One plain sentence for each term this page uses and a newcomer may not know."""
-    words = " ".join([entry["claim"], entry["limit"], entry.get("credit", "")] +
+    words = " ".join([entry["claim"], entry["limit"], entry.get("credit", ""), entry.get("theirs", ""), entry.get("mine", "")] +
                      [f'{s["label"]} {s["detail"]}' for s in entry["stops"]])
     return [text for term, text in terms.items() if re.search(rf"\b{re.escape(term)}\b", words)]
 
@@ -270,9 +288,11 @@ def tile(entry: dict, *, here: bool, home: bool, plain: bool = False, kicker: st
     loop = f' data-loop="/{e(entry["loops"]["s"])}"' if entry.get("loops") and not plain else ""
     current = ' aria-current="page"' if here else ""
     mark = '<span class="tile__here">You are here</span>' if here else ""
-    names = f'<span class="tile__names">{e(entry["names"])}</span>' if entry.get("names") else ""
+    # One small line under the tile's line: the websites it covers, or whose work it is built on.
+    small = entry.get("names") or entry.get("by")
+    names = f'<span class="tile__names">{e(small)}</span>' if small else ""
     klass = "tile" + (" tile--plain" if plain else "") + (" tile--step" if kicker else "")
-    pic = "" if plain else f'<span class="tile__pic">{img(entry["poster"], sizes="(min-width: 861px) 150px, 34vw")}{mark}</span>'
+    pic = "" if plain else f'<span class="tile__pic">{img(entry["tile_poster"], sizes="(min-width: 861px) 150px, 34vw")}{mark}</span>'
     said = f'<span class="tile__kicker">{e(kicker)}</span><span class="vh">: </span>' if kicker else ""
     flag = mark if plain else ""
     return (f'<li class="tiles__item">{ids}<a class="{klass}" href="/{e(entry["path"])}"{current}{loop}{rel} data-entry="{e(entry["slug"])}">'
@@ -293,7 +313,7 @@ def lead_card(entry: dict) -> str:
 
 
 def project_map(model: dict, *, current: str | None, title: str, note: str) -> str:
-    """Home: three places to start, then all fifteen by group with pictures. A project page: the fifteen as a plain index."""
+    """Home: three places to start, then every project by group with pictures. A project page: the same projects as a plain index."""
     home = current is None
     level = "h4" if home else "h3"
     bands = []
@@ -414,6 +434,11 @@ def render_home(model: dict, registry: dict, hub, structured: str, book: Book) -
 def render_entry(model: dict, entry: dict, hub, book: Book) -> str:
     stops = "".join(stop_markup(s) for s in entry["stops"])
     credit = f'<p class="credit">{e(entry["credit"])}</p>' if entry.get("credit") else ""
+    # Whose work this is, said before anything is claimed about it: what other people made, then what I made.
+    whose = ""
+    if entry.get("theirs"):
+        whose = (f'<dl class="whose"><div><dt>Their work</dt><dd>{e(entry["theirs"])}</dd></div>'
+                 f'<div><dt>My work</dt><dd>{e(entry["mine"])}</dd></div></dl>')
     gloss = "".join(f'<p class="credit credit--term">{e(text)}</p>' for text in glosses(entry, model["terms"]))
     loops = entry.get("loops") or {}
     loop_attrs = f' data-loop-l="/{e(loops["l"])}"' if loops else ""
@@ -439,8 +464,8 @@ def render_entry(model: dict, entry: dict, hub, book: Book) -> str:
     </nav>
     <article class="stage stage--work wrap" aria-labelledby="name">
       <div class="stage__text">
-        <h1 class="name" id="name">{e(entry["name"])}</h1>
-        <p class="say say--claim">{e(entry["claim"])}</p>
+        <h1 class="name{" name--long" if len(entry["name"]) >= 20 else ""}" id="name">{e(entry["name"])}</h1>
+        {whose}<p class="say say--claim">{e(entry["claim"])}</p>
         <p class="limit"><strong class="limit__label">Limits:</strong> {e(entry["limit"])}</p>
         {credit}{gloss}{go}
       </div>
@@ -460,7 +485,7 @@ def render_entry(model: dict, entry: dict, hub, book: Book) -> str:
       <p class="whole__say">{e(intro["h1"])}</p>
       <p class="whole__links"><a href="/">Home page and introduction, {e(clock(intro["short"]["seconds"]))}</a><a href="/#about">About and contact</a></p>
     </section>
-    {project_map(model, current=entry["slug"], title="All fifteen projects", note="")}
+    {project_map(model, current=entry["slug"], title=f"All {model['count_word']} projects", note="")}
   </main>
   {footer()}
 </body>

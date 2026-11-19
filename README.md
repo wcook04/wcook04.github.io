@@ -6,8 +6,8 @@ have their own repositories, listed below.
 
 The page opens with one sentence and the [short introduction](https://www.youtube.com/watch?v=f7VD4vebw-c)
 video, which plays in the page in YouTube's player once Play is pressed. Under it are three projects to start with,
-then all fifteen in five groups, as the [full introduction](https://www.youtube.com/watch?v=FwgaZYH2otY)
-orders them. Each project has its own page, with links back to the whole list and to the projects either side. It opens with a strip of levels,
+then every project in five groups, in the order of the [full introduction](https://www.youtube.com/watch?v=FwgaZYH2otY)
+with newer projects added to their groups. Each project has its own page, with links back to the whole list and to the projects either side. It opens with a strip of levels,
 from a short video on the left to the full video, the website, the paper, the
 proof and the code on the right, so a visitor chooses how deep to go.
 
@@ -31,7 +31,8 @@ and proofs that a computer can check.
 
 - **[Proof Reader](https://wcook04.github.io/proof-reader/)**.
   Read a published research paper beside its proof in Lean. Select a statement
-  to open the corresponding lines of the proof.
+  to open the corresponding lines of the proof. It also holds three explanations
+  of Troy Lee's Lean proof of the PCP theorem.
   Code: [proof-reader](https://github.com/wcook04/proof-reader).
 
 - **[Quartic Reader](https://wcook04.github.io/quartic-query-lean/)**.
@@ -56,6 +57,21 @@ and proofs that a computer can check.
   code errors when given records of earlier mistakes.
   Code: [plectis-zenith](https://github.com/wcook04/plectis-zenith).
 
+- **[MedAgentBench study](https://wcook04.github.io/medagentbench-reader/)**.
+  An experiment on one task of Stanford's MedAgentBench benchmark: a Lean
+  specification of the task, 629 further cases built from the benchmark's
+  records, and three scripts and one AI model run on them.
+  Code: [medagentbench-reader](https://github.com/wcook04/medagentbench-reader).
+
+- **[FaithformBench Reader](https://wcook04.github.io/faithformbench-reader/)**.
+  Each reasoning step in the public FaithformBench results beside the Lean
+  statement each program wrote for it, with counts from the released text.
+  Code: [faithformbench-reader](https://github.com/wcook04/faithformbench-reader).
+
+- **[PDD Kit spec change map](https://wcook04.github.io/pdd-spec-change-map/)**.
+  What changed between the two published versions of PDD Kit's login contract.
+  Code: [pdd-spec-change-map](https://github.com/wcook04/pdd-spec-change-map).
+
 - **[Agent Trace](https://github.com/wcook04/agent-trace-mechanism)**.
   Browse local Codex and Claude Code sessions, including messages, commands
   and their results. Export selected context or give an agent access through
@@ -73,7 +89,10 @@ and proofs that a computer can check.
 The page also links to [Safety Core](https://github.com/wcook04/safety-core),
 which supplies rules and command checks for AI programs that edit code, and
 [One Checkout](https://github.com/wcook04/one-checkout), which saves a selected
-set of code changes in Git while leaving other unfinished edits out of that commit. Code Map has a video
+set of code changes in Git while leaving other unfinished edits out of that commit.
+[Edit View](https://github.com/wcook04/edit-view) is a way of showing a file edit to a monitoring model that always
+includes the removed text, and [glean-description-staleness](https://github.com/wcook04/glean-description-staleness)
+tests which written descriptions of code need rereading after a change. Code Map has a video
 showing how to explore connections between files and functions; its code is
 private.
 
@@ -228,7 +247,8 @@ images for the earlier introductions, which are still listed on the page.
 GitHub Pages publishes the `main` branch. The project websites have their own
 repositories, so this repository must leave their address folders free:
 `practical-formal-verification/`, `plectis-atlas/`, `plectis-zenith/`,
-`lean-exposition-site/` and `proof-reader/`. The repository check enforces this.
+`lean-exposition-site/`, `proof-reader/`, `quartic-query-lean/`, `code-ontology-bridge/`,
+`medagentbench-reader/`, `faithformbench-reader/` and `pdd-spec-change-map/`. The repository check enforces this.
 
 To refresh a website picture, run
 `python3 scripts/capture_cards.py --help` for the available sites and options.

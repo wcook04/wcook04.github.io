@@ -121,6 +121,13 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 .go__main:active { transform: scale(.97); }
 .go__main:hover { background: var(--ink); }
 .name { font: 700 clamp(42px, 4.7vw, 76px)/.96 var(--display); letter-spacing: -.005em; margin: .08em 0 .28em; text-wrap: balance; }
+/* A name of twenty letters or more is set smaller, so it stays on one line beside the picture. */
+.name--long { font-size: clamp(36px, 3.55vw, 56px); }
+/* Whose work a project is built on, and which part is mine: said under the name, before the claim. */
+.whose { margin: 0 0 .95em; display: grid; gap: 6px; max-width: 38em; font-size: 14.5px; line-height: 1.4; }
+.whose div { display: grid; grid-template-columns: 5.6em minmax(0, 1fr); column-gap: 12px; }
+.whose dt { color: var(--ink); font-weight: 600; }
+.whose dd { margin: 0; color: var(--muted); text-wrap: pretty; }
 .say--claim { font-size: clamp(18px, 1.52vw, 23px); line-height: 1.38; letter-spacing: 0; text-wrap: pretty; margin-bottom: .9em; max-width: 27em; }
 .limit { border-left: 2px solid var(--brick); padding-left: 14px; font-size: 16px; line-height: 1.45; max-width: 33em; text-wrap: pretty; }
 .limit__label { color: var(--brick); font-weight: 600; }

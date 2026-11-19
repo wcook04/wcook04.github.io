@@ -1,6 +1,6 @@
 # Will Cook's websites
 
-This host's root page lists Will Cook's projects, websites and videos. Each of the fifteen projects has a page at https://wcook04.github.io/work/<slug>/ with its videos, website, papers, proof and code in order from the quickest look to the most detail. Each website is its own project with its own source and its own agent entry where one exists.
+This host's root page lists Will Cook's projects, websites and videos. Each of the twenty-one projects has a page at https://wcook04.github.io/work/<slug>/ with its videos, website, papers, proof and code in order from the quickest look to the most detail. Each website is its own project with its own source and its own agent entry where one exists.
 
 - [Maths Map](https://wcook04.github.io/practical-formal-verification/map/): AI-assisted research on eight Erdős problems, with papers, records of failed approaches and Lean 4 proofs of partial results. Seven original questions remain open. The #1041 formal-statement counterexample is due to ani. The papers are not peer reviewed. Agent entry: https://wcook04.github.io/practical-formal-verification/llms.txt
 - [SK Reader](https://wcook04.github.io/lean-exposition-site/): Three explanations of OpenAI’s full-support theorem for the Sherrington–Kirkpatrick spin glass, linked to Lean declarations and an argument map. The theorem and Lean proof are OpenAI’s. I made the explanations and links with AI; no mathematician has reviewed them.
@@ -10,6 +10,30 @@ This host's root page lists Will Cook's projects, websites and videos. Each of t
 - [Practical Formal Verification](https://wcook04.github.io/practical-formal-verification/explorer/): Dafny proofs for 16 selected computations in an 88-component research-workflow prototype, with generated Python and proof-coverage maps. The proofs cover those computations, not the complete system. Agent entry: https://wcook04.github.io/practical-formal-verification/llms.txt
 - [Zenith](https://wcook04.github.io/plectis-zenith/): Experiments on whether records of earlier mistakes help language models test and repair code. The held-out testing study reports a mean per-problem fault-class detection score of 77.0%, compared with 69.2%. DeepSeek V4.1 Flash on 58 held-out HumanEval problems; roughly half the gain came from timeouts. [Held-out study (unmerged revision)](https://github.com/wcook04/plectis-zenith/blob/def1d26160c840397c00b247b2f74266f97a4cee/docs/studies/kept-experience/README.md). [Study pull request #13](https://github.com/wcook04/plectis-zenith/pull/13). Agent entry: https://wcook04.github.io/plectis-zenith/llms.txt
 - [Code Ontology Bridge](https://wcook04.github.io/code-ontology-bridge/): Exports Python code structure to DuckDB, with semantic descriptions and recursive SQL views for NVIDIA Auto Ontology’s text-to-SQL agent. Independent of NVIDIA. The 12-question comparison measured Auto Ontology plus the code database against DeepSeek alone. The separate no-clear-improvement result concerns adding descriptions within Auto Ontology, not the gain from the whole setup.
+
+## Project pages
+
+- [The funnel](https://wcook04.github.io/work/funnel/): How a Lean proof becomes papers and a video
+- [Maths Map](https://wcook04.github.io/work/maths-map/): Eight Erdős problems on one map
+- [Erdős #257](https://wcook04.github.io/work/erdos-257/): A case from 1968, proved and checked in Lean
+- [Quantum computers](https://wcook04.github.io/work/quantum-computers/): OpenAI’s fourth-power result, proved again in Lean
+- [Spin glass](https://wcook04.github.io/work/spin-glass/): Two nearly best answers, half the arrows differ
+- [PCP theorem](https://wcook04.github.io/work/pcp-theorem/): Troy Lee’s Lean proof, explained at three lengths
+- [Reader websites](https://wcook04.github.io/work/reader-websites/): Click a linked sentence, open the Lean beside it
+- [Atlas](https://wcook04.github.io/work/atlas/): Two groups, two labels for one maths paper
+- [Verification map](https://wcook04.github.io/work/verification-map/): What one proof covers, in a toolkit of 88 components
+- [MedAgentBench study](https://wcook04.github.io/work/medagentbench/): A script that reads one page of results passes all 30 released cases
+- [FaithformBench Reader](https://wcook04.github.io/work/faithformbench/): A wrong step adds a number. In two thirds of false positives, the Lean omits it.
+- [Spec change map](https://wcook04.github.io/work/spec-change-map/): What three corrected clauses changed in a login contract
+- [CodeMap](https://wcook04.github.io/work/codemap/): A map of my code from AI-written descriptions
+- [Code Ontology Bridge](https://wcook04.github.io/work/code-ontology-bridge/): NVIDIA’s Auto Ontology answers questions about its own code
+- [Stale descriptions](https://wcook04.github.io/work/stale-descriptions/): After an edit, which sentences about other files to reread
+- [One Checkout](https://wcook04.github.io/work/one-checkout/): Commit one fix while another AI keeps editing
+- [Safety Core](https://wcook04.github.io/work/safety-core/): A written rule let 6 of 10 AI runs commit a made-up value. A check let 0.
+- [Edit View](https://wcook04.github.io/work/edit-view/): An edit can remove text that its monitor is never shown
+- [Agent Trace](https://wcook04.github.io/work/agent-trace/): Read what your AI coding assistant ran
+- [Zenith](https://wcook04.github.io/work/zenith/): Showing an AI tester the bugs it missed
+- [Narration IR](https://wcook04.github.io/work/narration-ir/): Plan what each sentence means, then animate
 
 Every website, video, repository and term, with how they connect, is in https://wcook04.github.io/catalogue.json (a graph of typed nodes and edges, generated from https://wcook04.github.io/sites.json and https://wcook04.github.io/glossary.json).
 Use each site's own source links and stated limits when describing its findings.

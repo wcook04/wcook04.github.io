@@ -10,7 +10,9 @@ Its look and behaviour are `assets/front.css`, `assets/front.js` and
 ## The idea
 
 The full introduction video draws a map of the work: fifteen projects in five
-numbered groups. The home page is that map. Every project has its own page, and
+numbered groups. The home page is that map, with the projects made since the
+video added to their groups (twenty-one on 19 November 2026). The pages take
+the number from `front.json`, so no page states it by hand. Every project has its own page, and
 every project page opens the same way: a strip of levels, from a short video on
 the left down to the proof or the code on the right. A visitor chooses how deep
 to go. The strip is the one control the site uses, so it is learned once.
@@ -26,18 +28,18 @@ sits on the page with no edge.
 - **From a video's description.** Each video links to its project's page with a
   fragment naming the video: `/work/agent-trace/#short`. The stop the visitor
   watched carries a "You watched this" flag and the next stop is marked "Next".
-  This is CSS `:target`, so it works without JavaScript. The map of all fifteen
-  projects is under the strip. `front.json` `videos` holds the 24 addresses and
+  This is CSS `:target`, so it works without JavaScript. The map of every
+  project is under the strip. `front.json` `videos` holds the 24 addresses and
   the checker fails the build if any of them stops resolving.
 
 ## Pages
 
-- `/`: header; stage (sentence, introduction); map (`#map`): three places to start (`#start`), then all fifteen
+- `/`: header; stage (sentence, introduction); map (`#map`): three places to start (`#start`), then every project
   by group (`#all`, each group at `#band-<id>`); about (`#about`); footer.
 - `/work/<slug>/`: header; where the page is (All projects, the group, and the previous and next project);
   stage (name, claim, stated limit, credit, one filled control that opens the thing itself, the video's own loop);
   the strip of levels; the previous and next project with pictures; the site in one sentence with links home;
-  all fifteen projects as words with this one marked (`#map`); footer.
+  every project as words with this one marked (`#map`); footer.
 - `all.html`: every link in one table, a row per project under the five groups and columns in the strip's order;
   then earlier videos, contributions, contact and the glossary. `404.html`: says the address has no page and shows
   the map. Both are written by [`scripts/register.py`](../scripts/register.py) with `assets/register.css`, on this
@@ -59,11 +61,11 @@ questions the same way.
 - **Whose site is this, and how do I get back?** The header is the same on every page and stays at the top of the
   window. Projects always opens the map on the home page, so the word means one thing everywhere. On a project page
   it is underlined, and the line under the header reads All projects, then the group, each a link.
-- **What is next to this?** Previous and Next step through the fifteen in the map's order: as words at the top of a
+- **What is next to this?** Previous and Next step through the projects in the map's order: as words at the top of a
   project page (wider than a phone) and as two pictures under the strip.
 - **What else is there?** Three sizes say what leads. The home page shows three places to start with large pictures
   (the three projects the introduction uses as its examples, marked `start` in `front.json`), then every project in
-  its group with a small picture and one sentence about the group. Under a project page the same fifteen are words
+  its group with a small picture and one sentence about the group. Under a project page the same projects are words
   only. No single project is given a larger place than the other two starts.
 
 A project page has one filled control. It opens the thing itself (the website, the study or the repository), named
@@ -75,7 +77,8 @@ code is private.
 
 `front.json`:
 
-- `intro`: the home page's sentence, lede, the two introduction videos and the idle clip.
+- `intro`: the home page's sentence, lede, the two introduction videos and the idle clip. `{count}` and `{Count}` in
+  its words become the number of projects, written as a word.
 - `terms`: one plain sentence for each word a newcomer may not know (Lean,
   Dafny). A project page that uses the word prints the sentence under its credit.
 - `bands`: the five groups, numbered as the full introduction numbers them. Each has `about`, one sentence on
@@ -83,6 +86,10 @@ code is private.
 - `entries`: one per project. `slug`, `name`, `band`, `line` (the tile's line),
   `claim`, `limit`, optional `credit`, optional `start` and `primary` (see Finding the way), `loop` (the stem of its pictures and
   clips), `aliases` (ids the earlier home page used) and `stops`.
+- A project built on someone else's work also has `theirs` and `mine`, printed under its name as "Their work" and
+  "My work" before anything is claimed, and `by`, one short line on its tile. Each sentence names a person and what
+  they did ("I counted, in their published results, ..."), never a label such as "the reader and the counts".
+  Write them from the project's README in the same sitting.
 - A stop has `id` (its fragment), `kind`, and either `res` (a resource id in
   `sites.json`; the address and length are read from there) or `href`. Optional
   `label`, `detail`, `plate` (a picture in `assets/front/plates/`), `fallback`
@@ -107,6 +114,11 @@ All under `assets/front/`, all this repository's own files:
 - `cards/<slug>.png`: the 1200 by 630 picture a link to each page unfurls with (PNG, because some readers refuse WebP).
 - `plates/<name>-640|1280.webp`: the first page of a paper, or the real website,
   proof file or repository page a stop opens.
+- A project with no video has no clip. Its `loop` names a still, `posters/still-<slug>-480|960|1600.webp`: a capture
+  of its real website, or of its own script's output, cut like a video still so one object reads at tile size. Its
+  strip starts at the website or the code, and its filled control opens that.
+- `tile` (optional) names a second still, `posters/tile-<slug>-480|960.webp`, used only on the map's tiles: a tighter
+  cut of the same capture, or pieces of it set closer together, so that one object still reads at 138 px wide. The project page keeps the wider still.
 
 The checker fails the build if a page names a file that is missing, or if a file
 in these folders is used by no page.

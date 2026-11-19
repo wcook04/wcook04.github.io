@@ -1,6 +1,6 @@
 """Every link on one page (all.html), and the page for an address that has none (404.html).
 
-all.html is the register: one row for each of the fifteen projects, in the five
+all.html is the register: one row for each project, in the five
 groups of the full introduction, and one column for each kind of thing, in the
 order of the strip of levels on a project page (Short video, Full video,
 Website, Paper, Proof, Code, Study). Under it: earlier videos, contributions to
@@ -348,7 +348,7 @@ def render(registry: dict, glossary: dict, root: Path, hub) -> str:
                    ((("earlier", "Earlier videos"),) if earlier else ()) + (("about", "Contributions"), ("terms", "Glossary")))
     head = with_sheet(front.head(
         hub, title="Every link: videos, websites, papers, proofs and code | Will Cook",
-        description="Every video, website, paper, proof and repository from Will Cook’s fifteen projects on one page, with a glossary.",
+        description=f"Every video, website, paper, proof and repository from Will Cook’s {model['count_word']} projects on one page, with a glossary.",
         canonical=HOME + "all.html", picture=None), hub)
     return f'''{head}
 <body class="register">
@@ -374,7 +374,7 @@ def render(registry: dict, glossary: dict, root: Path, hub) -> str:
 
 
 def render_404(registry: dict, root: Path, hub) -> str:
-    """404.html: one sentence, the map of fifteen, the way home. Old /plectis/ addresses still forward."""
+    """404.html: one sentence, the map of projects, the way home. Old /plectis/ addresses still forward."""
     canonical = registry["_canonical_v3"]
     model = front.resolve(front.load(root), front.Book(canonical, root))
     head = with_sheet(front.head(hub, title="Page not found | Will Cook", description="This address has no page.",

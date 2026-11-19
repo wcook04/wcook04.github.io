@@ -155,12 +155,14 @@ class HubTests(unittest.TestCase):
         extra = dict(self.files)
         extra["assets/front/loops/unused-s.mp4"] = b""
         self.assertTrue(any("no page uses" in error for error in CHECK.validate_landing(extra, self.view)))
-        # The map is a list of links without its script: fifteen tiles, each to a project page that exists,
+        # The map is a list of links without its script: one tile for each project, each to a project page that exists,
         # and no picture depends on YouTube (posters, plates and loops are this repository's own files).
         page = self.files["index.html"].decode()
         parsed = CHECK.Page(page)
         tiles = [a.get("href") for a in parsed.all("a") if a.get("class") == "tile"]
-        self.assertEqual(len(tiles), 15)
+        entries = json.loads(self.files["front.json"])["entries"]
+        self.assertEqual(len(tiles), len(entries))
+        self.assertGreaterEqual(len(entries), 21)
         self.assertTrue(all(href.lstrip("/") + "index.html" in self.files for href in tiles))
         self.assertNotIn("ytimg", page)
 
@@ -168,7 +170,7 @@ class HubTests(unittest.TestCase):
         front = json.loads(self.files["front.json"])
         slugs = [entry["slug"] for entry in front["entries"]]
         home = CHECK.Page(self.files["index.html"].decode())
-        # The home page leads with the three projects the introduction uses, then lists all fifteen by group.
+        # The home page leads with the three projects the introduction uses, then lists every project by group.
         leads = [a.get("href") for a in home.all("a") if a.get("class") == "lead"]
         self.assertEqual(leads, ["/work/" + e["slug"] + "/" for e in front["entries"] if e.get("start")])
         self.assertEqual(len(leads), 3)

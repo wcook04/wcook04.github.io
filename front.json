@@ -2,7 +2,7 @@
   "about": "The home page and the project pages. Words and order live here; addresses and video lengths are read from sites.json through each stop's res. See docs/front.md.",
   "intro": {
     "title": "Will Cook: AI-written maths and code, made easier to understand",
-    "description": "I do maths research and build software with AI, and I use AI to make the results easier to understand. Fifteen projects with short videos, and websites, papers, proofs or code where they exist.",
+    "description": "I do maths research and build software with AI, and I use AI to make the results easier to understand. {Count} projects, most with short videos, and websites, papers, proofs or code where they exist.",
     "h1": "I use AI to make AI-written maths and code easier to understand.",
     "lede": "I do maths research and build software with AI. Most projects here can be followed at several levels of detail, from a short video down to the proof or the code.",
     "second": "I build the tools so they get better as AI models get better.",
@@ -20,10 +20,10 @@
       "alt": "From the introduction: what AI produces goes through an AI model and comes out as a paper for experts, a website with the paper beside its proof, a map where you click any theorem, and a video for anyone. With a better model, each of these is redrawn."
     },
     "map_title": "The projects",
-    "map_note": "Fifteen projects in five groups. Each has its own page, from a short video down to the proof or the code.",
+    "map_note": "{Count} projects in five groups. Each has its own page. Fifteen open with a video, and the six newest open on the website or the code.",
     "start_title": "Three places to start",
     "start_note": "These three are my examples in the introduction, one each from maths, code and working with AI coding assistants.",
-    "all_title": "All fifteen, by group",
+    "all_title": "All {count}, by group",
     "card_alt": "Will Cook: I use AI to make AI-written maths and code easier to understand. A frame from the introduction video."
   },
   "kinds": {"short": "Short video", "long": "Full video", "site": "Website", "paper": "Paper", "proof": "Lean proof", "code": "Code", "study": "Study", "issue": "Issue"},
@@ -32,9 +32,9 @@
     "Dafny": "Dafny is a programming language and verifier that checks code against written specifications."
   },
   "bands": [
-    {"id": "maths", "n": 1, "name": "Maths", "about": "Research on Erdős problems and on two of OpenAI's results, as papers, websites and proofs in Lean.", "note": "Lean is a program that checks mathematical proofs."},
-    {"id": "checks", "n": 2, "name": "What a check covers", "about": "Which statement a proof or a report covers, and what it leaves out."},
-    {"id": "code", "n": 3, "name": "Code", "about": "Code turned into a map, and into a database that an AI model can search."},
+    {"id": "maths", "n": 1, "name": "Maths", "about": "Research on Erdős problems and on two of OpenAI's results, as papers, websites and proofs in Lean, and explanations of Troy Lee's Lean proof of the PCP theorem.", "note": "Lean is a program that checks mathematical proofs."},
+    {"id": "checks", "n": 2, "name": "What a check covers", "about": "What a proof, a report, a benchmark's grader or a specification covers, and what it leaves out."},
+    {"id": "code", "n": 3, "name": "Code", "about": "Code turned into a map and into a database that an AI model can search, and a test of which descriptions of code go out of date."},
     {"id": "assistants", "n": 4, "name": "AI coding assistants at work", "about": "Tools for working with AI coding assistants, and experiments on what they do."},
     {"id": "videos", "n": 5, "name": "How I make these videos", "about": "The plan I write before AI draws any animation."}
   ],
@@ -117,7 +117,10 @@
       "line": "OpenAI's fourth-power result, proved again in Lean",
       "claim": "Count how often each machine looks at its input. For a yes-or-no question with an answer for every input, an ordinary computer needs at most a fixed multiple of the quantum count to the fourth power, and OpenAI showed that no smaller power works. Lean checks that whole theorem here.",
       "limit": "The count is of looks at the input, which is a different measure from running time. The labels that compare each Lean statement with the paper are AI-written, and no expert has reviewed them yet.",
-      "credit": "The result is OpenAI's, released in October 2026. It matches an upper bound proved in 2020.",
+      "mine": "With AI, I proved the same theorem in Lean and wrote two explanations of the proof. I built a website where the Lean beside each paper follows the paragraph you are reading.",
+      "theirs": "OpenAI proved the result and released its paper in October 2026.",
+      "by": "Result by OpenAI",
+      "credit": "The result matches an upper bound proved in 2020.",
       "page_title": "Quantum computers: OpenAI’s fourth-power result, proved again in Lean",
       "description": "Count how often each machine looks at its input. For yes-or-no questions with an answer for every input, the ordinary count is at most a fixed multiple of the quantum count to the fourth power, and OpenAI showed no smaller power works. Lean checks this. Looks at the input are a different measure from running time.",
       "card_alt": "Quantum computers: OpenAI’s fourth-power result, proved again in Lean. A frame from the project’s video.",
@@ -140,6 +143,9 @@
       "line": "Two nearly best answers, half the arrows differ",
       "claim": "In a model of magnets, every arrow points up or down and every arrangement gets a score. Two arrangements can both score almost the best while about half their arrows differ. When the scoring is random, the chance that such a pair exists approaches 100% as the number of arrows grows.",
       "limit": "The Lean proofs are OpenAI's and cover OpenAI's theorem. They do not cover this result about two arrangements.",
+      "mine": "With AI, I wrote three papers that explain OpenAI's proof. I built a website where each paper is read beside OpenAI's Lean and a graph of the argument's 131 steps.",
+      "theirs": "OpenAI proved the theorem and wrote its Lean. Hong-Bin Chen first proved, in July 2026, the property of that theorem this result uses.",
+      "by": "Theorem and Lean by OpenAI",
       "credit": "The result follows from a 2020 paper by Auffinger, Chen and Zeng and an OpenAI theorem released in October 2026. Full support, the part of that theorem the result uses, was first proved in a July 2026 paper by Hong-Bin Chen. OpenAI's proof is quantitative and also gives a strictly positive density.",
       "page_title": "Spin glass: two nearly best answers, half the arrows differ",
       "description": "In a model of magnets, two arrangements can both score almost the best while about half their arrows differ. The result follows from a 2020 paper by Auffinger, Chen and Zeng and an OpenAI theorem. Full support was first proved in a July 2026 paper by Hong-Bin Chen. The Lean proofs are OpenAI’s and cover OpenAI’s theorem only.",
@@ -154,6 +160,31 @@
       ]
     },
     {
+      "slug": "pcp-theorem",
+      "primary": {"stop": "exposition", "label": "Open the exposition"},
+      "name": "PCP theorem",
+      "band": "maths",
+      "aliases": ["pcp"],
+      "loop": "still-pcp-theorem",
+      "line": "Troy Lee's Lean proof, explained at three lengths",
+      "claim": "The PCP theorem says that any proof a computer can check quickly can be rewritten so that a checker reads only a fixed number of its bits, chosen at random. For a true claim the rewritten proof is always accepted, and every proof of a false claim is rejected at least half the time.",
+      "limit": "Lean compiled Lee's proof. I made the three papers and their links to the Lean with AI. Neither Lee nor the authors of the algebraic proof have reviewed them, and nobody has compared each sentence with the Lean lines it links to.",
+      "mine": "With AI, I wrote three papers that explain his Lean proof: one through worked examples, one for specialists and one detailed account. In each paper, clicking a linked sentence opens the Lean lines it describes.",
+      "theirs": "Troy Lee wrote the proof of the PCP theorem in Lean, and a guide to reading it. His Lean follows the algebraic proof by Amireddy, Behera, Srinivasan, Sudan and Willumsgaard.",
+      "by": "Lean proof by Troy Lee",
+      "page_title": "PCP theorem: Troy Lee's Lean proof, explained at three lengths",
+      "description": "The PCP theorem says a proof can be rewritten so that a checker reads only a fixed number of its bits, chosen at random, and still rejects every proof of a false claim at least half the time. Troy Lee proved it in Lean. Three AI-written explanations of his proof, linked to his Lean and not yet reviewed by him.",
+      "card_alt": "PCP theorem: Troy Lee's Lean proof, explained at three lengths. The exposition open in Proof Reader beside a graph of the proof.",
+      "stops": [
+        {"id": "exposition", "kind": "site", "label": "Exposition", "detail": "worked examples", "href": "https://wcook04.github.io/proof-reader/#/pcp-exposition", "plate": "pcp-exposition"},
+        {"id": "specialist", "kind": "paper", "label": "Specialist paper", "detail": "in the reader", "href": "https://wcook04.github.io/proof-reader/#/pcp-specialist", "plate": "pcp-specialist"},
+        {"id": "full", "kind": "paper", "label": "Detailed account", "detail": "in the reader", "href": "https://wcook04.github.io/proof-reader/#/pcp-full-argument", "plate": "pcp-full-argument"},
+        {"id": "guide", "kind": "paper", "label": "Lee's reading guide", "detail": "his own text", "href": "https://wcook04.github.io/proof-reader/#/pcp-reading-guide", "plate": "pcp-reading-guide"},
+        {"id": "proof", "kind": "proof", "label": "Lean proof", "detail": "the main theorem", "href": "https://github.com/troyjlee/tcs-formalizations/blob/a0ce13ed0fa264f051c1278e039596ce65557fa4/PCP/Theorem.lean#L25-L33", "plate": "pcp-lean"},
+        {"id": "code", "kind": "code", "res": "repo:proof-reader", "detail": "on GitHub"}
+      ]
+    },
+    {
       "slug": "reader-websites",
       "name": "Reader websites",
       "band": "maths",
@@ -163,15 +194,16 @@
       "names": "Lean Exposition, Quartic Reader, Proof Reader",
       "claim": "Three websites where you read a maths paper and click a linked sentence to open the Lean linked to it, beside the text. In Lean Exposition and Proof Reader, the step you are reading is also highlighted on a map of the argument.",
       "limit": "Lean checks the code. Whether a sentence and the code say the same thing is for a person to judge, and I made the links with AI.",
-      "credit": "Lean Exposition and Quartic Reader show OpenAI's papers. Proof Reader shows Contextual Embeddings by Frohlich, Foster, Kavvos and Wang, with the authors' own Lean proof.",
+      "mine": "I built the three websites. With AI, I linked sentences in each paper to the Lean lines they describe, and wrote the explanations of OpenAI's results, of the PCP proof and of the coupled-spring proof.",
+      "theirs": "OpenAI proved the two results shown in Lean Exposition and Quartic Reader, and wrote the Lean in Lean Exposition. Frohlich, Foster, Kavvos and Wang wrote Contextual Embeddings and its Lean proof. Troy Lee wrote the Lean proof of the PCP theorem, and Bjørn Kjos-Hanssen the Lean proof about a coupled spring.",
       "page_title": "Reader websites: click a linked sentence, open the Lean beside it",
       "description": "Three websites where you read a maths paper and click a linked sentence to open the Lean linked to it, beside the text. Lean checks the code. Whether a sentence and the code say the same thing is for a person to judge, and I made the links with AI.",
       "card_alt": "Reader websites: Click a linked sentence, open the Lean beside it. A frame from the project’s video.",
       "stops": [
         {"id": "long", "kind": "long", "res": "film:long-lean-readers", "detail_prefix": "all three, "},
-        {"id": "lean-exposition", "kind": "site", "res": "site:lean-exposition", "label": "Lean Exposition", "detail": "OpenAI's spin-glass paper", "plate": "sk-site", "fallback": "assets/sites/lean-exposition-dark-720.webp", "watched": "film:short-sk-website", "more": [{"label": "Short video", "res": "film:short-sk-website"}, {"label": "Map of the argument", "res": "link:lean-exposition-argument-map"}, {"label": "Code", "res": "repo:lean-exposition-site"}]},
+        {"id": "lean-exposition", "kind": "site", "res": "site:lean-exposition", "label": "Lean Exposition", "detail": "OpenAI's spin-glass theorem", "plate": "sk-site", "fallback": "assets/sites/lean-exposition-dark-720.webp", "watched": "film:short-sk-website", "more": [{"label": "Short video", "res": "film:short-sk-website"}, {"label": "Map of the argument", "res": "link:lean-exposition-argument-map"}, {"label": "Code", "res": "repo:lean-exposition-site"}]},
         {"id": "quartic-reader", "kind": "site", "res": "site:quartic", "label": "Quartic Reader", "detail": "OpenAI's quantum paper", "plate": "quartic-site", "fallback": "assets/sites/quartic-dark-720.webp", "watched": "film:short-quartic-reader", "more": [{"label": "Short video", "res": "film:short-quartic-reader"}, {"label": "Code", "res": "repo:quartic-query-lean"}]},
-        {"id": "proof-reader", "kind": "site", "res": "site:proof-reader", "label": "Proof Reader", "detail": "Contextual Embeddings", "plate": "proof-reader-site", "fallback": "assets/sites/proof-reader-dark-720.webp", "watched": "film:short-proof-reader", "more": [{"label": "Short video", "res": "film:short-proof-reader"}, {"label": "Open the paper", "res": "paper:contextual-embeddings"}, {"label": "Code", "res": "repo:proof-reader"}]}
+        {"id": "proof-reader", "kind": "site", "res": "site:proof-reader", "label": "Proof Reader", "detail": "Contextual Embeddings and five more", "plate": "proof-reader-site", "fallback": "assets/sites/proof-reader-dark-720.webp", "watched": "film:short-proof-reader", "more": [{"label": "Short video", "res": "film:short-proof-reader"}, {"label": "Open the paper", "res": "paper:contextual-embeddings"}, {"label": "Code", "res": "repo:proof-reader"}]}
       ]
     },
     {
@@ -184,6 +216,9 @@
       "line": "Two groups, two labels for one maths paper",
       "claim": "Atlas is a website that lists the papers in OpenAI's October 2026 maths release, with other groups' checking reports linked beside each one. For the paper about π, two groups both report the proof accepted and label its coverage differently. Atlas shows the two labels side by side.",
       "limit": "Each group reported its own labels and proof checks, and Atlas has not rerun them. The suggested matches between paper theorems and Lean statements are unreviewed.",
+      "mine": "I built a website with one page for each group of OpenAI's papers. On that page you read the paper, open its Lean statements and compare what each outside report says about it.",
+      "theirs": "OpenAI published the mathematics papers and their Lean code. Other groups, among them MathVet and Carlos Toledo with cert-machine, published reports on those proofs.",
+      "by": "OpenAI's papers, other groups' reports",
       "credit": "The two reports on the π paper are by MathVet and by Carlos Toledo's cert-machine. Atlas also uses Neal McBurnett's Lean tooling.",
       "page_title": "Atlas: two groups, two labels for one maths paper",
       "description": "A website that lists the papers in OpenAI’s October 2026 maths release, with other groups' checking reports beside each one. For the paper about π, two groups both report the proof accepted and label its coverage differently. Atlas links their reports and has not rerun their checks.",
@@ -220,6 +255,75 @@
       ]
     },
     {
+      "slug": "medagentbench",
+      "primary": {"stop": "site", "label": "Open the study"},
+      "name": "MedAgentBench study",
+      "band": "checks",
+      "aliases": ["medagentbench-reader"],
+      "loop": "still-medagentbench",
+      "tile": "tile-medagentbench",
+      "line": "A script that reads one page of results passes all 30 released cases",
+      "claim": "In the potassium task a model reads a patient's most recent potassium result and submits two orders if it is low. A script that reads only the first page of search results passes Stanford's grader on all 30 released cases, though on 12 of them that page does not contain the most recent result. On the 629 further cases, which all need the orders, the same script passes 299.",
+      "limit": "One task of the benchmark, and one AI model, DeepSeek V4.1 Flash. This is a prototype, and no one outside the study has reviewed it.",
+      "mine": "I ran a new experiment on one task, potassium replacement. I wrote the task's instruction as a specification in Lean. I built 629 further cases from the benchmark's own records, and ran three scripts and one AI model on them.",
+      "theirs": "MedAgentBench is by Jiang and coauthors at Stanford. It contains clinical tasks, de-identified patient records in a simulated record system, and a program that grades the answers an AI model gives.",
+      "by": "Benchmark by Jiang and coauthors, Stanford",
+      "page_title": "MedAgentBench study: a script that reads one page of results passes all 30 released cases",
+      "description": "MedAgentBench's potassium task, followed from its instruction to its grading code. A script that reads only the first page of search results passes Stanford's grader on all 30 released cases, and on 299 of 629 further cases built from the benchmark's own records. One task, one model, and a prototype nobody outside has reviewed.",
+      "card_alt": "MedAgentBench study: a script that reads one page of results passes all 30 released cases. A table from the study's page.",
+      "stops": [
+        {"id": "site", "kind": "site", "label": "Website", "detail": "the study on one page", "href": "https://wcook04.github.io/medagentbench-reader/", "plate": "medagentbench-site"},
+        {"id": "paper", "kind": "paper", "label": "Paper", "detail": "PDF, 33 pages", "href": "https://wcook04.github.io/medagentbench-reader/medagentbench-potassium-task.pdf", "plate": "medagentbench-pdf"},
+        {"id": "proof", "kind": "proof", "label": "Lean specification", "detail": "the task's rule", "href": "https://github.com/wcook04/medagentbench-reader/blob/main/lean/Potassium.lean", "plate": "medagentbench-lean"},
+        {"id": "code", "kind": "code", "href": "https://github.com/wcook04/medagentbench-reader", "detail": "with the results"}
+      ]
+    },
+    {
+      "slug": "faithformbench",
+      "primary": {"stop": "site", "label": "Open the reader"},
+      "name": "FaithformBench Reader",
+      "band": "checks",
+      "aliases": ["faithformbench-reader"],
+      "loop": "still-faithformbench",
+      "tile": "tile-faithformbench",
+      "line": "A wrong step adds a number. In two thirds of false positives, the Lean omits it.",
+      "claim": "In one case a step is changed to say that 3 miles plus 3 miles is 5 miles. The Lean statement written for that step is 3 * 2 = 6, and the prover proved it. Where a change put a new number into a step, that number is missing from the Lean statement in 9,223 of 13,606 false positives (68%).",
+      "limit": "I counted in the authors' published results and ran no translation program or prover again. The authors have not reviewed or endorsed this project.",
+      "mine": "I built a website that shows each of their steps beside the Lean statement each of the four programs wrote for it. In their published results I counted how many false positives do not contain the number that the change put into the step.",
+      "theirs": "Rob Cornish, Iacopo Ghinassi and coauthors changed each step of a worked solution to make it wrong, had four AI programs translate every step into a Lean statement, and published each statement with whether a prover proved it. They call a proved statement of a wrong step a false positive.",
+      "by": "Benchmark by Cornish, Ghinassi and coauthors",
+      "page_title": "FaithformBench Reader: where a wrong step adds a number, two thirds of false positives omit it from the Lean",
+      "description": "FaithformBench changes a step of reasoning to make it wrong and counts how often its Lean translation is still proved. Where the change put a new number into the step, that number is missing from the Lean in 9,223 of 13,606 false positives of this kind. A reader shows every step beside its Lean. Independent of the benchmark's authors.",
+      "card_alt": "FaithformBench Reader: a wrong step adds a number, and in two thirds of false positives the Lean omits it. One step beside its Lean statement in the reader.",
+      "stops": [
+        {"id": "site", "kind": "site", "label": "Website", "detail": "1,179 reasoning chains", "href": "https://wcook04.github.io/faithformbench-reader/", "plate": "faithformbench-site", "more": [{"label": "The benchmark's paper", "href": "https://arxiv.org/abs/2608.10916"}]},
+        {"id": "example", "kind": "site", "label": "Example", "detail": "one step and its Lean", "href": "https://wcook04.github.io/faithformbench-reader/#/gsm8k-221/step_3/llm", "plate": "faithformbench-example"},
+        {"id": "code", "kind": "code", "href": "https://github.com/wcook04/faithformbench-reader", "detail": "with the counts"}
+      ]
+    },
+    {
+      "slug": "spec-change-map",
+      "primary": {"stop": "site", "label": "Open the map"},
+      "name": "Spec change map",
+      "band": "checks",
+      "aliases": ["pdd-spec-change-map"],
+      "loop": "still-spec-change-map",
+      "line": "What three corrected clauses changed in a login contract",
+      "claim": "Take a login with the right password, where the account lookup and the token signing both work. The Microsoft Research listing allows a token or an HTTP 500 error. The GitHub Next listing allows only a token. The correction removes the HTTP 500 from 5 of the 18 situations and adds no response anywhere.",
+      "limit": "The comparison is a finite model of the two printed listings: 162 modelled logins in 18 situations. Nobody ran the app, and the map does not show whether the code meets either listing.",
+      "mine": "I compared the two published contracts. For each of 18 login situations, the map shows which HTTP responses each version allows, which clause removed a response, and which functions that clause takes on trust.",
+      "theirs": "PDD Kit is a research prototype in which AI coding assistants write Rust code and proofs that the Verus verifier checks. Its authors published the contract for its login function twice: in a Microsoft Research post, and on the GitHub Next page with three clauses corrected.",
+      "by": "Contract by PDD Kit's authors",
+      "page_title": "Spec change map: what three corrected clauses changed in a login contract",
+      "description": "PDD Kit's login contract has been published twice, the second time with three clauses corrected. For a login with the right password, the first listing allows a token or a server error and the corrected one allows only the token. A map of every situation the correction changed, from a finite model of the two printed listings.",
+      "card_alt": "Spec change map: what three corrected clauses changed in a login contract. The map of responses each version of the contract allows.",
+      "stops": [
+        {"id": "site", "kind": "site", "label": "Website", "detail": "the map", "href": "https://wcook04.github.io/pdd-spec-change-map/", "plate": "spec-change-map-site"},
+        {"id": "example", "kind": "site", "label": "Example", "detail": "the right password", "href": "https://wcook04.github.io/pdd-spec-change-map/#o=s%3Acorrect-password%3A0", "plate": "spec-change-map-example"},
+        {"id": "code", "kind": "code", "href": "https://github.com/wcook04/pdd-spec-change-map", "detail": "on GitHub"}
+      ]
+    },
+    {
       "slug": "codemap",
       "name": "CodeMap",
       "band": "code",
@@ -247,7 +351,9 @@
       "line": "NVIDIA's Auto Ontology answers questions about its own code",
       "claim": "A program that reads a Python project and writes a database of every function and which function calls which. Given that database of its own code, NVIDIA's Auto Ontology, running a DeepSeek model, answered 10.3 of 12 questions correctly on average. The same model asked directly answered 3.2.",
       "limit": "Twelve questions, written by AI models. The answer keys were corrected after the runs, which moved results in both directions.",
-      "credit": "Auto Ontology is NVIDIA's open-source project. This study is independent of NVIDIA.",
+      "mine": "I wrote a program that reads Python source code and writes a database of its files, functions, classes, calls and imports. I gave Auto Ontology that database of its own code and counted how many of twelve questions it answered correctly. The study is independent of NVIDIA.",
+      "theirs": "Auto Ontology is NVIDIA's open-source system for answering questions about databases.",
+      "by": "Built on NVIDIA's Auto Ontology",
       "page_title": "Code Ontology Bridge: NVIDIA’s Auto Ontology answers questions about its own code",
       "description": "A program that reads a Python project and writes a database of its functions and calls. Given that database of its own code, NVIDIA’s Auto Ontology, running a DeepSeek model, answered 10.3 of 12 questions correctly on average. The same model asked directly answered 3.2. AI models wrote the questions, and the study is independent of NVIDIA.",
       "card_alt": "Code Ontology Bridge: NVIDIA’s Auto Ontology answers questions about its own code. A frame from the project’s video.",
@@ -259,6 +365,28 @@
         {"id": "paper", "kind": "paper", "label": "Paper", "detail": "PDF", "href": "https://github.com/wcook04/code-ontology-bridge/blob/main/docs/case-study.pdf", "plate": "cob-paper"},
         {"id": "code", "kind": "code", "res": "repo:code-ontology-bridge", "detail": "on GitHub", "plate": "repo-code-ontology-bridge"},
         {"id": "issue", "kind": "issue", "label": "Issue", "detail": "on NVIDIA's repository", "href": "https://github.com/NVIDIA/auto-ontology/issues/431", "plate": "cob-issue", "more": [{"label": "NVIDIA Auto Ontology", "href": "https://github.com/NVIDIA/auto-ontology"}]}
+      ]
+    },
+    {
+      "slug": "stale-descriptions",
+      "primary": {"stop": "code", "label": "Code on GitHub"},
+      "name": "Stale descriptions",
+      "band": "code",
+      "aliases": ["glean-description-staleness"],
+      "loop": "still-stale-descriptions",
+      "tile": "tile-stale-descriptions",
+      "line": "After an edit, which sentences about other files to reread",
+      "claim": "I ask AI coding assistants to keep a few sentences about each file inside that file. Editing a function in one file can make a sentence in another file false. In the test, one function is changed from doubling a number to tripling it, and a sentence about its caller in another file, that it returns twice the value, becomes false. Glean returns that caller, and the script lists its three sentences for rereading.",
+      "limit": "Three files from Glean's own Python example, with sentences and true-or-false verdicts that I wrote by hand. It shows the mechanism. How often this happens in a real project is untested.",
+      "mine": "I wrote sentences that describe those three files and marked each one true or false after each change to the code. A script asks Glean which functions call or refer to the changed code and lists the sentences about those functions.",
+      "theirs": "Glean is Meta's open-source program that indexes code and answers questions such as which functions call a given function. The three Python files in this test are Glean's own example.",
+      "by": "Tested with Meta's Glean",
+      "page_title": "Stale descriptions: after an edit, which sentences about other files to reread",
+      "description": "Editing a function in one file can make a sentence about another file false. This project tests whether Glean, Meta's open-source code index, can list those sentences for rereading by asking which functions call or refer to the changed code. Three files from Glean's own example, with hand-written verdicts.",
+      "card_alt": "Stale descriptions: after an edit, which sentences about other files to reread. A table of results from the project's README.",
+      "stops": [
+        {"id": "results", "kind": "study", "label": "Results", "detail": "in the README", "href": "https://github.com/wcook04/glean-description-staleness#results", "plate": "stale-descriptions-results"},
+        {"id": "code", "kind": "code", "href": "https://github.com/wcook04/glean-description-staleness", "detail": "on GitHub"}
       ]
     },
     {
@@ -297,6 +425,29 @@
         {"id": "short", "kind": "short", "res": "film:short-safety-core"},
         {"id": "long", "kind": "long", "res": "film:safety-core"},
         {"id": "code", "kind": "code", "res": "repo:safety-core", "detail": "with the run records", "plate": "repo-safety-core", "fallback": "assets/sites/repo-safety-core-720.webp"}
+      ]
+    },
+    {
+      "slug": "edit-view",
+      "primary": {"stop": "code", "label": "Code on GitHub"},
+      "name": "Edit View",
+      "band": "assistants",
+      "aliases": ["edit-view"],
+      "loop": "still-edit-view",
+      "tile": "tile-edit-view",
+      "line": "An edit can remove text that its monitor is never shown",
+      "claim": "The released program shows the monitor the first 3,000 characters of the text an edit replaces. If the edit begins with 3,000 unchanged characters, removing a comment from an SSH settings file and removing the line PasswordAuthentication no give the monitor the same input. Edit View always includes the removed text, so the two edits give different input.",
+      "limit": "Tested on Anthropic's released code at one commit, with an OpenAI model as the monitor and three runs per case. Nothing was run against current Claude Code. I am not affiliated with Anthropic.",
+      "mine": "I found a case where that program gives the monitor the same text for two different edits. I wrote Edit View, another way to prepare an edit for the monitor, and replayed both edits through the released monitor each way.",
+      "theirs": "Anthropic released the code from its Red-Teaming Auto Mode study. In that code a second AI model, the monitor, reads each action an AI coding assistant proposes and allows or blocks it. One program prepares the text of a file edit for the monitor to read.",
+      "by": "Tested on code Anthropic released",
+      "page_title": "Edit View: an edit can remove text that its monitor is never shown",
+      "description": "Anthropic's released program shows a monitor the first 3,000 characters of the text an edit replaces. When an edit begins with 3,000 unchanged characters, removing a comment and removing a security setting give the monitor the same input. Edit View always includes the removed text. Tested on the released code only.",
+      "card_alt": "Edit View: an edit can remove text that its monitor is never shown. Output from the project's own script.",
+      "stops": [
+        {"id": "code", "kind": "code", "href": "https://github.com/wcook04/edit-view", "detail": "with the replays"},
+        {"id": "proof", "kind": "proof", "label": "Lean proof", "detail": "same view, same edit", "href": "https://github.com/wcook04/edit-view/blob/main/lean/EditView.lean", "plate": "edit-view-lean"},
+        {"id": "issue", "kind": "issue", "label": "Issue", "detail": "reported upstream", "href": "https://github.com/safety-research/red-teaming-auto-mode/issues/3"}
       ]
     },
     {
