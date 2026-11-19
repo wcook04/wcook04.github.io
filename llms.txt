@@ -16,7 +16,7 @@ This host's root page lists Will Cook's projects, websites and videos. Each of t
 - [The funnel](https://wcook04.github.io/work/funnel/): How a Lean proof becomes papers and a video
 - [Maths Map](https://wcook04.github.io/work/maths-map/): Eight Erdős problems on one map
 - [Erdős #257](https://wcook04.github.io/work/erdos-257/): A case from 1968, proved and checked in Lean
-- [Quantum computers](https://wcook04.github.io/work/quantum-computers/): OpenAI’s fourth-power result, proved again in Lean
+- [Quartic separation](https://wcook04.github.io/work/quantum-computers/): OpenAI’s fourth-power result, proved again in Lean
 - [Spin glass](https://wcook04.github.io/work/spin-glass/): Two nearly best answers, half the arrows differ
 - [PCP theorem](https://wcook04.github.io/work/pcp-theorem/): Troy Lee’s Lean proof, explained at three lengths
 - [Reader websites](https://wcook04.github.io/work/reader-websites/): Click a linked sentence, open the Lean beside it

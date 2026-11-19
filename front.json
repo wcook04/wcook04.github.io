@@ -110,7 +110,7 @@
     {
       "slug": "quantum-computers",
       "primary": {"stop": "site", "label": "Open Quartic Reader"},
-      "name": "Quantum computers",
+      "name": "Quartic separation",
       "band": "maths",
       "aliases": ["quartic"],
       "loop": "short-quartic",
@@ -121,9 +121,9 @@
       "theirs": "OpenAI proved the result and released its paper in October 2026.",
       "by": "Result by OpenAI",
       "credit": "The result matches an upper bound proved in 2020.",
-      "page_title": "Quantum computers: OpenAI’s fourth-power result, proved again in Lean",
+      "page_title": "Quartic separation: OpenAI’s fourth-power result, proved again in Lean",
       "description": "Count how often each machine looks at its input. For yes-or-no questions with an answer for every input, the ordinary count is at most a fixed multiple of the quantum count to the fourth power, and OpenAI showed no smaller power works. Lean checks this. Looks at the input are a different measure from running time.",
-      "card_alt": "Quantum computers: OpenAI’s fourth-power result, proved again in Lean. A frame from the project’s video.",
+      "card_alt": "Quartic separation: OpenAI’s fourth-power result, proved again in Lean. A frame from the project’s video.",
       "stops": [
         {"id": "short", "kind": "short", "res": "film:short-quartic"},
         {"id": "long", "kind": "long", "res": "film:quartic-query"},
