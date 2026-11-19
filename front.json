@@ -48,15 +48,15 @@
       "aliases": ["funnel"],
       "loop": "short-funnel",
       "line": "How a Lean proof becomes papers and a video",
-      "claim": "The funnel is a set of written instructions that AI follows to turn a proof Lean has accepted into shorter and shorter versions for different readers. For one Erdős problem that is 152 pages, then 26, then 16, then a half-hour video.",
+      "claim": "The funnel is a set of written instructions that AI follows to turn a proof Lean has accepted into shorter and shorter versions for different readers. For one Erdős problem that is 153 pages, then 26, then 16, then a half-hour video.",
       "limit": "Lean checks the proof. An expert still has to judge whether each paper and video says the same maths.",
       "page_title": "The funnel: how a Lean proof becomes papers and a video",
-      "description": "Written instructions that AI follows to turn a proof Lean has accepted into shorter versions for different readers. For one Erdős problem that is 152 pages, then 26, then 16, then a half-hour video. Lean checks the proof. The papers and the video still need an expert’s reading.",
+      "description": "Written instructions that AI follows to turn a proof Lean has accepted into shorter versions for different readers. For one Erdős problem that is 153 pages, then 26, then 16, then a half-hour video. Lean checks the proof. The papers and the video still need an expert’s reading.",
       "card_alt": "The funnel: How a Lean proof becomes papers and a video. A frame from the project’s video.",
       "stops": [
         {"id": "short", "kind": "short", "res": "film:short-funnel"},
         {"id": "long", "kind": "long", "res": "film:long-funnel"},
-        {"id": "example", "kind": "site", "label": "Example", "detail": "one problem, every version", "href": "https://wcook04.github.io/practical-formal-verification/maths/problems/erdos_257.html", "plate": "p257-page", "fallback": "assets/sites/maths-dark-720.webp"},
+        {"id": "example", "kind": "site", "label": "Example", "detail": "one problem, every version", "href": "https://wcook04.github.io/erdos-257-reader/", "plate": "p257-reader", "fallback": "assets/sites/maths-dark-720.webp"},
         {"id": "code", "kind": "code", "res": "repo:lean-exposition", "detail": "writing guides and reader tools", "plate": "repo-lean-exposition", "fallback": "assets/sites/repo-funnel-720.webp"}
       ]
     },
@@ -85,7 +85,7 @@
     },
     {
       "slug": "erdos-257",
-      "primary": {"stop": "site", "label": "Open the problem page"},
+      "primary": {"stop": "site", "label": "Open the reader"},
       "name": "Erdős #257",
       "band": "maths",
       "aliases": [],
@@ -100,10 +100,10 @@
       "stops": [
         {"id": "short", "kind": "short", "res": "film:short-mathematics"},
         {"id": "long", "kind": "long", "res": "film:mathematics"},
-        {"id": "site", "kind": "site", "label": "Website", "detail": "the problem page", "href": "https://wcook04.github.io/practical-formal-verification/maths/problems/erdos_257.html", "plate": "p257-page", "fallback": "assets/sites/maths-dark-720.webp", "more": [{"label": "The problem as Erdős stated it", "href": "https://www.erdosproblems.com/257"}]},
+        {"id": "site", "kind": "site", "label": "Erdős 257 Reader", "detail": "three papers beside the Lean", "href": "https://wcook04.github.io/erdos-257-reader/", "plate": "p257-reader", "fallback": "assets/sites/maths-dark-720.webp", "more": [{"label": "The problem as Erdős stated it", "href": "https://www.erdosproblems.com/257"}]},
         {"id": "exposition", "kind": "paper", "label": "Exposition", "detail": "PDF, 16 pages", "href": "https://wcook04.github.io/practical-formal-verification/papers/erdos257-expository-sums-never-fractions.pdf", "plate": "p257-exposition"},
         {"id": "paper", "kind": "paper", "label": "Paper for experts", "detail": "PDF, 26 pages", "href": "https://wcook04.github.io/practical-formal-verification/papers/erdos-257-mersenne-support-subseries.pdf", "plate": "p257-paper"},
-        {"id": "record", "kind": "paper", "label": "Research record", "detail": "PDF, 152 pages", "href": "https://wcook04.github.io/practical-formal-verification/papers/erdos257-mersenne-reasoning-surface.pdf", "plate": "p257-record"},
+        {"id": "record", "kind": "paper", "label": "Research record", "detail": "PDF, 153 pages", "href": "https://wcook04.github.io/practical-formal-verification/papers/erdos257-mersenne-reasoning-surface.pdf", "plate": "p257-record"},
         {"id": "proof", "kind": "proof", "label": "Lean proof", "detail": "the 1968 case", "href": "https://github.com/wcook04/plectis-erdos-lean/blob/ec92e5ce12c6117a24e4b532ea565ba332a1df7b/verification/FC257ReciprocalSupport/verification/Solutions/FC257Subtype.lean#L10-L17", "plate": "p257-lean", "more": [{"label": "All the Lean proofs", "res": "repo:plectis-erdos-lean"}]}
       ]
     },
