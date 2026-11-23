@@ -1,6 +1,6 @@
 # Will Cook's websites
 
-This host's root page lists Will Cook's projects, websites and videos. Each of the twenty-one projects has a page at https://wcook04.github.io/work/<slug>/ with its videos, website, papers, proof and code in order from the quickest look to the most detail. Each website is its own project with its own source and its own agent entry where one exists.
+This host's root page lists Will Cook's projects, websites and videos. Each of the twenty-three projects has a page at https://wcook04.github.io/work/<slug>/ with its videos, website, papers, proof and code in order from the quickest look to the most detail. Each website is its own project with its own source and its own agent entry where one exists.
 
 - [Maths Map](https://wcook04.github.io/practical-formal-verification/map/): AI-assisted research on eight Erdős problems, with papers, records of failed approaches and Lean 4 proofs of partial results. Seven original questions remain open. The #1041 formal-statement counterexample is due to ani. The papers are not peer reviewed. Agent entry: https://wcook04.github.io/practical-formal-verification/llms.txt
 - [SK Reader](https://wcook04.github.io/lean-exposition-site/): Three explanations of OpenAI’s full-support theorem for the Sherrington–Kirkpatrick spin glass, linked to Lean declarations and an argument map. The theorem and Lean proof are OpenAI’s. I made the explanations and links with AI; no mathematician has reviewed them.
@@ -19,6 +19,8 @@ This host's root page lists Will Cook's projects, websites and videos. Each of t
 - [Quartic separation](https://wcook04.github.io/work/quantum-computers/): OpenAI’s fourth-power result, proved again in Lean
 - [Spin glass](https://wcook04.github.io/work/spin-glass/): Two nearly best answers, half the arrows differ
 - [PCP theorem](https://wcook04.github.io/work/pcp-theorem/): Troy Lee’s Lean proof, explained at three lengths
+- [Euler blow-up](https://wcook04.github.io/work/euler-blow-up/): A singularity on the torus, read beside its Lean
+- [Navier–Stokes blow-up](https://wcook04.github.io/work/navier-stokes-blow-up/): Finite-time blow-up without force, read beside its Lean
 - [Reader websites](https://wcook04.github.io/work/reader-websites/): Click a linked sentence, open the Lean beside it
 - [Atlas](https://wcook04.github.io/work/atlas/): A map of every result in OpenAI’s maths release
 - [Verification map](https://wcook04.github.io/work/verification-map/): What one proof covers, in a toolkit of 88 components

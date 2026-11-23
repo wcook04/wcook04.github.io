@@ -33,7 +33,7 @@
     "Dafny": "Dafny is a programming language and verifier that checks code against written specifications."
   },
   "bands": [
-    {"id": "maths", "n": 1, "name": "Maths", "about": "Research on Erdős problems and on two of OpenAI's results, as papers, websites and proofs in Lean, and explanations of Troy Lee's Lean proof of the PCP theorem.", "note": "Lean is a program that checks mathematical proofs."},
+    {"id": "maths", "n": 1, "name": "Maths", "about": "Research on Erdős problems and on two of OpenAI's results, as papers, websites and proofs in Lean, explanations of Troy Lee's Lean proof of the PCP theorem, and readers for Alpöge, Buckmaster and Coiculescu's Euler and Navier–Stokes blow-up papers.", "note": "Lean is a program that checks mathematical proofs."},
     {"id": "checks", "n": 2, "name": "What a check covers", "about": "What a proof, a report, a benchmark's grader or a specification covers, and what it leaves out."},
     {"id": "code", "n": 3, "name": "Code", "about": "Code turned into a map and into a database that an AI model can search, and a test of which descriptions of code go out of date."},
     {"id": "assistants", "n": 4, "name": "AI coding assistants at work", "about": "Tools for working with AI coding assistants, and experiments on what they do."},
@@ -183,6 +183,116 @@
         {"id": "guide", "kind": "paper", "label": "Lee's reading guide", "detail": "his own text", "href": "https://wcook04.github.io/proof-reader/#/pcp-reading-guide", "plate": "pcp-reading-guide"},
         {"id": "proof", "kind": "proof", "label": "Lean proof", "detail": "the main theorem", "href": "https://github.com/troyjlee/tcs-formalizations/blob/a0ce13ed0fa264f051c1278e039596ce65557fa4/PCP/Theorem.lean#L25-L33", "plate": "pcp-lean"},
         {"id": "code", "kind": "code", "res": "repo:proof-reader", "detail": "on GitHub"}
+      ]
+    },
+    {
+      "slug": "euler-blow-up",
+      "primary": {
+        "stop": "site",
+        "label": "Open the paper"
+      },
+      "name": "Euler blow-up",
+      "band": "maths",
+      "aliases": [
+        "euler"
+      ],
+      "loop": "still-euler-blow-up",
+      "line": "A singularity on the torus, read beside its Lean",
+      "claim": "Alpöge, Buckmaster and Coiculescu construct smooth periodic initial data for the three-dimensional incompressible Euler equations whose solution blows up in finite time. The velocity stays bounded while the vorticity at the origin becomes infinite.",
+      "limit": "The links between sentences and Lean, the titles and the comparisons were made with AI, and no mathematician has reviewed them. The adapted edition's added explanations are AI-written too, and every change is marked.",
+      "mine": "I built a reader where clicking a phrase of their paper opens the Lean that states it, with a comparison of the two, a map of the argument, and an adapted edition where AI added explanations to their text with every change marked.",
+      "theirs": "Levent Alpöge, Tristan Buckmaster and Matei Coiculescu wrote the paper and its Lean proof. Their AI statement says they used Claude and Codex throughout, and they thank Anthropic for supporting the collaboration.",
+      "by": "Paper and Lean by Alpöge, Buckmaster and Coiculescu",
+      "page_title": "Euler blow-up: a singularity on the torus, read beside its Lean",
+      "description": "Alpöge, Buckmaster and Coiculescu's construction of finite-time blow-up for the three-dimensional Euler equations on the torus, in a reader where each phrase opens the Lean that states it, with an adapted edition and a map of the argument. Links and explanations made with AI and not reviewed by a mathematician.",
+      "card_alt": "Euler blow-up: the paper in the reader, beside a map of its argument.",
+      "stops": [
+        {
+          "id": "site",
+          "kind": "site",
+          "label": "Their paper",
+          "detail": "in the reader",
+          "href": "https://wcook04.github.io/library/euler/",
+          "plate": "euler-site"
+        },
+        {
+          "id": "adapted",
+          "kind": "paper",
+          "label": "Adapted edition",
+          "detail": "every change marked",
+          "href": "https://wcook04.github.io/library/euler/adapted/",
+          "plate": "euler-adapted"
+        },
+        {
+          "id": "argument-map",
+          "kind": "site",
+          "label": "Map of the argument",
+          "detail": "coloured by topic",
+          "href": "https://wcook04.github.io/library/euler/map/",
+          "plate": "euler-map"
+        },
+        {
+          "id": "proof",
+          "kind": "proof",
+          "label": "Their Lean",
+          "detail": "on GitHub",
+          "href": "https://github.com/mcoiculescu/EulerBlowupPublic"
+        }
+      ]
+    },
+    {
+      "slug": "navier-stokes-blow-up",
+      "primary": {
+        "stop": "site",
+        "label": "Open the paper"
+      },
+      "name": "Navier–Stokes blow-up",
+      "band": "maths",
+      "aliases": [
+        "navier-stokes"
+      ],
+      "loop": "still-navier-stokes-blow-up",
+      "line": "Finite-time blow-up without force, read beside its Lean",
+      "claim": "Alpöge and Buckmaster prove that smooth, compactly supported, divergence-free initial data on R³, and smooth data on the torus, exist for which the three-dimensional Navier–Stokes equations without force blow up in finite time. The construction starts from a certificate, an approximate solution that satisfies explicit inequalities.",
+      "limit": "The certificate is not yet in their repository, so their Lean proves the result from the certificate's inequalities and does not check the numbers themselves. The links, titles and comparisons, and the adapted edition's added explanations, were made with AI and no mathematician has reviewed them.",
+      "mine": "I built a reader where clicking a phrase of their paper opens the Lean that states it, with a comparison of the two, a map of the argument, and an adapted edition where AI added explanations to their text with every change marked.",
+      "theirs": "Levent Alpöge and Tristan Buckmaster wrote the paper and its Lean proof. Their AI statement says they used Anthropic's models (Claude) throughout and no others, and they thank Anthropic for supporting the collaboration.",
+      "by": "Paper and Lean by Alpöge and Buckmaster",
+      "page_title": "Navier–Stokes blow-up: finite-time blow-up without force, read beside its Lean",
+      "description": "Alpöge and Buckmaster's proof of finite-time blow-up for the Navier–Stokes equations without force, in a reader where each phrase opens the Lean that states it, with an adapted edition and a map of the argument. Links and explanations made with AI and not reviewed by a mathematician.",
+      "card_alt": "Navier–Stokes blow-up: the paper in the reader, beside a map of its argument.",
+      "stops": [
+        {
+          "id": "site",
+          "kind": "site",
+          "label": "Their paper",
+          "detail": "in the reader",
+          "href": "https://wcook04.github.io/library/navier-stokes/",
+          "plate": "navier-stokes-site"
+        },
+        {
+          "id": "adapted",
+          "kind": "paper",
+          "label": "Adapted edition",
+          "detail": "every change marked",
+          "href": "https://wcook04.github.io/library/navier-stokes/adapted/",
+          "plate": "navier-stokes-adapted"
+        },
+        {
+          "id": "argument-map",
+          "kind": "site",
+          "label": "Map of the argument",
+          "detail": "coloured by topic",
+          "href": "https://wcook04.github.io/library/navier-stokes/map/",
+          "plate": "navier-stokes-map"
+        },
+        {
+          "id": "proof",
+          "kind": "proof",
+          "label": "Their Lean",
+          "detail": "on GitHub",
+          "href": "https://github.com/tristanbuckmaster/navier-stokes"
+        }
       ]
     },
     {
