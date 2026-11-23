@@ -6,6 +6,7 @@
     "h1": "I use AI to make AI-written maths and code easier to understand.",
     "lede": "I’m Will Cook. I do maths research and build software with AI. Most projects here can be followed at several levels of detail, from a short video down to the proof or the code.",
     "second": "I build the tools so they get better as AI models get better.",
+    "reader": {"label": "Explore the Riemann Hypothesis reader", "href": "https://wcook04.github.io/riemann-hypothesis-reader/"},
     "short": {
       "res": "film:short-introduction",
       "label": "Introduction (V4)"
@@ -203,7 +204,8 @@
         {"id": "long", "kind": "long", "res": "film:long-lean-readers", "detail_prefix": "all three, "},
         {"id": "lean-exposition", "kind": "site", "res": "site:lean-exposition", "label": "Lean Exposition", "detail": "OpenAI's spin-glass theorem", "plate": "sk-site", "fallback": "assets/sites/lean-exposition-dark-720.webp", "watched": "film:short-sk-website", "more": [{"label": "Short video", "res": "film:short-sk-website"}, {"label": "Map of the argument", "res": "link:lean-exposition-argument-map"}, {"label": "Code", "res": "repo:lean-exposition-site"}]},
         {"id": "quartic-reader", "kind": "site", "res": "site:quartic", "label": "Quartic Reader", "detail": "OpenAI's quantum paper", "plate": "quartic-site", "fallback": "assets/sites/quartic-dark-720.webp", "watched": "film:short-quartic-reader", "more": [{"label": "Short video", "res": "film:short-quartic-reader"}, {"label": "Code", "res": "repo:quartic-query-lean"}]},
-        {"id": "proof-reader", "kind": "site", "res": "site:proof-reader", "label": "Proof Reader", "detail": "Contextual Embeddings and five more", "plate": "proof-reader-site", "fallback": "assets/sites/proof-reader-dark-720.webp", "watched": "film:short-proof-reader", "more": [{"label": "Short video", "res": "film:short-proof-reader"}, {"label": "Open the paper", "res": "paper:contextual-embeddings"}, {"label": "Code", "res": "repo:proof-reader"}]}
+        {"id": "proof-reader", "kind": "site", "res": "site:proof-reader", "label": "Proof Reader", "detail": "Contextual Embeddings and five more", "plate": "proof-reader-site", "fallback": "assets/sites/proof-reader-dark-720.webp", "watched": "film:short-proof-reader", "more": [{"label": "Short video", "res": "film:short-proof-reader"}, {"label": "Open the paper", "res": "paper:contextual-embeddings"}, {"label": "Code", "res": "repo:proof-reader"}]},
+        {"id": "riemann-hypothesis-reader", "kind": "site", "label": "Riemann Hypothesis reader", "detail": "Independent candidate edition", "href": "https://wcook04.github.io/riemann-hypothesis-reader/", "more": [{"label": "Paper by Qui Vincit and Fable", "href": "https://github.com/vincitamore/riemann-lean-account"}, {"label": "Reader repository", "href": "https://github.com/wcook04/riemann-hypothesis-reader"}]}
       ]
     },
     {

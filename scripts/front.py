@@ -375,6 +375,11 @@ def render_home(model: dict, registry: dict, hub, structured: str, book: Book) -
     intro = model["intro"]
     owner = registry["owner"]
     short, long = intro["short"], intro["long"]
+    reader = intro.get("reader")
+    reader_link = (
+        f'<p class="lede"><a href="{e(reader["href"])}"{off(reader["href"])}>{e(reader["label"])}</a></p>'
+        if reader else ""
+    )
     found = re.search(r"[?&]v=([A-Za-z0-9_-]{11})", short["href"])
     if not found:
         raise ValueError("the short introduction has no YouTube address to embed")
@@ -398,6 +403,7 @@ def render_home(model: dict, registry: dict, hub, structured: str, book: Book) -
         <h1 class="say" id="say">{whole(intro["h1"])}</h1>
         <p class="lede">{e(intro["lede"])}</p>
         <p class="lede lede--second">{e(intro["second"])}</p>
+        {reader_link}
       </div>
       <div class="stage__show">
         <div class="player" id="player" data-embed="{e(embed)}" data-embed-title="{e(short["label"])}, {e(clock(short["seconds"]))}"{loop_attrs}>
