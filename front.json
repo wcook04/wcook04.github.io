@@ -21,7 +21,7 @@
       "alt": "From the introduction: what AI produces goes through an AI model and comes out as a paper for experts, a website with the paper beside its proof, a map where you click any theorem, and a video for anyone. With a better model, each of these is redrawn."
     },
     "map_title": "The projects",
-    "map_note": "{Count} projects in five groups. Each has its own page. Fifteen open with a video, and the six newest open on the website or the code.",
+    "map_note": "{Count} projects in five groups. Each has its own page.",
     "start_title": "Three places to start",
     "start_note": "These three are my examples in the introduction, one each from maths, code and working with AI coding assistants.",
     "all_title": "All {count}, by group",
@@ -33,7 +33,7 @@
     "Dafny": "Dafny is a programming language and verifier that checks code against written specifications."
   },
   "bands": [
-    {"id": "maths", "n": 1, "name": "Maths", "about": "Research on Erdős problems and on two of OpenAI's results, as papers, websites and proofs in Lean, explanations of Troy Lee's Lean proof of the PCP theorem, and readers for Alpöge, Buckmaster and Coiculescu's Euler and Navier–Stokes blow-up papers.", "note": "Lean is a program that checks mathematical proofs."},
+    {"id": "maths", "n": 1, "name": "Maths", "about": "Research on Erdős problems and readers for papers and proofs in Lean, from the PCP theorem and fluid blow-up to VP versus VNP and the Riemann Hypothesis.", "note": "Lean is a program that checks mathematical proofs."},
     {"id": "checks", "n": 2, "name": "What a check covers", "about": "What a proof, a report, a benchmark's grader or a specification covers, and what it leaves out."},
     {"id": "code", "n": 3, "name": "Code", "about": "Code turned into a map and into a database that an AI model can search, and a test of which descriptions of code go out of date."},
     {"id": "assistants", "n": 4, "name": "AI coding assistants at work", "about": "Tools for working with AI coding assistants, and experiments on what they do."},
@@ -293,6 +293,53 @@
           "detail": "on GitHub",
           "href": "https://github.com/tristanbuckmaster/navier-stokes"
         }
+      ]
+    },
+    {
+      "slug": "vp-vnp",
+      "primary": {"stop": "site", "label": "Choose a paper"},
+      "name": "VP versus VNP",
+      "band": "maths",
+      "aliases": [],
+      "loop": "still-vp-vnp",
+      "line": "Compare two papers about the size of arithmetic circuits",
+      "claim": "Choose a paper and click a highlighted phrase to open the corresponding Lean declaration. Where I linked passages across the papers, the paper switch opens the matching passage.",
+      "limit": "The papers give lower bounds for arithmetic circuits. I used AI to prepare the passage links, notes and comparisons.",
+      "mine": "I built a reader for the two papers, with a map of the argument in each.",
+      "theirs": "OpenAI and Anthropic wrote the papers and released their Lean formalizations.",
+      "by": "Papers and Lean by OpenAI and Anthropic",
+      "page_title": "VP versus VNP reader",
+      "description": "Read the OpenAI and Anthropic papers on arithmetic circuit lower bounds beside their Lean formalizations, with maps of both arguments and links between selected passages.",
+      "card_alt": "The VP versus VNP reader's choice of the OpenAI and Anthropic papers.",
+      "stops": [
+        {"id": "site", "kind": "site", "label": "Choose a paper", "detail": "both papers with summaries", "href": "https://wcook04.github.io/vp-vnp-reader/", "plate": "vp-vnp-library"},
+        {"id": "openai", "kind": "paper", "label": "OpenAI paper", "detail": "November 24 edition", "href": "https://wcook04.github.io/vp-vnp-reader/openai/", "plate": "vp-vnp-openai", "more": [{"label": "November 23 edition", "href": "https://wcook04.github.io/vp-vnp-reader/openai-2026-11-23/"}]},
+        {"id": "anthropic", "kind": "paper", "label": "Anthropic paper", "detail": "VP versus VNP over every field", "href": "https://wcook04.github.io/vp-vnp-reader/anthropic/", "plate": "vp-vnp-anthropic", "more": [{"label": "Anthropic's Lean", "href": "https://github.com/anthropics/formal-math/tree/11b6c7e3c927df2658f513b6b68ea7f8929c62c5/vp-vnp"}]},
+        {"id": "site-files", "kind": "code", "label": "Published reader files", "href": "https://github.com/wcook04/vp-vnp-reader"}
+      ]
+    },
+    {
+      "slug": "riemann-hypothesis",
+      "primary": {"stop": "site", "label": "Open the reader"},
+      "name": "Riemann Hypothesis reader",
+      "band": "maths",
+      "aliases": [],
+      "loop": "still-riemann-hypothesis",
+      "line": "Read an account of Alpöge's proof beside its Lean",
+      "claim": "Open the statement about the zeros of the zeta function beside its Lean declaration. Follow the map to see which results the paper uses to reach it.",
+      "limit": "The paper authors report their checks of the Lean proof separately. I used AI to prepare the reader's passage links and comparisons.",
+      "mine": "I built an independent reader that links passages in their paper to the Lean they describe.",
+      "theirs": "Levent Alpöge released the Lean proof. Qui Vincit and Fable wrote an account of its argument.",
+      "by": "Paper by Qui Vincit and Fable. Lean by Levent Alpöge with Claude.",
+      "page_title": "Riemann Hypothesis reader",
+      "description": "Read Qui Vincit and Fable's account of Levent Alpöge's Lean proof of the Riemann Hypothesis, with passages linked to Lean declarations and a map of the argument.",
+      "card_alt": "The Riemann Hypothesis reader's argument map with the main result selected.",
+      "stops": [
+        {"id": "site", "kind": "site", "label": "Read the paper", "detail": "Statement 2.1 beside its Lean", "href": "https://wcook04.github.io/riemann-hypothesis-reader/?n=rh.result&l=b11474-11623&v=lean&view=pdf&page=4", "plate": "riemann-hypothesis-reader", "more": [{"label": "Paper and verification records", "href": "https://github.com/vincitamore/riemann-lean-account/tree/dd9bfc30bf9fc605251a22aa41004d1e22cc303b"}]},
+        {"id": "argument-map", "kind": "site", "label": "Map of the argument", "detail": "start at the main result", "href": "https://wcook04.github.io/riemann-hypothesis-reader/map/?n=rh.result", "plate": "riemann-hypothesis-map"},
+        {"id": "zeta-certificates", "kind": "site", "label": "Zeta Certificate Explorer", "detail": "Mercuri and Mehta's separate check up to height 10,011", "href": "https://wcook04.github.io/zeta-certificate-explorer/", "plate": "zeta-certificates"},
+        {"id": "proof", "kind": "proof", "label": "Lean source", "detail": "the reader's pinned revision", "href": "https://github.com/leanprover-community/riemann-hypothesis/tree/8b83d5e7b319ebc7b3be6e59ce3411ba2b09d116"},
+        {"id": "site-files", "kind": "code", "label": "Published reader files", "href": "https://github.com/wcook04/riemann-hypothesis-reader"}
       ]
     },
     {
